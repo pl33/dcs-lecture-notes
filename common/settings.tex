@@ -1,0 +1,213 @@
+\documentclass[%
+	a4paper,%				A4 Papier
+	twoside,%				einseitig (linker und rechter Seitenrand sind gleich groß)
+	bibliography=totocnumbered,%	Literaturverzeichnis nummeriert mit ins
+	                           % Inhaltsverzeichnis einfügen
+	numbers=noenddot,%		hinter der Gliederungsnummer soll kein Punkt gesetzt werden (siehe Duden)
+	parskip=half,%			europäischer Satz mit Abstand zwischen Absätzen
+	headsepline,%			Linie nach Kopfzeile
+	footsepline,%			Linie vor Fusszeile
+	headings=small,%		kleine Überschriften
+	12pt,%					grössere Schrift, besser lesbar am Bildschrim
+]{scrreprt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Language and fonts
+\usepackage[UKenglish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{array}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Graphics
+
+\usepackage{graphicx}
+%\graphicspath{{./}{./bilder/export/}}
+
+\usepackage{float}
+
+% TikZ
+\usepackage{tikz}
+\usepackage{pgf}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=newest}
+\pgfplotsset{
+	scriptsize/.style={
+		width=4.5cm,
+		height=,
+		legend style={font=\scriptsize},
+		tick label style={font=\scriptsize},
+		label style={font=\footnotesize},
+		title style={font=\footnotesize},
+		every axis title shift=0pt,
+		max space between ticks=15,
+		every mark/.append style={mark size=7},
+		major tick length=0.1cm,
+		minor tick length=0.066cm,
+	},
+}
+\pgfplotsset{legend cell align=left}
+\pgfplotsset{xmajorgrids}
+\pgfplotsset{ymajorgrids}
+\pgfplotsset{scale only axis}
+\pgfplotsset{every axis plot/.append style={line width=1pt}}
+\addto\extrasngerman{\pgfplotsset{/pgf/number format/.cd,set decimal separator={{{,}}}}}
+\pgfplotsset{/pgf/number format/.cd,1000 sep={\,}}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.arrows}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{pgf-umlsd}
+
+% Circuits
+\usepackage[european]{circuitikz}
+
+% Custom TikZ blocks
+\tikzset{
+	block/.style={
+		rectangle,
+		align=center,
+		minimum height=1cm,
+		inner sep=.5cm,
+		rounded corners=.15cm
+	}
+}
+
+% Colours
+\usepackage{xcolor}
+\usepackage{color}
+
+% Subfigures
+\usepackage{subfig}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Symbols
+
+% Mathematics
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Symbols
+
+\usepackage{rotating}
+
+% Linien für Tabellen
+\usepackage{booktabs}
+
+%\usepackage{multirow}
+%
+%\usepackage{longtable}
+%
+%\usepackage{bibgerm}
+%
+%\usepackage{csquotes}
+%
+%\usepackage[normalem]{ulem}
+
+% Formatierung von Zahlen mit Einheiten
+\usepackage[load-configurations=binary]{siunitx}
+\sisetup{per-mode=fraction,mode=math}
+\addto\extrasngerman{\sisetup{output-decimal-marker={,}}}
+\addto\extrasenglish{\sisetup{output-decimal-marker={.}}}
+\addto\extrasngerman{\sisetup{range-phrase={ bis~}}} 
+\addto\extrasenglish{\sisetup{range-phrase={ to~}}}
+
+%\usepackage{xspace}
+%
+%\usepackage{xfrac}
+%
+%\usepackage{bigfoot}
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Page layout
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage[a4paper, margin=2.5cm, headheight=22pt]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formatting
+
+\usepackage{adjustbox}
+
+%\usepackage[english]{nomencl}
+%\makenomenclature
+%\usepackage{etoolbox}
+%
+%% Abkürzungsverzeichnis
+%%\usepackage{acronym}
+%\usepackage[printonlyused]{acronym}
+%
+%\renewcommand{\topfraction}{0.8}
+%\renewcommand{\bottomfraction}{0.33}
+%\renewcommand{\floatpagefraction}{0.66}
+%\renewcommand{\textfraction}{0.10}
+%
+%\usepackage[numbers]{natbib}
+%
+%\usepackage[
+%	pdftitle={Indoor Localization of Ultra Wide Band Beacons using Synchronized Receivers},
+%	pdfauthor={Philipp Le},
+%	pdfcreator={LaTeX with hyperref and KOMA-Script},
+%	pdfsubject={},
+%	pdfkeywords={},
+%	pdfstartview={Fit},
+%	hidelinks]{hyperref}
+%
+%\usepackage[xindy,numberedsection,section=section,toc]{glossaries}
+%\makeglossaries
+%\GlsSetXdyCodePage{duden-utf8}
+%\usepackage[xindy]{imakeidx}
+%\makeindex
+%
+%\usepackage{pdflscape}
+%
+%\usepackage{pdfpages}
+%
+%\usepackage{listings}
+%
+%\usepackage[subfigure]{tocloft}
+%
+%\usepackage[bottom]{footmisc}
+%\interfootnotelinepenalty=10000
+%
+%% Fußnotennummerierung nicht in jedem Kapitel neu beginnen
+%\let\counterwithout\relax
+%\let\counterwithin\relax
+%\usepackage{chngcntr}
+%\counterwithout{footnote}{chapter}
+%%\usepackage{remreset}
+%%\makeatletter
+%%\@removefromreset{footnote}{chapter}
+%%\makeatother
+%
+%% \emph{} fett darstellen
+%%\makeatletter
+%%\DeclareRobustCommand{\em}{%
+%%  \@nomath\em \if b\expandafter\@car\f@series\@nil
+%%  \normalfont \else \bfseries \fi}
+%%\makeatother
+%	
+%%\newcommand{\varDatum}{xx.xx.2018}
+%\newcommand{\varAbgabeDatum}{21.08.2019}
+%
+%
+%%\newcommand{\vect}[1]{\boldsymbol{\vec{\mathbf{#1}}}}
+%\newcommand{\vect}[1]{\vec{\bm{#1}}}
+%\newcommand{\cmplxvect}[1]{\vect{\underline{#1}}}
+%\newcommand{\mat}[1]{\bm{\mathrm{#1}}}
+%
+%\newcommand{\E}{\mathrm{E}}
+%\newcommand{\Var}{\mathrm{Var}}
+%\newcommand{\Cov}{\mathrm{Cov}}
+%\def\j{\mathsf{j}}
+%
+%\newlistof{todos}{mcf}{To Do}
+%\newcommand{\todo}[1]{\texttt{\textbf{\#\# TODO \#\# #1 \#\#}} \addcontentsline{mcf}{todos}{#1}}
+

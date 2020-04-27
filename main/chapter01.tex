@@ -1,0 +1,80 @@
+\input{../common/settings.tex}
+
+\newcommand{\thekindofdocument}{Lecture Notes}
+\newcommand{\thesubtitle}{Chapter 1: Communication Systems}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title Page
+\pagenumbering{Alph}
+\pagestyle{empty}
+
+% Title Page
+\input{../common/titlepage.tex}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Preface
+\pagenumbering{arabic}
+\pagestyle{headings}
+
+% Inhaltsverzeichnis
+%\tableofcontents
+%\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Content
+
+\clearpage
+\input{../chapter01/content.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendix
+
+\begin{appendix}
+
+%\include{appendix/crlb}
+
+\end{appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nachtrag
+
+% References
+%\bibliographystyle{unsrt}
+%\bibliography{Masterarbeit}
+
+% List of Acronyms
+%\include{formales/acronym}
+\newpage
+
+% Notation
+%\include{formales/notation}
+%\newpage
+
+% List of Symbols
+%\include{formales/formelzeichen}
+\newpage
+
+% List of Block Diagram Symbols
+%\include{formales/blockfigures}
+\newpage
+
+% List of Figures
+%\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\newpage
+
+% List of Tables
+%\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
+\newpage
+
+% To Do
+\pagenumbering{alph}
+%\listoftodos
+
+\end{document}
