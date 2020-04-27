@@ -1,7 +1,15 @@
-\input{../common/settings.tex}
 
-\newcommand{\thekindofdocument}{Lecture Notes}
-\newcommand{\thesubtitle}{Chapter 1: Communication Systems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration
+\date{2020-04-27}
+\def\thekindofdocument{Lecture Notes}
+\def\thesubtitle{Chapter 1: Communication Systems}
+\def\therevision{1}
+\def\therevisiondate{2020-04-27}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Header
+\input{../common/settings.tex}
 
 \begin{document}
 
@@ -26,6 +34,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Content
 
+\setcounter{chapter}{0}
+
 \clearpage
 \input{../chapter01/content.tex}
 
@@ -46,7 +56,7 @@
 %\bibliography{Masterarbeit}
 
 % List of Acronyms
-%\include{formales/acronym}
+\input{../common/acronym.tex}
 \newpage
 
 % Notation
@@ -71,6 +81,10 @@
 %\phantomsection
 \addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
+\newpage
+
+% Imprint
+\input{../common/imprint.tex}
 \newpage
 
 % To Do

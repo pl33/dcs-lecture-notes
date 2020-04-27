@@ -248,13 +248,13 @@ These devices mainly operate automatically without human interaction. Therefore,
 
 Protocols are standardized and must be implemented in every device, which interacts with other devices. Important standardization organizations are:
 \begin{itemize}
-	\item The non-profit organization \textbf{Internet Engineering Task Force} (IETF) issues standards concerning the internet. The standards are called \emph{Request For Comment} (RFC) and are available for everyone for free. Example standards: Internet Protocol (IP), Hypertext Transfer Protocol (HTTP)
-	\item The \textbf{Institute of Electrical and Electronics Engineers} (IEEE) has standards committees which develop and publish standards. With respect to the internet, the IEEE\,802 LAN/MAN Standards Committee is the most important one. Example standards: IEEE\,802.11 (Wifi)
-	\item The \textbf{European Telecommunications Standards Institute} (ETSI) is an independent, non-profit standardization organization. It is recognized by the European Council and officially responsible for standardization of information and communication technologies in Europe. Example standards: 3G (cell phone system), 4G (cell phone system), TETRA (professional mobile radio system)
+	\item The non-profit organization \textbf{\acf{IETF}} issues standards concerning the internet. The standards are called \emph{Request For Comment} (RFC) and are available for everyone for free. Example standards: \ac{IP}, \ac{HTTP}
+	\item The \textbf{\acf{IEEE}} has standards committees which develop and publish standards. With respect to the internet, the IEEE\,802 LAN/MAN Standards Committee is the most important one. Example standards: IEEE\,802.11 (Wifi)
+	\item The \textbf{\acf{ETSI}} is an independent, non-profit standardization organization. It is recognized by the European Council and officially responsible for standardization of information and communication technologies in Europe. Example standards: 3G (cell phone system), 4G (cell phone system), TETRA (professional mobile radio system)
 \end{itemize}
 
 
-\subsection{OSI Model}
+\subsection{\acs{OSI} Model}
 
 There are many task which a digital communication systems must accomplish.
 \begin{itemize}
@@ -263,7 +263,7 @@ There are many task which a digital communication systems must accomplish.
 	\item The network is shared with other users and applications.
 	\item The network consists of many links using different physical transmission channels, for example, wired and wireless.
 \end{itemize}
-For each task, there are communication protocols to solve it. Communication protocols are grouped by the task which they fulfil. There is an increasing level of abstraction from the physical link to the application data. The \textbf{OSI Model} (Figure \ref{fig:ch01:osi_model}) defines a layer structure for classifying communication protocols, which regards the level of abstraction.
+For each task, there are communication protocols to solve it. Communication protocols are grouped by the task which they fulfil. There is an increasing level of abstraction from the physical link to the application data. The \textbf{\acs{OSI} Model} (Figure \ref{fig:ch01:osi_model}) defines a layer structure for classifying communication protocols, which regards the level of abstraction.
 
 \begin{figure}[H]
 	\centering
@@ -292,12 +292,12 @@ For each task, there are communication protocols to solve it. Communication prot
 		
 		\filldraw[fill=gray!60, draw=none] ([xshift=10mm, yshift=3mm] L7.north east) -- node[midway, above, anchor=south, align=center]{Level of\\ abstraction} ([xshift=15mm, yshift=3mm] L7.north east) -- ([xshift=12.5mm, yshift=-3mm] L1.south east);
 	\end{tikzpicture}
-	\caption{OSI Model with seven layers}
+	\caption[OSI Model with seven layers]{\ac{OSI} Model with seven layers}
 	\label{fig:ch01:osi_model}
 \end{figure}
 
 \begin{table}[H]
-	\caption{Description of the layers of the OSI Model (Figure \ref{fig:ch01:osi_model}). The protocol data unit is the information }
+	\caption[Description of the layers of the OSI Model]{Description of the layers of the \ac{OSI} Model (Figure \ref{fig:ch01:osi_model}). The protocol data unit is the information }
 	\begin{tabular}{|l|l|p{0.5\linewidth}|}
 		\hline
 		Layer & PDU & Function \\
@@ -327,7 +327,7 @@ Each protocol has a standardized interface exposed to the upper layer, called \t
 	\item Network registration and de-registration
 \end{itemize}
 
-Protocol layers add own information to the data received from the upper layer. This additional information is required to provide the protocol's functionality. For example, the Internet Protocol (IP) needs to add the source and destination address, so that the packet can be routed to the correct endpoint. One can imagine this like data which is written on a letter, which is put into an envelope, which itself is put into another envelope, and so on.
+Protocol layers add own information to the data received from the upper layer. This additional information is required to provide the protocol's functionality. For example, the \acf{IP} needs to add the source and destination address, so that the packet can be routed to the correct endpoint. One can imagine this like data which is written on a letter, which is put into an envelope, which itself is put into another envelope, and so on.
 
 \begin{figure}[H]
 	\centering
@@ -336,7 +336,7 @@ Protocol layers add own information to the data received from the upper layer. T
 	\label{fig:ch01:frame_construction}
 \end{figure}
 
-Communication protocols may be exchanged in one layer without affecting the functionality of the other layers. For example, HTTP operates on TCP/IP. But the Internet Protocol (IP) works on multiple physical links like Ethernet (IEEE\,802.3), Wifi (IEEE\,802.11) or 4G. The transmission media can even change along the communication path. Information travlling through the internet experience lots of \textbf{media changes}.
+Communication protocols may be exchanged in one layer without affecting the functionality of the other layers. For example, \ac{HTTP} operates on \acs{TCP}/\acs{IP}. But the \acf{IP} works on multiple physical links like Ethernet (IEEE\,802.3), Wifi (IEEE\,802.11) or 4G. The transmission media can even change along the communication path. Information travlling through the internet experience lots of \textbf{media changes}.
 
 
 \begin{figure}[H]

@@ -25,8 +25,7 @@
 
 \usepackage{graphicx}
 %\graphicspath{{./}{./bilder/export/}}
-
-\usepackage{float}
+\usepackage{pdfpages}
 
 % TikZ
 \usepackage{tikz}
@@ -83,33 +82,26 @@
 % Subfigures
 \usepackage{subfig}
 
+% Controlling floats
+%\renewcommand{\topfraction}{0.8}
+%\renewcommand{\bottomfraction}{0.33}
+%\renewcommand{\floatpagefraction}{0.66}
+%\renewcommand{\textfraction}{0.10}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Symbols
+
+\usepackage{textcomp}
 
 % Mathematics
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{bm}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Symbols
+% Quotes
+\usepackage{csquotes}
 
-\usepackage{rotating}
-
-% Linien für Tabellen
-\usepackage{booktabs}
-
-%\usepackage{multirow}
-%
-%\usepackage{longtable}
-%
-%\usepackage{bibgerm}
-%
-%\usepackage{csquotes}
-%
-%\usepackage[normalem]{ulem}
-
-% Formatierung von Zahlen mit Einheiten
+% Formatting units
 \usepackage[load-configurations=binary]{siunitx}
 \sisetup{per-mode=fraction,mode=math}
 \addto\extrasngerman{\sisetup{output-decimal-marker={,}}}
@@ -117,97 +109,123 @@
 \addto\extrasngerman{\sisetup{range-phrase={ bis~}}} 
 \addto\extrasenglish{\sisetup{range-phrase={ to~}}}
 
-%\usepackage{xspace}
-%
-%\usepackage{xfrac}
-%
-%\usepackage{bigfoot}
-%
+% Custom symbols
+%\newcommand{\vect}[1]{\boldsymbol{\vec{\mathbf{#1}}}}
+\newcommand{\vect}[1]{\vec{\bm{#1}}}
+\newcommand{\cmplxvect}[1]{\vect{\underline{#1}}}
+\newcommand{\mat}[1]{\bm{\mathrm{#1}}}
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\def\j{\mathsf{j}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tables
+
+% Lines for Tables
+\usepackage{booktabs}
+
+\usepackage{multirow}
+\usepackage{longtable}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Page layout
+
 \usepackage{setspace}
 \onehalfspacing
 
 \usepackage[a4paper, margin=2.5cm, headheight=22pt]{geometry}
 
+\usepackage{pdflscape}
+
+\usepackage[bottom]{footmisc}
+\interfootnotelinepenalty=10000
+
+% Don't restart footnote count on each chapter
+\let\counterwithout\relax
+\let\counterwithin\relax
+\usepackage{chngcntr}
+\counterwithout{footnote}{chapter}
+%\usepackage{remreset}
+%\makeatletter
+%\@removefromreset{footnote}{chapter}
+%\makeatother
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Formatting
 
-\usepackage{adjustbox}
+\usepackage[normalem]{ulem}
 
+\usepackage{adjustbox}
+\usepackage{xspace}
+\usepackage{xfrac}
+\usepackage{bigfoot}
+
+%\usepackage{float}
+%\usepackage{rotating}
+\usepackage{rotfloat}
+
+% make \emph{} bold
+%\makeatletter
+%\DeclareRobustCommand{\em}{%
+%  \@nomath\em \if b\expandafter\@car\f@series\@nil
+%  \normalfont \else \bfseries \fi}
+%\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+
+%\usepackage{bibgerm}
+%\usepackage[numbers]{natbib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Directories
+
+\usepackage[subfigure]{tocloft}
+
+%% Nomenclature
 %\usepackage[english]{nomencl}
 %\makenomenclature
 %\usepackage{etoolbox}
-%
-%% Abkürzungsverzeichnis
-%%\usepackage{acronym}
-%\usepackage[printonlyused]{acronym}
-%
-%\renewcommand{\topfraction}{0.8}
-%\renewcommand{\bottomfraction}{0.33}
-%\renewcommand{\floatpagefraction}{0.66}
-%\renewcommand{\textfraction}{0.10}
-%
-%\usepackage[numbers]{natbib}
-%
-%\usepackage[
-%	pdftitle={Indoor Localization of Ultra Wide Band Beacons using Synchronized Receivers},
-%	pdfauthor={Philipp Le},
-%	pdfcreator={LaTeX with hyperref and KOMA-Script},
-%	pdfsubject={},
-%	pdfkeywords={},
-%	pdfstartview={Fit},
-%	hidelinks]{hyperref}
-%
+
+% Acronyms
+\usepackage[printonlyused]{acronym}
+
 %\usepackage[xindy,numberedsection,section=section,toc]{glossaries}
 %\makeglossaries
 %\GlsSetXdyCodePage{duden-utf8}
 %\usepackage[xindy]{imakeidx}
 %\makeindex
-%
-%\usepackage{pdflscape}
-%
-%\usepackage{pdfpages}
-%
-%\usepackage{listings}
-%
-%\usepackage[subfigure]{tocloft}
-%
-%\usepackage[bottom]{footmisc}
-%\interfootnotelinepenalty=10000
-%
-%% Fußnotennummerierung nicht in jedem Kapitel neu beginnen
-%\let\counterwithout\relax
-%\let\counterwithin\relax
-%\usepackage{chngcntr}
-%\counterwithout{footnote}{chapter}
-%%\usepackage{remreset}
-%%\makeatletter
-%%\@removefromreset{footnote}{chapter}
-%%\makeatother
-%
-%% \emph{} fett darstellen
-%%\makeatletter
-%%\DeclareRobustCommand{\em}{%
-%%  \@nomath\em \if b\expandafter\@car\f@series\@nil
-%%  \normalfont \else \bfseries \fi}
-%%\makeatother
-%	
-%%\newcommand{\varDatum}{xx.xx.2018}
-%\newcommand{\varAbgabeDatum}{21.08.2019}
-%
-%
-%%\newcommand{\vect}[1]{\boldsymbol{\vec{\mathbf{#1}}}}
-%\newcommand{\vect}[1]{\vec{\bm{#1}}}
-%\newcommand{\cmplxvect}[1]{\vect{\underline{#1}}}
-%\newcommand{\mat}[1]{\bm{\mathrm{#1}}}
-%
-%\newcommand{\E}{\mathrm{E}}
-%\newcommand{\Var}{\mathrm{Var}}
-%\newcommand{\Cov}{\mathrm{Cov}}
-%\def\j{\mathsf{j}}
-%
-%\newlistof{todos}{mcf}{To Do}
-%\newcommand{\todo}[1]{\texttt{\textbf{\#\# TODO \#\# #1 \#\#}} \addcontentsline{mcf}{todos}{#1}}
+
+% ToDo list
+\newlistof{todos}{mcf}{To Do}
+\newcommand{\todo}[1]{\texttt{\textbf{\#\# TODO \#\# #1 \#\#}} \addcontentsline{mcf}{todos}{#1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Listings
+
+\usepackage{listings}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PDF Metadata
+
+\def\hyperrefgeneraltitle{Digital Communication Systems - \thekindofdocument{}}
+\ifdefined\thesubtitle
+\def\hyperreftitle{\hyperrefgeneraltitle{} - \thesubtitle{}}
+\else
+\def\hyperreftitle{\hyperrefgeneraltitle{}}
+\fi
+
+\usepackage[
+	pdftitle={\hyperreftitle{}},
+	pdfauthor={Philipp Le},
+	pdfcreator={LaTeX with hyperref and KOMA-Script},
+	pdfsubject={},
+	pdfkeywords={},
+	pdfstartview={Fit},
+	pdflang={en-GB},
+	pdfduplex={DuplexFlipLongEdge}
+	hidelinks]{hyperref}
+
 
