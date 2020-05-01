@@ -73,14 +73,20 @@
 %\include{formales/blockfigures}
 \newpage
 
+% Print default index
+\phantomsection
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+\newpage
+
 % List of Figures
-%\phantomsection
+\phantomsection
 \addcontentsline{toc}{chapter}{\listfigurename}
 \listoffigures
 \newpage
 
 % List of Tables
-%\phantomsection
+\phantomsection
 \addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
 \newpage

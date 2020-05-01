@@ -2,8 +2,10 @@
 
 \section{What is Communication?}
 
+\index{communication}
 \textbf{Communication} (from Latin \emph{communicare}, ``to share'') is the act of conveying information from one entity to another using mutually understood sign and symbols.
 
+\index{information}
 \textbf{Information} is the knowledge which is being conveyed from the source to the recipient. Information results in increased knowledge at the recipient's side.
 
 Many research areas concern with communication and information:
@@ -40,7 +42,7 @@ There are courses at this university which give you a deeper insight into these 
 \subsection{Communication Model}
 
 %\todo{citation}
-Claude Shannon and Warren Weaver were engineers at the Bell Telephone Labs, USA. They developed the \textbf{Shannon-Weaver Model} (Figure \ref{fig:ch01:shannon_weaver_model}).
+Claude Shannon and Warren Weaver were engineers at the Bell Telephone Labs, USA. They developed the \index{Shannon-Weaver model} \textbf{Shannon-Weaver Model} (Figure \ref{fig:ch01:shannon_weaver_model}).
 
 \begin{figure}[H]
 	\centering
@@ -67,11 +69,11 @@ Claude Shannon and Warren Weaver were engineers at the Bell Telephone Labs, USA.
 \begin{description}
 	\item[Information source] The information is created here.
 	\item[Signal a] The original information is represented in physical form by a signal.
-	\item[Transducer (sender)] The transducer converts the signal from one physical form to another.
+	\item[Transducer (sender)] The \index{Shannon-Weaver model!transducer} transducer converts the signal from one physical form to another.
 	\item[Signal b] The signal is in a form which can be processed by the transmitter.
 	\item[Transmitter] The information is modulated on a carrier, which can be transmitted through the transmission channel.
 	\item[Signal c] The information is modulated on a carrier and can pass through the transmission channel.
-	\item[Tansmission channel] The physical system through which the modulated information passes. Transmission channels are noisy and add disturbances to the information.
+	\item[Tansmission channel] The physical system through which the modulated information passes. \index{transmission channels} Transmission channels are noisy and add disturbances to the information.
 	\item[Signal d] It is basically the Signal c. However, noise and disturbances have been added.
 	\item[Receiver] The receiver extracts the information from the carrier. Information must be reconstructed from the noisy input signal.
 	\item[Signal e] The output signal of the receiver.
@@ -97,7 +99,7 @@ Claude Shannon and Warren Weaver were engineers at the Bell Telephone Labs, USA.
 
 \subsection{Classification of Signals}
 
-A signal conveys information in a form that can be processed by components of the communication systems.
+A \index{signal} signal conveys information in a form that can be processed by components of the communication systems.
 
 \begin{figure}[H]
 	\centering
@@ -119,6 +121,8 @@ A signal conveys information in a form that can be processed by components of th
 
 \paragraph{Analogue signals.}
 
+\index{signal!analogue signal}
+\index{signal!value-continuous}
 Analogue signals are represented by values out of a continuous range (\emph{value-continuous}). The range can be limited. However, each real value in this range can be taken.
 
 Examples:
@@ -128,6 +132,8 @@ Examples:
 	\item Light signals (microscope, photograph)
 \end{itemize}
 
+\index{signal!time-continuous}
+\index{signal!time-discrete}
 Analogue signals can be time-continuous or time-discrete. \emph{Time-continuity} means that the signal is defined at any real point of time. A \emph{time-discrete} signal is only defined at certain time instances. The number of time instances can be unlimited. However, the signal is not defined between two time points.
 
 \begin{figure}[H]
@@ -165,6 +171,8 @@ Analogue signals can be time-continuous or time-discrete. \emph{Time-continuity}
 
 \paragraph{Digital signals.}
 
+\index{signal!digital signal}
+\index{signal!value-discrete}
 Digital signals are both time-discrete and value-discrete. \emph{Value-discrete} means that they can take only one state out of a limited set of states.
 
 \begin{figure}[H]
@@ -183,11 +191,13 @@ Examples:
 
 \textit{Remark:} In fact, the physical form of a digital signal is again an analogue signal. A binary signal can take the discrete states ``high'' and ``low''. If the signal is on a wire, its states are represented by voltage levels, for example \SI{0}{V} and \SI{3.3}{V}. However, if processed by a digital system, the physical representation is of minor importance. Only the discrete, logical states are considered.
 
+\index{signal!binary signal}
 A special kind of digital signal is the \textbf{binary signal}. It has two discrete states.
 
 
 \subsection{Transmission Channels}
 
+\index{transmission channel}
 Digital communication systems employ electromagnetic waves to convey information. Therefore, only transmission channels transporting electromagnetic waves are considered.
 
 \begin{figure}[H]
@@ -212,14 +222,14 @@ Examples of transmission lines:
 \begin{itemize}
 	\item Cables
 	\begin{itemize}
-		\item Two wire, twisted pair
-		\item Coaxial cable
+		\item Two wire, twisted-pair \index{twisted-pair cable}
+		\item Coaxial cable \index{coaxial cable}
 	\end{itemize}
-	\item Waveguides
+	\item Waveguides \index{waveguide}
 	\item Planar lines (on printed circuit boards or integrated circuits)
 	\begin{itemize}
-		\item Microstrip
-		\item Coplanar waveguide
+		\item Microstrip \index{microstrip}
+		\item Coplanar waveguide \index{coplanar waveguide}
 	\end{itemize}
 	\item Glass fibre (light is an electromagnetic wave, too)
 \end{itemize}
@@ -232,14 +242,14 @@ The electromagnetic wave is not bound to a transmission line. It propagates thro
 \section{Computer Networks}
 
 
-This course focuses on the technologies which convey information between endpoints, using electromagnetic waves. The information, being conveyed, are called \textbf{data}. The handling of the data is a subject of computer science, especially \emph{computer networks}. Since data processing is a part of digital communication systems, too, this digression shall give an overview about the employed concepts.
+This course focuses on the technologies which convey information between endpoints, using electromagnetic waves. The information, being conveyed, are called \textbf{data}. The handling of the data is a subject of computer science, especially \emph{computer networks} \index{computer network}. Since data processing is a part of digital communication systems, too, this digression shall give an overview about the employed concepts.
 
 
 \subsection{Protocols}
 
 Modern communication systems convey information world-wide. These communication links are established over myriads of devices, which form a network. The biggest computer network is the internet.
 
-These devices mainly operate automatically without human interaction. Therefore, they are required to follow certain rules, which are called \textbf{communication protocols}. Protocols define
+These devices mainly operate automatically without human interaction. Therefore, they are required to follow certain rules, which are called \textbf{communication protocols} \index{communication protocol}. Protocols define
 \begin{itemize}
 	\item the structure and semantics of data,
 	\item synchronization of communication, and
@@ -263,7 +273,7 @@ There are many task which a digital communication systems must accomplish.
 	\item The network is shared with other users and applications.
 	\item The network consists of many links using different physical transmission channels, for example, wired and wireless.
 \end{itemize}
-For each task, there are communication protocols to solve it. Communication protocols are grouped by the task which they fulfil. There is an increasing level of abstraction from the physical link to the application data. The \textbf{\acs{OSI} Model} (Figure \ref{fig:ch01:osi_model}) defines a layer structure for classifying communication protocols, which regards the level of abstraction.
+For each task, there are communication protocols to solve it. Communication protocols are grouped by the task which they fulfil. There is an increasing level of abstraction from the physical link to the application data. The \index{OSI model} \textbf{\acs{OSI} Model} (Figure \ref{fig:ch01:osi_model}) defines a layer structure for classifying communication protocols, which regards the level of abstraction.
 
 \begin{figure}[H]
 	\centering
@@ -320,7 +330,7 @@ For each task, there are communication protocols to solve it. Communication prot
 	\end{tabular}
 \end{table}
 
-Each protocol has a standardized interface exposed to the upper layer, called \textbf{Service Access Point}. They allow an upper layer protocol to execute functions of the lower layer protocol. These functions are, for example:
+Each protocol has a standardized interface exposed to the upper layer, called \index{service access point} \textbf{\ac{SAP}}. They allow an upper layer protocol to execute functions of the lower layer protocol. These functions are, for example:
 \begin{itemize}
 	\item Sending or receiving data
 	\item Control operations
@@ -336,7 +346,7 @@ Protocol layers add own information to the data received from the upper layer. T
 	\label{fig:ch01:frame_construction}
 \end{figure}
 
-Communication protocols may be exchanged in one layer without affecting the functionality of the other layers. For example, \ac{HTTP} operates on \acs{TCP}/\acs{IP}. But the \acf{IP} works on multiple physical links like Ethernet (IEEE\,802.3), Wifi (IEEE\,802.11) or 4G. The transmission media can even change along the communication path. Information travlling through the internet experience lots of \textbf{media changes}.
+Communication protocols may be exchanged in one layer without affecting the functionality of the other layers. For example, \ac{HTTP} operates on \acs{TCP}/\acs{IP}. But the \acf{IP} works on multiple physical links like Ethernet (IEEE\,802.3), Wifi (IEEE\,802.11) or 4G. The transmission media can even change along the communication path. Information travelling through the internet experience lots of \index{media change} \textbf{media changes}.
 
 
 \begin{figure}[H]

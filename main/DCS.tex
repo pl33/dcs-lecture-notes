@@ -1,8 +1,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Configuration
-\def\thekindofdocument{Lecture Notes}
-\def\thesubtitle{Chapter 1: Communication Systems}
+\def\thekindofdocument{Lecture Notes and Exercises}
 \def\therevision{1}
 \def\therevisiondate{2020-04-27}
 
@@ -30,10 +29,27 @@
 %\tableofcontents
 %\newpage
 
+% Imprint
+\input{../common/imprint.tex}
+\newpage
+
+% List of Acronyms
+\input{../common/acronym.tex}
+\newpage
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Content
 
-\setcounter{chapter}{0}
+\clearpage
+\input{../chapter00/preface.tex}
+
+\clearpage
+\tableofcontents
+
+\setcounter{chapter}{-1}
+
+\clearpage
+\input{../chapter00/content.tex}
 
 \clearpage
 \input{../chapter01/content.tex}
@@ -53,10 +69,6 @@
 % References
 %\bibliographystyle{unsrt}
 %\bibliography{Masterarbeit}
-
-% List of Acronyms
-\input{../common/acronym.tex}
-\newpage
 
 % Notation
 %\include{formales/notation}
@@ -86,10 +98,6 @@
 \phantomsection
 \addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
-\newpage
-
-% Imprint
-\input{../common/imprint.tex}
 \newpage
 
 % To Do
