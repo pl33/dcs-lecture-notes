@@ -177,38 +177,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
 
-%\usepackage[square, numbers, sectionbib]{natbib}
-%\usepackage{chapterbib}
-%\def\thebibfile{../DCS}
-%\def\thebibstyle{unsrtnat}
-%
-%\makeatletter
-%\renewenvironment{thebibliography}[1]
-%{\section*{\bibname}% <-- this line was changed from \chapter* to \section*
-%	\@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}%
-%	\list{\@biblabel{\@arabic\c@enumiv}}%
-%	{\settowidth\labelwidth{\@biblabel{#1}}%
-%		\leftmargin\labelwidth
-%		\advance\leftmargin\labelsep
-%		\@openbib@code
-%		\usecounter{enumiv}%
-%		\let\p@enumiv\@empty
-%		\renewcommand\theenumiv{\@arabic\c@enumiv}}%
-%	\sloppy
-%	\clubpenalty4000
-%	\@clubpenalty \clubpenalty
-%	\widowpenalty4000%
-%	\sfcode`\.\@m}
-%{\def\@noitemerr
-%	{\@latex@warning{Empty `thebibliography' environment}}%
-%	\endlist}
-%\makeatother
-
-%\usepackage[square, numbers, sectionbib]{natbib}
-%\usepackage[backend=bibtex,style=unsrtnat]{biblatex}
 \usepackage[backend=biber,sorting=none]{biblatex}
 \addbibresource{../DCS.bib}
-%\bibliography{../DCS}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Directories
@@ -240,6 +210,21 @@
 % Listings
 
 \usepackage{listings}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Exercises
+
+\usepackage{exsheets}
+\SetupExSheets{
+	headings = block-subtitle,
+	headings-format = \bfseries\sffamily,
+	subtitle-format = \bfseries\sffamily,
+	counter-within = chapter,
+	counter-format = ch.qu\IfQuestionSubtitleT{:},
+	toc-level = {subsection},
+	% solution/print = true % uncomment for tutors
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PDF Metadata
