@@ -4,7 +4,7 @@ BUILD_DIR = build
 LATEXMK = latexmk -pdf -silent -synctex=1
 LATEXMK_PVC = $(LATEXMK) -pvc
 
-ALL_TARGETS = $(BUILD_DIR)/chapter00.pdf $(BUILD_DIR)/chapter01.pdf
+ALL_TARGETS = $(BUILD_DIR)/chapter00.pdf $(BUILD_DIR)/chapter01.pdf $(BUILD_DIR)/chapter02.pdf
 COMMON_DEPS = common/settings.tex common/titlepage.tex common/acronym.tex common/imprint.tex
 
 all: $(ALL_TARGETS)

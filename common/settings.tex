@@ -233,3 +233,59 @@
 	hidelinks]{hyperref}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Own environments
+
+\usepackage{tcolorbox}
+
+\newenvironment{attention}{%
+	\begin{tcolorbox}[colframe=red]%
+	{\sffamily\bfseries Attention!}\par%
+}{%
+	\end{tcolorbox}%
+}
+
+\newenvironment{definition}[1]{%
+	\begin{tcolorbox}[colframe=gray]%
+	{\sffamily\bfseries Definition: #1}\par%
+}{%
+	\end{tcolorbox}%
+}
+
+\newenvironment{fact}{%
+	\begin{tcolorbox}[colframe=gray!80]%
+	\bfseries%
+}{%
+	\end{tcolorbox}%
+}
+
+\newenvironment{proof}[1]{%
+	\begin{tcolorbox}[colframe=black]%
+	{\sffamily\bfseries Proof: #1}\par%
+}{%
+	\end{tcolorbox}%
+}
+
+\newenvironment{derivation}[1]{%
+	\begin{tcolorbox}[colframe=black]%
+	{\sffamily\bfseries Derivation: #1}\par%
+}{%
+	\end{tcolorbox}%
+}
+
+\newenvironment{example}[1]{%
+	\begin{tcolorbox}[colframe=black!60]%
+	{\sffamily\bfseries Example: #1}\par%
+}{%
+	\end{tcolorbox}%
+}
+
+\newenvironment{excursus}[1]{%
+	\begin{tcolorbox}[colframe=gray!40]%
+	{\sffamily\bfseries Excursus: #1}\par%
+}{%
+	\end{tcolorbox}%
+}
+
+

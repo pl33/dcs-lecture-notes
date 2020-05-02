@@ -1,0 +1,451 @@
+\chapter{Signals and Systems}
+
+All signals considered in this chapter are \index{signal!deterministic signal} \textbf{deterministic}, i.e., its values are predictable at any time. Especially, the values can be calculated by a mathematical equation. In contrast, \emph{random} signals are not predictable. Its values are subject to a random process, which must be modelled stochastically.
+
+\index{signal!time-continuous}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\draw node[block](Signals){\textbf{Signal}\\ \textbf{(deterministic)}};
+		\draw node[block, below left=of Signals](Periodic){Periodic};
+		\draw node[block, below right=of Signals](NonPeriodic){Non-periodic};
+		\draw node[block, below left=of Periodic](Mono){Mono-chromatic};
+		\draw node[block, below right=of Periodic](Multi){Multi-frequent};
+		
+		\draw [-latex] (Signals) -- (Periodic);
+		\draw [-latex] (Signals) -- (NonPeriodic);
+		\draw [-latex] (Periodic) -- (Mono);
+		\draw [-latex] (Periodic) -- (Multi);
+	\end{tikzpicture}
+	\caption{Classification of time-continuous signals}
+	\label{fig:ch02:timecont_signals_classif}
+\end{figure}
+
+\section{Mono-Chromatic Signals}
+
+\paragraph{Representation by A Real-Valued Function.}
+
+The mono-chromatic signal $x_{mc}(t)$ is defined by:
+\begin{equation}
+	x_{mc}(t) = \hat{X} \cdot \cos\left(\omega_0 t - \varphi_0\right)
+	\label{eq:ch02:mono_chrom_eq}
+\end{equation}
+where
+
+\begin{tabular}{ll}
+	$\hat{X}$ & is the \index{amplitude} \textbf{amplitude} of the signal, \\
+	$\omega_0$ & is the \index{angular frequency} \textbf{angular frequency} of the signal, \\
+	$\varphi_0$ & is the \index{phase} \textbf{phase} of the signal, \\
+	$t \in \mathbb{R}$ & is the real-value time variable and continuously defined.
+\end{tabular}
+
+In fact, the sine function $\sin()$ is mono-chromatic, too. However, it can be derived from \eqref{eq:ch02:mono_chrom_eq} with $\varphi_0 = \SI{90}{\degree}$.
+
+\begin{equation*}
+	x_{sin}(t) = \hat{X} \cdot \sin\left(\omega_0 t\right) = \cos\left(\omega_0 t - \SI{90}{\degree}\right)
+\end{equation*}
+
+The angular frequency is connected to the \index{frequency} \textbf{frequency}.
+\begin{equation}
+	\omega_0 = 2 \pi f_0
+\end{equation}
+
+\begin{attention}
+	You must not confuse the terms \emph{frequency} and \emph{angular frequency}!
+\end{attention}
+
+The inverse of the frequency is the \index{period} \textbf{period} $T_0$. It is the time interval at which the signal repeats.
+\begin{equation}
+	T_0 = \frac{1}{f_0} = \frac{2 \pi}{\omega_0}
+\end{equation}
+
+Be aware of the units. The period $T_0$ is defined in seconds \si{s}. The frequency $f_0$ is the inverse of seconds, which is Hertz \si{Hz}. The angular frequency $\omega_0$ is the inverse of seconds, too. However, it is never given in Hertz, only in \si{rad/s} or, more commonly, \si{1/s}.
+
+\begin{table}[H]
+	\centering
+	\caption{Units}
+	\begin{tabular}{|l|l|}
+		\hline
+		Period $T_0$ & \si{s} \\
+		\hline
+		Frequency $f_0$ & \si{Hz} \\
+		\hline
+		Angular frequency $\omega_0$ & \si{1/s} \; (never Hertz!) \\
+		\hline
+	\end{tabular}
+\end{table}
+
+The actual unit of the signal is derived from its amplitude $\hat{X}$ which can be any physical measure.
+
+\paragraph{Representation by A Complex-Valued Phasor.}
+
+A graphical view on the creation of a cosine signal is depicted in Figure \ref{fig:ch02:cos_creation}.
+
+\begin{figure}[H]
+	\caption{Imagine, there is a pointer (red) with one side fixed to a point. Now, it begins rotating counter-clockwise with an angular frequency of $\omega_0$ (blue). The arrow of the pointer draws a circle (left side). Each angle of the pointer is related to a time instance (green). The blue pointer is the current position at time instance $t$. Its vertical value is projected into the time plot, forming the cosine wave (orange).}
+	\label{fig:ch02:cos_creation}
+\end{figure}
+
+You may now some relations:
+\begin{itemize}
+	\item A full rotation of the pointer takes exactly one period $T_0$.
+	\item The orange cosine curve can be horizontally shifted by redefining the original angle of the pointer at $T_0$. This offset angle is the phase $\varphi_0$.
+	\item The length of the pointer and the radius of the circle is the amplitude $\hat{X}$.
+\end{itemize}
+
+A mono-chromatic signal can be described by its three parameters
+\begin{itemize}
+	\item Amplitude $\hat{X}$
+	\item Phase $\varphi_0$
+	\item Frequency $\omega_0$
+\end{itemize}
+
+When a signal passes through a \ac{LTI} system, the amplitude, the phase or both may change. However, the frequency never changes. Thus, the frequency $\omega_0$ is assumed to be constant and neglected. Consequently, the parameters
+\begin{itemize}
+	\item amplitude $\hat{X}$ and
+	\item phase $\varphi_0$
+\end{itemize}
+remain. Both are absorbed by the complex-valued \index{phasor} \textbf{phasor} $\underline{X}$, which uniquely describes a mono-chromatic signal.
+\begin{equation}
+	\underline{X} = \hat{X} \cdot e^{-j \varphi_0}
+\end{equation}
+
+The phasor $\underline{X} \in \mathbb{C}$ is a complex number, which is mostly represented in polar coordinates (see Figure \ref{fig:ch02:cmplxplane_phasor}).
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	\draw[->] (-3.2,0) -- (3.2,0) node[below, align=left]{$\Re$};
+	\draw[->] (0,-3.2) -- (0,3.2) node[left, align=right]{$\Im$};
+	\draw[->, thick] (0, 0) -- (-40:3) node[right, align=left]{Complex phasor $\underline{X}$\\ (position at $t = 0$)};
+	\draw (0:1.5) arc(0:-40:1.5) node[midway, right, align=left]{Phase $\varphi_0$};
+	
+	\draw[->, dashed] (-50:1) arc(-50:30:1) node[right, align=left]{$\omega_0$};
+	\end{tikzpicture}
+	\caption{Phasor in the complex plane}
+	\label{fig:ch02:cmplxplane_phasor}
+\end{figure}
+
+Figure \ref{fig:ch02:cmplxplane_phasor} depicts the phasor in the complex plane. Figure \ref{fig:ch02:cos_creation} shows a complex plane, too. Please note that both complex planes are rotated by \SI{90}{\degree} with respect to each other.
+
+\begin{fact}
+	The phasor of a signal is a signal parameter, constant and \underline{not} time-dependent.
+\end{fact}
+
+The current position of the pointer $\underline{x}(t)$ in the complex plane is obtained by rotating it. It makes a full rotation each $T_0$ periods. Therefore, it rotates at an angular frequency of $\omega_0$. The rotation is a multiplication by $e^{j \omega t}$ in the complex plane. $\underline{x}(t) \in \mathbb{C}$ is a complex value, too.
+\begin{equation}
+	\underline{x_{mc}}(t) = \underline{X} \cdot e^{j \omega t} = \hat{X} \cdot e^{-j \varphi_0} \cdot e^{j \omega t}
+\end{equation}
+
+\todo{Proof}
+
+The real-valued function can be obtained by extracting the real part of the complex-valued current value.
+\begin{equation}
+	x_{mc}(t) = \Re\left\{\underline{x_{mc}}(t)\right\}
+\end{equation}
+
+% Exercise: Is a sine wave with DC bias mono-chromatic -> no
+
+\section{Periodic Signals and Fourier Series}
+
+Periodic signals $x_p(t)$ comprises a class of signals which indefinitely repeat at constant time intervals $T_0$.
+\begin{equation}
+	x_p(t + n T_0) = x_p(t) \qquad \forall \; n \in \mathbb{Z}, \quad \mathbb{Z} = \left\{..., -2, -1, 0, 1, 2, ...\right\}
+\end{equation}
+
+Mono-chromatic signals are a special kind of periodic signals. Multi-frequent signals are composed a limited or unlimited number of mono-chromatic signals, which superimpose. Multi-frequent signals are periodic signals in general.
+
+\begin{fact}
+	Each periodic signal can be decomposed into a superposition of mono-chromatic signals.
+\end{fact}
+
+The inverse of the period $T_0$ is $f_0$, which is the \textbf{base frequency}. This is the frequency at the periodic pattern repeats. Again, frequency and angular frequency $\omega_0 = 2 \pi f_0$ must be distinguished.
+
+The periodic signal can now be decomposed in cosine and sine functions with integer multiples of the base frequency $f_0$ or base angular frequency $\omega_0$, respectively. They are called \index{harmonics} \textbf{harmonics}.
+\begin{equation}
+	\begin{split}
+		x_p(t) &= \sum\limits_{n=0}^{\infty} a_n \cos\left(n \omega_0 t\right) + \sum\limits_{m=0}^{\infty} b_m \sin\left(m \omega_0 t\right) \qquad \forall \; n, m \in \mathbb{N} = \left\{0, 1, 2, ...\right\} \\
+		 &= a_0 + \sum\limits_{n=1}^{\infty} a_n \cos\left(n \omega_0 t\right) + \sum\limits_{m=1}^{\infty} b_m \sin\left(m \omega_0 t\right) \\
+	\end{split}
+	\label{eq:ch02:fourier_series}
+\end{equation}
+
+What happened to $n = 0$ and $m = 0$? $\cos(0) = 1$ and $\sin(0) = 0$. That's it.
+
+Comparing to the mono-chromatic signals, what happened to the phase $\varphi_0$? The phase $\varphi_0$ is a characteristic of mono-chromatic signals. It is completely absorbed by the coefficients $a_n$ and $b_n$ of the cosine and sine functions.
+
+\subsection{Orthogonality}
+\index{orthogonality}
+The cosine and sine functions are orthogonal to each other. In geometry, two vectors $\vect{A}$ and $\vect{B}$ are said to be orthogonal, if the angle between them is \SI{90}{\degree}. In this case, their inner product is zero.
+\begin{equation}
+	\langle \vect{A}, \vect{B} \rangle = 0
+\end{equation}
+
+More generally, two functions $f(x)$ and $g(x)$ are orthogonal if their \index{inner product} \textbf{inner product} $\langle f, g \rangle$ is zero. 
+\begin{equation}
+	0 \stackrel{!}{=} \langle f, g \rangle_w = \int\limits_{a}^{b} f(x) g(x) w(x) \, \mathrm{d} x
+\end{equation}
+$w(x)$ is a non-negative weight function, which is $w(x) = 1$ in simple cases like this one.
+
+Now, you can prove that the cosine and sine functions are orthogonal to each other.
+\begin{equation}
+	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \cos\left(n \omega_0 t\right) \sin\left(m \omega_0 t\right) \, \mathrm{d} t = 0 \qquad \forall n, m \in \mathbb{Z}
+	\label{eq:ch02:orth_rel_cos_sin}
+\end{equation}
+
+Furthermore, the sine and cosine functions with \underline{different} indices are orthogonal to each other.
+\begin{equation}
+	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \cos\left(n \omega_0 t\right) \cos\left(p \omega_0 t\right) \, \mathrm{d} t = \frac{\pi}{\omega_0} \cdot \delta_{np} \qquad \forall \; n, p \in \mathbb{N}
+	\label{eq:ch02:orth_rel_cos}
+\end{equation}
+\begin{equation}
+	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \sin\left(m \omega_0 t\right) \sin\left(q \omega_0 t\right) \, \mathrm{d} t = \frac{\pi}{\omega_0} \cdot \delta_{mq} \qquad \forall \; m, q \in \mathbb{N}
+	\label{eq:ch02:orth_rel_sin}
+\end{equation}
+with the Kronecker delta
+\begin{equation}
+	\delta_{uv} = \begin{cases}
+		1 & \qquad \text{if } u = v, \\
+		0 & \qquad \text{if } u \neq v
+	\end{cases}
+	\label{eq:ch02:kronecker_delta}
+\end{equation}
+
+The \index{orthogonality relations} \textbf{orthogonality relations} \eqref{eq:ch02:orth_rel_cos_sin}, \eqref{eq:ch02:orth_rel_cos} and \eqref{eq:ch02:orth_rel_sin} point out:
+\begin{itemize}
+	\item Cosine functions are orthogonal if their indices are different. I.e., $n \neq p$ in \eqref{eq:ch02:orth_rel_cos}.
+	\item Sine functions are orthogonal if their indices are different. I.e., $m \neq q$ in \eqref{eq:ch02:orth_rel_sin}.
+	\item Cosine and sine function are orthogonal independent of their indices.
+	\item The indices are the integer multiples of the base frequency $\omega_0$ (harmonics).
+\end{itemize}
+
+\subsection{Extraction of The Coefficients}
+
+The orthogonality relations are useful to extract the coefficients $a_n$ and $b_n$ in \eqref{eq:ch02:fourier_series}. Given is the input signal $\tilde{x}_p(t)$ whose coefficient shall be determined. Following assumptions can be derived from the properties of a periodic signal:
+\begin{itemize}
+	\item $\tilde{x}_p(t)$ is composed of mono-chromatic cosine and sine functions.
+	\item All cosine and sine functions have integer multiples of the base frequency.
+	\item Each cosine and sine function has a different weight -- the coefficient.
+\end{itemize}
+
+Using the orthogonality relations, the coefficients $\tilde{a}_n$ and $\tilde{b}_n$ can be obtained by:
+\begin{subequations}
+	\begin{align}
+		\tilde{a}_n &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \cos\left(n \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_an} \\
+		\tilde{b}_m &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \sin\left(n \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_bm}
+	\end{align}
+\end{subequations}
+
+\begin{proof}{Parameter Extraction for $\tilde{a}_n$}
+	Given is a periodic function $\tilde{x}_p(t)$, which can be decomposed into:
+	\begin{equation}
+		\tilde{x}_p(t) = \sum\limits_{p=0}^{\infty} \tilde{a}_p \cos\left(p \omega_0 t\right) + \sum\limits_{q=0}^{\infty} \tilde{b}_q \sin\left(q \omega_0 t\right)
+		\label{eq_ch02_proof_per_sig_example}
+	\end{equation}
+	The coefficient $\tilde{a}_n$ is of interest.
+	
+	Inserting \eqref{eq_ch02_proof_per_sig_example} into \eqref{eq_ch02_fourier_series_coeff_an}, yields
+	\begin{equation}
+		\tilde{a}_n = \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \left(\sum\limits_{p=0}^{\infty} \tilde{a}_p \cos\left(p \omega_0 t\right) + \sum\limits_{q=0}^{\infty} \tilde{b}_q \sin\left(q \omega_0 t\right)\right) \cdot \cos\left(n \omega_0 t\right) \, \mathrm{d} t
+	\end{equation}
+	Due to the orthogonality relations, \underline{all products containing a sine function} and \underline{all products containing a cosine function with the index $n \neq p$} become zero. Furthermore, following must be true: $n = p$
+	
+	\begin{equation}
+		\tilde{a}_n = \tilde{a}_p \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \cos\left(p \omega_0 t\right) \cdot \cos\left(n \omega_0 t\right) \, \mathrm{d} t \qquad \text{if } \; n = p
+	\end{equation}
+	
+	Using \eqref{eq:ch02:orth_rel_cos}, the integral resolves to:
+	\begin{equation}
+		\tilde{a}_n = \tilde{a}_p \frac{\omega_0}{\pi} \frac{\pi}{\omega_0} \qquad \text{if } \; n = p
+	\end{equation}
+	
+	In the end, it could be proven that $\tilde{a}_n = \tilde{a}_p$ for $n = p$.
+	
+	The proof is analogous for the coefficient $b_n$.
+\end{proof}
+
+$\cos\left(n \omega_0 t\right)$ can be seen as a ``test function'', which is used to extract the component with the index $n$. The proof points out:
+\begin{itemize}
+	\item All sine components are erased by $\cos\left(n \omega_0 t\right)$, due to the orthogonality relations.
+	\item All cosine function with index $p \neq n$ are erased by $\cos\left(n \omega_0 t\right)$, due to the orthogonality relations.
+\end{itemize}
+For $b_m$, $\sin\left(m \omega_0 t\right)$ is analogous.
+
+\begin{excursus}{Illustration of The ``Test Function''}
+	For illustration of the ``test functions'', image you have a radio and want to hear a specific station. You tune to the frequency on which the station is broadcasting. All other signals are filtered out, you don't want to hear them. Actually, the radio does not employ orthogonality in this case. However, this illustration might help to understand the meaning of $\cos\left(n \omega_0 t\right)$ and $\sin\left(m \omega_0 t\right)$ \underline{in connection} with the orthogonality relations.
+\end{excursus}
+
+A special case is the coefficient $\tilde{a}_0$.
+\begin{equation}
+	\tilde{a}_0 = \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \, \mathrm{d} t
+\end{equation}
+$\cos\left(n \omega_0 t\right)$ is $1$ for $n = 0$. $\tilde{a}_0$ is the \index{DC offset} \textbf{\ac{DC} offset} of the signal. The above formula is known as the calculation of the signal mean in electrical engineering.
+
+The composition of a series of mono-chromatic signals as shown in \eqref{eq:ch02:fourier_series} is called \index{Fourier series} \textbf{Fourier series}.
+\begin{equation*}
+	x_p(t) = \sum\limits_{n=1}^{\infty} a_n \cos\left(n \omega_0 t\right) + \sum\limits_{m=1}^{\infty} b_m \sin\left(m \omega_0 t\right)
+\end{equation*}
+
+\subsection{Complex-Valued Fourier Series}
+
+A complex-valued, periodic signal $\underline{x_p}(t)$ can be decomposed into complex-valued mono-chromatic signals. The coefficients $\underline{c}_n$ are phasors.
+\begin{equation}
+	\underline{x_p}(t) = \sum\limits_{n = -\infty}^{\infty} \underline{c}_n \cdot e^{j n \omega_0 t} \qquad \forall \; n \in \mathbb{Z}
+	\label{eq:ch02:fourier_series_cmplx}
+\end{equation}
+
+The coefficients $\underline{\tilde{c}}_n$ of an input signal $\underline{\tilde{x}_p}(t)$ can be determined by:
+\begin{equation}
+	\underline{\tilde{c}}_n = \frac{\omega_0}{2 \pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \underline{\tilde{x}_p}(t) \cdot e^{-j n \omega_0 t} \, \mathrm{d} t
+	\label{eq_ch02_fourier_series_coeff_cn}
+\end{equation}
+
+It is based on the orthogonality relation:
+\begin{equation}
+	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} e^{j n \omega_0 t} e^{-j p \omega_0 t} \, \mathrm{d} t = \frac{2 \pi}{\omega_0} \cdot \delta_{np} \qquad \forall \; n, p \in \mathbb{Z}
+	\label{eq:ch02:orth_rel_exp}
+\end{equation}
+
+\subsection{Amplitude and Phase Spectra}
+
+\section{Non-Periodic Signals and Fourier Transform}
+
+\subsection{Derivation of The Fourier Transform}
+
+Non-periodic signals have no repeating pattern. Consequently, there is no period $T_0$. Mathematically, the period is indefinite $T_0 \rightarrow \infty$.
+
+A non-periodic signal $\underline{x_{np}}(t)$ cannot be simply decomposed by a Fourier series \eqref{eq:ch02:fourier_series_cmplx}.
+\begin{equation}
+	\begin{split}
+		\underline{x_{np}}(t) &= \lim\limits_{T_0 \rightarrow \infty} \sum\limits_{n = -\infty}^{\infty} \underline{c}_n \cdot e^{j n \omega_0 t} \\
+		 &= \lim\limits_{T_0 \rightarrow \infty} \sum\limits_{n = -\infty}^{\infty} \underline{c}_n \cdot e^{j \frac{2 \pi n}{T_0} t}
+	\end{split}
+	\label{eq:ch02:sig_np_fourier_series}
+\end{equation}
+
+The coefficient $\underline{c}_n$ is defined by \eqref{eq_ch02_fourier_series_coeff_cn}:
+\begin{equation*}
+	\begin{split}
+		\underline{c}_n &= \frac{\omega_0}{2 \pi} \int\limits_{t = -\frac{T_0}{2}}^{\frac{T_0}{2}} \underline{x_{np}}(t) \cdot e^{-j n \omega_0 t} \, \mathrm{d} t \\
+		 &= \frac{1}{T_0} \int\limits_{t = -\frac{T_0}{2}}^{\frac{T_0}{2}} \underline{x_{np}}(t) \cdot e^{-j n \omega_0 t} \, \mathrm{d} t
+	\end{split}
+	\label{eq:ch02:sig_np_cn}
+\end{equation*}
+
+In this case where $T_0 \rightarrow \infty$, $n \omega_0$ is substituted by the frequency variable $\omega$.
+\begin{equation}
+	\omega = n \omega_0
+	\label{eq:ch02:omega_subst}
+\end{equation}
+
+Inserting \eqref{eq:ch02:sig_np_cn} into \eqref{eq:ch02:sig_np_fourier_series} while considering \eqref{eq:ch02:omega_subst}, yields:
+\begin{equation}
+	\underline{x_{np}}(t) = \lim\limits_{T_0 \rightarrow \infty} \sum\limits_{n = -\infty}^{\infty} \frac{1}{T_0} \left( \int\limits_{t' = -\frac{T_0}{2}}^{\frac{T_0}{2}} \underline{x_{np}}(t') \cdot e^{-j \omega t'} \, \mathrm{d} t' \right) \cdot e^{j \omega t}
+\end{equation}
+Remember, that $n$ is still in the sum, since it has been absorbed by $\omega = n \omega_0$.
+
+The outer sum is a Rieman sum. $\frac{1}{T_0}$ is substituted by $\frac{\Delta \omega}{2 \pi}$. With $T_0 \rightarrow \infty$, it can be rewritten as an integral.
+\begin{equation}
+	\underline{x_{np}}(t) = \underbrace{\frac{1}{2 \pi} \int\limits_{\omega = -\infty}^{\infty} \underbrace{\left( \int\limits_{t' = -\infty}^{\infty} \underline{x_{np}}(t') \cdot e^{-j \omega t'} \, \mathrm{d} t' \right)}_{\text{Fourier transform}} \cdot e^{j \omega t} \, \mathrm{d} \omega}_{\text{Inverse Fourier transform}}
+\end{equation}
+
+The inner integral is the \index{Fourier transform} \textbf{Fourier transform}. 
+
+\begin{definition}{Fourier Transform}
+	The \index{Fourier transform} \textbf{Fourier transform} of the function $\underline{x}(t)$ is:
+	\begin{equation}
+		\underline{X}(j \omega) = \mathcal{F} \left\{\underline{x}(t)\right\} = \int\limits_{t = -\infty}^{\infty} \underline{x}(t) \cdot e^{-j \omega t} \, \mathrm{d} t
+	\end{equation}
+	
+	The \index{inverse Fourier transform} \textbf{inverse Fourier transform} is:
+	\begin{equation}
+		\underline{x}(t) = \mathcal{F}^{-1} \left\{\underline{X}(j \omega)\right\} = \frac{1}{2 \pi} \int\limits_{\omega = -\infty}^{\infty} \underline{X}(j \omega) \cdot e^{+j \omega t} \, \mathrm{d} \omega
+	\end{equation}
+\end{definition}
+
+\subsection{Amplitude and Phase Spectra}
+
+\subsection{Time Domain and Frequency Domain}
+
+\section{Properties of The Fourier Transform}
+
+\subsection{Energy Signals and Power Signals}
+
+Besides the classification of signals into periodic and non-periodic, signals can be divided into \index{energy signals} \textbf{energy signals} and \index{power signals} \textbf{power signals}.
+
+\begin{definition}{Energy and Power Signals}
+	\begin{itemize}
+		\item \textbf{Energy signals} have a finite, positive signal energy $0 < E < \infty$, but their average power is zero $P = 0$.
+		\item \textbf{Power signals} have a finite, positive average signal power $0 < P < \infty$, but their signal energy is indefinite $E = \infty$.
+	\end{itemize}
+\end{definition}
+
+The \index{average signal power} \textbf{average signal power} $P$ is a measure for the amount of energy transferred per unit time and defined by:
+\begin{equation}
+	P = \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{-\frac{T}{2}}^{\frac{T}{2}} \left|x(t)\right|^2 \; \mathrm{d} t
+\end{equation}
+The signal power is connected to the \ac{RMS} value, which is often used in electrical engineering.
+\begin{equation}
+	\hat{x}_{RMS} = \lim\limits_{T \rightarrow \infty} \sqrt{ \frac{1}{T} \int\limits_{-\frac{T}{2}}^{\frac{T}{2}} \left|x(t)\right|^2 \; \mathrm{d} t}
+\end{equation}
+
+The \index{signal energy} \textbf{signal energy} $E$ is:
+\begin{equation}
+	E = \int\limits_{-\infty}^{\infty} \left|x(t)\right|^2 \; \mathrm{d} t
+\end{equation}
+
+The property of power signals, which have an indefinite signal energy, is a problem for the Fourier transform. The transform would yield an indefinite value. Thus:
+\begin{fact}
+	Every energy signal has a Fourier transform.
+\end{fact}
+
+Only some power signals have a Fourier transform. There are distributions which are power signals, but have a Fourier transform, too. Especially, all \emph{tempered distributions} have a Fourier transform.
+
+\subsection{Dirac Delta Function}
+
+An important distribution is the \index{Dirac delta function} \textbf{Dirac delta function} $\delta(t)$. The Dirac delta function is zero everywhere except at its origin, where it is an indefinitely narrow, indefinitely high pulse.
+\begin{equation}
+	\delta(t) = \begin{cases}
+		+\infty & \qquad \text{if } t = 0, \\
+		0 & \qquad \text{if } t \neq 0
+	\end{cases}
+	\label{eq:ch02:dirac_delta}
+\end{equation}
+It is constrained by
+\begin{equation}
+	\int\limits_{-\infty}^{\infty} \delta(t) \; \mathrm{d} t = 1
+\end{equation}
+
+\begin{attention}
+	The Dirac delta function $\delta(t)$ must not be confused with the Kronecker delta \eqref{eq:ch02:kronecker_delta}. The Dirac delta function operates in continuous space $t \in \mathbb{R}$. The Kronecker delta $\delta_n$ (here one-dimensional) operates in discrete space $n \in \mathbb{Z}$.
+\end{attention}
+
+A special feature of the function is called \index{Dirac measure} \textbf{Dirac measure}.
+\begin{equation}
+	\int\limits_{-\infty}^{\infty} f(t) \delta(t) \; \mathrm{d} t = f(0)
+	\label{eq:ch02:dirac_measure}
+\end{equation}
+
+Using the Dirac measure, the Fourier transform can be calculated:
+\begin{equation}
+	\mathcal{F} \left\{\delta(t)\right\} = \int\limits_{-\infty}^{\infty} \delta(t) \cdot e^{-j \omega t} \; \mathrm{d} t = 1
+\end{equation}
+The Fourier transform of the Dirac delta function is the frequency-independent constant $1$.
+
+\subsection{Operations 1: Linearity}
+
+\subsection{Operations 2: Differentiation and Integration}
+
+\subsection{Operations 3: Multiplication}
+
+\subsection{Operations 4: Time Shift}
+
+\subsection{Duality}
+
+\section{\acs{LTI} Systems}
+
+\subsection{Transfer Function and Impulse Response}
+
+\subsection{Convolution}
+
+\subsection{Poles and Zeroes}

@@ -1,9 +1,10 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Configuration
-\def\thekindofdocument{Lecture Notes and Exercises}
+\def\thekindofdocument{Lecture Notes}
+\def\thesubtitle{Chapter 2: Signals and Systems}
 \def\therevision{1}
-\def\therevisiondate{2020-04-27}
+\def\therevisiondate{2020-05-01}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Header
@@ -29,33 +30,13 @@
 %\tableofcontents
 %\newpage
 
-% Imprint
-\input{../common/imprint.tex}
-\newpage
-
-% List of Acronyms
-\input{../common/acronym.tex}
-\newpage
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Content
 
-\input{../chapter00/preface.tex}
+\setcounter{chapter}{1}
+
 \clearpage
-
-\tableofcontents
-\clearpage
-
-\setcounter{chapter}{-1}
-
-\input{../chapter00/content.tex}
-\clearpage
-
-\input{../chapter01/content.tex}
-\clearpage
-
 \input{../chapter02/content.tex}
-\clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendix
@@ -72,6 +53,10 @@
 % References
 %\bibliographystyle{unsrt}
 %\bibliography{Masterarbeit}
+
+% List of Acronyms
+\input{../common/acronym.tex}
+\newpage
 
 % Notation
 %\include{formales/notation}
@@ -101,6 +86,10 @@
 \phantomsection
 \addcontentsline{toc}{chapter}{\listtablename}
 \listoftables
+\newpage
+
+% Imprint
+\input{../common/imprint.tex}
 \newpage
 
 % To Do
