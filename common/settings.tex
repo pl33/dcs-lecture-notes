@@ -1,7 +1,7 @@
 \documentclass[%
 	a4paper,%				A4 Papier
 	twoside,%				einseitig (linker und rechter Seitenrand sind gleich groß)
-	bibliography=totocnumbered,%	Literaturverzeichnis nummeriert mit ins
+	%bibliography=totocnumbered,%	Literaturverzeichnis nummeriert mit ins
 	                           % Inhaltsverzeichnis einfügen
 	numbers=noenddot,%		hinter der Gliederungsnummer soll kein Punkt gesetzt werden (siehe Duden)
 	parskip=half,%			europäischer Satz mit Abstand zwischen Absätzen
@@ -177,8 +177,38 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
 
-%\usepackage{bibgerm}
-%\usepackage[numbers]{natbib}
+%\usepackage[square, numbers, sectionbib]{natbib}
+%\usepackage{chapterbib}
+%\def\thebibfile{../DCS}
+%\def\thebibstyle{unsrtnat}
+%
+%\makeatletter
+%\renewenvironment{thebibliography}[1]
+%{\section*{\bibname}% <-- this line was changed from \chapter* to \section*
+%	\@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}%
+%	\list{\@biblabel{\@arabic\c@enumiv}}%
+%	{\settowidth\labelwidth{\@biblabel{#1}}%
+%		\leftmargin\labelwidth
+%		\advance\leftmargin\labelsep
+%		\@openbib@code
+%		\usecounter{enumiv}%
+%		\let\p@enumiv\@empty
+%		\renewcommand\theenumiv{\@arabic\c@enumiv}}%
+%	\sloppy
+%	\clubpenalty4000
+%	\@clubpenalty \clubpenalty
+%	\widowpenalty4000%
+%	\sfcode`\.\@m}
+%{\def\@noitemerr
+%	{\@latex@warning{Empty `thebibliography' environment}}%
+%	\endlist}
+%\makeatother
+
+%\usepackage[square, numbers, sectionbib]{natbib}
+%\usepackage[backend=bibtex,style=unsrtnat]{biblatex}
+\usepackage[backend=biber,sorting=none]{biblatex}
+\addbibresource{../DCS.bib}
+%\bibliography{../DCS}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Directories
@@ -232,6 +262,11 @@
 	pdfduplex={DuplexFlipLongEdge}
 	hidelinks]{hyperref}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Own commands
+
+\newcommand{\licensequote}[3]{\textit{Reproduced from #1. Copyright by #2. License: #3.}}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

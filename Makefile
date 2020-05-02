@@ -4,11 +4,15 @@ BUILD_DIR = build
 LATEXMK = latexmk -pdf -silent -synctex=1
 LATEXMK_PVC = $(LATEXMK) -pvc
 
-ALL_TARGETS = $(BUILD_DIR)/chapter00.pdf $(BUILD_DIR)/chapter01.pdf $(BUILD_DIR)/chapter02.pdf
-COMMON_DEPS = common/settings.tex common/titlepage.tex common/acronym.tex common/imprint.tex
+ALL_CHAPTERS = $(BUILD_DIR)/chapter00.pdf $(BUILD_DIR)/chapter01.pdf $(BUILD_DIR)/chapter02.pdf
+COMMON_DEPS = common/settings.tex common/titlepage.tex common/acronym.tex common/imprint.tex DCS.bib
 
-all: $(ALL_TARGETS)
+all: chapters complete
 
+.PHONY: chapters
+chapters: $(ALL_CHAPTERS)
+
+.PHONY: complete
 complete: $(BUILD_DIR)/DCS.pdf
 
 clean:
