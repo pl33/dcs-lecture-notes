@@ -1,4 +1,4 @@
-\chapter{Signals and Systems}
+\chapter{Time-Continuous Signals and Systems}
 
 \begin{refsection}
 
@@ -322,10 +322,14 @@ A special case is the coefficient $\tilde{a}_0$.
 \end{equation}
 $\cos\left(n \omega_0 t\right)$ is $1$ for $n = 0$. $\tilde{a}_0$ is the \index{DC offset} \textbf{\ac{DC} offset} of the signal. The above formula is known as the calculation of the signal mean in electrical engineering.
 
-The composition of a series of mono-chromatic signals as shown in \eqref{eq:ch02:fourier_series} is called \index{Fourier series} \textbf{Fourier series}.
-\begin{equation*}
-	x_p(t) = \sum\limits_{n=1}^{\infty} a_n \cos\left(n \omega_0 t\right) + \sum\limits_{m=1}^{\infty} b_m \sin\left(m \omega_0 t\right)
-\end{equation*}
+\begin{definition}{Fourier series}
+	The composition of a series of mono-chromatic signals as shown in \eqref{eq:ch02:fourier_series} is called \index{Fourier series} \textbf{Fourier series}.
+	\begin{equation*}
+		x_p(t) = \sum\limits_{n=1}^{\infty} a_n \cos\left(n \omega_0 t\right) + \sum\limits_{m=1}^{\infty} b_m \sin\left(m \omega_0 t\right)
+	\end{equation*}
+	
+	The coefficients can be calculated using \eqref{eq_ch02_fourier_series_coeff_an} and \eqref{eq_ch02_fourier_series_coeff_bm}.
+\end{definition}
 
 \subsection{Complex-Valued Fourier Series}
 
@@ -346,6 +350,15 @@ It is based on the orthogonality relation:
 	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} e^{j n \omega_0 t} e^{-j p \omega_0 t} \, \mathrm{d} t = \frac{2 \pi}{\omega_0} \cdot \delta_{np} \qquad \forall \; n, p \in \mathbb{Z}
 	\label{eq:ch02:orth_rel_exp}
 \end{equation}
+
+\begin{definition}{Complex-Valued Fourier series}
+	A complex-valued, periodic signal $\underline{x_p}(t)$ can be decomposed into a series complex-valued mono-chromatic signals \eqref{eq:ch02:fourier_series_cmplx} -- the \index{Fourier series!complex-valued} \textbf{complex-valued Fourier series}.
+	\begin{equation*}
+		\underline{x_p}(t) = \sum\limits_{n = -\infty}^{\infty} \underline{c}_n \cdot e^{j n \omega_0 t} \qquad \forall \; n \in \mathbb{Z}
+	\end{equation*}
+	
+	The coefficients can be calculated using \eqref{eq_ch02_fourier_series_coeff_cn}.
+\end{definition}
 
 \subsection{Amplitude and Phase Spectra}
 
