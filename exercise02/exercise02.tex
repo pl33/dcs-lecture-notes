@@ -1,0 +1,40 @@
+\phantomsection
+\addcontentsline{toc}{section}{Exercise 2}
+\section*{Exercise 2}
+
+\begin{question}[subtitle={Mono-chromatic Signals}]
+	Given is a mono-chromatic signal $u(t)$:
+	\begin{equation*}
+		u(t) = \SI{2}{V} \cdot \cos\left(2 \pi \cdot \SI{1}{MHz} \cdot t + \frac{\pi}{2} \right)
+	\end{equation*}
+	\begin{tasks}
+		\task
+		How much is the frequency and angular frequency? How much is the amplitude? How much is the phase?
+		\task
+		Give the phasor of the signal!
+		\task
+		An DC bias is added to the signal $u(t)$.
+		\begin{equation*}
+			u_2(t) = \SI{1}{V} + \SI{2}{V} \cdot \cos\left(2 \pi \cdot \SI{1}{MHz} \cdot t + \frac{\pi}{2} \right)
+		\end{equation*}
+		Is the resulting signal $u_2(t)$ still mono-chromatic?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{itemize}
+			\item Frequency: \SI{1}{MHz}
+			\item Angular frequency: $2 \pi \cdot \SI{1}{MHz} = \SI{6283185.3}{s^{-1}}$
+			\item Phase: $\SI{-\pi/2}{rad}$ or \SI{-90}{\degree}
+			\item Amplitude: \SI{2}{V}
+		\end{itemize}
+		\task
+		$\underline{U} = \SI{2}{V} \cdot e^{+j \frac{\pi}{2}}$ or $\underline{U} = \SI{2}{V} \angle +\frac{\pi}{2}$
+		\task
+		No, the DC bias adds a mono-chromatic component with a frequency of $f = 0$. $u_2(t)$ is a Fourier series.
+	\end{tasks}
+\end{solution}
+
+% Exercise: Is a sine wave with DC bias mono-chromatic -> no

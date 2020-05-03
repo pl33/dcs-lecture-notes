@@ -44,7 +44,7 @@ There are courses at this university which give you a deeper insight into these 
 \subsection{Communication Model}
 
 %\todo{citation}
-Claude Shannon and Warren Weaver were engineers at the Bell Telephone Labs, USA. They developed the \index{Shannon-Weaver model} \textbf{Shannon-Weaver Model} (Figure \ref{fig:ch01:shannon_weaver_model}).
+Claude Shannon and Warren Weaver were engineers at the Bell Telephone Labs, USA. They developed the \index{Shannon-Weaver model} \textbf{Shannon-Weaver Model} \cite{Shannon1949} (Figure \ref{fig:ch01:shannon_weaver_model}).
 
 \begin{figure}[H]
 	\centering
@@ -191,10 +191,14 @@ Examples:
 	\item Coded data
 \end{itemize}
 
-\textit{Remark:} In fact, the physical form of a digital signal is again an analogue signal. A binary signal can take the discrete states ``high'' and ``low''. If the signal is on a wire, its states are represented by voltage levels, for example \SI{0}{V} and \SI{3.3}{V}. However, if processed by a digital system, the physical representation is of minor importance. Only the discrete, logical states are considered.
-
 \index{signal!binary signal}
 A special kind of digital signal is the \textbf{binary signal}. It has two discrete states.
+
+\begin{excursus}{How analogue are digital signals?}
+	In fact, the physical form of a digital signal is again an analogue signal. If digital electronics are implemented, digital signals are transferred into a physical form. A binary signal can take the discrete states ``high'' and ``low''. Being on a wire, its states are represented by voltage levels, for example \SI{0}{V} and \SI{3.3}{V}. At this point, the engineer must carefully consider the effects which the signal is subject to. This topic is covered by the field of microwave engineering and \ac{EMC}.
+	
+	However, if processed by a digital system, the physical representation is of minor importance. The theoretical consideration of digital signals neglects the physical nature. Even more, it is irrelevant if and which a physical form of the digital signal exists. Only the discrete, logical states are of interest.
+\end{excursus}
 
 
 \subsection{Transmission Channels}
@@ -240,6 +244,98 @@ Examples of transmission lines:
 
 The electromagnetic wave is not bound to a transmission line. It propagates through the space. A medium is not necessary. Electromagnetic wave can also travel through vacuum.
 
+\section{The Electromagnetic Spectrum}
+
+The carrier of information in an electronic communication system are electromagnetic waves -- either bound to a transmission line or wireless. Electromagnetic waves are electric fields $\underline{E}$ and magnetic fields $\underline{H}$, which oscillate at high frequencies.
+
+\begin{excursus}{Maxwell's equations and wave equations}
+	The Maxwell's equations are a set of coupled partial differential equations. They are the foundation of classical electromagnetism and classical optics.
+	
+	\textbf{Gauss' law:}
+	\begin{equation}
+		\nabla \cdot \cmplxvect{E} = \frac{\rho}{\varepsilon_0}
+	\end{equation}
+	
+	\textbf{Gauss' law of magnetism:}
+	\begin{equation}
+		\nabla \cdot \cmplxvect{B} = 0
+	\end{equation}
+	
+	\textbf{Faraday's law (electromagnetic induction):}
+	\begin{equation}
+		\nabla \times \cmplxvect{E} = - \frac{\partial \cmplxvect{B}}{\partial t}
+	\end{equation}
+	
+	\textbf{Ampere's circuital law with Maxwell's extension:}
+	\begin{equation}
+		\nabla \times \cmplxvect{B} = \mu_0 \left(\cmplxvect{J} + \varepsilon_0 \frac{\partial \cmplxvect{E}}{\partial t} \right)
+	\end{equation}
+	
+	James Clerk Maxwell postulated electromagnetic waves in 1865. By ``decoupling'' the Maxwell's equations, the wave equations can be isolated for both the electric field and the magnetic field. They describe the wave propagation in any media.
+	\begin{subequations}
+		\begin{align}
+			\Delta \cmplxvect{E} - \underline{\gamma}^2 \cmplxvect{E} &= \vect{0} \\
+			\Delta \cmplxvect{H} - \underline{\gamma}^2 \cmplxvect{H} &= \vect{0}
+		\end{align}
+	\end{subequations}
+	where $\underline{\gamma}$ is the complex propagation constant, that devolves into the attenuation constant $\alpha$ and the phase constant $\beta$. $\alpha$ expresses the decrease of the field amplitudes while the wave travels through a lossy medium. $\beta$ determines the propagation speed and the wavelength $\lambda = 2 \pi / \beta$.
+	\begin{equation}
+		\underline{\gamma} = \alpha + \mathsf{j} \beta
+	\end{equation}
+\end{excursus}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{svg/ch01_EM_Spectrum_Properties.pdf}
+	\caption[Diagram of the electromagnetic spectrum]{Diagram of the electromagnetic spectrum. \licensequote{\cite{Inductiveload2007}}{''Inductiveload''}{\href{https://creativecommons.org/licenses/by-sa/3.0/deed.en}{CC-BY-SA 3.0}}}
+\end{figure}
+
+Electromagnetic waves have different properties and applications, depending on the frequency. The most interesting range for communication is from radio waves to visible light.
+\begin{itemize}
+	\item Infrared and visible light are used in glass fibre (optical) communication systems. Before the appearance of electronic communication, light was an important information carrier (lighthouses, optical telegraphs, etc.).
+	\item Radio waves and microwaves can be generated by electronics and are radiated by antennas. They have advantages over light like a wider range or their ability to penetrate walls.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\linewidth]{svg/ch01_Electromagnetic-Spectrum.pdf}
+	\caption[Zooming into the radio spectrum as apart of the electromagnetic spectrum]{Zooming into the radio spectrum as apart of the electromagnetic spectrum. \licensequote{\cite{Penubag2012}}{"Penubag" and Victor Blacus}{\href{https://creativecommons.org/licenses/by-sa/3.0/deed.en}{CC-BY-SA 3.0}}}
+\end{figure}
+
+Radio waves are used as a information carrier since the beginning of the 20th century. They can be further divided in accordance with their properties. The radio spectrum is split into \index{bands} \textbf{bands}.
+
+\begin{table}[H]
+	\centering
+	\caption[ITU radio band plan]{\ac{ITU} radio band plan}
+	\begin{tabular}{|l|l|}
+		\hline
+		Band & Abbreviation \\
+		\hline
+		\hline
+		Extremely low frequency & ELF \\
+		\hline
+	\end{tabular}
+\end{table}
+
+Especially, the bands LF to UHF have been traditionally used in wireless communication. Furthermore, their usage is not limited to wireless systems. For example, cable television uses parts of the VHF or UHF spectra. Cable internet shares the wire with TV broadcasting.
+
+Because of the increasing number of services and growing demands regarding bandwidth and response time, modern communication system advance in the direction of microwaves. The microwave spectrum begins at \SI{3}{GHz}. There are dedicate band plans for microwave applications. Table \ref{tab:ch01:IEEE_radar_bands} IEEE radar bands.
+
+\begin{table}[H]
+	\centering
+	\caption{IEEE radar bands}
+	\label{tab:ch01:IEEE_radar_bands}
+	\begin{tabular}{|l|}
+		\hline
+		Abbreviation \\
+		\hline
+		\hline
+		HF \\
+		\hline
+	\end{tabular}
+\end{table}
+
+The services using the electromagnetic spectrum get a \index{frequency allocation} \textbf{frequency allocation}. Usually, a national telecommunication regulation authority is responsible for allocation frequencies to the services. They follow recommendations of the \ac{ITU}, a special agency of the \ac{UN}. In Germany, the regulation authority is the Federal Network Agency (Bundesnetzagentur).
 
 \section{Computer Networks}
 
@@ -371,6 +467,8 @@ This course on digital communication systems mainly considers the physical layer
 	\item \textbf{Mesh}, special form \emph{Full Mesh}
 \end{itemize}
 
+\phantomsection
+\addcontentsline{toc}{section}{References}
 \printbibliography[heading=subbibliography]
 \end{refsection}
 

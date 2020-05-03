@@ -1,10 +1,10 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Configuration
-\def\thekindofdocument{Lecture Notes}
-\def\thesubtitle{Chapter 0: Introduction and Organization}
+\def\thekindofdocument{Exercise}
+\def\thesubtitle{Chapter 1: Communication Systems}
 \def\therevision{1}
-\def\therevisiondate{2020-05-03}
+\def\therevisiondate{2020-04-28}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Header
@@ -33,12 +33,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Content
 
-\input{../chapter00/preface.tex}
-\clearpage
+\setcounter{chapter}{1}
 
-\setcounter{chapter}{-1}
-
-\input{../chapter00/content_ch00.tex}
+\input{../exercise01/exercise01.tex}
 \clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,44 +49,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Nachtrag
-
-% References
-%\bibliographystyle{unsrt}
-%\bibliography{Masterarbeit}
-
-% List of Acronyms
-\input{../common/acronym.tex}
-\newpage
-
-% Notation
-%\include{formales/notation}
-%\newpage
-
-% List of Symbols
-%\include{formales/formelzeichen}
-\newpage
-
-% List of Block Diagram Symbols
-%\include{formales/blockfigures}
-\newpage
-
-% Print default index
-\phantomsection
-\addcontentsline{toc}{chapter}{Index}
-\printindex
-\newpage
-
-% List of Figures
-\phantomsection
-\addcontentsline{toc}{chapter}{\listfigurename}
-\listoffigures
-\newpage
-
-% List of Tables
-\phantomsection
-\addcontentsline{toc}{chapter}{\listtablename}
-\listoftables
-\newpage
 
 % Imprint
 \input{../common/imprint.tex}

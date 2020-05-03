@@ -109,8 +109,49 @@ When a signal passes through a \ac{LTI} system, the amplitude, the phase or both
 \end{itemize}
 remain. Both are absorbed by the complex-valued \index{phasor} \textbf{phasor} $\underline{X}$, which uniquely describes a mono-chromatic signal.
 \begin{equation}
-	\underline{X} = \hat{X} \cdot e^{-j \varphi_0}
+	\underline{X} = \hat{X} \cdot e^{-j \varphi_0} = \hat{X} \angle -\varphi_0
 \end{equation}
+
+\begin{excursus}{Complex numbers}
+	$j$ is the \index{imaginary unit} \textbf{imaginary unit}. It satisfies the equation
+	\begin{equation}
+		j^2 = -1
+	\end{equation}
+	There is no real number $j \notin \mathbb{R}$ which satisfies the above solution. $j$ spans the set of complex numbers $\mathbb{C}$.
+	
+	In mathematics, the imaginary unit is noted as $i$. In engineering context, $j$ is used instead, because $i$ is the symbol of the electric current.
+	
+	A complex number $\underline{c} \in \mathbb{C}$ can be noted in \index{cartesian form} \textbf{cartesian form}:
+	\begin{equation}
+		\underline{c} = a + j b
+	\end{equation}
+	$a \in \mathbb{R}$ is the \index{real part} \textbf{real part} of $\underline{c}$. $b \in \mathbb{R}$ is the \index{imaginary part} \textbf{imaginary part} $\underline{c}$.
+	\begin{subequations}
+		\begin{align}
+			a &= \Re\{\underline{c}\} \\
+			b &= \Im\{\underline{c}\}
+		\end{align}
+	\end{subequations}
+	Complex numbers $\underline{c}$ always carry an underline in this lecture to distinguish them from real numbers. However, this is not mandatory.
+
+	Another notation is the \index{polar form} \textbf{polar form}:
+	\begin{equation}
+		\underline{c} = r \cdot e^{j \varphi}
+	\end{equation}
+	with
+	\begin{subequations}
+		\begin{align}
+			r &= |\underline{c}| = \sqrt{\Re\{\underline{c}\}^2 + \Im\{\underline{c}\}^2} \\
+			\varphi &= \mathrm{atan2} \left(\Im\{\underline{c}\}, \Re\{\underline{c}\}\right) \\
+			e^{j \varphi} &= \cos \varphi + j \sin \varphi
+		\end{align}
+	\end{subequations}
+	The polar form can be written in \index{angle notation} \textbf{angle notation}:
+	\begin{equation}
+		\underline{c} = r \angle \varphi
+	\end{equation}
+	$r \in \mathbb{R}$ and $\varphi \in \mathbb{R}$ are the \index{polar coordinates} \textbf{polar coordinates}.
+\end{excursus}
 
 The phasor $\underline{X} \in \mathbb{C}$ is a complex number, which is mostly represented in polar coordinates (see Figure \ref{fig:ch02:cmplxplane_phasor}).
 
@@ -145,8 +186,6 @@ The real-valued function can be obtained by extracting the real part of the comp
 \begin{equation}
 	x_{mc}(t) = \Re\left\{\underline{x_{mc}}(t)\right\}
 \end{equation}
-
-% Exercise: Is a sine wave with DC bias mono-chromatic -> no
 
 \section{Periodic Signals and Fourier Series}
 
