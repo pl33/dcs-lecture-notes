@@ -159,15 +159,67 @@ Analogue signals can be time-continuous or time-discrete. \emph{Time-continuity}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics{../chapter01/Signal_Analogue.jpg}
+	%\includegraphics{../chapter01/Signal_Analogue.jpg}
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			axis lines=left,
+			legend pos=north east,
+			xmin=0,
+			xmax=7,
+			ymin=0,
+			ymax=3,
+			xtick={0, 1, ..., 6},
+			ytick={0, 0.5, ..., 2.5}
+		]
+			\addplot[smooth, blue, thick] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
+		\end{axis}
+	\end{tikzpicture}
 	\caption[An analogue, value-continuous, time-continuous signal]{An analogue, value-continuous, time-continuous signal. Both time and value can be any real number.}
 	\label{fig:ch01:Signal_Analogue}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics{../chapter01/Signal_TimeDiscr.jpg}
-	\caption[An analogue, value-continuous, but time-discrete signal]{An analogue, value-continuous, but time-discrete signal. Only certain time points are valid, but the values can be any real number.}
+	%\includegraphics{../chapter01/Signal_TimeDiscr.jpg}
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			axis lines=left,
+			legend pos=north east,
+			xmin=0,
+			xmax=7,
+			ymin=0,
+			ymax=3,
+			xtick={0, 1, ..., 6},
+			ytick={0, 0.5, ..., 2.5}
+		]
+			\addplot[smooth, blue, dashed] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
+			\addplot[red, thick] coordinates {(0, 0) (0, 1.1)};
+			\addplot[red, thick] coordinates {(1, 0) (1, 1.8)};
+			\addplot[red, thick] coordinates {(2, 0) (2, 2.1)};
+			\addplot[red, thick] coordinates {(3, 0) (3, 1.0)};
+			\addplot[red, thick] coordinates {(4, 0) (4, 0.8)};
+			\addplot[red, thick] coordinates {(5, 0) (5, 1.7)};
+			\addplot[red, thick] coordinates {(6, 0) (6, 2.4)};
+			\addplot[only marks, red, thick, mark=o] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[An analogue, value-continuous, but time-discrete signal]{An analogue, value-continuous, but time-discrete signal. Only certain time points (in this case $t \in \mathbb{Z}$) are valid, but the values can be any real number. The red circles form the signal. The vertical lines illustrate that the signal in time-discrete. The blue, dashed signal is not present, but illustrates the original time-continuous signal from which the time-discrete signal has been obtained.}
 	\label{fig:ch01:Signal_TimeDiscr}
 \end{figure}
 
@@ -179,8 +231,40 @@ Digital signals are both time-discrete and value-discrete. \emph{Value-discrete}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics{../chapter01/Signal_Digital.jpg}
-	\caption[A digital, value-discrete, time-discrete signal]{A digital, value-discrete, time-discrete signal. Only certain time points and a limited set of values are valid.}
+	%\includegraphics{../chapter01/Signal_Digital.jpg}
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			xmajorgrids=false,
+			ymajorgrids=true,
+			grid style={color=lightgray, dashed},
+			axis lines=left,
+			legend pos=north east,
+			xmin=0,
+			xmax=7,
+			ymin=0,
+			ymax=3,
+			xtick={0, 1, ..., 6},
+			ytick={0, 0.5, ..., 2.5}
+		]
+			\addplot[smooth, blue, dashed] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
+			\addplot[red, thick] coordinates {(0, 0) (0, 1.0)};
+			\addplot[red, thick] coordinates {(1, 0) (1, 2.0)};
+			\addplot[red, thick] coordinates {(2, 0) (2, 2.0)};
+			\addplot[red, thick] coordinates {(3, 0) (3, 1.0)};
+			\addplot[red, thick] coordinates {(4, 0) (4, 1.0)};
+			\addplot[red, thick] coordinates {(5, 0) (5, 1.5)};
+			\addplot[red, thick] coordinates {(6, 0) (6, 2.5)};
+			\addplot[only marks, red, thick, mark=o] coordinates {(0, 1.0) (1, 2.0) (2, 2.0) (3, 1.0) (4, 1.0) (5, 1.5) (6, 2.5)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[A digital, value-discrete, time-discrete signal]{A digital, value-discrete, time-discrete signal. Only certain time points and a limited set of values (in this case multiples of $0.5$) are valid.}
 	\label{fig:ch01:Signal_Digital}
 \end{figure}
 
@@ -197,7 +281,7 @@ A special kind of digital signal is the \textbf{binary signal}. It has two discr
 \begin{excursus}{How analogue are digital signals?}
 	In fact, the physical form of a digital signal is again an analogue signal. If digital electronics are implemented, digital signals are transferred into a physical form. A binary signal can take the discrete states ``high'' and ``low''. Being on a wire, its states are represented by voltage levels, for example \SI{0}{V} and \SI{3.3}{V}. At this point, the engineer must carefully consider the effects which the signal is subject to. This topic is covered by the field of microwave engineering and \ac{EMC}.
 	
-	However, if processed by a digital system, the physical representation is of minor importance. The theoretical consideration of digital signals neglects the physical nature. Even more, it is irrelevant if and which a physical form of the digital signal exists. Only the discrete, logical states are of interest.
+	However, if processed by a digital system, the physical representation is of minor importance. The theoretical consideration of digital signals neglects the physical nature. Even more, it is irrelevant which physical form of the digital signal exists and whether it exits. Only the discrete, logical states are of interest.
 \end{excursus}
 
 
@@ -271,7 +355,7 @@ The carrier of information in an electronic communication system are electromagn
 		\nabla \times \cmplxvect{B} = \mu_0 \left(\cmplxvect{J} + \varepsilon_0 \frac{\partial \cmplxvect{E}}{\partial t} \right)
 	\end{equation}
 	
-	James Clerk Maxwell postulated electromagnetic waves in 1865. By ``decoupling'' the Maxwell's equations, the wave equations can be isolated for both the electric field and the magnetic field. They describe the wave propagation in any media.
+	James Clerk Maxwell postulated electromagnetic waves in 1865 \cite{Maxwell1864}. By ``decoupling'' the Maxwell's equations, the wave equations can be isolated for both the electric field and the magnetic field. They describe the wave propagation in any media.
 	\begin{subequations}
 		\begin{align}
 			\Delta \cmplxvect{E} - \underline{\gamma}^2 \cmplxvect{E} &= \vect{0} \\
@@ -378,17 +462,17 @@ This course focuses on the technologies which convey information between endpoin
 
 Modern communication systems convey information world-wide. These communication links are established over myriads of devices, which form a network. The biggest computer network is the internet.
 
-These devices mainly operate automatically without human interaction. Therefore, they are required to follow certain rules, which are called \textbf{communication protocols} \index{communication protocol}. Protocols define
+In order to interact, the devices are required to follow certain rules, which are called \textbf{communication protocols} \index{communication protocol}. Protocols define
 \begin{itemize}
 	\item the structure and semantics of data,
 	\item synchronization of communication, and
 	\item possible error recovery methods.
 \end{itemize}
 
-Protocols are standardized and must be implemented in every device, which interacts with other devices. Important standardization organizations are:
+Protocols are standardized and must be implemented in every device, which interacts with other devices. Important standardization organizations are amongst others:
 \begin{itemize}
 	\item The non-profit organization \textbf{\acf{IETF}} issues standards concerning the internet. The standards are called \emph{Request For Comment} (RFC) and are available for everyone for free. Example standards: \ac{IP}, \ac{HTTP}
-	\item The \textbf{\acf{IEEE}} has standards committees which develop and publish standards. With respect to the internet, the IEEE\,802 LAN/MAN Standards Committee is the most important one. Example standards: IEEE\,802.11 (Wifi)
+	\item The \textbf{\acf{IEEE}} has standards committees which develop and publish standards. With respect to the internet, the IEEE\,802 LAN/MAN Standards Committee is the most important one. Example standards: IEEE\,802.11 (\ac{WLAN}, Wifi)
 	\item The \textbf{\acf{ETSI}} is an independent, non-profit standardization organization. It is recognized by the European Council and officially responsible for standardization of information and communication technologies in Europe. Example standards: 3G (cell phone system), 4G (cell phone system), TETRA (professional mobile radio system)
 \end{itemize}
 
@@ -475,14 +559,14 @@ Protocol layers add own information to the data received from the upper layer. T
 	\label{fig:ch01:frame_construction}
 \end{figure}
 
-Communication protocols may be exchanged in one layer without affecting the functionality of the other layers. For example, \ac{HTTP} operates on \acs{TCP}/\acs{IP}. But the \acf{IP} works on multiple physical links like Ethernet (IEEE\,802.3), Wifi (IEEE\,802.11) or 4G. The transmission media can even change along the communication path. Information travelling through the internet experience lots of \index{media change} \textbf{media changes}.
+Communication protocols may be exchanged in one layer without affecting the functionality of the other layers. For example, \ac{HTTP} operates on \acs{TCP}/\acs{IP}. But the \acf{IP} works on multiple physical links like Ethernet (IEEE\,802.3), Wifi (IEEE\,802.11) or 4G. The transmission media can even change along the communication path. Information travelling through the internet experience lots of \index{media change} \textbf{media changes}. For example, a datagram is firstly sent over a \ac{WLAN} link an relayed by the router on a cable to the internet service provider.
 
 
-\begin{figure}[H]
-	\centering
-	\caption{Media change on the internet. }
-	\label{fig:ch01:media_changes}
-\end{figure}
+%\begin{figure}[H]
+%	\centering
+%	\caption{Media change on the internet. }
+%	\label{fig:ch01:media_changes}
+%\end{figure}
 
 This course on digital communication systems mainly considers the physical layer (layer 1) and the data link layer (layer 2). This physical layer converts the information to physical signals which then leave the device to be transmitted over a physical transmission channel. Networks, which are enabled by protocols of layer 3 and above, are outside the scope of this course.
 
