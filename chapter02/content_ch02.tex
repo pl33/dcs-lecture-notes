@@ -362,6 +362,132 @@ It is based on the orthogonality relation:
 
 \subsection{Amplitude and Phase Spectra}
 
+Let's consider the complex-valued Fourier series $\underline{x_p}(t)$ \eqref{eq:ch02:fourier_series_cmplx}. The coefficients $\underline{c}_n$ are phasors. Its absolute value (amplitude) $|\underline{c}_n|$ and argument (phase) $\arg\left(\underline{c}_n\right)$ can now be plotted over the index $n$. The index $n \in \mathbb{Z}$ is discrete. Thus, the resulting plots are value-discrete in the dimension of $n$. In contrast, the amplitudes and phases are value-continuous.
+
+\begin{definition}{Spectrum of a period signal}
+	\begin{itemize}
+		\item The plot of the amplitude $|\underline{c}_n|$ is called \index{amplitude spectrum} \textbf{amplitude spectrum}.
+		\item The plot of the phase $\arg\left(\underline{c}_n\right)$ is called \index{phase spectrum} \textbf{phase spectrum}.
+		\item When referring to the \index{spectrum} \textbf{spectrum}, generally both amplitude and phase, or their complex-valued representation of $\underline{c}_n$ is meant.
+	\end{itemize}
+\end{definition}
+
+\begin{fact}
+	The index $n \in \mathbb{Z}$ is discrete. The plots of the spectrum are value-discrete in the dimension of $n$.
+\end{fact}
+
+When considering a complex-valued signal $\underline{x_p}(t)$, both amplitude and phase can take any value, with following constraints:
+\begin{itemize}
+	\item The amplitude $|\underline{c}_n|$ is always a positive real number.
+	\item The phase $\arg\left(\underline{c}_n\right)$ a real number from the interval $[-\pi, +\pi]$.
+\end{itemize}
+
+If the signal $\underline{x_p}(t) = x_p(t)$ is real-valued, i.e., $\Im\left\{\underline{c}_n(t)\right\} = 0$, the values of $\underline{c}_n$ are even more constrained by the \index{spectrum!symmetry rules} \textbf{symmetry rules}:
+\begin{itemize}
+	\item The coefficients $\underline{c}_n \in \mathbb{C}$ are still complex-valued phasors.
+	\item But, the coefficients $\underline{c}_n$ show a special symmetry.
+	\begin{itemize}
+		\item The amplitude spectrum $|\underline{c}_n|$ is an \underline{even function}. It is symmetric with respect to the $y$-axis.
+		\item The phase spectrum $\arg\left(\underline{c}_n\right)$ is an \underline{odd function}. It is symmetric with respect to the origin.
+		\item As a consequence, the phase of $\arg\left(\underline{c}_0\right)$ at $n = 0$ must be either $0$ or $+\pi$. Note that, $+\pi$ is identical to $-\pi$ in the complex plane. Thus, $-\pi$ is valid, too, but not distinct from $+\pi$. This phase is the sign of the \ac{DC} bias: $\arg\left(\underline{c}_0\right) = 0$ means positive \ac{DC} bias and $\arg\left(\underline{c}_0\right) = \pi$ means negative \ac{DC} bias.
+	\end{itemize}
+\end{itemize}
+These symmetry rules apply for \underline{all} real-valued signals $\underline{x_p}(t) = x_p(t) \in \mathbb{R}$. The symmetry rules ensure that the mono-chromatic components of the Fourier series \eqref{eq:ch02:fourier_series_cmplx} sum up to a real value at each time instance $t \in \mathbb{R}$.
+
+The symmetry rules do \underline{not} apply for complex-valued signals $\underline{x_p}(t) \in \mathbb{C}$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$n$},
+			ylabel={$|\underline{c}_n|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			axis lines=left,
+			legend pos=north east,
+			xmin=-4,
+			xmax=4,
+			ymin=0,
+			ymax=3,
+			xtick={-3, -2, ..., 3},
+			ytick={0, 0.5, ..., 2.5},
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			}
+		]
+			\addplot[red, thick] coordinates {(-3, 0) (-3, 2.0)};
+			\addplot[red, thick] coordinates {(-2, 0) (-2, 0.4)};
+			\addplot[red, thick] coordinates {(-1, 0) (-1, 1.6)};
+			\addplot[red, thick] coordinates {(0, 0) (0, 1.1)};
+			\addplot[red, thick] coordinates {(1, 0) (1, 1.6)};
+			\addplot[red, thick] coordinates {(2, 0) (2, 0.4)};
+			\addplot[red, thick] coordinates {(3, 0) (3, 2.0)};
+			\addplot[only marks, red, thick, mark=o] coordinates {(-3, 2.0) (-2, 0.4) (-1, 1.6) (0, 1.1) (1, 1.6) (2, 0.4) (3, 2.0)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[Amplitude Spectrum of a multi-frequent signal]{Amplitude Spectrum of a multi-frequent signal. The absolute values (amplitudes) of the coefficients are plotted. The signal $\underline{c}_n$ is actually real-valued ($\Im\left\{\underline{c}_n(t)\right\} = 0$). This leads a symmetry with respect to the $y$-axis. The amplitude spectrum of a real-valued signal is an even function.}
+	\label{fig:ch02:FSeries_Amplitude_Spectrum}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$n$},
+			ylabel={$\arg\left(\underline{c}_n\right)$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			axis lines=left,
+			legend pos=north east,
+			xmin=-4,
+			xmax=4,
+			ymin=-4,
+			ymax=4,
+			xtick={-3, -2, ..., 3},
+			ytick={-3.14159, -1.5708,1.5708, 3.14159},
+			yticklabels={$-\pi\hspace{0.30cm}$, $-\frac{\pi}{2}$,$\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			}
+		]
+			\addplot[red, thick] coordinates {(-3, 0) (-3, 3.14159)};
+			\addplot[red, thick] coordinates {(-2, 0) (-2, -0.5)};
+			\addplot[red, thick] coordinates {(-1, 0) (-1, 1.6)};
+			%\addplot[red, thick] coordinates {(0, 0) (0, 0)};
+			\addplot[red, thick] coordinates {(1, 0) (1, -1.6)};
+			\addplot[red, thick] coordinates {(2, 0) (2, 0.5)};
+			\addplot[red, thick] coordinates {(3, 0) (3, -3.14159)};
+			\addplot[only marks, red, thick, mark=o] coordinates {(-3, 3.14159) (-2, -0.5) (-1, 1.6) (0, 0.0) (1, -1.6) (2, 0.5) (3, -3.14159)};
+			\addplot[only marks, blue, mark=x] coordinates {(0, -3.14159) (0, 0.0) (0, 3.14159)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[Phase Spectrum of a multi-frequent signal]{Phase Spectrum of a multi-frequent signal. The arguments (phases) of the coefficients are plotted. The signal $\underline{c}_n$ is actually real-valued ($\Im\left\{\underline{c}_n(t)\right\} = 0$). This leads a symmetry with respect to the origin. The phase spectrum of a real-valued signal is an odd function. The blue $x$ define the possible phase values of the coefficient $\underline{c}_0$ of the real-valued signal.}
+	\label{fig:ch02:FSeries_Phase_Spectrum}
+\end{figure}
+
 \section{Non-Periodic Signals and Fourier Transform}
 
 \subsection{Derivation of The Fourier Transform}
@@ -418,6 +544,20 @@ The inner integral is the \index{Fourier transform} \textbf{Fourier transform}.
 \end{definition}
 
 \subsection{Amplitude and Phase Spectra}
+
+The value-continuous complex frequency variable $j \omega$ in the Fourier transforms replaced the value-discrete index $n$ of the Fourier series. Due to their similarity, the constraints for all signals and the \index{spectrum!symmetry rules} \textbf{symmetry rules} for real-valued signals apply analogously.
+
+\begin{itemize}
+	\item The Fourier transform $\underline{X}(j \omega) \in \mathbb{C}$ is always complex-valued, for both real-valued $\underline{x}(t) = x(t) \in \mathbb{R}$ and complex-valued $\underline{x}(t) \in \mathbb{C}$ signals.
+	\item The amplitude $|\underline{X}(j \omega)|$ is always a positive real number.
+	\item The phase $\arg\left(\underline{X}(j \omega)\right)$ a real number from the interval $[-\pi, +\pi]$.
+	\item For real-valued signals $\underline{x}(t) = x(t) \in \mathbb{R}$, but not for complex-valued $\underline{x}(t) \in \mathbb{C}$ signals, following additional constraints (symmetry rules) apply:
+	\begin{itemize}
+		\item The amplitude spectrum $|\underline{X}(j \omega)|$ is an \underline{even function}. It is symmetric with respect to the $y$-axis.
+		\item The phase spectrum $\arg\left(\underline{X}(j \omega)\right)$ is an \underline{odd function}. It is symmetric with respect to the origin.
+		\item As a consequence, the phase of $\arg\left(\underline{X}(0)\right)$ at $j \omega = 0$ must be either $0$ or $+\pi$. Note that, $+\pi$ is identical to $-\pi$ in the complex plane. Thus, $-\pi$ is valid, too, but not distinct from $+\pi$. This phase is the sign of the \ac{DC} bias: $\arg\left(\underline{X}(0)\right) = 0$ means positive \ac{DC} bias and $\arg\left(\underline{X}(0)\right) = \pi$ means negative \ac{DC} bias.
+	\end{itemize}
+\end{itemize}
 
 \subsection{Time Domain and Frequency Domain}
 
