@@ -389,7 +389,7 @@ If the signal $\underline{x_p}(t) = x_p(t)$ is real-valued, i.e., $\Im\left\{\un
 	\begin{itemize}
 		\item The amplitude spectrum $|\underline{c}_n|$ is an \underline{even function}. It is symmetric with respect to the $y$-axis.
 		\item The phase spectrum $\arg\left(\underline{c}_n\right)$ is an \underline{odd function}. It is symmetric with respect to the origin.
-		\item As a consequence, the phase of $\arg\left(\underline{c}_0\right)$ at $n = 0$ must be either $0$ or $+\pi$. Note that, $+\pi$ is identical to $-\pi$ in the complex plane. Thus, $-\pi$ is valid, too, but not distinct from $+\pi$. This phase is the sign of the \ac{DC} bias: $\arg\left(\underline{c}_0\right) = 0$ means positive \ac{DC} bias and $\arg\left(\underline{c}_0\right) = \pi$ means negative \ac{DC} bias.
+		\item As a consequence, the phase of $\arg\left(\underline{c}_0\right)$ at $n = 0$ must be either $0$ or $\pm \pi$. Note that, $+\pi$ is identical to $-\pi$ in the complex plane. The phase is the sign of the \ac{DC} bias: $\arg\left(\underline{c}_0\right) = 0$ means positive \ac{DC} bias and $\arg\left(\underline{c}_0\right) = \pi$ means negative \ac{DC} bias.
 	\end{itemize}
 \end{itemize}
 These symmetry rules apply for \underline{all} real-valued signals $\underline{x_p}(t) = x_p(t) \in \mathbb{R}$. The symmetry rules ensure that the mono-chromatic components of the Fourier series \eqref{eq:ch02:fourier_series_cmplx} sum up to a real value at each time instance $t \in \mathbb{R}$.
@@ -460,8 +460,9 @@ The symmetry rules do \underline{not} apply for complex-valued signals $\underli
 			ymin=-4,
 			ymax=4,
 			xtick={-3, -2, ..., 3},
-			ytick={-3.14159, -1.5708,1.5708, 3.14159},
-			yticklabels={$-\pi\hspace{0.30cm}$, $-\frac{\pi}{2}$,$\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+			ytick={-3.14159, -1.5708, 1.5708, 3.14159},
+			yticklabels={$-\pi\hspace{0.30cm}$, $-\frac{\pi}{2}$,
+$\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
 			axis y line=middle,
 			axis x line=middle,
 			every axis x label/.style={
@@ -488,9 +489,61 @@ The symmetry rules do \underline{not} apply for complex-valued signals $\underli
 	\label{fig:ch02:FSeries_Phase_Spectrum}
 \end{figure}
 
-\section{Non-Periodic Signals and Fourier Transform}
+\begin{excursus}{Spectra in the nature}
+	The spectrum is no abstract, mathematical theory. You can see spectra with your eye:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=1]{../chapter02/Rainbow.jpg}
+		\caption[A rainbow showing the spectrum of the sunlight]{A rainbow showing the spectrum of the sunlight: The white sunlight is composed of mono-chromatic, electromagnetic waves of all frequencies which are optically visible for humans. When light passes through a dispersive medium (glass prism, raindrop, etc.), it is refracted. Each mono-chromatic component has a different refraction index. The light components are separated by its frequency and become individually visible. An example, is a rainbow as depicted above. \licensequote{\cite{Arz2007}}{``Arz''}{\href{https://creativecommons.org/licenses/by-sa/3.0/deed.en}{CC-BY-SA 3.0}}}
+	\end{figure}
+	The rainbow is a natural example of an visible spectrum of the sunlight.
+\end{excursus}
 
-\subsection{Derivation of The Fourier Transform}
+\section{Non-Periodic Signals and The Continuous Fourier Transform}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x_{np}(t)$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-3,
+			xmax=3,
+			ymin=0,
+			ymax=2,
+			xtick={-2, -0.5, ..., 2},
+			ytick={0, 0.5, ..., 1.5}
+		]
+			\addplot[blue, thick] coordinates {(-2, 0) (-0.5, 0)};
+			\addplot[blue, dashed] coordinates {(-0.5, 0) (-0.5, 1)};
+			\addplot[blue, thick] coordinates {(-0.5, 1) (0.5, 1)};
+			\addplot[blue, dashed] coordinates {(0.5, 1) (0.5, 0)};
+			\addplot[blue, thick] coordinates {(0.5, 0) (2, 0)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{The rectangular function $\mathrm{rect}$ as an example for a non-period signal}
+	\label{fig:ch02:rect_function}
+\end{figure}
+\index{rectangular function}
+
+\subsection{Derivation of The Continuous Fourier Transform}
 
 Non-periodic signals have no repeating pattern. Consequently, there is no period $T_0$. Mathematically, the period is indefinite $T_0 \rightarrow \infty$.
 
@@ -529,15 +582,15 @@ The outer sum is a Rieman sum. $\frac{1}{T_0}$ is substituted by $\frac{\Delta \
 	\underline{x_{np}}(t) = \underbrace{\frac{1}{2 \pi} \int\limits_{\omega = -\infty}^{\infty} \underbrace{\left( \int\limits_{t' = -\infty}^{\infty} \underline{x_{np}}(t') \cdot e^{-j \omega t'} \, \mathrm{d} t' \right)}_{\text{Fourier transform}} \cdot e^{j \omega t} \, \mathrm{d} \omega}_{\text{Inverse Fourier transform}}
 \end{equation}
 
-The inner integral is the \index{Fourier transform} \textbf{Fourier transform}. 
+The inner integral is the \textbf{continuous Fourier transform}, also called only \index{Fourier transform} \emph{Fourier transform}. 
 
 \begin{definition}{Fourier Transform}
-	The \index{Fourier transform} \textbf{Fourier transform} of the function $\underline{x}(t)$ is:
+	The \index{continuous Fourier transform} \textbf{continuous Fourier transform} of the function $\underline{x}(t)$ is:
 	\begin{equation}
 		\underline{X}(j \omega) = \mathcal{F} \left\{\underline{x}(t)\right\} = \int\limits_{t = -\infty}^{\infty} \underline{x}(t) \cdot e^{-j \omega t} \, \mathrm{d} t
 	\end{equation}
 	
-	The \index{inverse Fourier transform} \textbf{inverse Fourier transform} is:
+	The \index{inverse Fourier transform} \index{inverse continuous Fourier transform} \textbf{inverse (continuous) Fourier transform} is:
 	\begin{equation}
 		\underline{x}(t) = \mathcal{F}^{-1} \left\{\underline{X}(j \omega)\right\} = \frac{1}{2 \pi} \int\limits_{\omega = -\infty}^{\infty} \underline{X}(j \omega) \cdot e^{+j \omega t} \, \mathrm{d} \omega
 	\end{equation}
@@ -545,7 +598,7 @@ The inner integral is the \index{Fourier transform} \textbf{Fourier transform}.
 
 \subsection{Amplitude and Phase Spectra}
 
-The value-continuous complex frequency variable $j \omega$ in the Fourier transforms replaced the value-discrete index $n$ of the Fourier series. Due to their similarity, the constraints for all signals and the \index{spectrum!symmetry rules} \textbf{symmetry rules} for real-valued signals apply analogously.
+The value-continuous complex frequency variable $j \omega$ in the continuous Fourier transforms replaced the value-discrete index $n$ of the Fourier series. Due to their similarity, the constraints for all signals and the \index{spectrum!symmetry rules} \textbf{symmetry rules} for real-valued signals apply analogously.
 
 \begin{itemize}
 	\item The Fourier transform $\underline{X}(j \omega) \in \mathbb{C}$ is always complex-valued, for both real-valued $\underline{x}(t) = x(t) \in \mathbb{R}$ and complex-valued $\underline{x}(t) \in \mathbb{C}$ signals.
@@ -555,13 +608,175 @@ The value-continuous complex frequency variable $j \omega$ in the Fourier transf
 	\begin{itemize}
 		\item The amplitude spectrum $|\underline{X}(j \omega)|$ is an \underline{even function}. It is symmetric with respect to the $y$-axis.
 		\item The phase spectrum $\arg\left(\underline{X}(j \omega)\right)$ is an \underline{odd function}. It is symmetric with respect to the origin.
-		\item As a consequence, the phase of $\arg\left(\underline{X}(0)\right)$ at $j \omega = 0$ must be either $0$ or $+\pi$. Note that, $+\pi$ is identical to $-\pi$ in the complex plane. Thus, $-\pi$ is valid, too, but not distinct from $+\pi$. This phase is the sign of the \ac{DC} bias: $\arg\left(\underline{X}(0)\right) = 0$ means positive \ac{DC} bias and $\arg\left(\underline{X}(0)\right) = \pi$ means negative \ac{DC} bias.
+		\item As a consequence, the phase of $\arg\left(\underline{X}(0)\right)$ at $j \omega = 0$ must be either $0$ or $\pm \pi$. Note that, $+\pi$ is identical to $-\pi$ in the complex plane. The phase is the sign of the \ac{DC} bias: $\arg\left(\underline{X}(0)\right) = 0$ means positive \ac{DC} bias and $\arg\left(\underline{X}(0)\right) = \pi$ means negative \ac{DC} bias.
 	\end{itemize}
 \end{itemize}
 
+Let's investigate the \index{rectangular function} rectangular function from Figure \ref{fig:ch02:rect_function}. It is defined as:
+\begin{equation}
+	\mathrm{rect}(t) = \begin{cases}
+		0 & \qquad \text{if } \; |t| > \frac{1}{2}, \\
+		1 & \qquad \text{if } \; |t| < \frac{1}{2}
+	\end{cases}
+\end{equation}
+The function is undefined for $t = \pm \frac{1}{2}$. The function is now transformed, i.e., $\underline{x}(t) = \mathrm{rect}(t)$.
+
+\begin{equation}
+	\underline{X}\left(j \omega\right) =  \int\limits_{t = -\infty}^{\infty} \mathrm{rect}(t) \cdot e^{-j \omega t} \, \mathrm{d} t = \mathrm{sinc}\left(\frac{\omega}{2 \pi}\right)
+\end{equation}
+where $\mathrm{sinc}(t)$ is the \emph{normalized} sinc function.
+
+\begin{attention}
+	Mathematics and engineering use a slightly different definition of the sinc function.
+	
+	In mathematics, it is \index{sinc function!unnormalized} \textbf{\textit{unnormalized} sinc function}:
+	\begin{equation*}
+		\mathrm{sinc}(t) = \frac{\sin\left(t\right)}{t}
+	\end{equation*}
+	
+	In the context of signal processing and information theory, it is the \index{sinc function!normalized} \textbf{\textit{normalized} sinc function}:
+	\begin{equation*}
+		\mathrm{sinc}(t) = \frac{\sin\left(\pi t\right)}{\pi t}
+	\end{equation*}
+	
+	In either case, the value at $t = 0$ is defined to:
+	\begin{equation*}
+		\mathrm{sinc}(t = 0) = \lim\limits_{t \rightarrow 0} \frac{\sin\left(t\right)}{t} = 1
+	\end{equation*}
+\end{attention}
+
+The resulting spectra of $\underline{X}\left(j \omega\right)$ can now be drawn. The rectangular function is special. The imaginary part $\Im\left\{\underline{X}\left(j \omega\right)\right\} = 0$ is zero. Thus, the phase can only be $0$ or $\pm \pi$. However, this is a special property of the sinc function, but not of every function.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$|\underline{X}\left(j \omega\right)|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-52,
+			xmax=52,
+			ymin=0,
+			ymax=1.2,
+			xtick={-50, -40, ..., 50},
+			ytick={0, 0.25, ..., 1.0}
+		]
+			\addplot[red, thick, smooth, domain=-50:50, samples=200] plot (\x,{abs(sinc((1/(2*pi))*\x))});
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Amplitude spectrum of the rectangular function}
+	\label{fig:ch02:rect_function_ampl_spectrum}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$\arg\left(\underline{X}(j \omega)\right)$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-52,
+			xmax=52,
+			ymin=-4,
+			ymax=4,
+			xtick={-50, -40, ..., 50},
+			ytick={-3.14159, -1.5708, 1.5708, 3.14159},
+			yticklabels={$-\pi\hspace{0.30cm}$, $-\frac{\pi}{2}$,
+				$\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+		]
+			\addplot[red, thick] coordinates {(-50, 0) (-39.48, 0)};
+			\addplot[red, dashed] coordinates {(-39.48, 0)(-39.48, -3.14159)};
+			\addplot[red, thick] coordinates {(-39.48, -3.14159) (-19.74, -3.14159)};
+			\addplot[red, dashed] coordinates {(-19.74, -3.14159) (-19.74, 0)};
+			\addplot[red, thick] coordinates {(-19.74, 0) (19.74, 0)};
+			\addplot[red, dashed] coordinates {(19.74, 0) (19.74, 3.14159)};
+			\addplot[red, thick] coordinates {(19.74, 3.14159) (39.48, 3.14159)};
+			\addplot[red, dashed] coordinates {(39.48, 3.14159)(39.48, 0)};
+			\addplot[red, thick] coordinates {(39.48, 0)(50, 0)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[Phase spectrum of the rectangular function]{Phase spectrum of the rectangular function. Please note that $- \pi$ is equivalent to $+ \pi$.}
+	\label{fig:ch02:rect_function_phase_spectrum}
+\end{figure}
+
 \subsection{Time Domain and Frequency Domain}
 
-\section{Properties of The Fourier Transform}
+You have learnt two representations of a signal, so far.
+\begin{itemize}
+	\item \index{time domain} \textbf{Time domain} -- A signal is a function $\underline{x}(t)$ of the time.
+	\item \index{frequency domain} \textbf{Frequency domain} -- A signal is a function $\underline{X}(j \omega)$ of the frequency.
+\end{itemize}
+Both $\underline{x}(t)$ and $\underline{X}(j \omega)$ refer to the same signal. 
+
+The frequency domain is obtained from the time domain by a transform. For time-continuous signals, these transforms one of:
+\begin{itemize}
+	\item Fourier series
+	\item continuous Fourier transform
+\end{itemize}
+The time domain is obtained by the respective inverse transform.
+
+\begin{definition}{Transform operator}
+	The operation of a transform between time and frequency domain is written as:
+	\begin{equation}
+		\underline{x}(t) \TransformHoriz \underline{X}(j \omega)
+	\end{equation}
+	for the transform from time to frequency domain, and vice versa:
+	\begin{equation}
+		\underline{X}(j \omega) \InversTransformHoriz \underline{x}(t)
+	\end{equation}
+\end{definition}
+
+\textbf{But what is the purpose of the transforms?}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[align=center, minimum width=2.5cm, minimum height=1.5cm] (ProbTD) {\textbf{Problem}\\ in time domain};
+		\node[align=center, minimum width=2.5cm, minimum height=1.5cm, right=5cm of ProbTD] (ProbFD) {\textbf{Problem}\\ in frequency domain};
+		\node[align=center, minimum width=2.5cm, minimum height=1.5cm, below=3cm of ProbTD] (SolTD) {\textbf{Solution}\\ in time domain};
+		\node[align=center, minimum width=2.5cm, minimum height=1.5cm, below=3cm of ProbFD] (SolFD) {\textbf{Solution}\\ in frequency domain};
+		
+		\draw[-latex, thick] (ProbTD.south) -- node[midway, left, align=right]{Hard to solve} (SolTD.north);
+		\draw[-latex, thick] (ProbTD.east) -- node[midway, above, align=center]{Transform} (ProbFD.west);
+		\draw[-latex, thick] (ProbFD.south) -- node[midway, right, align=left]{Easy to solve} (SolFD.north);
+		\draw[-latex, thick] (SolFD.west) -- node[midway, above, align=center]{Inverse Transform} (SolTD.east);
+	\end{tikzpicture}
+	\caption{Explanation of the purpose of transforms}
+\end{figure}
+
+\section{Properties of The Continuous Fourier Transform}
 
 \subsection{Energy Signals and Power Signals}
 
