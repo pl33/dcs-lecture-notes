@@ -588,13 +588,23 @@ The inner integral is the \textbf{continuous Fourier transform}, also called onl
 	The \index{continuous Fourier transform} \textbf{continuous Fourier transform} of the function $\underline{x}(t)$ is:
 	\begin{equation}
 		\underline{X}(j \omega) = \mathcal{F} \left\{\underline{x}(t)\right\} = \int\limits_{t = -\infty}^{\infty} \underline{x}(t) \cdot e^{-j \omega t} \, \mathrm{d} t
+		\label{eq:ch02:def_fourier_transform}
 	\end{equation}
 	
 	The \index{inverse Fourier transform} \index{inverse continuous Fourier transform} \textbf{inverse (continuous) Fourier transform} is:
 	\begin{equation}
 		\underline{x}(t) = \mathcal{F}^{-1} \left\{\underline{X}(j \omega)\right\} = \frac{1}{2 \pi} \int\limits_{\omega = -\infty}^{\infty} \underline{X}(j \omega) \cdot e^{+j \omega t} \, \mathrm{d} \omega
+		\label{eq:ch02:def_inv_fourier_transform}
 	\end{equation}
 \end{definition}
+
+The Fourier transform $\mathcal{F} \left\{\underline{x}(t)\right\}$ and its inverse $\mathcal{F}^{-1} \left\{\underline{X}(j \omega)\right\}$ both yield functions which depend on $t$ or $\omega$, respectively. This relation is sometimes emphasized by appending $(t)$ or $\left(j \omega\right)$.
+\begin{subequations}
+	\begin{align}
+		\mathcal{F} \left\{\underline{x}(t)\right\} &= \mathcal{F} \left\{\underline{x}(t)\right\} \left(j \omega\right) \\
+		\mathcal{F}^{-1} \left\{\underline{X}(j \omega)\right\} &= \mathcal{F}^{-1} \left\{\underline{X}(j \omega)\right\} (t)
+	\end{align}
+\end{subequations}
 
 \subsection{Amplitude and Phase Spectra}
 
@@ -645,7 +655,7 @@ where $\mathrm{sinc}(t)$ is the \emph{normalized} sinc function.
 	\end{equation*}
 \end{attention}
 
-The resulting spectra of $\underline{X}\left(j \omega\right)$ can now be drawn. The rectangular function is special. The imaginary part $\Im\left\{\underline{X}\left(j \omega\right)\right\} = 0$ is zero. Thus, the phase can only be $0$ or $\pm \pi$. However, this is a special property of the sinc function, but not of every function.
+The resulting spectra of $\underline{X}\left(j \omega\right)$ can now be drawn. The rectangular function is special. The imaginary part $\Im\left\{\underline{X}\left(j \omega\right)\right\} = 0$ is zero. Thus, the phase can only be $0$ or $\pm \pi$. However, this is a special property of all functions which are real-valued and even in the time domain like the sinc function.
 
 \begin{figure}[H]
 	\centering
@@ -841,21 +851,163 @@ Using the Dirac measure, the Fourier transform can be calculated:
 \end{equation}
 The Fourier transform of the Dirac delta function is the frequency-independent constant $1$.
 
-\subsection{Operations 1: Linearity}
+\subsection{Basic Properties}
 
-\subsection{Operations 2: Differentiation and Integration}
+All properties of the Fourier transform can be proven using the definition of the Fourier transform \eqref{eq:ch02:def_fourier_transform}.
 
-\subsection{Operations 3: Multiplication}
+\subsubsection{Linearity}
 
-\subsection{Operations 4: Time Shift}
+%\begin{equation}
+	
+%\end{equation}
+
+\begin{definition}{Linearity of the Fourier transform}
+	\begin{equation}
+		\mathcal{F}\left\{\underline{a} \cdot \underline{f}(t) + \underline{b} \cdot \underline{g}(t)\right\} = \underline{a} \cdot \mathcal{F}\left\{\underline{f}(t)\right\} + \underline{b} \cdot \mathcal{F}\left\{\underline{g}(t)\right\}
+		\label{eq:ch02:op_lin}
+	\end{equation}
+	where
+	\begin{itemize}
+		\item $\underline{a} \in \mathbb{C}$ and $\underline{b} \in \mathbb{C}$ are complex numbers and
+		\item $\underline{f}(t)$ and $\underline{g}(t)$ are Fourier-transformable functions.
+	\end{itemize}
+\end{definition}
+
+\subsubsection{Differentiation and Integration}
+
+\begin{definition}{Differentiation of the Fourier transform}
+	\begin{equation}
+		\mathcal{F}\left\{\frac{\mathrm{d}^n}{\mathrm{d} t^n} \underline{f}(t)\right\} = \left(j \omega\right)^n \underbrace{\underline{F} \left(j \omega\right)}_{= \mathcal{F}\left\{\underline{f}(t)\right\}}
+		\label{eq:ch02:op_diff}
+	\end{equation}
+\end{definition}
+
+\begin{definition}{Integration of the Fourier transform}
+	\begin{equation}
+		\mathcal{F}\left\{\int\limits_{t'= -\infty}^{t} \underline{f}(t') \, \mathrm{d} t' \right\} = \frac{1}{j \omega} \underbrace{\underline{F} \left(j \omega\right)}_{= \mathcal{F}\left\{\underline{f}(t)\right\}}
+		\label{eq:ch02:op_int}
+	\end{equation}
+\end{definition}
+
+\begin{excursus}{Network analysis of reactive electrical circuits}
+	Linear, reactive electrical networks are analysed using the Fourier transform.
+	
+	For example, voltage and current have following relation in time domain at a capacity:
+	\begin{equation}
+		u(t) = \frac{1}{C} \int i(t) \, \mathrm{d} t
+	\end{equation}
+	The expression in complex-valued phasors (frequency domain) is:
+	\begin{equation}
+		\underline{U} = \underline{Z}_C \cdot \underline{I}
+	\end{equation}
+	Using the Fourier transform, the impedance $\underline{Z}_C$ can be determined to:
+	\begin{equation}
+		\underline{Z}_C = \frac{1}{j \omega C}
+	\end{equation}
+	
+	The calculation is analogous for inductances. The volatge-current relation in the time domain is:
+	\begin{equation}
+		u(t) = L \cdot \frac{\mathrm{d}}{\mathrm{d} t} i(t)
+	\end{equation}
+	The complex-valued impedance $\underline{Z}_L$ (frequency domain) is:
+	\begin{equation}
+		\underline{Z}_L = j \omega L
+	\end{equation}
+\end{excursus}
+
+\subsubsection{Multiplication}
+
+\begin{definition}{Convolution theorem}
+	A multiplication in the time-domain becomes a convolution in the frequency domain.
+	\begin{equation}
+		\mathcal{F}\left\{ \underline{f}(t) \cdot \underline{g}(t) \right\} = \frac{1}{2 \pi} \mathcal{F}\left\{\underline{f}(t)\right\} * \mathcal{F}\left\{\underline{g}(t)\right\}
+		\label{eq:ch02:op_mult}
+	\end{equation}
+\end{definition}
+
+\begin{excursus}{Convolution}
+	The convolution is defined to:
+	\begin{equation}
+		f(t) * g(t) = \left(f * g\right) (t) = \int_{\tau = -\infty}^{\infty} f(\tau) g(t - \tau) \, \mathrm{d} \tau
+		\label{eq:ch02:def_convolution}
+	\end{equation}
+\end{excursus}
+
+\subsubsection{Time Shift}
+
+%Let
+%\begin{equation}
+%	h(t) = \underline{f}(t - t_0)
+%\end{equation}
+
+\begin{definition}{Translation}
+	\begin{equation}
+		\mathcal{F}\left\{\underline{f}(t - t_0)\right\} = e^{-j t_0 \omega} \cdot \underbrace{\underline{F} \left(j \omega\right)}_{= \mathcal{F}\left\{\underline{f}(t)\right\}}
+		\label{eq:ch02:op_time_shift}
+	\end{equation}
+	where
+	\begin{itemize}
+		\item $t_0 \in \mathbb{R}$ is a real number and
+		\item $\underline{f}(t)$ is a Fourier-transformable function.
+	\end{itemize}
+\end{definition}
 
 \subsection{Duality}
 
+\begin{definition}{Duality}
+	Suppose $\underline{g}(t)$ has a Fourier transform $\underline{G}\left(j \omega\right)$, i.e., $\underline{g} \TransformHoriz \underline{G}$. The Fourier transform of $\underline{G}(t)$ is:
+	\begin{equation}
+		\mathcal{F}\left\{\underline{G}(t)\right\} = \underline{g} \left(- j \omega\right)
+		\label{eq:ch02:op_duality}
+	\end{equation}
+\end{definition}
+
+An example for the duality is, the frequency shift. We already know the Fourier transform of the time shift \eqref{eq:ch02:op_time_shift}.
+\begin{equation}
+	\mathcal{F}\left\{e^{j \omega_0 t} \underline{f}(t)\right\} = \underbrace{\underline{F} \left(j (\omega - \omega_0)\right)}_{= \mathcal{F}\left\{\underline{f}(t)\right\} \left( j (\omega - \omega_0) \right)}
+	\label{eq:ch02:op_freq_shift}
+\end{equation}
+
+Another example is the convolution in time-domain. Due to the duality, it becomes a multiplication the frequency domain.
+\begin{equation}
+	\mathcal{F}\left\{ \underline{f}(t) * \underline{f}(t) \right\} = \mathcal{F}\left\{\underline{f}(t)\right\} \cdot \mathcal{F}\left\{\underline{g}(t)\right\}
+	\label{eq:ch02:op_conv}
+\end{equation}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[align=center, minimum width=2.5cm, minimum height=1.5cm] (TD1) {$\underline{f}(t) \cdot \underline{g}(t)$};
+		\node[align=center, minimum width=2.5cm, minimum height=1.5cm, right=3.5cm of TD1] (TD2) {$\underline{f}(t) * \underline{f}(t)$};
+		\node[align=center, minimum width=2.5cm, minimum height=1.5cm, below=2cm of TD1] (FD1) {$\frac{1}{2 \pi} \left(\underline{F}\left(j \omega\right) * \underline{G}\left(j \omega\right)\right)$};
+		\node[align=center, minimum width=2.5cm, minimum height=1.5cm, below=2cm of TD2] (FD2) {$\underline{F}\left(j \omega\right) \cdot \underline{G}\left(j \omega\right)$};
+		
+		\node[align=right, anchor=east, left=3cm of TD1] (LabelTD) {\textbf{Time domain}};
+		\node[align=right, anchor=east, below=2cm of LabelTD] (LabelFD) {\textbf{Frequency domain}};
+		\node[align=right, above=1cm of TD1] (Func1) {\textbf{Function 1}};
+		\node[align=right, above=1cm of TD2] (Func2) {\textbf{Function 2}};
+		
+		%\draw (TD1) node[midway, align=right, rotate=-90]{$\TransformHoriz$} (FD1);
+		%\draw (TD2) node[midway, align=right, rotate=-90]{$\TransformHoriz$} (FD2);
+		\draw[o-*, thick] (TD1.south) -- (FD1.north);
+		\draw[o-*, thick] (TD2.south) -- (FD2.north);
+		
+		\draw[thick] (TD1.south east) -- (FD2.north west);
+		\draw[thick] (TD2.south west) -- (FD1.north east);
+	\end{tikzpicture}
+	\caption{Duality}
+\end{figure}
+
+The duality also affects the units of the time variable $t$ and the frequency variable $\omega$. The units must be inverse. If $t$ is in seconds, $\omega$ must be \si{1/s}.
+
+
 \section{\acs{LTI} Systems}
 
-\subsection{Transfer Function and Impulse Response}
+\subsection{Transfer Function}
 
-\subsection{Convolution}
+\subsection{Impulse Response}
+
+% Convolution
 
 \subsection{Poles and Zeroes}
 
