@@ -4,6 +4,8 @@
 
 All signals considered in this chapter are \index{signal!deterministic signal} \textbf{deterministic}, i.e., its values are predictable at any time. Especially, the values can be calculated by a mathematical equation. In contrast, \emph{random} signals are not predictable. Its values are subject to a random process, which must be modelled stochastically.
 
+Furthermore, the signals considered here are time-continuous.
+
 \index{signal!time-continuous}
 \begin{figure}[H]
 	\centering
@@ -19,7 +21,7 @@ All signals considered in this chapter are \index{signal!deterministic signal} \
 		\draw [-latex] (Periodic) -- (Mono);
 		\draw [-latex] (Periodic) -- (Multi);
 	\end{tikzpicture}
-	\caption{Classification of time-continuous signals}
+	\caption{Classification of signals}
 	\label{fig:ch02:timecont_signals_classif}
 \end{figure}
 
@@ -820,46 +822,34 @@ The property of power signals, which have an indefinite signal energy, is a prob
 
 Only some power signals have a Fourier transform. There are distributions which are power signals, but have a Fourier transform, too. Especially, all \emph{tempered distributions} have a Fourier transform.
 
-\subsection{Dirac Delta Function}
-
-An important distribution is the \index{Dirac delta function} \textbf{Dirac delta function} $\delta(t)$. The Dirac delta function is zero everywhere except at its origin, where it is an indefinitely narrow, indefinitely high pulse.
-\begin{equation}
-	\delta(t) = \begin{cases}
-		+\infty & \qquad \text{if } t = 0, \\
-		0 & \qquad \text{if } t \neq 0
-	\end{cases}
-	\label{eq:ch02:dirac_delta}
-\end{equation}
-It is constrained by
-\begin{equation}
-	\int\limits_{-\infty}^{\infty} \delta(t) \; \mathrm{d} t = 1
-\end{equation}
-
-\begin{attention}
-	The Dirac delta function $\delta(t)$ must not be confused with the Kronecker delta \eqref{eq:ch02:kronecker_delta}. The Dirac delta function operates in continuous space $t \in \mathbb{R}$. The Kronecker delta $\delta_n$ (here one-dimensional) operates in discrete space $n \in \mathbb{Z}$.
-\end{attention}
-
-A special feature of the function is called \index{Dirac measure} \textbf{Dirac measure}.
-\begin{equation}
-	\int\limits_{-\infty}^{\infty} f(t) \delta(t) \; \mathrm{d} t = f(0)
-	\label{eq:ch02:dirac_measure}
-\end{equation}
-
-Using the Dirac measure, the Fourier transform can be calculated:
-\begin{equation}
-	\mathcal{F} \left\{\delta(t)\right\} = \int\limits_{-\infty}^{\infty} \delta(t) \cdot e^{-j \omega t} \; \mathrm{d} t = 1
-\end{equation}
-The Fourier transform of the Dirac delta function is the frequency-independent constant $1$.
-
 \subsection{Basic Properties}
 
 All properties of the Fourier transform can be proven using the definition of the Fourier transform \eqref{eq:ch02:def_fourier_transform}.
 
 \subsubsection{Linearity}
 
-%\begin{equation}
-	
-%\end{equation}
+Let
+\begin{equation}
+	\underline{h}(t) = \underline{a} \cdot \underline{f}(t) + \underline{b} \cdot \underline{g}(t)
+\end{equation}
+where
+\begin{itemize}
+	\item $\underline{a} \in \mathbb{C}$ and $\underline{b} \in \mathbb{C}$ are complex numbers and
+	\item $\underline{f}(t)$ and $\underline{g}(t)$ are Fourier-transformable functions.
+\end{itemize}
+
+What is the Fourier transform of $\underline{h}(t)$?
+\begin{equation}
+	\underline{H}(j \omega) = \mathcal{F} \left\{\underline{h}(t)\right\} = \int\limits_{t = -\infty}^{\infty} \left(\underline{a} \cdot \underline{f}(t) + \underline{b} \cdot \underline{g}(t)\right) \cdot e^{-j \omega t} \, \mathrm{d} t
+\end{equation}
+The integral can be split into a sum of two integrals.
+\begin{equation}
+	\underline{H}(j \omega) = \int\limits_{t = -\infty}^{\infty} \underline{a} \cdot \underline{f}(t) \cdot e^{-j \omega t} \, \mathrm{d} t + \int\limits_{t = -\infty}^{\infty} \underline{b} \cdot \underline{g}(t) \cdot e^{-j \omega t} \, \mathrm{d} t
+\end{equation}
+The constants can be moved in front of the integrals.
+\begin{equation}
+	\underline{H}(j \omega) = \underline{a} \cdot \underbrace{\int\limits_{t = -\infty}^{\infty} \underline{f}(t) \cdot e^{-j \omega t} \, \mathrm{d} t}_{= \mathcal{F}\left\{\underline{f}(t)\right\}} + \underline{b} \cdot \underbrace{\int\limits_{t = -\infty}^{\infty} \underline{g}(t) \cdot e^{-j \omega t} \, \mathrm{d} t}_{= \mathcal{F}\left\{\underline{g}(t)\right\}}
+\end{equation}
 
 \begin{definition}{Linearity of the Fourier transform}
 	\begin{equation}
@@ -955,9 +945,9 @@ All properties of the Fourier transform can be proven using the definition of th
 \subsection{Duality}
 
 \begin{definition}{Duality}
-	Suppose $\underline{g}(t)$ has a Fourier transform $\underline{G}\left(j \omega\right)$, i.e., $\underline{g} \TransformHoriz \underline{G}$. The Fourier transform of $\underline{G}(t)$ is:
+	Suppose $\underline{g}(t)$ has a Fourier transform $\underline{G}\left(j \omega\right)$, i.e., $\mathcal{F}\left\{\underline{g}(t)\right\} = \underline{G}\left(j \omega\right)$. The Fourier transform of $\underline{G}(t)$ is:
 	\begin{equation}
-		\mathcal{F}\left\{\underline{G}(t)\right\} = \underline{g} \left(- j \omega\right)
+		\mathcal{F}\left\{\underline{G}(t)\right\} = 2 \pi \cdot \underline{g} \left(- j \omega\right)
 		\label{eq:ch02:op_duality}
 	\end{equation}
 \end{definition}
@@ -998,7 +988,85 @@ Another example is the convolution in time-domain. Due to the duality, it become
 	\caption{Duality}
 \end{figure}
 
-The duality also affects the units of the time variable $t$ and the frequency variable $\omega$. The units must be inverse. If $t$ is in seconds, $\omega$ must be \si{1/s}.
+\paragraph{Consequences of The Duality.}
+
+\begin{itemize}
+	\item Uncertainty relationship:
+	\begin{itemize}
+		\item Signals which are \underline{narrow in time domain} are \underline{wide in frequency domain}.
+		\item Signals which are \underline{wide in time domain} are \underline{narrow in frequency domain}.
+	\end{itemize}
+	\item The duality affects the units of the time variable $t$ and the frequency variable $\omega$.
+	\begin{itemize}
+		\item The units must be inverse.
+		\item If $t$ is in seconds, $\omega$ must be \si{1/s}.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Dirac Delta Function}
+
+An important distribution is the \index{Dirac delta function} \textbf{Dirac delta function} $\delta(t)$. The Dirac delta function is zero everywhere except at its origin, where it is an indefinitely narrow, indefinitely high pulse.
+\begin{equation}
+	\delta(t) = \begin{cases}
+		+\infty & \qquad \text{if } t = 0, \\
+		0 & \qquad \text{if } t \neq 0
+	\end{cases}
+	\label{eq:ch02:dirac_delta}
+\end{equation}
+It is constrained by
+\begin{equation}
+	\int\limits_{-\infty}^{\infty} \delta(t) \; \mathrm{d} t = 1
+\end{equation}
+
+\begin{attention}
+	The Dirac delta function $\delta(t)$ must not be confused with the Kronecker delta \eqref{eq:ch02:kronecker_delta}. The Dirac delta function operates in continuous space $t \in \mathbb{R}$. The Kronecker delta $\delta_n$ (here one-dimensional) operates in discrete space $n \in \mathbb{Z}$.
+\end{attention}
+
+A special feature of the function is called \index{Dirac measure} \textbf{Dirac measure}.
+\begin{equation}
+	\int\limits_{-\infty}^{\infty} f(t) \delta(t) \; \mathrm{d} t = f(0)
+	\label{eq:ch02:dirac_measure}
+\end{equation}
+
+Using the Dirac measure, the Fourier transform can be calculated:
+\begin{equation}
+	\mathcal{F} \left\{\delta(t)\right\} = \int\limits_{-\infty}^{\infty} \delta(t) \cdot e^{-j \omega t} \; \mathrm{d} t = 1
+\end{equation}
+The Fourier transform of the Dirac delta function is the frequency-independent constant $1$.
+
+\subsection{Fourier Transforms of Sinusoidal Functions}
+
+\begin{equation}
+	\mathcal{F} \left\{\cos\left(\omega_0 t\right)\right\} = \pi \left( \underbrace{\delta\left(\omega - \omega_0\right)}_{Poistive frequency} + \underbrace{\delta\left(\omega + \omega_0\right)}_{Negative frequency} \right)
+\end{equation}
+
+\begin{equation}
+	\mathcal{F} \left\{\sin\left(\omega_0 t\right)\right\} = -j \pi \left( \underbrace{\delta\left(\omega - \omega_0\right)}_{Poistive frequency} - \underbrace{\delta\left(\omega + \omega_0\right)}_{Negative frequency} \right)
+\end{equation}
+
+\begin{itemize}
+	\item The sinusoidal signals (cosine and sine) follow the symmetry rules.
+	\begin{itemize}
+		\item They have a part in both the positive and the negative frequency half-space (at $- \omega_0$ and $+ \omega_0$).
+		\item The cosine function is even.
+		\item The sine function is odd.
+	\end{itemize}
+	\item There are two Dirac delta functions at $- \omega_0$ and $+ \omega_0$.
+	\begin{itemize}
+		\item The Dirac delta function at $- \omega_0$ or $+ \omega_0$ is $\infty$. Sinusoidal functions are power signals. Remember, they have an infinite energy.
+		\item However, the Dirac delta functions can be weighted by the signal amplitude. Linearity of the Fourier transform applies.
+		\item Sinusoidal functions are mono-chromatic. So, it makes good sense, that they are only defined at $\pm \omega$.
+	\end{itemize}
+	\item The Fourier transforms of the cosine and the sine function are phase shifted by $\pi/2$ or \SI{90}{\degree}, respectively, in the complex plane.
+	\begin{itemize}
+		\item The Fourier transform of the sine function has a $-j$ whilst the cosine function has not.
+		\begin{itemize}
+			\item $\Im\left\{\mathcal{F} \left\{\cos\left(\omega_0 t\right)\right\}\right\} = 0$ (even function)
+			\item $\Re\left\{\mathcal{F} \left\{\sin\left(\omega_0 t\right)\right\}\right\} = 0$ (odd function)
+		\end{itemize}
+		\item Now, you see the orthogonality of these functions geometrically. ;)
+	\end{itemize}
+\end{itemize}
 
 
 \section{\acs{LTI} Systems}

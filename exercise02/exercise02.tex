@@ -37,4 +37,85 @@
 	\end{tasks}
 \end{solution}
 
-% Exercise: Is a sine wave with DC bias mono-chromatic -> no
+\begin{question}[subtitle={Using the Fourier transform}]
+	Derive the Fourier transform, without using the duality, of
+	\begin{tasks}
+		\task
+		Derive the Fourier transform of the time shift, without using the duality!
+		\begin{equation*}
+			\mathcal{F}\left\{\underline{f}(t - t_0)\right\}
+		\end{equation*}
+		
+		\task
+		Derive the Fourier transform of the frequency shift, without using the duality!
+		\begin{equation*}
+			\mathcal{F}\left\{e^{j \omega_0 t} \underline{f}(t)\right\}
+		\end{equation*}
+		
+		%\task
+		%Derive the Fourier transform of the frequency shift using the time shift and duality!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		Let
+		\begin{equation*}
+			\underline{h}(t) = \underline{f}(t - t_0)
+		\end{equation*}
+		The Fourier transform:
+		\begin{equation*}
+			\mathcal{F}\left\{\underline{h}(t)\right\} = \int\limits_{t = -\infty}^{\infty} \underline{f}(t - t_0) \cdot e^{-j \omega t} \, \mathrm{d} t
+		\end{equation*}
+		Substitute $t' = (t - t_0)$ in the integral.
+		\begin{equation*}
+			\mathcal{F}\left\{\underline{h}(t)\right\} = \int\limits_{t' = -\infty}^{\infty} \underline{f}(t') \cdot e^{-j \omega (t' + t_0)} \, \mathrm{d} t'
+		\end{equation*}
+		$e^{-j \omega t_0}$ is a constant.
+		\begin{equation*}
+			\mathcal{F}\left\{\underline{h}(t)\right\} = e^{-j \omega t_0} \underbrace{\int\limits_{t' = -\infty}^{\infty} \underline{f}(t') \cdot e^{-j \omega t'} \, \mathrm{d} t'}_{= \mathcal{F}\left\{\underline{f}(t)\right\} }
+		\end{equation*}
+		
+		\task
+		Let
+		\begin{equation*}
+			\underline{h}(t) = e^{j \omega_0 t} \underline{f}(t)
+		\end{equation*}
+		The Fourier transform:
+		\begin{equation*}
+			\mathcal{F}\left\{\underline{h}(t)\right\} = \int\limits_{t = -\infty}^{\infty} e^{j \omega_0 t} \underline{f}(t) \cdot e^{-j \omega t} \, \mathrm{d} t
+		\end{equation*}
+		Factor out $j t$ in the $e$-function.
+		\begin{equation*}
+			\mathcal{F}\left\{\underline{h}(t)\right\} = \int\limits_{t = -\infty}^{\infty} \underline{f}(t) \cdot e^{-j (\omega - \omega_0) t} \, \mathrm{d} t
+		\end{equation*}
+		Substitute $\omega' = \omega - \omega_0$ in the integral.
+		\begin{equation*}
+			\mathcal{F}\left\{\underline{h}(t)\right\} = \underbrace{\int\limits_{t = -\infty}^{\infty} \underline{f}(t) \cdot e^{-j \omega' t} \, \mathrm{d} t}_{= \mathcal{F}\left\{\underline{f}(t)\right\}}
+		\end{equation*}
+		\begin{equation*}
+			\mathcal{F}\left\{\underline{h}(t)\right\} = \underline{F}\left(j \omega' \right) = \underline{F}\left(j \left(\omega - \omega_0\right) \right)
+		\end{equation*}
+		
+%		\task
+%		Let
+%		\begin{equation*}
+%			\underline{g}(t) = \underline{f}(t - t_0)
+%		\end{equation*}
+%		We know from a) that
+%		\begin{equation*}
+%			\underline{G}\left(\omega \right) = \mathcal{F}\left\{\underline{g}(t)\right\} = e^{-j \omega t_0} \cdot \underline{F}\left(\omega \right)
+%		\end{equation*}
+%		Now, swap $\omega$ and $t$, swap $t_0$ and $\frac{\omega_0}{2 \pi}$, and assume both $\underline{G}$ and $\underline{F}$ are time-domain functions from now on. $\underline{F}$ now represents the original time-domain function which is shifted in frequency.
+%		\begin{equation*}
+%			\underline{G}\left(t\right) = e^{- j \frac{\omega_0}{2 \pi} t} \cdot \underline{F}\left(t \right)
+%		\end{equation*}
+%		We already know $\underline{g}$. Assume that both $\underline{g}$ and $\underline{f}$ are frequency-domain functions now. Therefore, swap $\omega$ and $t$, ans swap $t_0$ and $\frac{2 \pi}{\omega_0}$, too.
+%		\begin{equation*}
+%			\mathcal{F}\left\{\underline{G}(t)\right\} = 2 \pi \cdot \underline{g}\left(- \omega\right) = \underline{f}\left(- \omega + \omega_0\right) = \underline{f}\left(\omega - \omega_0\right)
+%		\end{equation*}
+%		
+%		We obtain the same result as in b). The duality works. \acs{QED}
+	\end{tasks}
+\end{solution}
