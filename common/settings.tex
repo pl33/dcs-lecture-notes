@@ -271,6 +271,7 @@
 % Own environments
 
 \usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins}
 
 \newenvironment{attention}{%
 	\begin{tcolorbox}[colframe=red]%
@@ -315,7 +316,7 @@
 }
 
 \newenvironment{excursus}[1]{%
-	\begin{tcolorbox}[colframe=gray!40]%
+	\begin{tcolorbox}[enhanced jigsaw, breakable,colframe=gray!40]%
 	{\sffamily\bfseries Excursus: #1}\par%
 }{%
 	\end{tcolorbox}%
