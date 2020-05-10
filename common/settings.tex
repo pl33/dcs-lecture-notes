@@ -198,11 +198,6 @@
 
 \usepackage[subfigure]{tocloft}
 
-%% Nomenclature
-%\usepackage[english]{nomencl}
-%\makenomenclature
-%\usepackage{etoolbox}
-
 % Acronyms
 \usepackage[printonlyused]{acronym}
 
@@ -218,6 +213,42 @@
 \newlistof{todos}{mcf}{To Do}
 \newcommand{\todo}[1]{\texttt{\textbf{\#\# TODO \#\# #1 \#\#}} \addcontentsline{mcf}{todos}{#1}}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nomenclature
+
+\usepackage[english]{nomencl}
+\makenomenclature
+%\usepackage{etoolbox}
+
+
+\renewcommand\nomgroup[1]{%
+	\item[\bfseries
+	\ifstrequal{#1}{C}{Physics Constants}{%
+		\ifstrequal{#1}{N}{Notation}{%
+			\ifstrequal{#1}{S}{Symbols}{%
+				\ifstrequal{#1}{F}{Functions}{%
+				}%
+			}%
+		}%
+	}%
+]}
+
+\newcommand{\nomunit}[1]{%
+	\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
+
+\nomenclature[C]{$c$}{Speed of light}
+
+\nomenclature[Na]{$\underline{a}$}{Value, explicitly marked complex valued}
+\nomenclature[Nb]{$\vect{a}$}{Vector}
+\nomenclature[Nba]{$\vect{\underline{a}}$}{Vector, explicitly marked complex valued}
+\nomenclature[Nc]{$\mat{A}$}{Matrix}
+\nomenclature[Nca]{$\mat{\underline{A}}$}{Matrix, explicitly marked complex valued}
+\nomenclature[Nxa]{$\underline{x}(t)$}{Analog signal in time domain}
+\nomenclature[Nxb]{$\underline{X}(\j \omega)$}{Analog signal in frequency domain (Fourier transform)}
+\nomenclature[Nxb]{$\underline{X}(\underline{s})$}{Analog signal in frequency domain (Laplace transform)}
+\nomenclature[Nxc]{$\underline{x}[k] = \underline{x}\left(k T_S\right)$}{Digital signal in time domain, with sampling period $T_S$}
+\nomenclature[Nxd]{$\underline{X}(\underline{z})$}{Digital signal in frequency domain (z-transform)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Listings

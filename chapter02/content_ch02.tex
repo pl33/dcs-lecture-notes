@@ -35,14 +35,15 @@ The mono-chromatic signal $x_{mc}(t)$ is defined by:
 \begin{equation}
 	x_{mc}(t) = \hat{X} \cdot \cos\left(\omega_0 t - \varphi_0\right)
 	\label{eq:ch02:mono_chrom_eq}
-\end{equation}
+\end{equation}%
+\nomenclature[Sx]{$x_{mc}(t)$, $\underline{x}_{mc}(t)$}{Mono-chromatic signal}%
 where
 
 \begin{tabular}{ll}
-	$\hat{X}$ & is the \index{amplitude} \textbf{amplitude} of the signal, \\
-	$\omega_0$ & is the \index{angular frequency} \textbf{angular frequency} of the signal, \\
-	$\varphi_0$ & is the \index{phase} \textbf{phase} of the signal, \\
-	$t \in \mathbb{R}$ & is the real-value time variable and continuously defined.
+	$\hat{X}$ & is the \index{amplitude} \textbf{amplitude} of the signal \nomenclature[Sx]{$\hat{X}$}{Amplitude of a mono-chromatic signal}, \\
+	$\omega_0$ & is the \index{angular frequency} \textbf{angular frequency} of the signal \nomenclature[So]{$\omega_0$}{Angular frequency of a mono-chromatic signal}, \\
+	$\varphi_0$ & is the \index{phase} \textbf{phase} of the signal \nomenclature[Sp]{$\varphi_0$}{Phase of a mono-chromatic signal}, \\
+	$t \in \mathbb{R}$ & is the real-value time variable and continuously defined \nomenclature[St]{$t$}{Time (continuous)}.
 \end{tabular}
 
 In fact, the sine function $\sin()$ is mono-chromatic, too. However, it can be derived from \eqref{eq:ch02:mono_chrom_eq} with $\varphi_0 = \SI{90}{\degree}$.
@@ -54,7 +55,8 @@ In fact, the sine function $\sin()$ is mono-chromatic, too. However, it can be d
 The angular frequency is connected to the \index{frequency} \textbf{frequency}.
 \begin{equation}
 	\omega_0 = 2 \pi f_0
-\end{equation}
+\end{equation}%
+\nomenclature[Sf]{$f_0$}{Frequency of a mono-chromatic signal}
 
 \begin{attention}
 	You must not confuse the terms \emph{frequency} and \emph{angular frequency}!
@@ -63,7 +65,8 @@ The angular frequency is connected to the \index{frequency} \textbf{frequency}.
 The inverse of the frequency is the \index{period} \textbf{period} $T_0$. It is the time interval at which the signal repeats.
 \begin{equation}
 	T_0 = \frac{1}{f_0} = \frac{2 \pi}{\omega_0}
-\end{equation}
+\end{equation}%
+\nomenclature[St]{$T_0$}{Period of a mono-chromatic signal}
 
 Be aware of the units. The period $T_0$ is defined in seconds \si{s}. The frequency $f_0$ is the inverse of seconds, which is Hertz \si{Hz}. The angular frequency $\omega_0$ is the inverse of seconds, too. However, it is never given in Hertz, only in \si{rad/s} or, more commonly, \si{1/s}.
 
@@ -148,13 +151,15 @@ When a signal passes through a \ac{LTI} system, the amplitude, the phase or both
 remain. Both are absorbed by the complex-valued \index{phasor} \textbf{phasor} $\underline{X}$, which uniquely describes a mono-chromatic signal.
 \begin{equation}
 	\underline{X} = \hat{X} \cdot e^{-j \varphi_0} = \hat{X} \angle -\varphi_0
-\end{equation}
+\end{equation}%
+\nomenclature[Np]{$r \angle \varphi$}{Complex with absolute value $r$ and phase $\varphi$ (e.g. phasor) in angle notation}
 
 \begin{excursus}{Complex numbers}
 	$j$ is the \index{imaginary unit} \textbf{imaginary unit}. It satisfies the equation
 	\begin{equation}
 		j^2 = -1
-	\end{equation}
+	\end{equation}%
+	\nomenclature[Sj]{$j$}{Imaginary unit}%
 	There is no real number $j \notin \mathbb{R}$ which satisfies the above solution. $j$ spans the set of complex numbers $\mathbb{C}$.
 	
 	In mathematics, the imaginary unit is noted as $i$. In engineering context, $j$ is used instead, because $i$ is the symbol of the electric current.
@@ -169,7 +174,9 @@ remain. Both are absorbed by the complex-valued \index{phasor} \textbf{phasor} $
 			a &= \Re\{\underline{c}\} \\
 			b &= \Im\{\underline{c}\}
 		\end{align}
-	\end{subequations}
+	\end{subequations}%
+	\nomenclature[Fr]{$\Re\{\underline{c}\}$}{Extracting the real part of the complex number $\underline{c}$}%
+	\nomenclature[Fi]{$\Im\{\underline{c}\}$}{Extracting the imaginary part of the complex number $\underline{c}$}%
 	Complex numbers $\underline{c}$ always carry an underline in this lecture to distinguish them from real numbers. However, this is not mandatory.
 
 	Another notation is the \index{polar form} \textbf{polar form}:
@@ -261,7 +268,9 @@ The real-valued function can be obtained by extracting the real part of the comp
 Periodic signals $x_p(t)$ comprises a class of signals which indefinitely repeat at constant time intervals $T_0$.
 \begin{equation}
 	x_p(t + n T_0) = x_p(t) \qquad \forall \; n \in \mathbb{Z}, \quad \mathbb{Z} = \left\{..., -2, -1, 0, 1, 2, ...\right\}
-\end{equation}
+\end{equation}%
+\nomenclature[Sx]{$x_p(t)$, $\underline{x}_p(t)$}{Periodic signal}%
+\nomenclature[Sn]{$n$}{Integer enumerator}
 
 Mono-chromatic signals are a special kind of periodic signals. Multi-frequent signals are composed a limited or unlimited number of mono-chromatic signals, which superimpose. Multi-frequent signals are periodic signals in general.
 
@@ -286,10 +295,11 @@ Comparing to the mono-chromatic signals, what happened to the phase $\varphi_0$?
 
 \subsection{Orthogonality}
 \index{orthogonality}
-The cosine and sine functions are orthogonal to each other. In geometry, two vectors $\vect{A}$ and $\vect{B}$ are said to be orthogonal, if the angle between them is \SI{90}{\degree}. In this case, their inner product is zero.
+The cosine and sine functions are orthogonal to each other. In geometry, two vectors $\vect{a}$ and $\vect{b}$ are orthogonal, if the angle between them is \SI{90}{\degree}. In this case, their inner product is zero.
 \begin{equation}
-	\langle \vect{A}, \vect{B} \rangle = 0
-\end{equation}
+	\langle \vect{a}, \vect{b} \rangle = 0
+\end{equation}%
+\nomenclature[Fa]{$\langle \vect{a}, \vect{b} \rangle$}{Inner product}
 
 More generally, two functions $f(x)$ and $g(x)$ are orthogonal if their \index{inner product} \textbf{inner product} $\langle f, g \rangle$ is zero. 
 \begin{equation}
@@ -319,7 +329,8 @@ with the Kronecker delta
 		0 & \qquad \text{if } u \neq v
 	\end{cases}
 	\label{eq:ch02:kronecker_delta}
-\end{equation}
+\end{equation}%
+\nomenclature[Fd]{$\delta_{uv}$}{Kronecker delta}
 
 The \index{orthogonality relations} \textbf{orthogonality relations} \eqref{eq:ch02:orth_rel_cos_sin}, \eqref{eq:ch02:orth_rel_cos} and \eqref{eq:ch02:orth_rel_sin} point out:
 \begin{itemize}
@@ -449,7 +460,9 @@ When considering a complex-valued signal $\underline{x_p}(t)$, both amplitude an
 \begin{itemize}
 	\item The amplitude $|\underline{c}_n|$ is always a positive real number.
 	\item The phase $\arg\left(\underline{c}_n\right)$ a real number from the interval $[-\pi, +\pi]$.
-\end{itemize}
+\end{itemize}%
+\nomenclature[Fa]{$|\cdot|$}{Absolute value of $\cdot$}%
+\nomenclature[Fa]{$\arg\left(\cdot\right)$}{Argument (angle) of $\cdot$}
 
 If the signal $\underline{x_p}(t) = x_p(t)$ is real-valued, i.e., $\Im\left\{\underline{c}_n(t)\right\} = 0$, the values of $\underline{c}_n$ are even more constrained by the \index{spectrum!symmetry rules} \textbf{symmetry rules}:
 \begin{itemize}
@@ -658,13 +671,15 @@ The inner integral is the \textbf{continuous Fourier transform}, also called onl
 	\begin{equation}
 		\underline{X}(j \omega) = \mathcal{F} \left\{\underline{x}(t)\right\} = \int\limits_{t = -\infty}^{\infty} \underline{x}(t) \cdot e^{-j \omega t} \, \mathrm{d} t
 		\label{eq:ch02:def_fourier_transform}
-	\end{equation}
+	\end{equation}%
+	\nomenclature[Ff]{$\mathcal{F} \left\{ \cdot \right\}$}{Fourier transform of $\cdot$}
 	
 	The \index{inverse Fourier transform} \index{inverse continuous Fourier transform} \textbf{inverse (continuous) Fourier transform} is:
 	\begin{equation}
 		\underline{x}(t) = \mathcal{F}^{-1} \left\{\underline{X}(j \omega)\right\} = \frac{1}{2 \pi} \int\limits_{\omega = -\infty}^{\infty} \underline{X}(j \omega) \cdot e^{+j \omega t} \, \mathrm{d} \omega
 		\label{eq:ch02:def_inv_fourier_transform}
-	\end{equation}
+	\end{equation}%
+	\nomenclature[Ff]{$\mathcal{F}^{-1} \left\{ \cdot \right\}$}{Inverse Fourier transform of $\cdot$}
 \end{definition}
 
 The Fourier transform $\mathcal{F} \left\{\underline{x}(t)\right\}$ and its inverse $\mathcal{F}^{-1} \left\{\underline{X}(j \omega)\right\}$ both yield functions which depend on $t$ or $\omega$, respectively. This relation is sometimes emphasized by appending $(t)$ or $\left(j \omega\right)$.
@@ -698,13 +713,14 @@ Let's investigate the \index{rectangular function} rectangular function from Fig
 		1 & \qquad \text{if } \; |t| < \frac{1}{2}
 	\end{cases}
 	\label{eq:ch02:rect_function}
-\end{equation}
+\end{equation}%
+\nomenclature[Fr]{$\mathrm{rect}(t)$}{Rectangular function}%
 The function is undefined for $t = \pm \frac{1}{2}$. The function is now transformed, i.e., $\underline{x}(t) = \mathrm{rect}(t)$.
 
 \begin{equation}
 	\underline{X}\left(j \omega\right) =  \int\limits_{t = -\infty}^{\infty} \mathrm{rect}(t) \cdot e^{-j \omega t} \, \mathrm{d} t = \mathrm{sinc}\left(\frac{\omega}{2 \pi}\right)
 \end{equation}
-where $\mathrm{sinc}(t)$ is the \emph{normalized} sinc function.
+where $\mathrm{sinc}(t)$ is the \emph{normalized} sinc function. \nomenclature[Fr]{$\mathrm{sinc}(t)$}{Sinc function}
 
 \begin{attention}
 	Mathematics and engineering use a slightly different definition of the sinc function.
@@ -831,11 +847,13 @@ The time domain is obtained by the respective inverse transform.
 	The operation of a transform between time and frequency domain is written as:
 	\begin{equation}
 		\underline{x}(t) \TransformHoriz \underline{X}(j \omega)
-	\end{equation}
+	\end{equation}%
+	\nomenclature[Nt]{$\TransformHoriz$}{Transform from the left side to the right side}%
 	for the transform from time to frequency domain, and vice versa:
 	\begin{equation}
 		\underline{X}(j \omega) \InversTransformHoriz \underline{x}(t)
-	\end{equation}
+	\end{equation}%
+	\nomenclature[Nt]{$\InversTransformHoriz$}{Inverse transform from the left side to the right side}
 \end{definition}
 
 \textbf{But what is the purpose of the transforms?}
@@ -873,7 +891,8 @@ Besides the classification of signals into periodic and non-periodic, signals ca
 The \index{average signal power} \textbf{average signal power} $P$ is a measure for the amount of energy transferred per unit time and defined by:
 \begin{equation}
 	P = \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{-\frac{T}{2}}^{\frac{T}{2}} \left|x(t)\right|^2 \; \mathrm{d} t
-\end{equation}
+\end{equation}%
+\nomenclature[Sp]{$P$}{Power}%
 The signal power is connected to the \ac{RMS} value, which is often used in electrical engineering.
 \begin{equation}
 	\hat{x}_{RMS} = \lim\limits_{T \rightarrow \infty} \sqrt{ \frac{1}{T} \int\limits_{-\frac{T}{2}}^{\frac{T}{2}} \left|x(t)\right|^2 \; \mathrm{d} t}
@@ -882,7 +901,8 @@ The signal power is connected to the \ac{RMS} value, which is often used in elec
 The \index{signal energy} \textbf{signal energy} $E$ is:
 \begin{equation}
 	E = \int\limits_{-\infty}^{\infty} \left|x(t)\right|^2 \; \mathrm{d} t
-\end{equation}
+\end{equation}%
+\nomenclature[Se]{$E$}{Energy}
 
 The property of power signals, which have an indefinite signal energy, is a problem for the Fourier transform. The transform would yield an indefinite value. Thus:
 \begin{fact}
@@ -1099,7 +1119,8 @@ An important distribution is the \index{Dirac delta function} \textbf{Dirac delt
 		0 & \qquad \text{if } t \neq 0
 	\end{cases}
 	\label{eq:ch02:dirac_delta}
-\end{equation}
+\end{equation}%
+\nomenclature[Fd]{$\delta(t)$}{Dirac delta function}%
 It is constrained by
 \begin{equation}
 	\int\limits_{-\infty}^{\infty} \delta(t) \; \mathrm{d} t = 1
@@ -1245,7 +1266,7 @@ Now, we can formulate a simple relationship in the frequency domain between the 
 	\underline{U}_o\left(j \omega\right) = \underline{H} \left(j \omega\right) \cdot \underline{U}_i\left(j \omega\right)
 \end{equation}
 
-$\underline{H} \left(j \omega\right)$ is the \index{transfer function} \textbf{transfer function} which fully describes a deterministic \ac{LTI} system.
+$\underline{H} \left(j \omega\right)$ is the \index{transfer function} \textbf{transfer function} which fully describes a deterministic \ac{LTI} system. \nomenclature[Sh]{$\underline{H} \left(j \omega\right)$}{Transfer function of a system}
 
 In our electric network, the transfer function is:
 \begin{equation}
@@ -1310,7 +1331,8 @@ Now, the input signal is set to the Dirac delta function $\delta(t)$ (see \eqref
 	The inverse Fourier transform of the transfer function $\underline{H} \left(j \omega\right)$ is the \index{impulse response} \textbf{impulse response} $\underline{h}(t)$.
 	\begin{equation}
 		\underline{h}(t) = \mathcal{F}^{-1}\left\{\underline{H} \left(j \omega\right)\right\}
-	\end{equation}
+	\end{equation}%
+	\nomenclature[Sh]{$\underline{h}(t)$}{Impulse response of a system}
 \end{definition}
 
 The name ``impulse response'' directly connected to the Dirac delta function. The Dirac delta function can be seen as an ideal impulse (indefinitely narrow width in time, indefinitely high in value). Giving this impulse as an input into a system yields the impulse response.
@@ -1447,8 +1469,8 @@ If $\underline{h}(t)$ is constrained to be zero for all $t < 0$ (red curve). It 
 
 In system analysis, zeros and poles play an important role.
 \begin{itemize}
-	\item $\underline{s}_0$ is a zero of the system with the transfer function $\underline{H}(\underline{s})$, when $\underline{H}(\underline{s}_0) = 0$.
-	\item $\underline{s}_\infty$ is a pole of the system with the transfer function $\underline{H}(\underline{s})$, when $\underline{H}(\underline{s}_\infty) \rightarrow \pm \infty$.
+	\item $\underline{s}_0$ is a zero of the system with the transfer function $\underline{H}(\underline{s})$, when $\underline{H}(\underline{s}_0) = 0$. \nomenclature[Ss]{$\underline{s}_0$}{Zero of a system}
+	\item $\underline{s}_\infty$ is a pole of the system with the transfer function $\underline{H}(\underline{s})$, when $\underline{H}(\underline{s}_\infty) \rightarrow \pm \infty$. \nomenclature[Ss]{$\underline{s}_\infty$}{Pole of a system}
 \end{itemize}
 
 $\underline{H}(\underline{s})$ can be written as a fraction with polynomials in both the numerator and denominator.
@@ -1524,7 +1546,7 @@ The complex transfer function of a system can be decomposed to polar coordinates
 \begin{equation}
 	\underline{H}\left(j \omega\right) = A(\omega) \cdot e^{j \varphi(\omega)}
 \end{equation}
-Both $A(\omega)$ and $\varphi(\omega)$ are functions of the angular frequency $\omega$.
+Both $A(\omega)$ and $\varphi(\omega)$ are functions of the angular frequency $\omega$. \nomenclature[Sa]{$A(\omega)$, $\left|\underline{H}(j \omega)\right|$}{Amplitude response of a system} \nomenclature[Sp]{$\varphi(\omega)$, $\arg\left(\underline{H}(j \omega)\right)$}{Phase response of a system}
 
 Each input signal $\underline{x}(t) \TransformHoriz \underline{X}\left(j \omega\right)$ is subject to
 \begin{itemize}
