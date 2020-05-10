@@ -1058,11 +1058,11 @@ The Fourier transform of the Dirac delta function is the frequency-independent c
 \subsection{Fourier Transforms of Sinusoidal Functions}
 
 \begin{equation}
-	\mathcal{F} \left\{\cos\left(\omega_0 t\right)\right\} = \pi \left( \underbrace{\delta\left(\omega - \omega_0\right)}_{Poistive frequency} + \underbrace{\delta\left(\omega + \omega_0\right)}_{Negative frequency} \right)
+	\mathcal{F} \left\{\cos\left(\omega_0 t\right)\right\} = \pi \left( \underbrace{\delta\left(\omega - \omega_0\right)}_{\text{Poistive frequency}} + \underbrace{\delta\left(\omega + \omega_0\right)}_{\text{Negative frequency}} \right)
 \end{equation}
 
 \begin{equation}
-	\mathcal{F} \left\{\sin\left(\omega_0 t\right)\right\} = -j \pi \left( \underbrace{\delta\left(\omega - \omega_0\right)}_{Poistive frequency} - \underbrace{\delta\left(\omega + \omega_0\right)}_{Negative frequency} \right)
+	\mathcal{F} \left\{\sin\left(\omega_0 t\right)\right\} = -j \pi \left( \underbrace{\delta\left(\omega - \omega_0\right)}_{\text{Poistive frequency}} - \underbrace{\delta\left(\omega + \omega_0\right)}_{\text{Negative frequency}} \right)
 \end{equation}
 
 \begin{itemize}
@@ -1529,13 +1529,52 @@ A \index{low pass filter} \textbf{\acf{LPF}}
 \end{itemize}
 
 \begin{equation}
-	\underline{H}_{TPF}\left(j \omega\right) = \mathrm{rect}\left(\frac{1}{2} \cdot \frac{\omega}{\omega_o}\right) = \begin{cases}
+	\underline{H}_{LPF}\left(j \omega\right) = \mathrm{rect}\left(\frac{1}{2} \cdot \frac{\omega}{\omega_o}\right) = \begin{cases}
 		0 & \qquad \text{if } \; |\omega| > \omega_o, \\
 		1 & \qquad \text{if } \; |\omega| < \omega_o
 	\end{cases}
 \end{equation}
 
-\todo{Amplitude response}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$A_{LPF}(\omega) = \left|\underline{H}_{LPF}(j \omega)\right|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-52,
+			xmax=52,
+			ymin=0,
+			ymax=1.5,
+			xtick={-20, 0, 20},
+			xticklabels={$-\omega_o$, 0, $\omega_o$},
+			ytick={0, 0.5, 1},
+		]
+			\addplot[red, thick] coordinates {(-50, 0) (-20, 0)};
+			\addplot[red, dashed] coordinates {(-20, 0)(-20, 1)};
+			\addplot[red, thick] coordinates {(-20, 1) (20, 1)};
+			\addplot[red, dashed] coordinates {(20, 1) (20, 0)};
+			\addplot[red, thick] coordinates {(20, 0) (50, 0)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[Amplitude response of an ideal \acl{LPF}]{Amplitude response of an ideal \ac{LPF}}
+\end{figure}
 
 \subsubsection{Ideal High Pass Filter}
 
@@ -1546,13 +1585,52 @@ A \index{high pass filter} \textbf{\acf{HPF}}
 \end{itemize}
 
 \begin{equation}
-	\underline{H}_{HPF}\left(j \omega\right) = 1 - \underbrace{\mathrm{rect}\left(\frac{1}{2} \cdot \frac{\omega}{\omega_o}\right)}_{\text{Equals low pass filter}} = \begin{cases}
+	\underline{H}_{HPF}\left(j \omega\right) = 1 - \underline{H}_{LPF}\left(j \omega\right) = \begin{cases}
 		1 & \qquad \text{if } \; |\omega| > \omega_o, \\
 		0 & \qquad \text{if } \; |\omega| < \omega_o
 	\end{cases}
 \end{equation}
 
-\todo{Amplitude response}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$A_{HPF}(\omega) = \left|\underline{H}_{HPF}(j \omega)\right|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-52,
+			xmax=52,
+			ymin=0,
+			ymax=1.5,
+			xtick={-20, 0, 20},
+			xticklabels={$-\omega_o$, 0, $\omega_o$},
+			ytick={0, 0.5, 1},
+		]
+			\addplot[red, thick] coordinates {(-50, 1) (-20, 1)};
+			\addplot[red, dashed] coordinates {(-20, 1)(-20, 0)};
+			\addplot[red, thick] coordinates {(-20, 0) (20, 0)};
+			\addplot[red, dashed] coordinates {(20, 0) (20, 1)};
+			\addplot[red, thick] coordinates {(20, 1) (50, 1)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[Amplitude response of an ideal \acl{HPF}]{Amplitude response of an ideal \ac{HPF}}
+\end{figure}
 
 \subsubsection{Ideal Band Pass Filter}
 
@@ -1563,15 +1641,63 @@ A \index{band pass filter} \textbf{\acf{BPF}}
 \end{itemize}
 
 \begin{equation}
-	\underline{H}_{HPF}\left(j \omega\right) = \underbrace{\mathcal{F}\left\{\cos\left(\omega_c t\right)\right\} * \underbrace{\mathrm{rect}\left(\frac{1}{2} \cdot \frac{\omega}{\omega_c}\right)}_{\text{Equals low pass filter}}}_{\text{``Two-sided frequency shift''}} = \begin{cases}
-		1 & \qquad \text{if } \; ||\omega| - \omega_c| < \frac{\omega_b}{2}, \\
-		0 & \qquad \text{else}
-	\end{cases}
+	\begin{split}
+		\underline{H}_{BPF}\left(j \omega\right) &= \underbrace{\mathcal{F}\left\{\frac{1}{\pi} \cos\left(\omega_c t\right)\right\} * \left.\underline{H}_{LPF}\left(j \omega\right)\right|_{\omega_o = \frac{1}{2} \omega_b}}_{\text{``Two-sided frequency shift''}} \\
+		 &= \left( \delta\left(\omega - \omega_c\right) + \delta\left(\omega + \omega_c\right) \right) * \mathrm{rect}\left(\frac{\omega}{\omega_b}\right) \\
+		 &= \mathrm{rect}\left(\frac{\omega - \omega_0}{\omega_b}\right) + \mathrm{rect}\left(\frac{\omega + \omega_0}{\omega_b}\right) \\
+		 &= \begin{cases}
+			1 & \qquad \text{if } \; ||\omega| - \omega_c| < \frac{\omega_b}{2}, \\
+			0 & \qquad \text{else}
+		\end{cases}
+	\end{split}
 \end{equation}
 
 The \ac{BPF} can be seen as a \ac{LPF} frequency-shifted in both positive and negative direction by the centre frequency $\omega_c$. This special ``two-sided frequency shift'' will later be called \emph{modulation}.
 
-\todo{Amplitude response}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.8\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$A_{BPF}(\omega) = \left|\underline{H}_{BPF}(j \omega)\right|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-52,
+			xmax=52,
+			ymin=0,
+			ymax=1.5,
+			xtick={-45, -32.5, -20, 0, 20, 32.5, 45},
+			xticklabels={$-\omega_c - \frac{\omega_b}{2}$, $-\omega_c$, $-\omega_c + \frac{\omega_b}{2}$, 0, $\omega_c - \frac{\omega_b}{2}$, $\omega_c$, $\omega_c + \frac{\omega_b}{2}$},
+			ytick={0, 0.5, 1},
+		]
+			\addplot[red, thick] coordinates {(-50, 0) (-45, 0)};
+			\addplot[red, dashed] coordinates {(-45, 0)(-45, 1)};
+			\addplot[red, thick] coordinates {(-45, 1) (-20, 1)};
+			\addplot[red, dashed] coordinates {(-20, 1) (-20, 0)};
+			\addplot[red, thick] coordinates {(-20, 0) (20, 0)};
+			\addplot[red, dashed] coordinates {(20, 0) (20, 1)};
+			\addplot[red, thick] coordinates {(20, 1) (45, 1)};
+			\addplot[red, dashed] coordinates {(45, 1) (45, 0)};
+			\addplot[red, thick] coordinates {(45, 0) (50, 0)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[Amplitude response of an ideal \acl{BPF}]{Amplitude response of an ideal \ac{BPF}}
+\end{figure}
 
 \subsubsection{Ideal Band Elimination Filter}
 
@@ -1582,13 +1708,56 @@ A \index{band elimination filter} \textbf{\acf{BEF}}
 \end{itemize}
 
 \begin{equation}
-	\underline{H}_{HPF}\left(j \omega\right) = 1 - \underbrace{\left(\mathcal{F}\left\{\cos\left(\omega_c t\right)\right\} * \mathrm{rect}\left(\frac{1}{2} \cdot \frac{\omega}{\omega_c}\right)\right)}_{\text{Equals band pass filter}} = \begin{cases}
+	\underline{H}_{BEF}\left(j \omega\right) = 1 - \underline{H}_{BPF}\left(j \omega\right) = \begin{cases}
 		0 & \qquad \text{if } \; ||\omega| - \omega_c| < \frac{\omega_b}{2}, \\
 		1 & \qquad \text{else}
 	\end{cases}
 \end{equation}
 
-\todo{Amplitude response}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.8\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$A_{BEF}(\omega) = \left|\underline{H}_{BEF}(j \omega)\right|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-52,
+			xmax=52,
+			ymin=0,
+			ymax=1.5,
+			xtick={-45, -32.5, -20, 0, 20, 32.5, 45},
+			xticklabels={$-\omega_c - \frac{\omega_b}{2}$, $-\omega_c$, $-\omega_c + \frac{\omega_b}{2}$, 0, $\omega_c - \frac{\omega_b}{2}$, $\omega_c$, $\omega_c + \frac{\omega_b}{2}$},
+			ytick={0, 0.5, 1},
+		]
+			\addplot[red, thick] coordinates {(-50, 1) (-45, 1)};
+			\addplot[red, dashed] coordinates {(-45, 1)(-45, 0)};
+			\addplot[red, thick] coordinates {(-45, 0) (-20, 0)};
+			\addplot[red, dashed] coordinates {(-20, 0) (-20, 1)};
+			\addplot[red, thick] coordinates {(-20, 1) (20, 1)};
+			\addplot[red, dashed] coordinates {(20, 1) (20, 0)};
+			\addplot[red, thick] coordinates {(20, 0) (45, 0)};
+			\addplot[red, dashed] coordinates {(45, 0) (45, 1)};
+			\addplot[red, thick] coordinates {(45, 1) (50, 1)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[Amplitude response of an ideal \acl{BEF}]{Amplitude response of an ideal \ac{BEF}}
+\end{figure}
 
 \subsection{Realizable Filters}
 
@@ -1598,6 +1767,259 @@ Realizable filters
 	\item have a real-valued slope between pass band and stopband instead of an ideal cut-off (step).
 	\item Their phase response $\varphi(\omega)$ is not constantly zero.
 \end{itemize}
+
+The cut-off frequencies or bandwidth, respectively, is defined at those frequencies, where the output signal power has dropped to $0.5$ in relation to the peak value. For voltages, this means $\sqrt{2} = 0.707$ of the peak voltage\footnote{$\sqrt{2} = 0.707$ is the crest factor for sinusoidal voltage signals.}. In decibel, this is \SI{-3}{dB}.
+
+\begin{itemize}
+	\item The order of the filter is the number of their memory components (capacitors, inductances, memory cells). The order corresponds to the highest exponent of $j \omega$ (or $\underline{s}$) in the transfer function of the filter.
+	\item A higher filter order yields a filter whose shape comes closer to the ideal filter (steeper slopes).
+	\item The filters depicted below are of low order and therefore very ``poor'' in performance.
+\end{itemize}
+
+\subsubsection{Low Pass Filter}
+
+\begin{minipage}{0.45\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0, 0) to[R, l=$R$, o-] ++(2,0) to[short, *-o] ++(2,0);
+			\draw (2, 0) to[C, l=$C$, -*] ++(0,-2);
+			\draw (0, -2) to[short, o-o] ++(4,0);
+			
+			\draw (0, 0) to[open, v=$u_i(t)$] (0, -2);
+			\draw (4, 0) to[open, v^=$u_o(t)$] (4, -2);
+		\end{circuitikz}
+		\caption{Real low pass filter as an electrical network}
+	\end{figure}
+
+	Transfer function of this example:
+	\begin{equation}
+		\underline{H}\left(j \omega\right) = \frac{1}{j \omega RC + 1}
+	\end{equation}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.9\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$A_{LPF}(\omega) = \left|\underline{H}_{LPF}(j \omega)\right|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-32,
+			xmax=32,
+			ymin=0,
+			ymax=1.2,
+			xtick={-5, 0, 5},
+			xticklabels={$-\omega_o$, 0, $\omega_o$},
+			ytick={0, 0.5, 0.707, 1},
+		]
+			% RC = 0.2
+			\addplot[blue, thick, domain=-30:30, samples=100] plot (\x, {sqrt( 1 / ((0.2 * \x)^2 + 1) )});
+			
+			\addplot[red, dashed] coordinates {(-5, 0) (-5, 0.707) (5, 0.707) (5, 0)};
+		\end{axis}
+		\end{tikzpicture}
+		\caption[Amplitude response of a real \acl{LPF}]{Amplitude response of a real \ac{LPF}}
+	\end{figure}
+\end{minipage}
+
+\subsubsection{High Pass Filter}
+
+\begin{minipage}{0.45\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0, 0) to[C, l=$C$, o-] ++(2,0) to[short, *-o] ++(2,0);
+			\draw (2, 0) to[R, l=$R$, -*] ++(0,-2);
+			\draw (0, -2) to[short, o-o] ++(4,0);
+			
+			\draw (0, 0) to[open, v=$u_i(t)$] (0, -2);
+			\draw (4, 0) to[open, v^=$u_o(t)$] (4, -2);
+		\end{circuitikz}
+		\caption{Real high pass filter as an electrical network}
+	\end{figure}
+
+	Transfer function of this example:
+	\begin{equation}
+		\underline{H}\left(j \omega\right) = \frac{j \omega RC}{j \omega RC + 1}
+	\end{equation}
+	
+	\textit{Remark:} The filter has one zero $\underline{s}_0 = 0 + j0$. The zero can be directly seen in the amplitude response: $A_{HPF}(\omega = 0) = 0$. The pole $\underline{s}_\infty = \frac{1}{RC} + j 0$ is not directly visible, because only the $j \omega$-axis of $\underline{s}$ is plotted. However, it indirectly determines the shape of the curve.
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+			height={0.25\textheight},
+			width=0.9\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$A_{HPF}(\omega) = \left|\underline{H}_{HPF}(j \omega)\right|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-32,
+			xmax=32,
+			ymin=0,
+			ymax=1.2,
+			xtick={-5, 0, 5},
+			xticklabels={$-\omega_o$, 0, $\omega_o$},
+			ytick={0, 0.5, 0.707, 1},
+			]
+			% RC = 0.2
+			\addplot[blue, thick, domain=-30:30, samples=100] plot (\x, {sqrt( (0.2 * \x)^2 / ((0.2 * \x)^2 + 1) )});
+			
+			\addplot[red, dashed] coordinates {(-5, 0) (-5, 0.707) (5, 0.707) (5, 0)};
+		\end{axis}
+		\end{tikzpicture}
+			\caption[Amplitude response of a real \acl{HPF}]{Amplitude response of a real \ac{HPF}}
+	\end{figure}
+\end{minipage}
+
+\subsubsection{Band Pass Filter}
+
+\begin{minipage}{0.45\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0, 0) to[C, l=$C$, o-] ++(2,0) to[L, l=$L$, -o] ++(2,0);
+			\draw (0, -2) to[short, o-o] ++(4,0);
+			
+			\draw (0, 0) to[open, v=$u_i(t)$] (0, -2);
+			\draw (4, 0) to[open, v^=$u_o(t)$] (4, -2);
+		\end{circuitikz}
+		\caption{Real band pass filter as an electrical network}
+	\end{figure}
+	\end{minipage}
+\hfill
+\begin{minipage}{0.45\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+				\begin{axis}[
+				height={0.25\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$A_{BPF}(\omega) = \left|\underline{H}_{BPF}(j \omega)\right|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=west,
+				},
+				xmin=0,
+				xmax=52,
+				ymin=0,
+				ymax=1.2,
+				xtick={0, 20},
+				xticklabels={0, $\omega_c$},
+				ytick={0, 0.5, 0.707, 1},
+			]
+				\addplot[blue, thick, domain=0:50, samples=100] plot (\x, {sqrt( 1 / ((0.2 * (\x - 20))^2 + 1) ) });
+				
+				\addplot[red, dashed] coordinates {(15, 0) (15, 0.707) (25, 0.707) (25, 0)};
+			\end{axis}
+		\end{tikzpicture}
+		\caption[Amplitude response of a real \acl{BPF}]{Amplitude response of a real \ac{BPF}. Negative $\omega$-axis omitted.}
+	\end{figure}
+\end{minipage}
+
+\subsubsection{Band Elimination Filter}
+
+\begin{minipage}{0.45\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0, 0) to[short, o-o] ++(4,0);
+			\draw (2, 0) to[C, l=$C$, *-] ++(0,-2) to[L, l=$L$, -*] ++(0,-2);
+			\draw (0, -4) to[short, o-o] ++(4,0);
+			
+			\draw (0, 0) to[open, v=$u_i(t)$] (0, -4);
+			\draw (4, 0) to[open, v^=$u_o(t)$] (4, -4);
+		\end{circuitikz}
+		\caption{Real band elimination filter as an electrical network}
+	\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\linewidth}
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.25\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$A_{BEF}(\omega) = \left|\underline{H}_{BEF}(j \omega)\right|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=west,
+				},
+				xmin=0,
+				xmax=52,
+				ymin=0,
+				ymax=1.2,
+				xtick={0, 20},
+				xticklabels={0, $\omega_c$},
+				ytick={0, 0.5, 0.707, 1},
+			]
+				\addplot[blue, thick, domain=0:50, samples=100] plot (\x, {sqrt( (0.2 * (\x - 20))^2 / ((0.2 * (\x - 20))^2 + 1) )});
+				
+				\addplot[red, dashed] coordinates {(15, 0) (15, 0.707) (25, 0.707) (25, 0)};
+			\end{axis}
+		\end{tikzpicture}
+		\caption[Amplitude response of a real \acl{BEF}]{Amplitude response of a real \ac{BEF}. Negative $\omega$-axis omitted.}
+	\end{figure}
+\end{minipage}
 
 \printbibliography[heading=subbibliography]
 \end{refsection}
