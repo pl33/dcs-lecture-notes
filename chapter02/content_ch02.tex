@@ -27,6 +27,8 @@ Furthermore, the signals considered here are time-continuous.
 
 \section{Mono-Chromatic Signals}
 
+\subsection{Real-Valued Signals and Phasor}
+
 \paragraph{Representation by A Real-Valued Function.}
 
 The mono-chromatic signal $x_{mc}(t)$ is defined by:
@@ -86,7 +88,41 @@ The actual unit of the signal is derived from its amplitude $\hat{X}$ which can 
 A graphical view on the creation of a cosine signal is depicted in Figure \ref{fig:ch02:cos_creation}.
 
 \begin{figure}[H]
-	\caption{Imagine, there is a pointer (red) with one side fixed to a point. Now, it begins rotating counter-clockwise with an angular frequency of $\omega_0$ (blue). The arrow of the pointer draws a circle (left side). Each angle of the pointer is related to a time instance (green). The blue pointer is the current position at time instance $t$. Its vertical value is projected into the time plot, forming the cosine wave (orange).}
+	\centering
+	\begin{tikzpicture}
+		\begin{scope}[shift={(0, 0)}]
+			\draw[-latex] (0,0) -- (4.5,0) node[below, align=left]{$t$};
+			\draw[-latex] (0,-2.2) -- (0,2.2);
+			\draw (1,0.1) -- (1,-0.1) node[below, align=center]{$\frac{T_0}{4}$};
+			\draw (2,0.1) -- (2,-0.1) node[below, align=center]{$\frac{T_0}{2}$};
+			\draw (3,0.1) -- (3,-0.1) node[below, align=center]{$\frac{3 T_0}{4}$};
+			\draw (4,0.1) -- (4,-0.1) node[below, align=center]{$T_0$};
+			
+			\draw (0.5,0.1) -- (0.5,-0.1) node[below, align=center]{$t'$};
+			
+			\draw[red, thick, smooth, domain=0:4, samples=40] plot (\x, {2*cos( 360 * \x / 4 )});
+		\end{scope}
+		\begin{scope}[shift={(-4, 0)}]
+			\draw[draw] (0:2) arc(0:360:2);
+			\draw[-latex] (0,0) -- (0,1) node[right, align=left]{$\Re$};
+			\draw[-latex] (0,0) -- (-1,0) node[below, align=center]{$\Im$};
+			
+			\draw (180:1.9) -- (180:2.1) node[left, align=center]{$\frac{T_0}{4}$};
+			\draw (270:1.9) -- (270:2.1) node[below, align=center]{$\frac{T_0}{2}$};
+			\draw (0:1.9) -- (0:2.1) node[right, align=center]{$\frac{3 T_0}{4}$};
+			\draw (90:1.9) -- (90:2.1) node[above, align=center]{$0$ and $T_0$};
+			
+			\draw (135:1.9) -- (135:2.1) node[above left, align=right]{$t'$};
+			
+			\draw[very thick, blue, -latex] (135:0) -- (135:2);
+			
+			
+			\draw[thick, green, -latex] (125:1) arc(125:235:1) node[right, align=left]{$\omega_0$};
+		\end{scope}
+		
+		\draw[dashed] (-5.414, 1.414) -- (0.5, 1.414) -- (0.5, 0);
+	\end{tikzpicture}
+	\caption[Generation of a sinusoidal shape]{Generation of a sinusoidal shape. Imagine, there is a pointer (blue) with one side fixed to a point. Now, it begins rotating counter-clockwise with an angular frequency of $\omega_0$ (green). The arrow of the pointer draws a circle (left side). Each angle of the pointer is related to a time instance. The blue pointer is the current position at time instance $t'$. Its vertical value is projected into the time plot, forming the cosine wave (red).}
 	\label{fig:ch02:cos_creation}
 \end{figure}
 
@@ -177,17 +213,48 @@ Figure \ref{fig:ch02:cmplxplane_phasor} depicts the phasor in the complex plane.
 	The phasor of a signal is a signal parameter, constant and \underline{not} time-dependent.
 \end{fact}
 
-The current position of the pointer $\underline{x}(t)$ in the complex plane is obtained by rotating it. It makes a full rotation each $T_0$ periods. Therefore, it rotates at an angular frequency of $\omega_0$. The rotation is a multiplication by $e^{j \omega t}$ in the complex plane. $\underline{x}(t) \in \mathbb{C}$ is a complex value, too.
+The current position of the pointer $\underline{x}(t)$ in the complex plane is obtained by rotating it. It makes a full rotation each $T_0$ periods. Therefore, it rotates at an angular frequency of $\omega_0$. The rotation is a multiplication by $e^{j \omega_0 t}$ in the complex plane. $\underline{x}(t) \in \mathbb{C}$ is a complex value, too.
 \begin{equation}
-	\underline{x_{mc}}(t) = \underline{X} \cdot e^{j \omega t} = \hat{X} \cdot e^{-j \varphi_0} \cdot e^{j \omega t}
+	\underline{x_{mc}}(t) = \underline{X} \cdot e^{j \omega_0 t} = \hat{X} \cdot e^{-j \varphi_0} \cdot e^{j \omega_0 t}
 \end{equation}
-
-\todo{Proof}
 
 The real-valued function can be obtained by extracting the real part of the complex-valued current value.
 \begin{equation}
 	x_{mc}(t) = \Re\left\{\underline{x_{mc}}(t)\right\}
 \end{equation}
+
+\begin{proof}{}
+	\begin{equation}
+		\begin{split}
+			x_{mc}(t) &= \Re\left\{\underline{x_{mc}}(t)\right\} \\
+			 &= \Re\left\{\hat{X} \cdot e^{-j \varphi_0} \cdot e^{j \omega_0 t}\right\} \\
+			 &= \hat{X} \cdot \Re\left\{e^{j \left(\omega_0 t - \varphi_0\right)}\right\} \\
+			 &= \hat{X} \cdot \Re\left\{\cos \left(\omega_0 t - \varphi_0\right) + j \sin \left(\omega_0 t - \varphi_0\right)\right\} \\
+			 &= \hat{X} \cdot \cos \left(\omega_0 t - \varphi_0\right) \\
+		\end{split}
+	\end{equation}
+\end{proof}
+
+\subsection{Complex-Valued Signals}
+
+\begin{excursus}{Are there complex-valued, mono-chromatic signals?}
+	Yes, there is.
+	\begin{equation}
+		\underline{x}_{mc,e}(t) = \hat{X} \cdot e^{j \left(\omega_0 t - \varphi_0\right)}
+	\end{equation}
+	is a complex-valued, mono-chromatic signal. We will come back to it later, but not in this chapter.
+	
+	\vspace{0.5em}
+	Phasor representation:
+	\begin{equation}
+		\underline{x}_{mc,e}(t) = \underline{X} \cdot e^{- j \omega_0 t}
+	\end{equation}
+	With the phasor $\underline{X}$:
+	\begin{equation}
+		\underline{X} = \hat{X} \cdot e^{- j \varphi_0} =  \hat{X} \angle -\varphi_0
+	\end{equation}
+	If you use a phasor, it must be clear from the context, whether you refer to a real-valued or complex-valued, mono-chromatic signal.
+\end{excursus}
 
 \section{Periodic Signals and Fourier Series}
 
@@ -1514,7 +1581,86 @@ For each mono-chromatic component of the signal at an angular frequency of $\ome
 
 The values of both the amplitude response $A(\omega)$ and the phase response $\varphi(\omega)$ can be plotted over the angular frequency $\omega$.
 
-\todo{Plots}
+Let's take an example:
+\begin{equation}
+	\underline{H}\left(j \omega\right) = \frac{3}{j \omega \tau + 1}
+\end{equation}
+with $\tau = \SI{0.05}{s}$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.8\linewidth,
+			scale only axis,
+			xlabel={$\omega \text{ in } \si{1/s}$},
+			ylabel={$A(\omega) = \left|\underline{H}(j \omega)\right|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-55,
+			xmax=55,
+			ymin=0,
+			ymax=3.2,
+			xtick={-50, -40, ..., 50},
+			ytick={0, 1, ..., 3},
+		]
+			\addplot[blue, thick, domain=-50:50, samples=100] plot (\x, {3 * sqrt( 1 / ((0.05 * \x)^2 + 1) )});
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Amplitude response}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.8\linewidth,
+			scale only axis,
+			xlabel={$\omega \text{ in } \si{1/s}$},
+			ylabel={$\varphi(\omega) = \arg\left(\underline{H}(j \omega)\right)$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-55,
+			xmax=55,
+			ymin=-4,
+			ymax=4,
+			xtick={-50, -40, ..., 50},
+			ytick={-3.14159, -1.5708, 1.5708, 3.14159},
+			yticklabels={$-\pi\hspace{0.30cm}$, $-\frac{\pi}{2}$,
+				$\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+		]
+			\addplot[blue, thick, domain=-50:50, samples=100] plot (\x, {(2*pi/360) * atan2((3*(0.05*\x)/((0.05*\x)^2+1)), (3/((0.05*\x)^2+1)))});
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Phase response}
+\end{figure}
+
 
 \subsection{Ideal Filters}
 
