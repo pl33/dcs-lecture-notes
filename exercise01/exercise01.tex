@@ -2,6 +2,133 @@
 \addcontentsline{toc}{section}{Exercise 1}
 \section*{Exercise 1}
 
-\begin{question}
+\begin{question}[subtitle={Shannon-Weaver Model}]
+	Illustrate the process of sending an e-mail using the Shannon-Weaver model! Describe all nodes and edges shortly!
+\end{question}
+
+\begin{solution}
+	Person A send an e-mail to person B:
+	\begin{itemize}
+		\item Information source: Brain of person A
+		\item Signal: Impulses on nerve cells
+		\item Transducer: Keyboard, converts keystrokes to electronic signals
+		\item Signal: Electronic signals
+		\item Modem: PC, Receives keystrokes and decodes them into the e-mail
+		\item Signal: Data
+		\item Transmission channel: Internet
+		\item Signal: Data
+		\item Modem: PC, decodes e-mail, generates text
+		\item Signal: Electronic signals
+		\item Transducer: Screen, displays text
+		\item Signal: Impulses on nerve cells
+		\item Information source: Brain of person B
+	\end{itemize}
+\end{solution}
+
+\begin{question}[subtitle={Classes of Signals}]
+	Assign the following signals to the categories: time-continuous vs. time-discrete, value-continuous vs. value-discrete!
+	\begin{tasks}
+		\task
+		$\cos\left(2 \pi \cdot \SI{50}{Hz} \cdot t\right)$
+		\task
+		Letters: a, B, F, f
+		\task
+		\begin{equation*}
+			f(x) = \begin{cases}
+				-1 & \qquad \forall \; x \leq 0 \\
+				1 & \qquad \forall \; x > 0
+			\end{cases}
+		\end{equation*}
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		time-continuous, value-continuous
+		\task
+		time-discrete, value-discrete
+		\task
+		time-continuous, value-discrete
+	\end{tasks}
+\end{solution}
+
+\begin{question}[subtitle={Frequency Allocation}]
+	An LTE (4G cell phone) signal can occupy a bandwidth of up to \SI{20}{MHz}. One of the bands allocated to LTE is, amongst others, the band 1 (uplink: \SIrange{1920}{1980}{MHz}, uplink: \SIrange{2110}{2170}{MHz}). The range of one LTE base station is a few kilometres.
+	
+	However, the HF band (\SIrange{3}{30}{MHz}) has the advantage that waves are reflected by the ionosphere and can propagate over longer distances or even across the whole world. Mostly, narrow-band services like AM broadcasting or amateur radio are allocated to the HF band.
+	
+	Why is it pointless to use the HF band for LTE?
+\end{question}
+
+\begin{solution}
+	Reasons:
+	\begin{enumerate}
+		\item Band capacity:
+		\begin{itemize}
+			\item HF band is only \SI{27}{MHz} wide.
+			\item In contrast, the UHF band is \SI{2700}{MHz} wide.
+			\item One LTE base station would occupy the whole HF band.
+			\item LTE base stations should only have a limited range. One base station can only service a limited number of users.
+			\item Increasing the cell coverage will decrease the number of users and the data rate.
+			\item \textbf{That's why high data rate services use higher frequencies.}
+		\end{itemize}
+		\item Antenna size
+		\begin{itemize}
+			\item The antenna size is proportional to the wave length. For example, a $\lambda/2$-dipole measures the half of the wave length.
+			\item HF band wave length: \SI{10}{100}{m}
+			\item UHF band wave length: \SI{0.1}{1}{m}
+			\item UHF antennas are much smaller. They must fit into a cell phone.
+			\item \textbf{The higher the frequencies, the more compact the antennas and devices.}
+		\end{itemize}
+	\end{enumerate}
+\end{solution}
+
+\begin{question}[subtitle={OSI Layers}]
 	What is the difference between a \emph{digital communication system} and a \emph{service}? To which OSI layers are they associated?
 \end{question}
+
+\begin{solution}
+	\begin{itemize}
+		\item Digital communication system (in our understanding): collection of technologies for conveying information
+		\item Implemented in lower layers (1 - 4), we consider with layers 1 and 2
+		\item Services provide user applications (e.g. video-on-demand, social media, etc.). A service uses communication systems.
+		\item Services are located in layer 5 - 7.
+	\end{itemize}
+\end{solution}
+
+\begin{question}[subtitle={Networks}]
+	\begin{tasks}
+		\task
+		What is the major difference between OSI layers 2 and 3?
+		\task
+		Give one example for each layer!
+		\task
+		What is routing?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{itemize}
+			\item Layer 2: Connection of two devices
+			\item Layer 3: Data transfer across multiple nodes (creating a network)
+		\end{itemize}
+		\task
+		\begin{itemize}
+			\item Layer 2: IEEE\,802.11 (WiFi)
+			\item Layer 3: Internet Protocol (IP)
+		\end{itemize}
+		\task
+		\begin{itemize}
+			\item Routing is used in layer 3
+			\item A network consists of devices interconnected using layer 2 protocols.
+			\item If one device sends a layer 3 packet, it is wrapped into a layer 2 frame and sent to the next node.
+			\item The next node unpacks the layer 3 packet.
+			\item The next node has to decide to which next node the layer 3 packet should be relayed.
+			\item \textbf{This is routing.} Routing means findig the best way to the destination route.
+			\item The node packs the layer 3 packet into a layer 2 frame and sends to it the node it has selected.
+		\end{itemize}
+	\end{tasks}
+\end{solution}
