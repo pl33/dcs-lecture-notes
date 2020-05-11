@@ -1690,6 +1690,15 @@ All ideal filters are non-causal and can therefore not be implemented in real.
 
 \subsubsection{Ideal Low Pass Filter}
 
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[lowpass] (2,0);
+	\end{circuitikz}
+	\caption[Block symbol of a \acs{LPF}]{Block symbol of a \ac{LPF}}
+\end{figure}%
+\nomenclature[Bl]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[lowpass] (2,0);\end{circuitikz}}{Low pass filter}
+
 A \index{low pass filter} \textbf{\acf{LPF}}
 \begin{itemize}
 	\item lets pass all signals below a \index{low pass filter!cut-off frequency} \textbf{cut-off frequency} $\omega_o$ (all signals within the \index{low pass filter!pass band} \textbf{pass band} $|\omega| < \omega_o$),
@@ -1746,6 +1755,15 @@ A \index{low pass filter} \textbf{\acf{LPF}}
 
 \subsubsection{Ideal High Pass Filter}
 
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[highpass] (2,0);
+	\end{circuitikz}
+	\caption[Block symbol of a \acs{HPF}]{Block symbol of a \ac{HPF}}
+\end{figure}%
+\nomenclature[Bh]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[highpass] (2,0);\end{circuitikz}}{High pass filter}
+
 A \index{high pass filter} \textbf{\acf{HPF}}
 \begin{itemize}
 	\item blocks all signals below a \index{high pass filter!cut-off frequency} \textbf{cut-off frequency} $\omega_o$ (all signals within the \index{high pass filter!stopband} \textbf{stopband} $|\omega| < \omega_o$),
@@ -1801,6 +1819,15 @@ A \index{high pass filter} \textbf{\acf{HPF}}
 \end{figure}
 
 \subsubsection{Ideal Band Pass Filter}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[bandpass] (2,0);
+	\end{circuitikz}
+	\caption[Block symbol of a \acs{BPF}]{Block symbol of a \ac{BPF}}
+\end{figure}%
+\nomenclature[Bl]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[bandpass] (2,0);\end{circuitikz}}{Band pass filter}
 
 A \index{band pass filter} \textbf{\acf{BPF}}
 \begin{itemize}
@@ -1867,16 +1894,25 @@ The \ac{BPF} can be seen as a \ac{LPF} frequency-shifted in both positive and ne
 	\caption[Amplitude response of an ideal \acl{BPF}]{Amplitude response of an ideal \ac{BPF}}
 \end{figure}
 
-\subsubsection{Ideal Band Elimination Filter}
+\subsubsection{Ideal Band Stop Filter}
 
-A \index{band elimination filter} \textbf{\acf{BEF}}
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[bandstop] (2,0);
+	\end{circuitikz}
+	\caption[Block symbol of a \acs{BSF}]{Block symbol of a \ac{BSF}}
+\end{figure}%
+\nomenclature[Bl]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[bandstop] (2,0);\end{circuitikz}}{Band stop filter}
+
+A \index{band stop filter} \textbf{\acf{BSF}}
 \begin{itemize}
-	\item blocks all signals within a \index{band eliminations filter!stopband} \textbf{stopband} with the \index{band elimination filter!bandwidth} \textbf{bandwidth} $\omega_b$ which is centred around the \index{band elimination filter!centre frequency} \textbf{centre frequency} $\omega_c$: stopband $||\omega| - \omega_c| < \frac{\omega_b}{2}$
-	\item lets pass all signals outside the pass band: \index{band elimination filter!pass band} \textbf{pass band} is everything outside the stopband
+	\item blocks all signals within a \index{band stop filter!stopband} \textbf{stopband} with the \index{band stop filter!bandwidth} \textbf{bandwidth} $\omega_b$ which is centred around the \index{band stop filter!centre frequency} \textbf{centre frequency} $\omega_c$: stopband $||\omega| - \omega_c| < \frac{\omega_b}{2}$
+	\item lets pass all signals outside the pass band: \index{band stop filter!pass band} \textbf{pass band} is everything outside the stopband
 \end{itemize}
 
 \begin{equation}
-	\underline{H}_{BEF}\left(j \omega\right) = 1 - \underline{H}_{BPF}\left(j \omega\right) = \begin{cases}
+	\underline{H}_{BSF}\left(j \omega\right) = 1 - \underline{H}_{BPF}\left(j \omega\right) = \begin{cases}
 		0 & \qquad \text{if } \; ||\omega| - \omega_c| < \frac{\omega_b}{2}, \\
 		1 & \qquad \text{else}
 	\end{cases}
@@ -1890,7 +1926,7 @@ A \index{band elimination filter} \textbf{\acf{BEF}}
 			width=0.8\linewidth,
 			scale only axis,
 			xlabel={$\omega$},
-			ylabel={$A_{BEF}(\omega) = \left|\underline{H}_{BEF}(j \omega)\right|$},
+			ylabel={$A_{BSF}(\omega) = \left|\underline{H}_{BSF}(j \omega)\right|$},
 			%grid style={line width=.6pt, color=lightgray},
 			%grid=both,
 			grid=none,
@@ -1924,7 +1960,7 @@ A \index{band elimination filter} \textbf{\acf{BEF}}
 			\addplot[red, thick] coordinates {(45, 1) (50, 1)};
 		\end{axis}
 	\end{tikzpicture}
-	\caption[Amplitude response of an ideal \acl{BEF}]{Amplitude response of an ideal \ac{BEF}}
+	\caption[Amplitude response of an ideal \acl{BSF}]{Amplitude response of an ideal \ac{BSF}}
 \end{figure}
 
 \subsection{Realizable Filters}
@@ -2131,7 +2167,7 @@ The cut-off frequencies or bandwidth, respectively, is defined at those frequenc
 	\end{figure}
 \end{minipage}
 
-\subsubsection{Band Elimination Filter}
+\subsubsection{Band Stop Filter}
 
 \begin{minipage}{0.45\linewidth}
 	\begin{figure}[H]
@@ -2144,7 +2180,7 @@ The cut-off frequencies or bandwidth, respectively, is defined at those frequenc
 			\draw (0, 0) to[open, v=$u_i(t)$] (0, -4);
 			\draw (4, 0) to[open, v^=$u_o(t)$] (4, -4);
 		\end{circuitikz}
-		\caption{Real band elimination filter as an electrical network}
+		\caption{Real band stop filter as an electrical network}
 	\end{figure}
 \end{minipage}
 \hfill
@@ -2157,7 +2193,7 @@ The cut-off frequencies or bandwidth, respectively, is defined at those frequenc
 				width=0.9\linewidth,
 				scale only axis,
 				xlabel={$\omega$},
-				ylabel={$A_{BEF}(\omega) = \left|\underline{H}_{BEF}(j \omega)\right|$},
+				ylabel={$A_{BSF}(\omega) = \left|\underline{H}_{BSF}(j \omega)\right|$},
 				%grid style={line width=.6pt, color=lightgray},
 				%grid=both,
 				grid=none,
@@ -2185,7 +2221,7 @@ The cut-off frequencies or bandwidth, respectively, is defined at those frequenc
 				\addplot[red, dashed] coordinates {(15, 0) (15, 0.707) (25, 0.707) (25, 0)};
 			\end{axis}
 		\end{tikzpicture}
-		\caption[Amplitude response of a real \acl{BEF}]{Amplitude response of a real \ac{BEF}. Negative $\omega$-axis omitted.}
+		\caption[Amplitude response of a real \acl{BSF}]{Amplitude response of a real \ac{BSF}. Negative $\omega$-axis omitted.}
 	\end{figure}
 \end{minipage}
 
