@@ -4,7 +4,7 @@ BUILD_DIR = build
 LATEXMK = latexmk -pdf -silent -synctex=1
 LATEXMK_PVC = $(LATEXMK) -pvc
 
-ALL_CHAPTERS = $(BUILD_DIR)/chapter00.pdf $(BUILD_DIR)/chapter01.pdf $(BUILD_DIR)/chapter02.pdf
+ALL_CHAPTERS = $(BUILD_DIR)/chapter00.pdf $(BUILD_DIR)/chapter01.pdf $(BUILD_DIR)/chapter02.pdf $(BUILD_DIR)/chapter03.pdf
 ALL_EXERCISES = $(BUILD_DIR)/exercise00.pdf $(BUILD_DIR)/exercise01.pdf $(BUILD_DIR)/exercise02.pdf
 ALL_SVGS = $(BUILD_DIR)/svg/ch01_EM_Spectrum_Properties.pdf $(BUILD_DIR)/svg/ch01_Electromagnetic-Spectrum.pdf $(BUILD_DIR)/svg/ch01_NetworkTopologies.pdf
 COMMON_DEPS = common/settings.tex common/titlepage.tex common/acronym.tex common/imprint.tex DCS.bib

@@ -1,9 +1,10 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Configuration
-\def\thekindofdocument{Lecture Notes and Exercises}
+\def\thekindofdocument{Lecture Notes}
+\def\thesubtitle{Chapter 3: Stochastic and Deterministic Processes}
 \def\therevision{1}
-\def\therevisiondate{2020-04-27}
+\def\therevisiondate{2020-05-11}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Header
@@ -29,49 +30,12 @@
 %\tableofcontents
 %\newpage
 
-% Imprint
-\input{../common/imprint.tex}
-\newpage
-
-% List of Acronyms
-\input{../common/acronym.tex}
-\newpage
-
-% Nomenclature
-\phantomsection
-\addcontentsline{toc}{chapter}{Nomenclature}
-\printnomenclature
-\newpage
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Content
 
-\input{../chapter00/preface.tex}
-\clearpage
-
-\tableofcontents
-\clearpage
-
-\setcounter{chapter}{-1}
-
-\input{../chapter00/content_ch00.tex}
-\clearpage
-\input{../exercise00/exercise00.tex}
-\clearpage
-
-\input{../chapter01/content_ch01.tex}
-\clearpage
-\input{../exercise01/exercise01.tex}
-\clearpage
-
-\input{../chapter02/content_ch02.tex}
-\clearpage
-\input{../exercise02/exercise02.tex}
-\clearpage
+\setcounter{chapter}{2}
 
 \input{../chapter03/content_ch03.tex}
-\clearpage
-%\input{../exercise03/exercise03.tex}
 \clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,10 +45,6 @@
 
 %\include{appendix/crlb}
 
-\chapter{Solutions of Exercises}
-
-\printsolutions
-
 \end{appendix}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -93,6 +53,10 @@
 % References
 %\bibliographystyle{unsrt}
 %\bibliography{Masterarbeit}
+
+% List of Acronyms
+\input{../common/acronym.tex}
+\newpage
 
 % Notation
 %\include{formales/notation}
@@ -124,8 +88,18 @@
 \listoftables
 \newpage
 
+% Nomenclature
+\phantomsection
+\addcontentsline{toc}{chapter}{Nomenclature}
+\printnomenclature
+\newpage
+
+% Imprint
+\input{../common/imprint.tex}
+\newpage
+
 % To Do
 \pagenumbering{alph}
-\listoftodos
+%\listoftodos
 
 \end{document}
