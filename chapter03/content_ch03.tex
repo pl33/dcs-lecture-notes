@@ -221,7 +221,7 @@ The temporal mean is calculated as the arithmetic mean with following difference
 	\begin{equation}
 		\overline{x_i} = \E\left\{x_i(t)\right\} = \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{-\frac{T}{2}}^{\frac{T}{2}} x_i{t} \; \mathrm{d} t
 	\end{equation}%
-	\nomenclature[Sx]{$\overline{x}$, $\E\left\{x_i(t)\right\}$}{Temporal mean}
+	\nomenclature[Sx]{$\overline{x}$, $\E\left\{x_i(t)\right\}$}{Temporal mean of x}
 \end{definition}
 
 The temporal mean is not time-dependent.
@@ -262,7 +262,7 @@ The \index{quadratic temporal mean} \textbf{quadratic temporal mean}:
 As a consequence:
 \begin{itemize}
 	\item One single, sufficiently long, random sample of the process is enough to deduct the statistical properties of an ergodic process.
-	\item The ergodic process is in steady state (\ac{WSS}), i.e., it does not erratically change its behaviour and properties.
+	\item The ergodic process is in steady state (\index{wide sense stationary}\ac{WSS}), i.e., it does not erratically change its behaviour and properties.
 \end{itemize}
 
 \begin{figure}[H]
@@ -326,35 +326,39 @@ We need a similarity measure. The cross-correlation is such a measure.
 \begin{definition}{Cross-correlation of stochastic processes}
 	The \index{cross-correlation!stochastic process} \text{cross-correlation of two stochastic processes} $\cmplxvect{x}(t_1)$ and $\cmplxvect{y}(t_2)$ between the times $t_1$ and $t_2$ is:
 	\begin{equation}
-		\mathrm{R}_{XY}(t_1, t_2) = \E\left\{ \cmplxvect{x}(t_1) \cmplxvect{y}^{*}(t_2) \right\}
+		\underline{\mathrm{R}}_{XY}(t_1, t_2) = \E\left\{ \cmplxvect{x}(t_1) \overline{\cmplxvect{y}(t_2)} \right\}
 	\end{equation}%
 	\nomenclature[Sr]{$\mathrm{R}_{XY}$}{Cross-correlation of two random vectors}%
-	\nomenclature[Na]{$\left(\cdot\right)^{*}$}{Complex conjugate of $\left(\cdot\right)$}
-	where $\left(\cdot\right)^{*}$ denotes the complex conjugate.
+	\nomenclature[Na]{$\overline{\left(\cdot\right)}$}{Complex conjugate of $\left(\cdot\right)$}
+	where $\overline{\left(\cdot\right)}$ denotes the complex conjugate.
 \end{definition}
 
-The expectation value can be expressed as:
+\begin{attention}
+	The complex conjugate uses the same notation as the temporal mean. You need to guess it from the context. The complex conjugate is only used in conjunction with complex number which can be identified by their underline.
+\end{attention}
+
+The expectation value can be expressed for real values as:
 \begin{equation}
-	\mathrm{R}_{XY}(t_1, t_2) = \E\left\{ \cmplxvect{x}(t_1) \cmplxvect{y}*(t_2) \right\} = \int\limits_{y = -\infty}^{\infty} \int\limits_{x = -\infty}^{\infty} x y \cdot p(x, y, t_1, t_2) \; \mathrm{d} x \mathrm{d} y
+	\mathrm{R}_{XY}(t_1, t_2) = \E\left\{ \vect{x}(t_1) \vect{y}(t_2) \right\} = \int\limits_{y = -\infty}^{\infty} \int\limits_{x = -\infty}^{\infty} x y \cdot p(x, y, t_1, t_2) \; \mathrm{d} x \mathrm{d} y
 \end{equation}
 $p(x, y, t_1, t_2)$ is the joint \ac{PDF} of the two random processes. It defines the likelihood that $x$ is produced at time $t_1$ \textbf{and} $y$ is produced at time $t_2$.
 
-Let's derive a special case for \textbf{ergodic} processes:
+Let's derive a special case for \textbf{ergodic} or \ac{WSS} processes:
 \begin{itemize}
 	\item The time difference is $\tau = t_2 - t_1$.
 	\item Because of the ergodicity of the two processes, only one sample of each $x_i(t)$ and $y_i(t)$ needs to be taken.
 	\item An estimation for the cross-correlation is averaging the products of the time-shifted samples $x_i(t) \cdot y_i(t+\tau)$. This resembles
 \end{itemize}
-Extending this to complex number yields:
+Extending this to complex numbers yields:
 \begin{equation}
-	\mathrm{R}_{XY}(\tau) = \E\left\{ \cmplxvect{x}(t) \cmplxvect{y}*(t+\tau) \right\} \approx \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{t = -\frac{T}{2}}^{\frac{T}{2}} \underline{x}_i^{*}(t) \cdot \underline{x}_i(t+\tau) \; \mathrm{d} t
+	\underline{\mathrm{R}}_{XY}(\tau) = \E\left\{ \cmplxvect{x}(t) \overline{\cmplxvect{y}(t+\tau)} \right\} \approx \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{t = -\frac{T}{2}}^{\frac{T}{2}} \underline{x}_i(t) \cdot \overline{\underline{y}_i(t+\tau)} \; \mathrm{d} t
 \end{equation}
 
 This resembles the cross-correlation of deterministic signals
 \begin{definition}{Cross-correlation of deterministic signals}
 	The \index{cross-correlation!deterministic signals} \text{cross-correlation of two deterministic signals} $\underline{f}(t_1)$ and $\underline{g}(t_2)$ between the times $\tau = t_2 - t_1$ is:
 	\begin{equation}
-		\left(f \star g\right)(\tau) = \int\limits_{t = -\infty}^{\infty} \underline{f}^{*}(t) \cdot \underline{g}(t+\tau) \; \mathrm{d} t
+		\left(\underline{f} \star \underline{g}\right)(\tau) = \int\limits_{t = -\infty}^{\infty} \underline{f}(t) \cdot \overline{\underline{g}(t+\tau)} \; \mathrm{d} t
 	\end{equation}%
 	\nomenclature[N]{$\left(f \ast g\right)(\tau)$}{Cross-correlation of two signals}
 \end{definition}
@@ -363,16 +367,16 @@ This resembles the cross-correlation of deterministic signals
 	You must not confuse the operators for the convolution $*$ and correlation $\star$.
 \end{attention}
 
-For the random signals $x(t)$ and $y(t)$, the cross-correlation can not be determined analytically, but numerically.
+For the random signals $\underline{x}(t)$ and $\underline{y}(t)$, the cross-correlation can not be determined analytically, but numerically.
 \begin{equation}
-	\mathrm{R}_{XY}(\tau) \approx \left(x \star y\right)(\tau)
+	\underline{\mathrm{R}}_{XY}(\tau) \approx \left(\underline{x} \star \underline{y}\right)(\tau)
 \end{equation}
 
-\paragraph{What's the use?}
+\paragraph{What's the purpose?}
 
 \begin{itemize}
 	\item The cross-correlation ``scans'' the two signals for common features.
-	\item The cross-correlation $\mathrm{R}_{XY}(\tau)$ will show a peak at the time shift $\tau$, if
+	\item The cross-correlation $\underline{\mathrm{R}}_{XY}(\tau)$ will show a peak at the time lag $\tau$, if
 	\begin{itemize}
 		\item The signals are correlated, i.e., have a common feature.
 		\item The common feature is time-shifted by $\tau$.
@@ -384,7 +388,128 @@ For the random signals $x(t)$ and $y(t)$, the cross-correlation can not be deter
 
 \subsection{Autocorrelation}
 
+The autocorrelation is the correlation $\underline{\mathrm{R}}_{XX}(t_1, t_2)$ of a stochastic process $\cmplxvect{x}(t)$ with a time-shifted copy of itself.
+\begin{equation}
+	\underline{\mathrm{R}}_{XX}(t_1, t_2) = \E\left\{ \cmplxvect{x}(t_1) \overline{\cmplxvect{x}(t_2)} \right\}
+\end{equation}
+
+For \textbf{ergodic} or \ac{WSS} processes, the autocorrelation $\underline{\mathrm{R}}_{XX}(\tau)$ is the correlation of a signal $\underline{x}(t)$ with a time-shifted copy of itself:
+\begin{equation}
+	\underline{\mathrm{R}}_{XX}(\tau) = \E\left\{ \cmplxvect{x}(t) \overline{\cmplxvect{x}(t+\tau)} \right\} \approx \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{t = -\frac{T}{2}}^{\frac{T}{2}} \underline{x}_i(t) \cdot \overline{\underline{x}_i(t+\tau)} \; \mathrm{d} t
+\end{equation}
+\begin{equation}
+	\underline{\mathrm{R}}_{XX}(\tau) \approx \left(x \star x\right)(\tau) = \int\limits_{t = -\infty}^{\infty} \underline{x}_i(t) \cdot \overline{\underline{x}_i(t+\tau)} \; \mathrm{d} t
+\end{equation}
+
+\subsubsection{Properties}
+
+\paragraph{Symmetry.}
+
+The autocorrelation function $\underline{\mathrm{R}}_{XX}(\tau)$ is even.
+
+\begin{equation}
+	\underline{\mathrm{R}}_{XX}(\tau) = \overline{\underline{\mathrm{R}}_{XX}(-\tau)}
+\end{equation}
+
+\paragraph{Bounded output.}
+
+For an ergodic or \ac{WSS} process, the autocorrelation function has its maximum at $\underline{\mathrm{R}}_{XX}(0)$.
+
+\begin{equation}
+	\left|\underline{\mathrm{R}}_{XX}(\tau)\right| \leq \left|\underline{\mathrm{R}}_{XX}(0)\right|
+\end{equation}
+
+\paragraph{Cauchy-Schwarz inequality.}
+
+For all stochastic processes -- even for non-ergodic or non-\acs{WSS} processes:
+
+\begin{equation}
+	\left|\underline{\mathrm{R}}_{XX}(t_1, t_2)\right|^2 \leq \E\left\{ \left|\cmplxvect{x}(t_1)\right|^2 \right\} \cdot \E\left\{ \left|\cmplxvect{x}(t_2)\right|^2 \right\}
+\end{equation}
+
+\subsection{Energy Spectral Density}
+
+\begin{definition}{Parseval's theorem}
+	Given is a time domain function $\underline{x}(t)$ and its Fourier transform $\underline{X}\left(j \omega\right)$. According to the \index{Parseval's theorem} Parseval's theorem:
+	\begin{equation}
+		\int\limits_{-\infty}^{\infty} \left|\underline{x}(t)\right|^2 \; \mathrm{d} t = \frac{1}{2 \pi} \int\limits_{-\infty}^{\infty} \left|\underline{X}\left(j \omega\right)\right|^2 \; \mathrm{d} \omega
+	\end{equation}
+\end{definition}
+
+Let's remember the signal energy defined in Chapter 2.
+\begin{equation}
+	E = \int\limits_{-\infty}^{\infty} \left|\underline{x}(t)\right|^2 \; \mathrm{d} t
+\end{equation}
+
+Using the Parseval's theorem:
+\begin{equation}
+	E = \int\limits_{-\infty}^{\infty} \left|\underline{x}(t)\right|^2 \; \mathrm{d} t = \frac{1}{2 \pi} \int\limits_{-\infty}^{\infty} \left|\underline{X}\left(j \omega\right)\right|^2 \; \mathrm{d} \omega
+	\label{eq:ch03:sig_energy_parseval}
+\end{equation}
+
+\begin{itemize}
+	\item The total signal energy can be calculated by integrating the squared sum of either the time domain signal or the frequency domain signal.
+	\item This is like the \emph{principle of conservation of power} in the signal theory.
+\end{itemize}
+
+The definition of the \textbf{energy spectral density} $\mathrm{S}_{E,xx}(\omega)$ can be derived from \eqref{eq:ch03:sig_energy_parseval}.
+
+\begin{definition}{Energy spectral density}
+	\begin{equation}
+		\mathrm{S}_{E,xx}(\omega) = \frac{1}{2 \pi} \left|\underline{X}\left(j \omega\right)\right|^2
+	\end{equation}%
+	\nomenclature[Ss]{$\underline{\mathrm{S}}_{E,xx}(\omega)$}{Energy spectral density}
+	
+	The \index{energy spectral density} \textbf{energy spectral density} is the squared Fourier transform of the time domain signal $\underline{x}(t)$. It is always real-valued.
+\end{definition}
+
+The energy spectral density describes how the signal energy is distributed over the frequency.
+\begin{equation}
+	E = \int\limits_{-\infty}^{\infty} \mathrm{S}_{E,xx}(\omega) \; \mathrm{d} \omega
+\end{equation}
+
 \subsection{Power Spectral Density}
+
+\begin{itemize}
+	\item The energy spectral density is applicable for energy signals with a finite energy.
+	\item We deal with \ac{WSS} (ergodic) processes which are power signals, i.e., their signal energy is infinite.
+\end{itemize}
+
+Let's recall the definition of the signal power.
+\begin{equation}
+	P = \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{-\frac{T}{2}}^{\frac{T}{2}} \left|x(t)\right|^2 \; \mathrm{d} t
+\end{equation}
+
+Analogue to the energy spectral density, we will find the \index{power spectral density} \textbf{\ac{PSD}} $\underline{\mathrm{S}}_{P,xx}(\omega)$ or simply $\underline{\mathrm{S}}_{xx}(\omega)$. It describes the distribution of the signal power over the frequency.
+
+\begin{definition}{Wiener-Khinchin theorem}
+	The \index{Wiener-Khinchin theorem} Wiener-Khinchin theorem states that the autocorrelation function of a \ac{WSS} process is the inverse Fourier transform of the \index{power spectral density} \textbf{\ac{PSD}}.
+	
+	\begin{equation}
+		\underline{\mathrm{R}}_{XX}(\tau) = \frac{1}{2 \pi} \int\limits_{-\infty}^{\infty} \underline{\mathrm{S}}_{xx}(\omega) e^{j \omega \tau} \; \mathrm{d} \omega = \mathcal{F}^{-1} \left\{\underline{\mathrm{S}}_{xx}(\omega)\right\}
+	\end{equation}
+	
+	And vice versa,
+	\begin{equation}
+		\underline{\mathrm{S}}_{xx}(\omega) = \int\limits_{-\infty}^{\infty} \underline{\mathrm{R}}_{XX}(\tau) e^{-j \omega \tau} \; \mathrm{d} \tau = \mathcal{F}\left\{\underline{\mathrm{R}}_{XX}(\tau)\right\}
+		\label{eq:ch03:psd_def}
+	\end{equation}
+\end{definition}
+
+\begin{excursus}{Unit of the \ac{PSD}}
+	The time domain signal is a physical quantity with a unit. The autocorrelation has the square of the unit. Because of \eqref{eq:ch03:psd_def}, the unit of the \ac{PSD} must be the squared unit of the physical quantity divided by seconds.
+	
+	Example:
+	\begin{itemize}
+		\item A voltage signal is given in the time domain: $u(t)$.
+		\item Its unit is \si{V}.
+		\item the unit of the autocorrelation is $\si{V^2}$.
+		\item In electrical engineering, the power of a voltage signal depends also on an ohmic resistance $R$, which the voltage is applied to.
+		\item Thus, the \ac{PSD} of the voltage signal is divided by $R$. This yields the unit $\si{W/(1/s)}$.
+		\item In practice, the real frequency is used in favour of the angular frequency. The unit of $\underline{\mathrm{S}}_{xx}(f)$ is $\si{W/Hz}$.
+	\end{itemize}
+	Watt per Hertz makes clear that the power is distributed over the frequency.
+\end{excursus}
 
 \subsection{Decibel}
 
