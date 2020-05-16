@@ -232,6 +232,10 @@ The temporal mean is not time-dependent.
 
 Actually $x_i(t)$ would not need the index $i$ if there is only one sample. Nevertheless, it was kept here, to emphasize the dependency on the sample, in contrast to the dependency on the time of the stochastic mean.
 
+\begin{attention}
+	The complex conjugate uses the same notation as the temporal mean. You need to guess it from the context. The complex conjugate is only used in conjunction with complex number which can be identified by their underline.
+\end{attention}
+
 \paragraph{Other measures?}
 
 The \index{quadratic temporal mean} \textbf{quadratic temporal mean}:
@@ -328,14 +332,9 @@ We need a similarity measure. The cross-correlation is such a measure.
 	\begin{equation}
 		\underline{\mathrm{R}}_{XY}(t_1, t_2) = \E\left\{ \cmplxvect{x}(t_1) \overline{\cmplxvect{y}(t_2)} \right\}
 	\end{equation}%
-	\nomenclature[Sr]{$\mathrm{R}_{XY}$}{Cross-correlation of two random vectors}%
-	\nomenclature[Na]{$\overline{\left(\cdot\right)}$}{Complex conjugate of $\left(\cdot\right)$}
+	\nomenclature[Sr]{$\mathrm{R}_{XY}$}{Cross-correlation of two random vectors}
 	where $\overline{\left(\cdot\right)}$ denotes the complex conjugate.
 \end{definition}
-
-\begin{attention}
-	The complex conjugate uses the same notation as the temporal mean. You need to guess it from the context. The complex conjugate is only used in conjunction with complex number which can be identified by their underline.
-\end{attention}
 
 The expectation value can be expressed for real values as:
 \begin{equation}
@@ -405,10 +404,11 @@ For \textbf{ergodic} or \ac{WSS} processes, the autocorrelation $\underline{\mat
 
 \paragraph{Symmetry.}
 
-The autocorrelation function $\underline{\mathrm{R}}_{XX}(\tau)$ is even.
+The autocorrelation function $\underline{\mathrm{R}}_{XX}(\tau)$ is Hermitian.
 
 \begin{equation}
 	\underline{\mathrm{R}}_{XX}(\tau) = \overline{\underline{\mathrm{R}}_{XX}(-\tau)}
+	\label{eq:ch02:autocorr_hermitian}
 \end{equation}
 
 \paragraph{Bounded output.}
@@ -475,26 +475,29 @@ The energy spectral density describes how the signal energy is distributed over 
 	\item We deal with \ac{WSS} (ergodic) processes which are power signals, i.e., their signal energy is infinite.
 \end{itemize}
 
-Let's recall the definition of the signal power.
-\begin{equation}
-	P = \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{-\frac{T}{2}}^{\frac{T}{2}} \left|x(t)\right|^2 \; \mathrm{d} t
-\end{equation}
-
-Analogue to the energy spectral density, we will find the \index{power spectral density} \textbf{\ac{PSD}} $\underline{\mathrm{S}}_{P,xx}(\omega)$ or simply $\underline{\mathrm{S}}_{xx}(\omega)$. It describes the distribution of the signal power over the frequency.
+Analogue to the energy spectral density, we will find the \index{power spectral density} \textbf{\ac{PSD}} $\mathrm{S}_{P,xx}(\omega)$ or simply $\mathrm{S}_{xx}(\omega)$. It describes the distribution of the signal power over the frequency. \nomenclature[Ss]{$\mathrm{S}_{xx}(\omega)$, $\mathrm{S}_{P,xx}(\omega)$}{Power spectral density}
 
 \begin{definition}{Wiener-Khinchin theorem}
 	The \index{Wiener-Khinchin theorem} Wiener-Khinchin theorem states that the autocorrelation function of a \ac{WSS} process is the inverse Fourier transform of the \index{power spectral density} \textbf{\ac{PSD}}.
 	
 	\begin{equation}
-		\underline{\mathrm{R}}_{XX}(\tau) = \frac{1}{2 \pi} \int\limits_{-\infty}^{\infty} \underline{\mathrm{S}}_{xx}(\omega) e^{j \omega \tau} \; \mathrm{d} \omega = \mathcal{F}^{-1} \left\{\underline{\mathrm{S}}_{xx}(\omega)\right\}
+		\underline{\mathrm{R}}_{XX}(\tau) = \frac{1}{2 \pi} \int\limits_{-\infty}^{\infty} \mathrm{S}_{xx}(\omega) e^{j \omega \tau} \; \mathrm{d} \omega = \mathcal{F}^{-1} \left\{\mathrm{S}_{xx}(\omega)\right\}
 	\end{equation}
 	
 	And vice versa,
 	\begin{equation}
-		\underline{\mathrm{S}}_{xx}(\omega) = \int\limits_{-\infty}^{\infty} \underline{\mathrm{R}}_{XX}(\tau) e^{-j \omega \tau} \; \mathrm{d} \tau = \mathcal{F}\left\{\underline{\mathrm{R}}_{XX}(\tau)\right\}
+		\mathrm{S}_{xx}(\omega) = \int\limits_{-\infty}^{\infty} \underline{\mathrm{R}}_{XX}(\tau) e^{-j \omega \tau} \; \mathrm{d} \tau = \mathcal{F}\left\{\underline{\mathrm{R}}_{XX}(\tau)\right\}
 		\label{eq:ch03:psd_def}
 	\end{equation}
 \end{definition}
+
+The \ac{PSD} $\mathrm{S}_{xx}(\omega)$ is always real-valued -- even for a complex-valued signal $\underline{x}(t)$ and its complex-valued autocorrelation function $\underline{\mathrm{R}}_{XX}(\tau)$.
+\begin{itemize}
+	\item The autocorrelation is Hermitian \eqref{eq:ch02:autocorr_hermitian}.
+	\item Due to the symmetry rules, the Fourier transform of a real-valued signal is Hermitian.
+	\item Using the duality of the Fourier transform, the Fourier transform of a Hermitian function is real-valued.
+	\item Therefore, the \ac{PSD} $\mathrm{S}_{xx}(\omega)$ is real-valued, because it is the Fourier transform of the Hermitian autocorrelation function $\mathrm{R}_{XX}(\tau)$.
+\end{itemize}
 
 \begin{excursus}{Unit of the \ac{PSD}}
 	The time domain signal is a physical quantity with a unit. The autocorrelation has the square of the unit. Because of \eqref{eq:ch03:psd_def}, the unit of the \ac{PSD} must be the squared unit of the physical quantity divided by seconds.
@@ -506,12 +509,215 @@ Analogue to the energy spectral density, we will find the \index{power spectral 
 		\item the unit of the autocorrelation is $\si{V^2}$.
 		\item In electrical engineering, the power of a voltage signal depends also on an ohmic resistance $R$, which the voltage is applied to.
 		\item Thus, the \ac{PSD} of the voltage signal is divided by $R$. This yields the unit $\si{W/(1/s)}$.
-		\item In practice, the real frequency is used in favour of the angular frequency. The unit of $\underline{\mathrm{S}}_{xx}(f)$ is $\si{W/Hz}$.
+		\item In practice, the real frequency is used in favour of the angular frequency. The unit of $\mathrm{S}_{xx}(f)$ is $\si{W/Hz}$.
 	\end{itemize}
 	Watt per Hertz makes clear that the power is distributed over the frequency.
 \end{excursus}
 
+\subsubsection{Special Case: Real-Valued Signal}
+
+If a signal $x(t)$ is always real-valued:
+\begin{itemize}
+	\item The autocorrelation function $\mathrm{R}_{XX}(\tau)$ is always real-valued, too.
+	\item The autocorrelation function $\mathrm{R}_{XX}(\tau) = \mathrm{R}_{XX}(-\tau)$ is even.
+	\item The \ac{PSD} $\mathrm{S}_{xx}(\omega) = \mathrm{S}_{xx}(- \omega)$ is even, too.
+\end{itemize}
+
+%TODO
+%The Wiener-Khinchin theorem can be simplified:
+%\begin{subequations}
+%	\begin{align}
+%		\mathrm{R}_{XX}(\tau) = \frac{1}{2 \pi} \int\limits_{-\infty}^{\infty} \mathrm{S}_{xx}(\omega) e^{j \omega \tau} \; \mathrm{d} \omega \\
+%		\mathrm{S}_{xx}(\omega) = \int\limits_{-\infty}^{\infty} \underline{\mathrm{R}}_{XX}(\tau) e^{-j \omega \tau} \; \mathrm{d} \tau
+%	\end{align}
+%\end{subequations}
+
+\subsubsection{Signal Power}
+
+Let's recall the definition of the signal power.
+\begin{equation}
+	P = \lim\limits_{T \rightarrow \infty} \frac{1}{T} \int\limits_{-\frac{T}{2}}^{\frac{T}{2}} \left|x(t)\right|^2 \; \mathrm{d} t
+\end{equation}
+
+The \ac{PSD} $\mathrm{S}_{xx}(\omega)$ defines the density of power. The whole signal power is the integral over the whole spectrum.
+\begin{equation}
+	P = \int\limits_{-\infty}^{\infty} \mathrm{S}_{xx}(\omega) \; \mathrm{d} \omega
+\end{equation}
+
+Consider a special case of the autocorrelation function $\underline{\mathrm{R}}_{XX}(0)$ at a time lag of zero $\tau = 0$.
+\begin{equation}
+	\underline{\mathrm{R}}_{XX}(0) = \frac{1}{2 \pi} \underbrace{\int\limits_{-\infty}^{\infty} \mathrm{S}_{xx}(\omega) \; \mathrm{d} \omega}_{= P}
+\end{equation}
+
+The autocorrelation function $\underline{\mathrm{R}}_{XX}(0)$ at a time lag of zero $\tau = 0$ is the signal power divided by $2 \pi$.
+\begin{equation}
+	\underline{\mathrm{R}}_{XX}(0) = \frac{1}{2 \pi} P
+\end{equation}
+
+\textit{Remark:} $\underline{\mathrm{R}}_{XX}(0)$ is always real-valued because $\underline{\mathrm{R}}_{XX}(\tau)$ is a Hermitian function.
+
+\subsubsection{Signal Power of A Band-Limited, Real-Valued Signal}
+
+The power of all signals is distributes in both positive and negative frequencies.
+
+The power of a certain band $[\omega_1, \omega_2]$ of a real-valued signal contains the power of $[-\omega_2, -\omega_1]$, too.
+\begin{equation}
+	\begin{split}
+		P_{bandlimited} &= \int\limits_{\omega_1}^{\omega_2} \mathrm{S}_{xx}(\omega) \; \mathrm{d} \omega + \int\limits_{-\omega_2}^{-\omega_1} \mathrm{S}_{xx}(\omega) \; \mathrm{d} \omega \\
+		 &= 2 \int\limits_{\omega_1}^{\omega_2} \mathrm{S}_{xx}(\omega) \; \mathrm{d} \omega
+	\end{split}
+\end{equation}
+
+\begin{attention}
+	Don't forget do double the ``band-limited integral'' for a real-valued signal.
+\end{attention}
+
+\subsubsection{\acs{PSD} of Input and Output of an \acs{LTI} System}
+
+An input signal $\underline{x}(t)$ to an \ac{LTI} system has the autocorrelation function $\underline{\mathrm{R}}_{XX}(\tau)$.
+\begin{equation}
+	\underline{\mathrm{R}}_{XX}(\tau) \approx \underline{x}(t) \star \underline{x}(t) = \underline{x}(t) * \overline{\underline{x}(-t)}
+\end{equation}
+
+The \ac{PSD} is:
+\begin{equation}
+	\mathrm{S}_{xx}(\omega) = \mathcal{F}\left\{\underline{\mathrm{R}}_{XX}(\tau)\right\} = \underline{X}\left(j \omega\right) \cdot \overline{\underline{X}\left(j \omega\right)} = \left|\underline{X}\left(j \omega\right)\right|^2
+\end{equation}
+
+Same applies for the output signal $\underline{y}(t)$:
+\begin{equation}
+	\mathrm{S}_{yy}(\omega) = \left|\underline{Y}\left(j \omega\right)\right|^2
+\end{equation}
+
+$\underline{Y}\left(j \omega\right)$ can be calculated using the transfer function $\underline{H}\left(j \omega\right)$:
+\begin{equation}
+	\begin{split}
+		\underline{Y}\left(j \omega\right) &= \underline{H}\left(j \omega\right) \cdot \underline{X}\left(j \omega\right) \\
+		\left|\underline{Y}\left(j \omega\right)\right|^2 &= \left|\underline{H}\left(j \omega\right) \cdot \underline{X}\left(j \omega\right)\right|^2 \\
+		\left|\underline{Y}\left(j \omega\right)\right|^2 &= \left|\underline{H}\left(j \omega\right)\right|^2 \cdot \mathrm{S}_{xx}(\omega)
+	\end{split}
+\end{equation}
+
+The \acp{PSD} of the input and output of an \acs{LTI} system is connected by the square of the transfer function:
+\begin{equation}
+	\mathrm{S}_{yy}(\omega) = \left|\underline{H}\left(j \omega\right)\right|^2 \cdot \mathrm{S}_{xx}(\omega)
+	\label{eq:ch03:psd_lti_io}
+\end{equation}
+
 \subsection{Decibel}
+
+After the previous section were very mathematical, let's go back to electrical engineering.
+
+Signal powers in communication system cover a wide range, for example:
+\begin{itemize}
+	\item Several watts to kilowatts ($10^3$) at the transmitter.
+	\item Nanowatt and less ($10^{-9}$) at the receiver.
+\end{itemize}
+These values are hard to display. Nanowatt would be close to zero when they are depicted in the same plot as the kilowatts. To resolve this issue, logarithmic plots are chosen.
+
+\todo{plot}
+
+But logarithmic expression of signal powers is also common for calculation.
+\begin{itemize}
+	\item Given that there is an input signal with a power of $P_x = \SI{2}{mW}$.
+	\item The signal is amplified by an \ac{LTI} system by a factor of \num{50000}.
+	\item The output signal has a power of $P_y = \SI{100000}{mW} = \SI{100}{W}$.
+\end{itemize}
+
+Multiplications and numbers with a strongly varying exponent are unhandy. So, they are transformed into the \emph{logarithmic domain}.
+
+\paragraph{Power Quantities.}
+A signal with a power quantity $P$ must be referenced to a \emph{reference value} $P_0$. $L_P$ is the \index{power level} \textbf{power level} in reference to $P_0$.
+\begin{equation}
+	L_P = \SI{10}{dB} \cdot \log_{10} \left(\frac{P}{P_0}\right)
+	\label{eq:ch03:level_dbm}
+\end{equation}
+Vice versa,
+\begin{equation}
+	P = 10^{\frac{L_P}{\SI{10}{dB}}} \cdot P_0
+\end{equation}
+The unit of levels is \index{decibel} \textbf{decibel} \si{dB}.
+
+A common reference for powers is $P_0 = \SI{1}{mW}$. So the input signal is $L_{P,x} = \SI{3}{dBm}$. The ``m'' after decibel defines the reference value. \si{dBm} always means that the power level is referenced to $P_0 = \SI{1}{mW}$.
+
+\paragraph{Power Spectral Density.}
+
+If a \ac{PSD} $\mathrm{S}_{xx}(\omega)$ is given, it can be also converted to logarithmic scale using \eqref{eq:ch03:level_dbm} and a reference power $P_0$. The unit is in this case \si{dBm/Hz}.
+
+\paragraph{Ratios.}
+The logarithm transform can be applied to ratios of two signal powers. The example system has a gain of $G = 50000$.
+\begin{equation}
+	G = \frac{P_y}{P_x}
+\end{equation}
+
+\begin{equation}
+	L_{G,P} = \SI{10}{dB} \cdot \log_{10} \left(G\right) = \SI{10}{dB} \cdot \log_{10} \left(\frac{P_y}{P_x}\right)
+\end{equation}
+
+Here, the system gain is \SI{47}{dB}.
+
+\begin{attention}
+	Ratios are never referenced to a physical quantity. Their unit is \underline{always \si{dB}}, never \si{dBm} or anything else.
+\end{attention}
+
+\paragraph{Operations.}
+
+Using the linear power scale, applying a gain to an input signal is a multiplication. For logarithms, the following applies:
+\begin{equation}
+	\log \left(a \cdot b\right) = \log a + \log b
+\end{equation}
+
+Consequently, the output power level $L_{P,y} = L_{P,x} + L_{G,P} = \SI{50}{dBm}$. The unit \si{dBm} is retained, \si{dB} is just a unit-less ratio. \SI{50}{dBm} can then be transformed back to the linear power scale using the reference power $P_0 = \SI{1}{mW}$. $P_y = \SI{100}{W}$.
+
+\paragraph{Other Physical Quantities.}
+
+Above explanations considered signal powers. However, some signals are given in voltages or currents.
+
+If the voltage is applied to a impedance $R$, the power is
+\begin{equation}
+	P = \frac{U^2}{R}
+\end{equation}
+
+The level is, using the reference $U_0 = \sqrt{P_0 R}$:
+\begin{equation}
+	\begin{split}
+		L_U &= \SI{10}{dB} \cdot \log_{10} \left(\frac{P}{P_0}\right) \\
+		 &= \SI{10}{dB} \cdot \log_{10} \left(\frac{U^2}{R} \cdot \frac{R}{U_0^2}\right) \\
+		 &= \SI{10}{dB} \cdot \log_{10} \left(\left(\frac{U}{U_0}\right)^2\right) \\
+		 &= \SI{20}{dB} \cdot \log_{10} \left(\frac{U}{U_0}\right) \\
+	\end{split}
+\end{equation}
+
+Same applies for currents.
+
+So, pure powers have a factor of $\SI{10}{dB}$ and current and voltage signals $\SI{20}{dB}$.
+
+\paragraph{Different Reference Levels.}
+
+The logarithmic scale is used for various physical quantities. The table below shows common values, using in communication systems.
+
+\begin{table}[H]
+	\centering
+	\caption{Common reference levels and the corresponding unit}
+	\begin{tabular}{|r|l|l|}
+		\hline
+		Reference level $P_0$, $U_0$, $I_0$, ... & Unit & Description \\
+		\hline
+		\hline
+		n/a & \si{dB} & Relative \\
+		\hline
+		\SI{1}{mW} & \si{dBm} & Power \\
+		\hline
+		\SI{1}{W} & \si{dBW} & Power \\
+		\hline
+		\SI{1}{V} & \si{dBV} & Voltage \\
+		\hline
+		\SI{1}{\micro.V} & \si{dB\micro.V} & Voltage \\
+		\hline
+		Power of carrier signal & \si{dBc} & Relative to carrier \\
+		\hline
+	\end{tabular}
+\end{table}
 
 \section{Noise}
 

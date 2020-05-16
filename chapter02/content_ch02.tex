@@ -353,7 +353,7 @@ Using the orthogonality relations, the coefficients $\tilde{a}_n$ and $\tilde{b}
 \begin{subequations}
 	\begin{align}
 		\tilde{a}_n &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \cos\left(n \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_an} \\
-		\tilde{b}_m &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \sin\left(n \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_bm}
+		\tilde{b}_m &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \sin\left(m \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_bm}
 	\end{align}
 \end{subequations}
 
@@ -475,6 +475,20 @@ If the signal $\underline{x_p}(t) = x_p(t)$ is real-valued, i.e., $\Im\left\{\un
 	\end{itemize}
 \end{itemize}
 These symmetry rules apply for \underline{all} real-valued signals $\underline{x_p}(t) = x_p(t) \in \mathbb{R}$. The symmetry rules ensure that the mono-chromatic components of the Fourier series \eqref{eq:ch02:fourier_series_cmplx} sum up to a real value at each time instance $t \in \mathbb{R}$.
+
+\begin{definition}{Hermitian function}
+	A complex-valued function $\underline{f}(t)$ is a \index{Hermitian function} \textbf{Hermitian function} if
+	\begin{equation}
+		\overline{\underline{f}(t)} = \underline{f}(-t)
+		\label{eq:ch02:hermitian}
+	\end{equation}%
+	\nomenclature[Na]{$\overline{\left(\cdot\right)}$}{Complex conjugate of $\left(\cdot\right)$}
+	where $\overline{\left(\cdot\right)}$ denotes the complex conjugate.
+	
+	Hermitian function are \index{conjugate symmetric} \textbf{conjugate symmetric}.
+\end{definition}
+
+$\underline{c}_n$ is Hermitian if and only if $\underline{x_p}(t) = x_p(t)$ is real-valued.
 
 The symmetry rules do \underline{not} apply for complex-valued signals $\underline{x_p}(t) \in \mathbb{C}$.
 
@@ -705,6 +719,11 @@ The value-continuous complex frequency variable $j \omega$ in the continuous Fou
 		\item As a consequence, the phase of $\arg\left(\underline{X}(0)\right)$ at $j \omega = 0$ must be either $0$ or $\pm \pi$. Note that, $+\pi$ is identical to $-\pi$ in the complex plane. The phase is the sign of the \ac{DC} bias: $\arg\left(\underline{X}(0)\right) = 0$ means positive \ac{DC} bias and $\arg\left(\underline{X}(0)\right) = \pi$ means negative \ac{DC} bias.
 	\end{itemize}
 \end{itemize}
+
+Analogue to the Fourier series, the Fourier transform $\underline{X}(j \omega)$ is Hermitian \eqref{eq:ch02:hermitian} if and only if $\underline{x}(t) = x(t)$ is real-valued.
+\begin{equation}
+	\overline{\underline{X}(j \omega)} = \underline{X}(-j \omega) \qquad \forall \; \mathcal{F}^{-1}\left\{\underline{X}(j \omega)\right\} \in \mathbb{R}
+\end{equation}
 
 Let's investigate the \index{rectangular function} rectangular function from Figure \ref{fig:ch02:rect_function}. It is defined as:
 \begin{equation}
