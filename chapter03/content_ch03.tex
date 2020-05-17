@@ -383,6 +383,21 @@ For the random signals $\underline{x}(t)$ and $\underline{y}(t)$, the cross-corr
 	\item A flat near $0$ cross-correlation means that the signals are uncorrelated.
 \end{itemize}
 
+\begin{excursus}{Why the conjugate complex in the cross-correlation?}
+	The conjugate complex provides a measure for the similarity of two functions. The similarity of two functions $\underline{f}(t_1)$ and $\underline{g}(t_2)$ at the times $T_1$ and $t_2$ is defined by:
+	\begin{itemize}
+		\item The amplitude product: the higher, the more correlated.
+		\item The phase difference: the lower, the more correlated.
+	\end{itemize}
+	The second point is the reason, why the conjugate complex is used. We need the phase difference $\arg\left(\underline{f}(t_1)\right) - \arg\left(\underline{g}(t_2)\right)$.
+	
+	The phase difference is obtained by using the conjugate complex:
+	\begin{equation}
+		\underline{f}(t_1) \overline{\underline{g}(t_2)} = \underbrace{\left|\underline{f}(t_1)\right|\left|\underline{g}(t_2)\right|}_{\text{Amplitude product}} \underbrace{e^{j\left(\arg\left(\underline{f}(t_1)\right) - \arg\left(\underline{g}(t_2)\right)\right)}}_{\text{Phase difference}}
+	\end{equation}
+	In contrast to that, not using the conjugate complex would give the phase sum, not difference.
+\end{excursus}
+
 \section{Spectral Density}
 
 \subsection{Autocorrelation}
@@ -426,6 +441,40 @@ For all stochastic processes -- even for non-ergodic or non-\acs{WSS} processes:
 \begin{equation}
 	\left|\underline{\mathrm{R}}_{XX}(t_1, t_2)\right|^2 \leq \E\left\{ \left|\cmplxvect{x}(t_1)\right|^2 \right\} \cdot \E\left\{ \left|\cmplxvect{x}(t_2)\right|^2 \right\}
 \end{equation}
+
+\begin{excursus}{Convolution vs. Cross-Correlation vs. Autocorrelation}
+	Have a look at the following integrals:
+	\begin{itemize}
+		\item Convolution:
+		\begin{equation*}
+			\underline{f}(t) * \underline{g}(t) = \left(\underline{f} * \underline{g}\right) (t) = \int_{\tau = -\infty}^{\infty} \underline{f}(\tau) \underline{g}(t - \tau) \, \mathrm{d} \tau  = \int_{\tau = -\infty}^{\infty} \underline{f}(t - \tau) \underline{g}(\tau) \, \mathrm{d} \tau
+		\end{equation*}
+		\item Cross-Correlation:
+		\begin{equation*}
+			\left(\underline{f} \star \underline{g}\right)(\tau) = \int\limits_{t = -\infty}^{\infty} \underline{f}(t) \cdot \overline{\underline{g}(t+\tau)} \; \mathrm{d} t
+		\end{equation*}
+		\item Autocorrelation:
+		\begin{equation*}
+			\left(\underline{f} \star \underline{f}\right)(\tau) = \int\limits_{t = -\infty}^{\infty} \underline{f}(t) \cdot \overline{\underline{f}(t+\tau)} \; \mathrm{d} t
+		\end{equation*}
+	\end{itemize}
+	Don't they look similar?
+	
+	Yes, they do, but they are not the same.
+	\begin{itemize}
+		\item All functions integrate one signal multiplied with another signal which is shifted in time. The time lag $\tau$ is the argument of all functions.
+		\item However, convolution and cross-correlation shift the second signal in different directions.
+		\item The convolution is commutative. The cross-correlation is not.
+		\item The autocorrelation is a special application of the cross-correlation. It is the cross-correlation of a signal with itself.
+		\item The cross-correlation requires the conjugate complex of the second signal.
+	\end{itemize}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\linewidth]{svg/ch03_Conv_Corr_Auto.pdf}
+		\caption{Visual comparison of convolution, cross-correlation and autocorrelation. \licensequote{\cite{Cmglee2016}}{''Cmglee''}{\href{https://creativecommons.org/licenses/by-sa/3.0/deed.en}{CC-BY-SA 3.0}}}
+	\end{figure}
+\end{excursus}
 
 \subsection{Energy Spectral Density}
 
@@ -615,7 +664,85 @@ Signal powers in communication system cover a wide range, for example:
 \end{itemize}
 These values are hard to display. Nanowatt would be close to zero when they are depicted in the same plot as the kilowatts. To resolve this issue, logarithmic plots are chosen.
 
-\todo{plot}
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Linear scale]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.25\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$A_{LPF}(\omega) = \left|\underline{H}_{LPF}(j \omega)\right|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-102,
+				xmax=102,
+				ymin=0,
+				ymax=1.2,
+				xtick={0},
+				xticklabels={0},
+				ytick={0, 0.01, 0.1, 1},
+			]
+				% RC = 0.2
+				\addplot[blue, thick, domain=-100:100, samples=50] plot (\x, {sqrt( 1 / ((0.2 * \x)^2 + 1) )});
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\subfloat[Logarihtmic scale]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.25\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$A_{LPF}(\omega) = \left|\underline{H}_{LPF}(j \omega)\right|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-102,
+				xmax=102,
+				ymin=-2,
+				ymax=0.2,
+				xtick={0},
+				xticklabels={0},
+				ytick={-2, -1, 0},
+				yticklabels={0.01, 0.1, 1}
+			]
+				% RC = 0.2
+				\addplot[blue, thick, domain=-100:100, samples=50] plot (\x, {log10(sqrt( 1 / ((0.2 * \x)^2 + 1) ))});
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\caption[Example: Amplitude response of a real \acl{LPF}]{Example: Amplitude response of a real \ac{LPF}}
+\end{figure}
 
 But logarithmic expression of signal powers is also common for calculation.
 \begin{itemize}
@@ -924,7 +1051,57 @@ The noise power of the band-limited thermal noise is
 \end{equation}
 where $\Delta f$ is the \index{noise bandwidth} \textbf{noise bandwidth} in \si{Hz}.
 
-\todo{noise voltage}
+\begin{excursus}{Noise in voltages and currents}
+	The noise power is converted to a voltage or current, respectively, if it appears at an ohmic resistance.
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\begin{scope}[shift={(0,0)}]
+				\draw (0,0) to[R,l=$R$,o-o] ++(0,4);
+				\node[align=center] at(0,-1) {Noisy\\ resistor};
+			\end{scope}
+			\begin{scope}[shift={(3,0)}]
+				\draw (0,0) to[R,l=$R$,o-] ++(0,2) to[european voltage source,v={$U_{N,RMS}$},-o] ++(0,2);
+				\node[align=center] at(0,-1) {Noise-free resistor\\ and noise\\ voltage source};
+			\end{scope}
+			\begin{scope}[shift={(6,0)}]
+				\draw (3,0) to[short,o-] (0,0) to[european current source,i={$I_{N,RMS}$}] (0,4) to[short,-o] (3,4);
+				\draw (2,0) to[R,l=$R$,*-*] (2,4);
+				\node[align=center] at(1.5,-1) {Noise-free resistor\\ and noise current source};
+			\end{scope}
+		\end{circuitikz}
+		\caption{Three equivalent circuits}
+	\end{figure}
+
+	Ohmic resistances are always noisy. They can be converted to an equivalent circuit:
+	\begin{itemize}
+		\item ideal noise-free resistor with noise voltage source, or
+		\item ideal noise-free resistor with noise current source.
+	\end{itemize}
+
+	Let's consider the first equivalent circuit.
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+				\draw (0,0) to[R,l=$R$,o-] ++(0,2) to[european voltage source,v={$U_{N,RMS}$},-o] ++(0,2);
+				\draw (0,0) to[short] (2,0) to[R,l=$R$] (2,4) to[short] (0,4);
+		\end{circuitikz}
+		\caption{The maximum power is transferred to a load of the same impedance as the inner resistance.}
+	\end{figure}
+	A load is connected to the noise source. To obtain a maximum power transfer, the load's impedance must equal the inner resistance of the source. The power emitted by the voltage source is:
+	\begin{equation}
+		P_N = \frac{U_{N,RMS}^2}{4 R}
+	\end{equation}
+	The noise voltage is:
+	\begin{equation}
+		U_{N,RMS} = \sqrt{4 k_B T \Delta f R}
+	\end{equation}
+	
+	Analogue to the voltage, the noise current is:
+	\begin{equation}
+		I_{N,RMS} = \sqrt{\frac{4 k_B T \Delta f}{R}}
+	\end{equation}
+\end{excursus}
 
 \paragraph{Noise Floor.}
 
