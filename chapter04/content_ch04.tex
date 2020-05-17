@@ -1,0 +1,173 @@
+\chapter{Sampling and Time-Discrete Signals and Systems}
+
+\begin{refsection}
+
+\section{Time-Discrete Signals}
+
+\subsection{Ideal Sampling}
+
+% TODO
+\begin{equation}
+	\begin{split}
+		\underline{x}[n] &= \int\limits_{-\infty}^{\infty} \underline{x}(t) \cdot \delta\left(t - n T_S\right) \, \mathrm{d} t \\
+		 &= \underline{x}\left(n T_S\right)
+	\end{split}
+\end{equation}
+
+\subsection{Discrete-Time Fourier Transform}
+
+% TODO
+\begin{equation}
+	\underline{x}_S(t) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S)
+\end{equation}
+
+\begin{equation}
+	\begin{split}
+		\underline{X}_S \left(j \omega\right) &= \mathcal{F} \left\{\underline{x}_S(t)\right\} \\
+		 &= \mathcal{F} \left\{\sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S)\right\} \\
+		 &= \int\limits_{t = -\infty}^{\infty} \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S) \cdot e^{-j \omega t} \, \mathrm{d} t \\
+		 &= \sum\limits_{n = -\infty}^{\infty} \int\limits_{t = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S) \cdot e^{-j \omega t} \, \mathrm{d} t \\
+		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \omega n T_S}
+	\end{split}
+\end{equation}
+
+Redefining $\phi = T_S \omega$:
+\begin{equation}
+	\underline{X}_S \left(j \omega\right) = \underline{X} \left(e^{j \phi}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \phi n}
+\end{equation}
+
+\subsection{Sampling Theorem and Aliasing}
+
+\subsection{Discrete Fourier Transform}
+
+\section{Analogies Of Time-Continuous and Time-Discrete Signals and Systems}
+
+\subsection{Transforms}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|p{0.3\linewidth}||p{0.3\linewidth}|p{0.3\linewidth}|}
+		\hline
+		{} & \textbf{Frequency-Continuous Domain} & \textbf{Frequency-Discrete Domain} \\
+		\hline
+		\hline
+		\textbf{Time-Continuous Domain} & Fourier transform & Fourier series \\
+		\hline
+		\textbf{Time-Discrete Domain} & Discrete-Time Fourier transform & Discrete Fourier transform \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\subsubsection{Obtaining a frequency-continuous domain:}
+
+\begin{minipage}{0.45\linewidth}
+	\textbf{From the time-continuous domain (analog signal):}
+	
+	\vspace{0.5em}
+	
+	Fourier transform:
+	\begin{equation*}
+		\underline{X}(j \omega) = \int\limits_{t = -\infty}^{\infty} \underline{x}(t) \cdot e^{-j \omega t} \, \mathrm{d} t
+	\end{equation*}
+	
+	Inverse Fourier transform:
+	\begin{equation*}
+		\underline{x}(t) = \frac{1}{2 \pi} \int\limits_{\omega = -\infty}^{\infty} \underline{X}(j \omega) \cdot e^{+ j \omega t} \, \mathrm{d} \omega
+	\end{equation*}
+	
+	\begin{itemize}
+		\item Continuous time: $t \in \mathbb{R}$
+		\item Continuous frequency: $\omega \in \mathbb{R}$
+	\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\linewidth}
+	\textbf{From the time-discrete domain (digital signal):}
+	
+	\vspace{0.5em}
+	
+	Discrete-time Fourier transform:
+	\begin{equation*}
+		\underline{X}_{2\pi}(e^{j \phi}) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{- j \phi n}
+	\end{equation*}
+	
+	Inverse discrete-time Fourier transform:
+	\begin{equation*}
+		\underline{x}[n] = \frac{1}{2 \pi} \int\limits_{- \pi}^{+ \pi} \underline{X}_{2\pi}(e^{j \phi}) \cdot e^{+ j \phi n} \, \mathrm{d} \phi
+	\end{equation*}
+	
+	\begin{itemize}
+		\item Discrete time: $n \in \mathbb{Z}$
+		\item Continuous frequency: $\phi \in \mathbb{R}$
+	\end{itemize}
+\end{minipage}
+
+\subsubsection{Obtaining a frequency-discrete domain:}
+
+\begin{minipage}{0.45\linewidth}
+	\textbf{From the time-continuous domain (analog signal):}
+	
+	\vspace{0.5em}
+	
+	Fourier analysis:
+	\begin{equation*}
+		\underline{X}[k] = \frac{\omega_0}{2 \pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \underline{x}(t) \cdot e^{-j k \omega_0 t} \, \mathrm{d} t
+	\end{equation*}
+	
+	Fourier series:
+	\begin{equation*}
+		\underline{x}(t) = \sum\limits_{k = -\infty}^{\infty} \underline{X}[k] \cdot e^{+ j k \omega_0 t}
+	\end{equation*}
+	
+	\begin{itemize}
+		\item Continuous time: $t \in \mathbb{R}$
+		\item Discrete frequency: $k \in \mathbb{Z}$
+	\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\linewidth}
+	\textbf{From the time-discrete domain (digital signal):}
+	
+	\vspace{0.5em}
+	
+	Discrete Fourier transform:
+	\begin{equation*}
+		\underline{X}[k] = \sum\limits_{n = 0}^{N - 1} \underline{x}[n] \cdot e^{- j \frac{2 \pi}{N} k n}
+	\end{equation*}
+	
+	Inverse discrete Fourier transform:
+	\begin{equation*}
+		\underline{x}[n] = \frac{1}{N} \sum\limits_{k = 0}^{N - 1} \underline{X}[k]  \cdot e^{+ j \frac{2 \pi}{N} k n}
+	\end{equation*}
+	
+	\begin{itemize}
+		\item Discrete time: $n \in \mathbb{Z}$
+		\item Discrete frequency: $k \in \mathbb{Z}$
+	\end{itemize}
+\end{minipage}
+
+\subsection{Systems}
+
+\subsection{Cross-Correlation and Autocorrelation}
+
+\subsection{Spectral Density}
+
+\subsection{Noise}
+
+\section{Digital Signals and Systems}
+
+\subsection{Quantization}
+
+\subsection{Quantization Error}
+
+\subsection{Window Filters}
+
+\subsection{Time Recovery}
+
+\subsection{Practical Issues}
+
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\printbibliography[heading=subbibliography]
+\end{refsection}
+
