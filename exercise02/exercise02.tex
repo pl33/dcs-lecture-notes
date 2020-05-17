@@ -3,7 +3,7 @@
 \section*{Exercise 2}
 
 \begin{question}[subtitle={Mono-chromatic Signals}]
-	Given is a mono-chromatic signal $u(t)$:
+	A mono-chromatic signal $u(t)$ is given:
 	\begin{equation*}
 		u(t) = \SI{2}{V} \cdot \cos\left(2 \pi \cdot \SI{1}{MHz} \cdot t + \frac{\pi}{2} \right)
 	\end{equation*}
@@ -37,17 +37,103 @@
 	\end{tasks}
 \end{solution}
 
-\begin{question}[subtitle={Using the Fourier transform}]
+\begin{question}
+	The following periodic signal is given.
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.25\textheight},
+				width=0.8\linewidth,
+				scale only axis,
+				xlabel={$t \text{ in } \si{s}$},
+				ylabel={$x(t) \text{ in } \si{V}$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=-0.5,
+				ymax=1.1,
+				xtick={-3.0, -2.5, ..., 3.0},
+				%ytick={0, 0.5, ..., 1.5},
+				%xticklabels={0, 1, $t_0$, 3, 4, ..., 10}
+			]
+				\addplot[blue, thick] coordinates {(-3.0,-0.2) (-2.5,-0.2)};
+				\addplot[blue, thick] coordinates {(-2.5,0.8) (-1.5,0.8)};
+				\addplot[blue, thick] coordinates {(-1.5,-0.2) (-0.5,-0.2)};
+				\addplot[blue, thick] coordinates {(-0.5,0.8) (0.5,0.8)};
+				\addplot[blue, thick] coordinates {(0.5,-0.2) (1.5,-0.2)};
+				\addplot[blue, thick] coordinates {(1.5,0.8) (2.5,0.8)};
+				\addplot[blue, thick] coordinates {(2.5,-0.2) (3.0,-0.2)};
+				
+				\addplot[blue, thick, dashed] coordinates {(-2.5,-0.2) (-2.5,0.8)};
+				\addplot[blue, thick, dashed] coordinates {(-1.5,0.8) (-1.5,-0.2)};
+				\addplot[blue, thick, dashed] coordinates {(-0.5,-0.2) (-0.5,0.8)};
+				\addplot[blue, thick, dashed] coordinates {(0.5,0.8) (0.5,-0.2)};
+				\addplot[blue, thick, dashed] coordinates {(1.5,-0.2) (1.5,0.8)};
+				\addplot[blue, thick, dashed] coordinates {(2.5,0.8) (2.5,-0.2)};
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+	
+	\begin{tasks}
+		\task
+		Find a functional expression for the above signal!
+		\task
+		What is the base frequency?
+		\task
+		Find the real-valued Fourier series coefficients $a_n$ and $b_m$!
+		\task
+		Find the complex-valued Fourier series coefficients $\underline{c}_n$!
+		\task
+		Plot the amplitude and phase spectra for $-5 \leq n \leq 5$!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{equation*}
+			x(t) = \begin{cases}
+				\SI{-0.2}{V}, &\quad \text{ if} \; \left(\SI{-0.5}{s} + n \cdot \SI{2}{s}\right) \leq t < \left(\SI{0.5}{s} + n \cdot \SI{2}{s}\right)  \\
+				\SI{-0.2}{V}, &\quad \text{ if} \; \left(\SI{0.5}{s} + n \cdot \SI{2}{s}\right) \leq t < \left(\SI{1.5}{s} + n \cdot \SI{2}{s}\right) \\
+			\end{cases} \qquad \forall \; n \in \mathbb{Z}
+		\end{equation*}
+		
+		\task
+		\begin{itemize}
+			\item Period: $T_0 = \SI{2}{s}$
+			\item Base frequency: $f_0 = \SI{0,5}{Hz}$
+			\item Base angular frequency: $\omega_0 = \SI{3.14}{s^{-1}}$
+		\end{itemize}
+	
+		%TODO
+	\end{tasks}
+\end{solution}
+
+\begin{question}[subtitle={Using the Fourier Transform}]
 	Derive the Fourier transform, without using the duality, of
 	\begin{tasks}
 		\task
-		Derive the Fourier transform of the time shift, without using the duality!
+		the time shift
 		\begin{equation*}
 			\mathcal{F}\left\{\underline{f}(t - t_0)\right\}
 		\end{equation*}
 		
 		\task
-		Derive the Fourier transform of the frequency shift, without using the duality!
+		the frequency shift
 		\begin{equation*}
 			\mathcal{F}\left\{e^{j \omega_0 t} \underline{f}(t)\right\}
 		\end{equation*}
@@ -117,5 +203,210 @@
 %		\end{equation*}
 %		
 %		We obtain the same result as in b). The duality works. \acs{QED}
+	\end{tasks}
+\end{solution}
+
+\begin{question}[subtitle={Fourier Transform of Signals}]
+	The following signal is given!
+	\begin{equation*}
+		\underline{x}(t) = j \cos\left(\omega_0 t\right) - \sin\left(\omega_0 t\right)
+	\end{equation*}
+	
+	\begin{tasks}
+		\task
+		What is the Fourier transform of the signal?
+		\task
+		Plot the amplitude and phase spectra!
+		\task
+		Why does the spectrum not fulfil the symmetry rules?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{equation*}
+			\underline{X}\left(j \omega\right) = j 2 \pi \delta\left(\omega - \omega_0\right)
+		\end{equation*}
+		
+		\task
+		\begin{minipage}{0.45\linewidth}
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}
+					\begin{axis}[
+						height={0.25\textheight},
+						width=0.9\linewidth,
+						scale only axis,
+						xlabel={$\omega \text{ in } \si{Hz}$},
+						ylabel={$\left|\underline{X}\left(j \omega\right)\right| \text{ in } \si{V/Hz}$},
+						%grid style={line width=.6pt, color=lightgray},
+						%grid=both,
+						grid=none,
+						legend pos=north east,
+						axis y line=middle,
+						axis x line=middle,
+						every axis x label/.style={
+							at={(ticklabel* cs:1.05)},
+							anchor=north,
+						},
+						every axis y label/.style={
+							at={(ticklabel* cs:1.05)},
+							anchor=east,
+						},
+						xmin=-2.5,
+						xmax=2.5,
+						ymin=0,
+						ymax=6.5,
+						xtick={-1, 0, 1},
+						xticklabels={$-\omega_0$, 0, $\omega_0$},
+						ytick={0, 6.28},
+						yticklabels={0, 6.28},
+					]
+						\addplot[blue, thick] coordinates {(1,0) (1,6.28)};
+						\addplot[blue, thick, only marks, mark=o] coordinates {(1,6.28)};
+					\end{axis}
+				\end{tikzpicture}
+			\end{figure}
+		\end{minipage}
+		\hfill
+		\begin{minipage}{0.45\linewidth}
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}
+					\begin{axis}[
+						height={0.25\textheight},
+						width=0.9\linewidth,
+						scale only axis,
+						xlabel={$\omega \text{ in } \si{Hz}$},
+						ylabel={$\arg\left(\underline{X}\left(j \omega\right)\right) \text{ in } \si{\degree}$},
+						%grid style={line width=.6pt, color=lightgray},
+						%grid=both,
+						grid=none,
+						legend pos=north east,
+						axis y line=middle,
+						axis x line=middle,
+						every axis x label/.style={
+							at={(ticklabel* cs:1.05)},
+							anchor=north,
+						},
+						every axis y label/.style={
+							at={(ticklabel* cs:1.05)},
+							anchor=east,
+						},
+						xmin=-2.5,
+						xmax=2.5,
+						ymin=-3.5,
+						ymax=3.5,
+						xtick={-1, 0, 1},
+						xticklabels={$-\omega_0$, 0, $\omega_0$},
+						ytick={-3.14, -1.57, 0, 1.57, 3.14},
+						yticklabels={$-\pi$, $-\frac{\pi}{2}$, 0, $\frac{\pi}{2}$, $\pi$},
+					]
+						\addplot[blue, thick] coordinates {(1,0) (1,1.57)};
+						\addplot[blue, thick, only marks, mark=o] coordinates {(1,1.57)};
+					\end{axis}
+				\end{tikzpicture}
+			\end{figure}
+		\end{minipage}
+		
+		\task
+		The signal is complex-valued. The symmetry rules only apply for real-valued signals.
+	\end{tasks}
+\end{solution}
+
+\begin{question}
+	The following circuit is given.
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0, 0) to[L, l=$L$, o-] ++(2,0) to[short, *-o] ++(2,0);
+			\draw (2, 0) to[C, l=$C$, -*] ++(0,-2);
+			\draw (0, -2) to[short, o-o] ++(4,0);
+			
+			\draw (0, 0) to[open, v=$u_i(t)$] (0, -2);
+			\draw (4, 0) to[open, v^=$u_o(t)$] (4, -2);
+		\end{circuitikz}
+	\end{figure}
+	\begin{tasks}
+		\task
+		Find a differential equation which connects $u_i(t)$ and $u_o(t)$!
+		\task
+		Determine the transfer function $\underline{H} \left(j \omega\right)$!
+		\task
+		Calculate the impulse response!
+		\task
+		Is the system causal? Why?
+		\task
+		What filter characteristic does the circuit have? Which order does the system have?
+	\end{tasks}
+\end{question}
+
+\begin{question}
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0, 0) to[C, l=$C$, o-] ++(2,0) to[short, *-o] ++(2,0);
+			\draw (2, 0) to[R, l=$R$, -*] ++(0,-2);
+			\draw (0, -2) to[short, o-o] ++(4,0);
+			
+			\draw (0, 0) to[open, v=$u_i(t)$] (0, -2);
+			\draw (4, 0) to[open, v^=$u_o(t)$] (4, -2);
+		\end{circuitikz}
+	\end{figure}
+	
+	The high-pass filter has the following transfer function:
+	\begin{equation}
+		\underline{H}\left(j \omega\right) = \frac{j \omega RC}{j \omega RC + 1}
+	\end{equation}
+	with
+	\begin{itemize}
+		\item $R = \SI{100}{\ohm}$
+		\item $C = \SI{470}{nF}$
+	\end{itemize}
+	
+	\begin{tasks}
+		\task
+		Which order does the system have?
+		\task
+		What are the poles and zeroes of the system? Is the system stable?
+		\task
+		Determine and plot the amplitude response $\left|\underline{H}\left(j \omega\right)\right|$!
+		\task
+		Determine and plot the phase response $\arg\left(\underline{H}\left(j \omega\right)\right)$!
+		\task
+		The following signal is applied to the input of the system $u_i(t)$.
+		\begin{equation}
+			u_i(t) = \SI{2}{V} \cos\left(2 \pi \cdot \SI{25}{kHz} \cdot t\right)
+		\end{equation}
+		Calculate the output signal $u_o(t)$ as either a time domain function or a phasor!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		1st order
+		\begin{itemize}
+			\item Only one capacity as a memorizing component
+			\item Highest exponent is $1$.
+		\end{itemize}
+	
+		\task
+		Replace $j \omega$ by $\underline{s}$.
+		\begin{itemize}
+			\item Zero: $\underline{s}_0 = 0$ (Numerator of $\underline{H}\left(j \omega\right)$ must be zero)
+			\item Pole: Denominator of $\underline{H}\left(j \omega\right)$ must be zero
+			\begin{equation*}
+				\begin{split}
+					\underline{s}_{\infty} &= -\frac{1}{RC} \\
+					 &= -\frac{1}{\SI{100}{\ohm} \cdot \SI{470}{nF}} \\
+					 &= \SI{-21276.6}{s^{-1}}
+				\end{split}
+			\end{equation*}
+		\end{itemize}
+		The system is stable because the real part of its pole is negative.
+		
+		%TODO
 	\end{tasks}
 \end{solution}
