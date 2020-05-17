@@ -714,20 +714,469 @@ The logarithmic scale is used for various physical quantities. The table below s
 		\hline
 		\SI{1}{\micro.V} & \si{dB\micro.V} & Voltage \\
 		\hline
+		\SI{1}{Hz} & \si{dBHz} & Frequency, bandwidth \\
+		\hline
 		Power of carrier signal & \si{dBc} & Relative to carrier \\
 		\hline
 	\end{tabular}
 \end{table}
 
+\begin{attention}
+	If you add two powers, never do this in the logarithmic scale. For example, two powers of \SI{20}{dBm} and \SI{23}{dBm}.
+	\begin{equation*}
+		\SI{20}{dBm} + \SI{23}{dBm} \neq \SI{43}{dBm} \quad \text{!!!}
+	\end{equation*}
+	Right:
+	\begin{equation*}
+		\begin{split}
+			\SI{20}{dBm} &\equiv \SI{100}{mW} \\
+			\SI{23}{dBm} &\equiv \SI{200}{mW} \\
+			\SI{100}{mW} + \SI{200}{mW} = \SI{300}{mW} &\equiv \SI{25}{dBm} \\
+		\end{split}
+	\end{equation*}
+\end{attention}
+
 \section{Noise}
+
+Real systems are not ideal.
+\begin{itemize}
+	\item They contribute noise to the signals.
+	\item Noise is any unwanted modification of the signal.
+	\item Noise is the result of a random process in most cases.
+\end{itemize} 
 
 \subsection{Types of Noise}
 
-\subsection{Thermal Noise}
+Here is a selection of \index{noise} noise types:
+\begin{description}
+	\item[Additive noise] The noise is added to the signal.
+	\item[Quantization error] During quantization, a real value of the input signal is assigned to a discrete integer value. The input signal is rounded to the nearest discrete value. This loss of information shows up as noise.
+	\item[Shot noise] Noise due to static electricity discharges (discrete events)
+	\item[Phase noise] Random time shifts of the signal.
+	\item[...]
+\end{description}
 
-\subsection{White Noise}
+Additive noise can be further divided into various types:
+\begin{itemize}
+	\item White noise
+	\item \ac{AWGN}
+	\item Pink noise or $1/f$-noise
+	\item Brownian noise or $1/f^2$-noise
+	\item ...
+\end{itemize}
 
-\subsection{Noise Floor and Noise Figure}
+We will investigate the \ac{AWGN} in this chapter. Besides quantization noise and phase noise, it is most dominating in communication systems. However, please keep the other noise types in mind. They have various reasons and models, and may be relevant in system design.
+
+\subsection{Additive White Gaussian Noise}
+
+\index{additive white Gaussian noise} \ac{AWGN} is noise which is:
+\begin{itemize}
+	\item \textbf{additive}: The noise is added to the signal.
+	\item \textbf{white}: The noise power is equally distributed over the frequency. The noise \ac{PSD} is a constant.
+	\item \textbf{Gaussian}: The noise is drawn from a normally distributed random process.
+\end{itemize}
+
+\paragraph{Additive Noise.}
+
+\index{additive noise} Additive means that the noise is added to the signal while it passes through a system. \ac{AWGN} is intrinsic to the system, i.e., the random process generating the noise runs inside the system.
+
+If an input signal $\underline{x}(t)$ is given to a system with the impulse response $\underline{h}(t)$, the output signal $\underline{y}(t)$ is also affected by the additive noise $\underline{w}(t)$.
+\begin{equation}
+	\underline{y}(t) = \left(\underline{x}(t) * \underline{h}(t)\right) + \underline{w}(t)
+\end{equation}%
+\nomenclature[Sn]{$\underline{w}(t)$}{Additive white Gaussian noise in the time domain}
+%Or, in the frequency domain:
+%\begin{equation}
+%	\underline{Y}\left(j \omega\right) = \underline{X}\left(j \omega\right) \underline{H}\left(j \omega\right) + \underline{W}\left(j \omega\right)
+%\end{equation}
+
+\paragraph{White Noise.}
+
+\index{white noise} White noise is ideal noise. It is the result of an ideal random process.
+\begin{itemize}
+	\item Each sample drawn from the random process $\underline{w}(t)$ at the time instance $t$ is uncorrelated with any other sample.
+	\item A corollary is that the autocorrelation is zero for any $\tau \neq 0$: $\underline{\mathrm{R}}_{ww}(\tau) = 0 \; \forall\; \tau \neq 0$
+	\item Each value of $\mathbb{C}$ can be taken by $\underline{w}(t)$.
+	\item That means that the signal power is infinite, i.e., $\underline{\mathrm{R}}_{ww}(0) = \infty$.
+	\item The mean of the process must be zero.
+\end{itemize}
+
+The autocorrelation function of ideal white noise is:
+\begin{equation}
+	\underline{\mathrm{R}}_{ww}(\tau) = \begin{cases}
+		\infty, & \quad \text{if } \tau = 0 \\
+		0, & \quad \text{else}
+	\end{cases}
+\end{equation}
+So, the autocorrelation function of ideal white noise is the Dirac delta function.
+\begin{equation}
+	\underline{\mathrm{R}}_{ww}(\tau) = \delta(\tau)
+\end{equation}
+
+The \ac{PSD} of ideal white noise is therefore ($\delta(t) \TransformHoriz 1$):
+\begin{equation}
+	\mathrm{S}_{ww}(\omega) = 1
+\end{equation}
+The power of ideal white noise is distributed equally over the frequency.
+
+\paragraph{Gaussian Distribution.}
+
+\begin{itemize}
+	\item Ideal white noise does not exist, because the signal energy cannot be infinite.
+	\item The random process is therefore assumed to be normally distributed with a mean $\mu = 0$ and a finite variance $\sigma^2 < \infty$ (the noise).
+\end{itemize}
+
+The time domain noise samples $\underline{w}(t)$ are drawn from a Gaussian process $\mathcal{N}(\mu, \sigma^2)$.
+\begin{equation}
+	\underline{w}(t) \sim \mathcal{N}(\mu = 0, \sigma^2)
+\end{equation}
+
+The \ac{PDF} for a Gaussian distribution is:
+\begin{equation}
+	p(w) = \frac{1}{\sigma \sqrt{2 \pi}} e^{-\frac{1}{2} \left(\frac{w - \mu}{\sigma}\right)^2}
+\end{equation}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{scope}[shift={(0, 0)}]
+			\draw[-latex] (-1,0) -- (5.5,0) node[below, align=center]{$t$};
+			\draw[-latex] (0,-2.2) -- (0,2.2) node[left, align=right]{$w(t)$};
+			\pgfmathsetseed{200};
+			\draw[blue, smooth, domain=-0.5:5, samples=100] plot (\x,{1.3*rand});
+		\end{scope}
+		\begin{scope}[shift={(-2, 0)},rotate=90]
+			\draw[-latex, dashed] (-2.2,0) -- (2.2,0) node[right, align=left]{$w$};
+			\draw[-latex, dashed] (0,0) -- (0,1.5) node[below, align=center]{$p(w)$};
+			\draw[red, thick, dashed, smooth, domain=-2:2, samples=50] plot (\x, {(1/(0.5*sqrt(2*pi)))*exp(-0.5*((\x)/0.5)^2)});
+		\end{scope}
+		\draw[brown, dashed] (-3, 1.5) -- ++(9,0) node[right,align=left]{$3 \sigma$};
+		\draw[brown, dashed] (-3, 1.0) -- ++(9,0) node[right,align=left]{$2 \sigma$};
+		\draw[brown, dashed] (-3, 0.5) -- ++(9,0) node[right,align=left]{$\sigma$};
+		\draw[brown, dashed] (-3, -0.5) -- ++(9,0) node[right,align=left]{$-\sigma$};
+		\draw[brown, dashed] (-3, -1.0) -- ++(9,0) node[right,align=left]{$-2 \sigma$};
+		\draw[brown, dashed] (-3, -1.5) -- ++(9,0) node[right,align=left]{$-3 \sigma$};
+	\end{tikzpicture}
+	\caption[AWGN in the time domain]{\ac{AWGN} in the time domain}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\draw[-latex] (-1,0) -- (6.5,0) node[below, align=center]{$t$};
+		\draw[-latex] (0,-3.2) -- (0,3.2) node[left, align=right]{$x(t)$};
+		\draw[blue, thick, dashed, smooth, domain=-0.5:6, samples=100] plot (\x, {3*cos(360*\x/4-60)});
+		\pgfmathsetseed{200};
+		\draw[red, thick, smooth, domain=-0.5:6, samples=100] plot (\x, {3*cos(360*\x/4-60)+0.5*rand});
+	\end{tikzpicture}
+	\caption[Effect of AWGN on a signal (here monochromatic) in the time domain]{Effect of \ac{AWGN} on a signal (blue, here monochromatic) in the time domain. The resulting signal with the \ac{AWGN} is red.}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\draw[-latex] (-3.2,0) -- (3.2,0) node[below, align=center]{$\Re$};
+		\draw[-latex] (0,-3.2) -- (0,3.2) node[left, align=right]{$\Im$};
+		\draw[blue, thick, dashed, -latex] (0:0) -- (60:2);
+		\begin{scope}[shift={(60:2)}]
+			\draw[brown, dashed] (0:0.4) arc(0:360:0.4);
+			\draw[brown, dashed] (0:0.8) arc(0:360:0.8);
+			\draw[brown, dashed] (0:1.2) arc(0:360:1.2);
+			\draw[brown] (20:0.4) -- (20:2) node[right, align=left]{$\sigma$};
+			\draw[brown] (45:0.8) -- (45:2.5) node[right, align=left]{$2 \sigma$};
+			\draw[brown] (70:1.2) -- (70:3) node[right, align=left]{$3 \sigma$};
+			\draw[brown, thick, -latex] (0:0) -- (130:0.5) node[anchor=east](W){};
+		\end{scope}
+		\draw[red, thick, -latex] (0,0) -- (W.east);
+	\end{tikzpicture}
+	\caption[Effect of AWGN on the phasor of a monochromatic signal (in the frequency domain)]{Effect of \ac{AWGN} (brown) on the phasor of a monochromatic signal (blue, in the frequency domain). The resulting signal with the \ac{AWGN} is red.}
+\end{figure}
+
+\subsection{Thermal Noise and Noise Floor}
+
+The most important noise in electric circuits is \index{thermal noise} \textbf{thermal noise}.
+\begin{itemize}
+	\item Thermal noise is the corollary of oscillating atoms and molecules at the temperature $T$.
+	\item The oscillation amplitude increases with increasing temperature. Consequently, the noise increases.
+\end{itemize}
+
+The noise \ac{PSD} $\mathrm{S}_{NN}$ is:
+\begin{equation}
+	\mathrm{S}_{NN}(\omega) = \frac{1}{2\pi} k_B T
+\end{equation}
+where $k_B = \SI{1.380649}{J/K}$ is the Boltzmann's constant. Or, for frequency instead of angular frequency:
+\begin{equation}
+	\mathrm{S}_{NN}(f) = k_B T
+\end{equation}
+
+\begin{itemize}
+	\item When the thermal noise is band-limited, it has nearly a Gaussian or normal distribution. It is \ac{AWGN}.
+	\item The noise has a finite power when it is band-limited.
+\end{itemize}
+The noise power of the band-limited thermal noise is
+\begin{equation}
+	\begin{split}
+		P_N &= \int\limits_{\omega_1}^{\omega_2} \mathrm{S}_{NN} \; \mathrm{d} \omega \\
+		 &= \frac{1}{2\pi} k_B T \underbrace{\left(\omega_2 - \omega_1\right)}_{= \Delta \omega} \\
+		 &= k_B T \underbrace{\frac{\Delta \omega}{2\pi}}_{= \Delta f} \\
+		 &= k_B T \Delta f
+	\end{split}
+\end{equation}
+where $\Delta f$ is the \index{noise bandwidth} \textbf{noise bandwidth} in \si{Hz}.
+
+\todo{noise voltage}
+
+\paragraph{Noise Floor.}
+
+The noise \ac{PSD} is small compared to the signals carrying information. Therefore, the logarithmic scale is used.
+
+The noise \ac{PSD} level is
+\begin{equation}
+	L_{S,N} = \SI{10}{dBm/Hz} \log_{10} \left(\frac{k_B T}{\SI{1}{mW/Hz}}\right)
+\end{equation}
+
+\begin{itemize}
+	\item The noise power is equally distributed over the frequency.
+	\item Therefore, the \ac{PSD} is flat in the frequency domain, which is called \index{noise floor} \textbf{noise floor}.
+\end{itemize}
+
+\begin{fact}
+	The noise \ac{PSD} or noise floor at room temperature (\SI{25}{\degreeCelsius} or $T = \SI{298.15}{K}$) is $L_{S,N} = \SI{-173.8}{dBm/Hz} \approx \SI{-174}{dBm/Hz}$.
+\end{fact}
+
+Band-limiting the noise, yields the noise power. The noise power is:
+\begin{equation}
+	\begin{split}
+		L_{P,N} &= \SI{10}{dBm} \log_{10} \left(\frac{k_B T \Delta f}{\SI{1}{mW}}\right) \\
+		 &= L_{S,N} + \SI{10}{dBHz} \log_{10} \left(\frac{\Delta f}{\SI{1}{Hz}}\right)
+	\end{split}
+\end{equation}
+
+Here, the advantage of the logarithmic scale comes into play. For example, a \ac{LTE} signal with a bandwidth of $\Delta f_{LTE} = \SI{20}{MHz}$ has a noise power of $\SI{-174}{dBm/Hz} + \SI{73}{dBHz} = \SI{-101}{dBm}$.
+
+\subsection{Signal-to-Noise Ratio and Noise Figure}
+
+\paragraph {The Signal-to-Noise Ratio.}
+
+Following scenario:
+\begin{itemize}
+	\item There is a signal at a frequency $\omega_0$ with a \ac{PSD} of $L_{S,X1}$ (for example indefinitely small peak $L_{S,X1} = \SI{-10}{dBm/Hz}$).
+	\item The noise floor is the thermal noise $L_{S,N1}$ (for example $L_{S,N1} = \SI{-174}{dBm/Hz}$).
+	\item The bandwidth considered is $\Delta f$ (for example $\Delta f = \SI{20}{MHz}$).
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\draw[-latex] (-0.5,0) -- (5,0) node[below, align=center]{$f$\\ in $\si{Hz}$};
+		\draw[-latex] (0,-10) -- (0,1) node[left, align=right]{$S(f)$\\ in $\si{dBm/Hz}$};
+		
+		\draw (2,0) -- ++(0,-0.1) node[below right, align=left]{$\omega_0$};
+		
+		\draw (0,-8.7) -- ++(-0.1,0) node[left, align=right]{$-174$};
+		\draw (0,-0.5) -- ++(-0.1,0) node[left, align=right]{$-10$};
+		
+		\draw[red, thick] (0,-8.7) -- ++(5,0) node[above left, align=right]{Noise floor};
+		\draw[blue, thick, -o] (2,-8.7) -- (2,-0.5) node[below right, align=left]{Signal};
+	\end{tikzpicture}
+	\caption[A signal including the AWGN]{A signal including the \ac{AWGN}}
+\end{figure}
+
+The noise power (level) is:
+\begin{equation}
+	\begin{split}
+		P_{N1} &= \SI{1}{mW/Hz} 10^{\frac{L_{S,N1}}{\SI{10}{dBm/Hz}}} \cdot \Delta f \\
+		L_{P,N1} &= L_{S,N1} + \SI{10}{dBHz} \log_{10} \left(\frac{\Delta f}{\SI{1}{Hz}}\right)
+	\end{split}
+\end{equation}
+In this example, $L_{P,N1} = \SI{-101}{dBm}$.
+
+The signal power is obtained by integrating the signal \ac{PSD} over the bandwidth:
+\begin{equation}
+	P_{X1} = \int\limits_{\Delta f} S_{XX}(\omega) \; \mathrm{d} \omega
+\end{equation}
+
+The signal \ac{PSD} in this example is:
+\begin{equation*}
+	S_{XX}(\omega) = \delta(\omega \pm \omega_0) \SI{1}{mW/Hz} 10^{\frac{L_{S,X1}}{\SI{10}{dBm/Hz}}}
+\end{equation*}
+In this example $P_{X1} \equiv L_{P,X1} = \SI{-10}{dBm}$.
+
+\textit{Note:} the signal is just a indefinite small peak (Dirac delta function). All of its power is concentrated in its peak, so that the bandwidth does not matter. This signal does not exist in practise, but this is just an exemplary consideration.
+
+\begin{definition}{Signal-to-noise ratio}
+	The \index{signal-to-noise ratio} \textbf{\ac{SNR}} is the ratio between the signal power $P_{X}$ and the noise power $P_{N}$:
+	\begin{equation}
+		\mathrm{SNR} = \frac{P_{X}}{P_{N}}
+	\end{equation}%
+	\nomenclature[Ss]{$\mathrm{SNR}$}{Signal-to-noise ratio}
+	
+	Or in logarithmic scale
+	\begin{equation}
+		L_{\mathrm{SNR}} = \SI{10}{dB} \log_{10} \left(\frac{P_{X}}{P_{N}}\right) = L_{P,X} - L_{P,N}
+	\end{equation}
+\end{definition}
+
+In this example, the \ac{SNR} is $L_{\mathrm{SNR},1} = \SI{91}{dB}$.
+
+Often, the noise floor is defined to be \SI{91}{dBc}, which means that the noise is \SI{91}{dB} below the \index{carrier} \emph{carrier} -- the signal carrying the information.
+
+\paragraph{\ac{SNR} Degradation.}
+
+The signal including the \ac{AWGN} is applied to a system with a \index{gain} \textbf{gain} $G$.
+
+Gain in logarithmic scale:
+\begin{equation}
+	L_G = \SI{10}{dB} \log_{10} \left(G\right)
+\end{equation}
+
+\begin{itemize}
+	\item Positive log. gain $L_G > 0$ ($G > 1$): amplifier
+	\item Negative log. gain $L_G < 0$ ($0 \leq G < 1$): attenuator
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[draw, block](Sys){System\\ (gain $G$,\\ noise factor $F$)};
+		
+		\draw[-o] (Sys.west) -- ++(-2,0) node[left, align=right]{Input\\ $P_{X1} + P_{N1}$};
+		\draw[-o] (Sys.east) -- ++(2,0) node[right, align=left]{Output\\ $P_{X2} + P_{N2}$};
+	\end{tikzpicture}
+	\caption[A system with gain degrading the SNR]{A system with gain degrading the \ac{SNR}}
+\end{figure}
+
+The system
+\begin{itemize}
+	\item amplifies or attenuates \underline{both} the signal \underline{and} the noise, and
+	\item adds intrinsic \ac{AWGN}.
+\end{itemize}
+
+The intrinsic \ac{AWGN} is thermal noise generated inside the system. This additional noise contribution shows up as an additional increase of the noise floor by a factor $F$ -- the \index{noise factor} \textbf{noise factor}. Or in logarithmic scale:
+\begin{equation}
+	L_F = \SI{10}{dB} \log_{10} \left(F\right)
+\end{equation}
+
+\begin{itemize}
+	\item Amplification or attenuation of the signal:
+	\begin{itemize}
+		\item Linear scale: $P_{X2} = G P_{X1}$
+		\item Logarithmic scale: $L_{P,X2} = L_{P,X1} + L_G$
+	\end{itemize}
+	\item Amplification or attenuation of the noise \underline{plus} intrinsic noise contribution:
+	\begin{itemize}
+		\item Linear scale: $P_{N2} = G F P_{N1}$
+		\item Logarithmic scale: $L_{P,N2} = L_{P,N1} + L_G + L_F$
+	\end{itemize}
+\end{itemize}
+
+The additional contribution of \ac{AWGN}, degrades the \ac{SNR} by $L_F$.
+
+\begin{definition}{Noise figure and noise factor}
+	The \index{noise factor} \textbf{noise factor} $F$ is the ratio of input \ac{SNR} $\mathrm{SNR}_i$ to output \ac{SNR} $\mathrm{SNR}_o$.
+	\begin{equation}
+		F = \frac{\mathrm{SNR}_i}{\mathrm{SNR}_o}
+	\end{equation}
+	
+	In logarithmic scale, the ratio is expressed by the \index{noise figure} \textbf{noise figure} $L_F$.
+	\begin{equation}
+		L_F = \SI{10}{dB} \log_{10} \left(F\right) = L_{\mathrm{SNR},i} - L_{\mathrm{SNR},o}
+	\end{equation}
+\end{definition}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{scope}[shift={(0,0)}]
+			\draw[-latex] (-0.5,0) -- (5,0) node[below, align=center]{$f$\\ in $\si{Hz}$};
+			\draw[-latex] (0,-10) -- (0,1.5) node[left, align=right]{$S(f)$\\ in $\si{dBm/Hz}$};
+			
+			\draw (2,0) -- ++(0,-0.1) node[below right, align=left]{$\omega_0$};
+			
+			\draw (0,-8.7) -- ++(-0.1,0) node[left, align=right]{$-174$};
+			\draw (0,-0.5) -- ++(-0.1,0) node[left, align=right]{$-10$};
+			
+			\draw[red, thick] (0,-8.7) -- ++(5,0) node[above left, align=right](N1){Noise floor};
+			\draw[blue, thick, -o] (2,-8.7) -- (2,-0.5) node[below right, align=left](X1){Signal};
+		\end{scope}
+		\begin{scope}[shift={(8,0)}]
+			\draw[-latex] (-0.5,0) -- (5,0) node[below, align=center]{$f$\\ in $\si{Hz}$};
+			\draw[-latex] (0,-10) -- (0,1.5) node[left, align=right]{$S(f)$\\ in $\si{dBm/Hz}$};
+			
+			\draw (2,0) -- ++(0,-0.1) node[below right, align=left]{$\omega_0$};
+			
+			\draw (0,-8.7) -- ++(-0.1,0) node[left, align=right]{$-174$};
+			\draw (0,-7.7) -- ++(-0.1,0) node[left, align=right]{$-154$};
+			\draw (0,-7.2) -- ++(-0.1,0) node[left, align=right]{$-144$};
+			\draw (0,-0.5) -- ++(-0.1,0) node[left, align=right]{$-10$};
+			\draw (0,0.5) -- ++(-0.1,0) node[left, align=right]{$+10$};
+			
+			\draw[red, dashed] (0,-7.7) -- ++(5,0) node[below left, align=right](Ng){Noise (gain only)};
+			\draw[red, thick] (0,-7.2) -- ++(5,0) node[above left, align=right](N2){Noise floor};
+			\draw[blue, thick, -o] (2,-7.2) -- (2,0.5) node[above right, align=left](X2){Signal};
+		\end{scope}
+		\begin{scope}[shift={(6,0)}]
+			\draw (-0.5,-8.7) -- (0.5,-8.7);
+			\draw[<->] (0,-8.7) -- (0,-7.7) node[midway, left, align=right]{$L_G$};
+			\draw (-0.5,-7.7) -- (0.5,-7.7);
+			\draw[<->] (0,-7.7) -- (0,-7.2) node[midway, left, align=right]{$L_F$};
+			\draw (-0.5,-7.2) -- (0.5,-7.2);
+			\draw (-0.5,-0.5) -- (0.5,-0.5);
+			\draw[<->] (0,-0.5) -- (0,0.5) node[midway, left, align=right]{$L_G$};
+			\draw (-0.5,0.5) -- (0.5,0.5);
+		\end{scope}
+	\end{tikzpicture}
+	\caption[Degradation of the SNR]{Degradation of the \ac{SNR}}
+\end{figure}
+
+In our example:
+\begin{itemize}
+	\item System properties:
+	\begin{itemize}
+		\item Gain $L_G = \SI{20}{dB}$
+		\item Noise figure $L_F = \SI{10}{dB}$
+	\end{itemize}
+	\item Output signal power $L_{X2} = \SI{+10}{dBm}$
+	\item Output noise power $L_{X2} = \SI{-71}{dBm}$ ($\SI{-144}{dBm/Hz}$ at $\SI{20}{MHz}$)
+	\item \ac{SNR} $L_{\mathrm{SNR},o} = \SI{81}{dB}$
+\end{itemize}
+
+\paragraph{Cascading Systems.}
+
+In a cascade of systems, the gain $G$ and noise factor $F$ must be applied several times.
+
+\begin{definition}{Friis formula}
+	The total noise factor of a chain of $n$ devices can be calculated by the \index{Friis formula} \textbf{Friis formula}.
+	\begin{equation}
+		F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \frac{F_4 - 1}{G_1 G_2 G_3} + \dots + \frac{F_n - 1}{G_1 G_2 \dots G_{n-1}}
+	\end{equation}
+	$F$ and $G$ are in linear scale (not logarithmic scale).
+	
+	\begin{figure}[H]
+		\centering
+		\begin{adjustbox}{scale=0.8}
+			\begin{tikzpicture}
+				\node[draw, block](S1){System\\ ($G_1$, $F_1$)};
+				\node[draw, block,right=of S1](S2){System\\ ($G_2$, $F_2$)};
+				\node[block,right=of S2](Sd){$\dots$};
+				\node[draw, block,right=of Sd](Sn){System\\ ($G_n$, $F_n$)};
+				
+				\draw[latex-] (S1.west) -- ++(-1,0) node[left, align=right]{Source};
+				\draw[-latex] (S1.east) -- (S2.west);
+				\draw[-latex] (S2.east) -- (Sd.west);
+				\draw[-latex] (Sd.east) -- (Sn.west);
+				\draw[-latex] (Sn.east) -- ++(1,0) node[right, align=left]{Output};
+				
+				\draw[decorate, decoration={brace, amplitude=3mm, mirror}] (S1.south west) -- (Sn.south east) node[midway, anchor=north, yshift=-4mm]{$G_{\text{total}}$, $F_{\text{total}}$};
+			\end{tikzpicture}
+		\end{adjustbox}
+	\end{figure}
+\end{definition}
+
+\textit{Remark:} The total chain gain is:
+\begin{equation}
+	G_{\text{total}} = G_1 G_2 \dots G_n = \prod_{i = 1}^{n} G_i
+\end{equation}
 
 \phantomsection
 \addcontentsline{toc}{section}{References}
