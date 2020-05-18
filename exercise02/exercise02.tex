@@ -37,7 +37,7 @@
 	\end{tasks}
 \end{solution}
 
-\begin{question}
+\begin{question}[subtitle={Fourier Series}]
 	The following periodic signal is given.
 	\begin{figure}[H]
 		\centering
@@ -315,7 +315,7 @@
 	\end{tasks}
 \end{solution}
 
-\begin{question}
+\begin{question}[subtitle={System Analysis}]
 	The following circuit is given.
 	\begin{figure}[H]
 		\centering
@@ -333,8 +333,8 @@
 		Find a differential equation which connects $u_i(t)$ and $u_o(t)$!
 		\task
 		Determine the transfer function $\underline{H} \left(j \omega\right)$!
-		\task
-		Calculate the impulse response!
+		%\task
+		%Calculate the impulse response!
 		\task
 		Is the system causal? Why?
 		\task
@@ -342,7 +342,11 @@
 	\end{tasks}
 \end{question}
 
-\begin{question}
+\begin{solution}
+	%TODO
+\end{solution}
+
+\begin{question}[subtitle={Amplitude and Phase Response}]
 	\begin{figure}[H]
 		\centering
 		\begin{circuitikz}
@@ -377,7 +381,7 @@
 		\task
 		The following signal is applied to the input of the system $u_i(t)$.
 		\begin{equation}
-			u_i(t) = \SI{2}{V} \cos\left(2 \pi \cdot \SI{25}{kHz} \cdot t\right)
+			u_i(t) = \SI{2}{V} \cdot \cos\left(2 \pi \cdot \SI{2.5}{kHz} \cdot t\right)
 		\end{equation}
 		Calculate the output signal $u_o(t)$ as either a time domain function or a phasor!
 	\end{tasks}
@@ -406,6 +410,59 @@
 			\end{equation*}
 		\end{itemize}
 		The system is stable because the real part of its pole is negative.
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				\underline{H}\left(j \omega\right) &= \frac{j \omega RC}{j \omega RC + 1} \\
+				 &= \frac{j \omega RC \left(j \omega RC - 1\right)}{\left(j \omega RC + 1\right)\left(j \omega RC - 1\right)} \\
+				 &= \frac{-\left(\omega RC\right)^2 - j \omega RC}{- \left(j \omega RC\right)^2 - 1} \\
+				 &= \frac{\left(\omega RC\right)^2 + j \omega RC}{\left(j \omega RC\right)^2 + 1} \\
+				\Re\left\{\underline{H}\left(j \omega\right)\right\} &= \frac{\left(\omega RC\right)^2}{\left(j \omega RC\right)^2 + 1} \\
+				\Im\left\{\underline{H}\left(j \omega\right)\right\} &= \frac{\omega RC}{\left(j \omega RC\right)^2 + 1}
+			\end{split}
+		\end{equation*}
+		\begin{equation*}
+			\begin{split}
+				\left|\underline{H}\left(j \omega\right)\right| &= \sqrt{\frac{\left(\omega RC\right)^4 + \left(\omega RC\right)^2}{\left(\left(j \omega RC\right)^2 + 1\right)^2}} \\
+				 &= \sqrt{\frac{\left(\omega RC\right)^2 \left(\left(j \omega RC\right)^2 + 1\right)}{\left(\left(j \omega RC\right)^2 + 1\right)^2}} \\
+				 &= \sqrt{\frac{\left(\omega RC\right)^2}{\left(j \omega RC\right)^2 + 1}}
+			\end{split}
+		\end{equation*}
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				\arg\left(\underline{H}\left(j \omega\right)\right) &= \mathrm{atan2}\left(\Im\left\{\underline{H}\left(j \omega\right)\right\}, \Re\left\{\underline{H}\left(j \omega\right)\right\}\right) \\
+				 &= \begin{cases}
+				 	\arctan\left(\frac{\Im\left\{\underline{H}\left(j \omega\right)\right\}}{\Re\left\{\underline{H}\left(j \omega\right)\right\}}\right) &\quad \text{ if } \Re\left\{\underline{H}\left(j \omega\right)\right\} > 0, \\
+				 	\arctan\left(\frac{\Im\left\{\underline{H}\left(j \omega\right)\right\}}{\Re\left\{\underline{H}\left(j \omega\right)\right\}}\right) + \pi &\quad \text{ if } \Re\left\{\underline{H}\left(j \omega\right)\right\} < 0 \text{ and } \Im\left\{\underline{H}\left(j \omega\right)\right\} \geq 0, \\
+				 	\arctan\left(\frac{\Im\left\{\underline{H}\left(j \omega\right)\right\}}{\Re\left\{\underline{H}\left(j \omega\right)\right\}}\right) - \pi &\quad \text{ if } \Re\left\{\underline{H}\left(j \omega\right)\right\} < 0 \text{ and } \Im\left\{\underline{H}\left(j \omega\right)\right\} < 0, \\
+				 	+\frac{\pi}{2} &\quad \text{ if } \Re\left\{\underline{H}\left(j \omega\right)\right\} = 0 \text{ and } \Im\left\{\underline{H}\left(j \omega\right)\right\} > 0, \\
+				 	-\frac{\pi}{2} &\quad \text{ if } \Re\left\{\underline{H}\left(j \omega\right)\right\} = 0 \text{ and } \Im\left\{\underline{H}\left(j \omega\right)\right\} < 0, \\
+				 	\text{undefined} &\quad \text{ if } \Re\left\{\underline{H}\left(j \omega\right)\right\} = 0 \text{ and } \Im\left\{\underline{H}\left(j \omega\right)\right\} = 0. \\
+				 \end{cases} \\
+				 &= \arctan\left(\frac{\Im\left\{\underline{H}\left(j \omega\right)\right\}}{\Re\left\{\underline{H}\left(j \omega\right)\right\}}\right)
+			\end{split}
+		\end{equation*}
+		
+		\task
+		\begin{equation*}
+			\underline{U}_i\left(j \omega\right) = \mathcal{F}\left\{u_i(t)\right\} = \SI{2}{V} \pi \left(\delta\left(\omega - 2 \pi \cdot \SI{2.5}{kHz}\right) + \delta\left(\omega + 2 \pi \cdot \SI{2.5}{kHz}\right)\right)
+		\end{equation*}
+		\begin{equation*}
+			\begin{split}
+				\underline{U}_i\left(j \omega\right) &= \underline{H}\left(j \omega\right) \underline{U}_i\left(j \omega\right) \\
+				 &= \SI{2}{V} \pi \left(\underline{H}\left(j \left(2 \pi \cdot \SI{2.5}{kHz}\right)\right) \delta\left(\omega - 2 \pi \cdot \SI{2.5}{kHz}\right) \right. + \\ &\qquad \left. \underline{H}\left(-j \left(2 \pi \cdot \SI{2.5}{kHz}\right)\right) \delta\left(\omega + 2 \pi \cdot \SI{2.5}{kHz}\right)\right) \\
+				 &= \SI{2}{V} \pi \left(0.594 \cdot e^{j \SI{53.6}{\degree}} \cdot \delta\left(\omega - 2 \pi \cdot \SI{2.5}{kHz}\right) \right. + \\ &\qquad \left. 0.594 \cdot e^{-j \SI{53.6}{\degree}} \cdot \delta\left(\omega + 2 \pi \cdot \SI{2.5}{kHz}\right)\right) \\
+				 &= \SI{1.19}{V} \pi \left(e^{j \SI{53.6}{\degree}} \cdot \delta\left(\omega - 2 \pi \cdot \SI{2.5}{kHz}\right) + e^{-j \SI{53.6}{\degree}} \cdot \delta\left(\omega + 2 \pi \cdot \SI{2.5}{kHz}\right)\right)
+			\end{split}
+		\end{equation*}
+		Using the time-shift theorem:
+		\begin{equation*}
+			u_o(t) = \mathcal{F}^{-1}\left\{\underline{U}_i\left(j \omega\right)\right\} = \SI{1.19}{V} \cdot \cos\left(2 \pi \cdot \SI{2.5}{kHz} \cdot t - \SI{53.6}{\degree}\right)
+		\end{equation*}
+		The signal has been attenuated and phase-shifted.
 		
 		%TODO
 	\end{tasks}
