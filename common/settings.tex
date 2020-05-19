@@ -15,7 +15,7 @@
 % Language and fonts
 \usepackage[UKenglish]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage[OT2,T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{microtype}
 \usepackage{array}
@@ -121,6 +121,10 @@
 \addto\extrasenglish{\sisetup{output-decimal-marker={.}}}
 \addto\extrasngerman{\sisetup{range-phrase={ bis~}}} 
 \addto\extrasenglish{\sisetup{range-phrase={ to~}}}
+
+% Cyrillic
+\DeclareSymbolFont{cyrletters}{OT2}{wncyr}{m}{n}
+\DeclareMathSymbol{\Sha}{\mathalpha}{cyrletters}{"58}
 
 % Custom symbols
 %\newcommand{\vect}[1]{\boldsymbol{\vec{\mathbf{#1}}}}
