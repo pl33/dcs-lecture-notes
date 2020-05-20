@@ -13,12 +13,12 @@
 			height={0.25\textheight},
 			width=0.6\linewidth,
 			scale only axis,
-			xlabel={$t$ or $n$, respectively},
+			xlabel={$t$},
 			ylabel={$x$},
 			%grid style={line width=.6pt, color=lightgray},
 			%grid=both,
 			grid=none,
-			legend pos=north east,
+			legend pos=north west,
 			axis y line=middle,
 			axis x line=middle,
 			every axis x label/.style={
@@ -34,9 +34,14 @@
 			%ymin=0,
 			%ymax=3,
 			%xtick={0, 1, ..., 6},
-			%ytick={0, 0.5, ..., 2.5}
+			%ytick={0, 0.5, ..., 2.5},
+			xmin=0,
+			xmax=6.5,
+			xtick={0, 1, ..., 6},
+			xticklabels={$0$, $T_S$, $2 T_S$, $3 T_S$, $4 T_S$, $5 T_S$, $6 T_S$},
 		]
 			\addplot[smooth, blue, dashed] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
+			\addlegendentry{$\underline{x}{t}$};
 			\addplot[red, thick] coordinates {(0, 0) (0, 1.1)};
 			\addplot[red, thick] coordinates {(1, 0) (1, 1.8)};
 			\addplot[red, thick] coordinates {(2, 0) (2, 2.1)};
@@ -45,6 +50,7 @@
 			\addplot[red, thick] coordinates {(5, 0) (5, 1.7)};
 			\addplot[red, thick] coordinates {(6, 0) (6, 2.4)};
 			\addplot[only marks, red, thick, mark=o] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
+			\addlegendentry{$\underline{x}_S{t}$};
 		\end{axis}
 	\end{tikzpicture}
 	\caption{Sampling of a time-continuous signal}
@@ -72,78 +78,109 @@ Sampling parameters:
 	\begin{equation}
 		f_S = \frac{1}{T_S}
 	\end{equation}
+	\item The \index{sampling angular frequency} \textbf{sampling angular frequency} $\omega_S$.
+	\begin{equation}
+		\omega_S = \frac{2 \pi}{T_S}
+	\end{equation}
 \end{itemize}
 
 Ideal sampling:
 \begin{itemize}
-	\item The samples are truly equidistant. The sampling period $T_S$ is constant and is \underline{not} subject to fluctuations.
-	\item The sample is the value of the original signal $\underline{x}(t)$ at \underline{exactly} the time instance where has been taken.
+	\item The samples are ideally equidistant. The sampling period $T_S$ is constant and is \underline{not} subject to fluctuations.
+	\item The sample has the value of the original signal $\underline{x}(t)$ at \underline{exactly} the time instance where has been taken.
 \end{itemize}
 Some corollaries can be deducted from these two points:
 \begin{itemize}
-	\item The sampled signal at the discrete time $n$ is the value of the original signal at time $t = n T_S$: $\underline{x}[n] = \underline{x}\left(n T_S\right)$
-	\item The sampled signal consists of a chain of indefinitely narrow pulses.
+	\item The sampled signal $\underline{x}_S(n T_S)$ at the discrete time $n$ is the value of the original signal at time $t = n T_S$.
+	\begin{equation}
+		\underline{x}[n] = \underline{x}\left(n T_S\right)
+	\end{equation}
+	\item The sampled signal $\underline{x}_S(t)$ consists of a chain of equidistant, indefinitely narrow pulses.
 	\begin{itemize}
 		\item The pulses are equidistant with $T_S$.
 		\item The pulses have the value of $\underline{x}\left(n T_S\right)$ as their amplitudes.
+		\item The value of the sampled signal is zero in between the pulses.
+		\begin{equation}
+			\underline{x}_S(t) = \begin{cases}
+				\underline{x}\left(n T_S\right) & \quad \forall \; t = n T_S, n \in \mathbb{Z}, \\
+				0 & \quad \forall \; n T_S < t < \left(n+1\right) T_S, n \in \mathbb{Z}.
+			\end{cases}
+		\end{equation}
 	\end{itemize}
 \end{itemize}
 
-\begin{proof}{}
-	We know already indefinitely narrow pulses. They are Dirac delta functions $\delta\left(t - n T_S\right)$.
-	
-	Taking out \underline{exactly one} sample out of $\underline{x}(t)$ is a convolution of $\underline{x}(t)$ with $\delta(t)$.
-	\begin{equation}
-		\begin{split}
-			\underline{x}[n] &= \underline{x}(t) * \delta(t) \\
-			 &= \int\limits_{-\infty}^{\infty} \underline{x}(t) \cdot \delta\left(n T_S - t\right) \, \mathrm{d} t \\
-			 & \text{$\delta(t)$ is symmetric} \\
-			 &= \int\limits_{-\infty}^{\infty} \underline{x}(t) \cdot \delta\left(t - n T_S\right) \, \mathrm{d} t \\
-			 &= \underline{x}\left(n T_S\right)
-		\end{split}
-		\label{eq:ch04:one_sample}
-	\end{equation}
-	
-	\begin{figure}[H]
-		\centering
-		\begin{tikzpicture}
-			\begin{axis}[
-				height={0.25\textheight},
-				width=0.6\linewidth,
-				scale only axis,
-				xlabel={$t$ or $n$, respectively},
-				ylabel={$x$},
-				%grid style={line width=.6pt, color=lightgray},
-				%grid=both,
-				grid=none,
-				legend pos=north east,
-				axis y line=middle,
-				axis x line=middle,
-				every axis x label/.style={
-					at={(ticklabel* cs:1.05)},
-					anchor=north,
-				},
-				every axis y label/.style={
-					at={(ticklabel* cs:1.05)},
-					anchor=east,
-				},
-				%xmin=0,
-				%xmax=7,
-				%ymin=0,
-				%ymax=3,
-				%xtick={0, 1, ..., 6},
-				%ytick={0, 0.5, ..., 2.5}
-			]
-				\addplot[smooth, blue, dashed] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
-				\addplot[red, thick] coordinates {(2, 0) (2, 2.1)};
-				\addplot[only marks, red, thick, mark=o] coordinates {(2, 2.1)};
-			\end{axis}
-		\end{tikzpicture}
-		\caption{Taking out exactly one sample out of $\underline{x}(t)$}
-	\end{figure}
-\end{proof}
+We know already indefinitely narrow pulses. They are Dirac delta functions $\delta\left(t - n T_S\right)$.
 
-These Dirac pulses are repeated with a period of $T_S$ and form a \index{Dirac comb} \textbf{Dirac comb} $\Sha_{T_S}(t)$ -- also called \index{impulse train} \textbf{impulse train}.
+Taking out \underline{exactly one} sample out of $\underline{x}(t)$ is a multiplication of $\underline{x}(t)$ with $\delta\left(t - n T_S\right)$.
+\begin{equation}
+	\underline{x}_{S,n}(t) = \underline{x}(t) \delta\left(t - n T_S\right)
+	\label{eq:ch4:one_sample_1}
+\end{equation}
+The Dirac delta function is zero expect at $t = n T_S$. So, \eqref{eq:ch4:one_sample_1} can be further reduced.
+\begin{equation}
+	\underline{x}_{S,n}(t) = \underline{x}(n T_S) \delta\left(t - n T_S\right)
+	\label{eq:ch4:one_sample_2}
+\end{equation}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north west,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			%xmin=0,
+			%xmax=7,
+			%ymin=0,
+			%ymax=3,
+			%xtick={0, 1, ..., 6},
+			%ytick={0, 0.5, ..., 2.5},
+			xmin=0,
+			xmax=6.5,
+			xtick={0, 1, ..., 6},
+			xticklabels={$0$, $T_S$, $2 T_S$, $3 T_S$, $4 T_S$, $5 T_S$, $6 T_S$},
+		]
+			\addplot[smooth, blue, dashed] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
+			\addlegendentry{$\underline{x}{t}$};
+			\addplot[red, thick] coordinates {(2, 0) (2, 2.1)};
+			\addplot[only marks, red, thick, mark=o] coordinates {(2, 2.1)};
+			\addlegendentry{$\underline{x}_{S,n}{t}$};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[Taking out exactly one sample out of $\underline{x}(t)$]{Taking out exactly one sample out of $\underline{x}(t)$ -- in this example $n = 2$.}
+\end{figure}
+
+To obtain the sampled signal, the sampling process $\underline{x}_{S,n}(t)$ \eqref{eq:ch4:one_sample_1} needs to be repeated for each $n \in \mathbb{Z}$. All individual sample processes $\underline{x}_{S,n}(t)$ are then superimposed to form the complete sampled signal $\underline{x}_S(t)$.
+\begin{equation}
+	\begin{split}
+		\underline{x}_S(t) &= \sum\limits_{n = -\infty}^{\infty} \underline{x}_{S,n}(t) \\
+		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(t\right) \delta\left(t - n T_S\right) \\
+		 &= \underline{x}\left(t\right) \cdot \underbrace{\sum\limits_{n = -\infty}^{\infty} \delta\left(t - n T_S\right)}_{= \Sha_{T_S}(t)}
+	\end{split}
+\end{equation}
+
+The sum of Dirac delta functions
+\begin{itemize}
+	\item forms a series of equidistant pulses repeating at a period of $T_S$,
+	\item is called \index{Dirac comb} \textbf{Dirac comb} $\Sha_{T_S}(t)$ or \index{impulse train} \textbf{impulse train}.
+\end{itemize}
+
 \begin{equation}
 	\Sha_{T_S}(t) = \sum\limits_{n = -\infty}^{\infty} \delta\left(t - n T_S\right)
 \end{equation}
@@ -191,10 +228,23 @@ These Dirac pulses are repeated with a period of $T_S$ and form a \index{Dirac c
 A \index{sampler} \textbf{sampler} is a system which
 \begin{itemize}
 	\item applies the Dirac comb $\Sha_{T_S}(t)$
-	\item to a time-continuous signal $\underline{x}(t)$ and
-	\item output a series of equidistant pulses $\underline{x}_S(t)$.
+	\item to a time-continuous signal $\underline{x}(t)$ (multiplication) and
+	\item outputs a series of equidistant pulses $\underline{x}_S(t)$.
 \end{itemize}
-The chain of pulses can then be reinterpreted as a time-discrete signal $\underline{x}[n]$.
+\begin{equation}
+	\begin{split}
+		\underline{x}_S(t) &= \underline{x}(t) \cdot \Sha_{T_S}(t) \\
+		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(t\right) \delta\left(t - n T_S\right) \\
+		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(n T_S\right) \delta\left(t - n T_S\right)
+	\end{split}
+	\label{eq:ch04:ideal_sampling}
+\end{equation}
+
+The sampled signal $\underline{x}_S(t)$ is a chain of pulses (red signal in Figure \ref{fig:ch04:sampling_of_signal}). The chain of pulses can then be reinterpreted as a time-discrete signal $\underline{x}[n]$. The value of $\underline{x}[n]$ is:
+\begin{equation}
+	\underline{x}[n] = \underline{x}_S\left(n T_S\right) = \underline{x}\left(n T_S\right) \qquad \forall \; n \in \mathbb{Z}
+	\label{eq:ch04:sample_value}
+\end{equation}
 
 \begin{figure}[H]
 	\centering
@@ -215,13 +265,6 @@ The chain of pulses can then be reinterpreted as a time-discrete signal $\underl
 	\caption{An abstract view on sampling}
 \end{figure}
 
-The ideal sampler multiplies the time-continuous signal $\underline{x}(t)$ with the Dirac comb $\Sha_{T_S}(t)$ in order to obtain the sampled signal $\underline{x}_S(t)$.
-\begin{equation}
-	\underline{x}_S(t) = \underline{x}(t) \cdot \Sha_{T_S}(t) = \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(n T_S\right) \delta\left(t - n T_S\right)
-	\label{eq:ch04:ideal_sampling}
-\end{equation}
-In Figure \ref{fig:ch04:sampling_of_signal}, the chain of pulses is red.
-
 \begin{fact}
 	The act of sampling is irreversible.
 \end{fact}
@@ -230,18 +273,25 @@ There is a way to obtain the sampled signal:
 \begin{equation*}
 	\underline{x}_S(t) = \mathrm{Sampling} \left(\underline{x}(t)\right)
 \end{equation*}
-But there is no way back to reconstruct the original signal. $\mathrm{Sampling}^{-1} \left(\underline{x}_S(t)\right)$ does not exist.
+But there is generally no way back to reconstruct the original signal. $\mathrm{Sampling}^{-1} \left(\underline{x}_S(t)\right)$ does not exist.
+\begin{equation*}
+	\underline{x}(t) \neq \underbrace{\mathrm{Sampling}^{-1}}_{\text{Does not exist}} \left(\underline{x}_S(t)\right)
+\end{equation*}
 
-Sampling is always lossy.
+Sampling is always lossy in general.
+
+\subsection{Sampling Theorem and Aliasing}
+
 
 \subsection{Discrete-Time Fourier Transform}
 
 % TODO
-Using \eqref{eq:ch04:ideal_sampling} and \eqref{eq:ch04:one_sample}, a expression depending on the time-discrete signal $\underline{x}[n]$ can be formulated:
+Using \eqref{eq:ch04:ideal_sampling} and \eqref{eq:ch04:sample_value}, a expression depending on the time-discrete signal $\underline{x}[n]$ can be formulated:
 \begin{equation}
 	\underline{x}_S(t) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S)
 \end{equation}
 
+The Fourier transform of the sampled signal $\underline{x}_S(t)$ is:
 \begin{equation}
 	\begin{split}
 		\underline{X}_S \left(j \omega\right) &= \mathcal{F} \left\{\underline{x}_S(t)\right\} \\
@@ -256,8 +306,6 @@ Redefining $\phi = T_S \omega$:
 \begin{equation}
 	\underline{X}_S \left(j \omega\right) = \underline{X} \left(e^{j \phi}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \phi n}
 \end{equation}
-
-\subsection{Sampling Theorem and Aliasing}
 
 \subsection{Discrete Fourier Transform}
 
