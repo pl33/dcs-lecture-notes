@@ -778,15 +778,87 @@ The Fourier transform of the sampled signal $\underline{x}_S(t)$ is:
 		\underline{X}_S \left(j \omega\right) &= \mathcal{F} \left\{\underline{x}_S(t)\right\} \\
 		 &= \mathcal{F} \left\{\sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S)\right\} \\
 		 &= \int\limits_{t = -\infty}^{\infty} \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S) \cdot e^{-j \omega t} \, \mathrm{d} t \\
-		 &= \sum\limits_{n = -\infty}^{\infty} \int\limits_{t = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S) \cdot e^{-j \omega t} \, \mathrm{d} t \\
+		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \int\limits_{t = -\infty}^{\infty} \cdot \delta(t - n T_S) \cdot e^{-j \omega t} \, \mathrm{d} t \\
+		 &\qquad \text{Using the Dirac measure:} \\
 		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \omega n T_S}
 	\end{split}
 \end{equation}
 
 Redefining $\phi = T_S \omega$:
 \begin{equation}
-	\underline{X}_S \left(j \omega\right) = \underline{X} \left(e^{j \phi}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \phi n}
+	\underline{X}_S \left(j \omega\right) = \underline{X}_{2 \pi} \left(e^{j \phi}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \phi n}
 \end{equation}
+
+$\underline{X}_{2 \pi} \left(e^{j \phi}\right)$ is the discrete-time Fourier transform of the time-discrete, sampled signal $\underline{x}[n]$.
+\begin{itemize}
+	\item The spectrum of the sampled signal $\underline{x}[n]$ is $\omega_S$-periodic.
+	\item The real-valued frequency-continuous variable $\omega$ is replaced by the complex-valued frequency-continuous variable $e^{j \phi}$ representing the periodicity of the spectrum.
+	\item $\phi = T_S \omega$
+	\item The $\omega_S$-periodicity is equivalent to to a full $2\pi$-rotation on the unit circle $e^{j \phi}$ in the complex plane.
+\end{itemize}
+
+\begin{definition}{Discrete-time Fourier transform}
+	The \index{discrete-time Fourier transform} \textbf{\acf{DTFT}} of a time-discrete signal $\underline{x}[n]$ with the sampling period $T_S$ is:
+	\begin{itemize}
+		\item Using the $T$-periodicity:
+		\begin{equation}
+			\underline{X}_{\frac{1}{T}} \left(e^{j T \omega}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j T \omega n}
+		\end{equation}
+		\item Using the $2 \pi$-periodicity:
+		\begin{equation}
+			\underline{X}_{2 \pi} \left(e^{j \phi}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \phi n}
+		\end{equation}
+	\end{itemize}
+	Both expressions are equivalent. $\phi = T_S \omega$
+	
+	The \index{discrete-time Fourier transform!inverse} \textbf{inverse discrete-time Fourier transform} of a time-discrete signal $\underline{x}[n]$ with the sampling period $T_S$ is:
+	\begin{itemize}
+		\item Using the $T$-periodicity: \todo{$T$ ???}
+		\begin{equation}
+			\underline{x}[n] = \frac{T}{2 \pi} \int\limits_{- \frac{\pi}{T}}^{+ \frac{\pi}{T}} \underline{X}_{\frac{1}{T}}(e^{j T \omega}) \cdot e^{+ j \omega T n} \, \mathrm{d} \omega
+		\end{equation}
+		\item Using the $2 \pi$-periodicity:
+		\begin{equation}
+			\underline{x}[n] = \frac{1}{2 \pi} \int\limits_{- \pi}^{+ \pi} \underline{X}_{2\pi}(e^{j \phi}) \cdot e^{+ j \phi n} \, \mathrm{d} \phi
+		\end{equation}
+	\end{itemize}
+	Both expressions are equivalent.
+\end{definition}
+
+\begin{excursus}{z-Transform}
+	Analogous to the Fourier and Laplace transform, the \acf{DTFT} is a special case of the z-transform. The \index{z-transform} \textbf{z-transform} is:
+	\begin{equation}
+		\underline{X}\left(\underline{z}\right) = \mathcal{Z}\left\{\underline{x}[n]\right\} = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \underline{z}^{-n}
+	\end{equation}
+	$\underline{z}$ is the complex frequency variable, which can be decomposed into:
+	\begin{equation}
+		\underline{z} = A e^{j \phi}
+	\end{equation}
+	where $A$ represents the gain and $e^{j \phi}$ the frequency.
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\draw[->] (-2.2,0) -- (2.2,0) node[below, align=left]{$\Re\left\{\underline{z}\right\}$};
+			\draw[->] (0,-2.2) -- (0,2.2) node[left, align=right]{$\Im\left\{\underline{z}\right\}$};
+			%\draw (0:1) arc(0:360:1);
+			\draw (1,0.2) -- (1,-0.2) node[below]{$1$};
+			\draw (-1,0.2) -- (-1,-0.2) node[below]{$-1$};
+			\draw (0.2,1) -- (-0.2,1) node[left]{$1$};
+			\draw (0.2,-1) -- (-0.2,-1) node[left]{$-1$};
+			
+			\draw[thick, red] (0:1) arc(0:360:1);
+			\draw[dashed, red] (60:1) -- (45:1.5) node[right, align=left, color=red]{$e^{j \phi}$};
+		\end{tikzpicture}
+		\caption{Complex plane of the complex frequency variable $\underline{z}$}
+		\label{fig:ch04:ztrafo_z_cmplx_plane}
+	\end{figure}
+	
+	In the \acf{DTFT}, $A = 1$ as a special case. The remainig $e^{j \phi}$ describes the unit circle in the complex plane. Like the Fourier transform, it assumes a steady-state, whereas the z-transform delivers a complete description of a time-discrete system. The z-transform is preferred for transient analysis of a time-discrete system. Its zeros $\underline{z}_0$ and poles $\underline{z}_\infty$ determine the stability of the system.
+	
+	\vspace{0.5em}
+	
+	Figure \ref{fig:ch04:ztrafo_z_cmplx_plane} makes evident the $2 \pi$-periodicity of both the \ac{DTFT} and z-transform. The frequency $e^{j \phi}$ repeats every $2 \pi$.
+\end{excursus}
 
 \subsection{Discrete Fourier Transform}
 
