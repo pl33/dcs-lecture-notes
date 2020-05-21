@@ -109,6 +109,8 @@ Some corollaries can be deducted from these two points:
 	\end{itemize}
 \end{itemize}
 
+\subsubsection{Dirac comb}
+
 We know already indefinitely narrow pulses. They are Dirac delta functions $\delta\left(t - n T_S\right)$.
 
 Taking out \underline{exactly one} sample out of $\underline{x}(t)$ is a multiplication of $\underline{x}(t)$ with $\delta\left(t - n T_S\right)$.
@@ -181,49 +183,63 @@ The sum of Dirac delta functions
 	\item is called \index{Dirac comb} \textbf{Dirac comb} $\Sha_{T_S}(t)$ or \index{impulse train} \textbf{impulse train}.
 \end{itemize}
 
-\begin{equation}
-	\Sha_{T_S}(t) = \sum\limits_{n = -\infty}^{\infty} \delta\left(t - n T_S\right)
-\end{equation}
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}
-		\begin{axis}[
-			height={0.15\textheight},
-			width=0.9\linewidth,
-			scale only axis,
-			xlabel={$t$},
-			ylabel={$\Sha_{T_S}(t)$},
-			%grid style={line width=.6pt, color=lightgray},
-			%grid=both,
-			grid=none,
-			legend pos=north east,
-			axis y line=middle,
-			axis x line=middle,
-			every axis x label/.style={
-				at={(ticklabel* cs:1.05)},
-				anchor=north,
-			},
-			every axis y label/.style={
-				at={(ticklabel* cs:1.05)},
-				anchor=east,
-			},
-			xmin=-5.5,
-			xmax=5.5,
-			ymin=0,
-			ymax=1.2,
-			xtick={-5, -4, ..., 5},
-			xticklabels={$-5 T_S$, $-4 T_S$, $-3 T_S$, $-2 T_S$, $- T_S$, $0$, $T_S$, $2 T_S$, $3 T_S$, $4 T_S$, $5 T_S$},
-			ytick={0},
-		]
-			\pgfplotsinvokeforeach{-5, -4, ..., 5}{
-				\draw[-latex, blue, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
-				%\addplot[blue, very thick] coordinates {(#1, 0) (#1, 1)};
-				%\addplot[only marks, blue, thick, mark=triangle] coordinates {(#1, 1)};
-			}
-		\end{axis}
-	\end{tikzpicture}
-	\caption{Dirac comb}
-\end{figure}
+\begin{definition}{Dirac comb}
+	The \index{Dirac comb} \textbf{Dirac comb} $\Sha_{T}(t)$ or \index{impulse train} \textbf{impulse train} is:
+	\begin{equation}
+		\Sha_{T}(t) = \sum\limits_{n = -\infty}^{\infty} \delta\left(t - n T\right)
+		\label{eq:ch04:dirac_comb}
+	\end{equation}
+	$T$ is the period of the equidistant Dirac pulses.
+	
+	It is a periodic signal and can be decomposed using the Fourier analysis:
+	\begin{equation}
+		\Sha_{T}(t) = \frac{1}{T} \sum\limits_{n = -\infty}^{\infty} e^{j n \frac{2 \pi}{T} t}
+		\label{eq:ch04:dirac_comb_fourier_series}
+	\end{equation}
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$t$},
+				ylabel={$\Sha_{T_S}(t)$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-5.5,
+				xmax=5.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-5, -4, ..., 5},
+				xticklabels={$-5 T_S$, $-4 T_S$, $-3 T_S$, $-2 T_S$, $- T_S$, $0$, $T_S$, $2 T_S$, $3 T_S$, $4 T_S$, $5 T_S$},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{-5, -4, ..., 5}{
+					\draw[-latex, blue, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+					%\addplot[blue, very thick] coordinates {(#1, 0) (#1, 1)};
+					%\addplot[only marks, blue, thick, mark=triangle] coordinates {(#1, 1)};
+				}
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Dirac comb}
+	\end{figure}
+\end{definition}
+
+\subsubsection{Ideal Sampler}
 
 A \index{sampler} \textbf{sampler} is a system which
 \begin{itemize}
@@ -231,14 +247,18 @@ A \index{sampler} \textbf{sampler} is a system which
 	\item to a time-continuous signal $\underline{x}(t)$ (multiplication) and
 	\item outputs a series of equidistant pulses $\underline{x}_S(t)$.
 \end{itemize}
-\begin{equation}
-	\begin{split}
-		\underline{x}_S(t) &= \underline{x}(t) \cdot \Sha_{T_S}(t) \\
-		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(t\right) \delta\left(t - n T_S\right) \\
-		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(n T_S\right) \delta\left(t - n T_S\right)
-	\end{split}
-	\label{eq:ch04:ideal_sampling}
-\end{equation}
+
+\begin{definition}{Ideally sampled signal}
+	An ideally \index{sampled signal} sampled signal is:
+	\begin{equation}
+		\begin{split}
+			\underline{x}_S(t) &= \underline{x}(t) \cdot \Sha_{T_S}(t) \\
+			 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(t\right) \delta\left(t - n T_S\right) \\
+			 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(n T_S\right) \delta\left(t - n T_S\right)
+		\end{split}
+		\label{eq:ch04:ideal_sampling}
+	\end{equation}
+\end{definition}
 
 The sampled signal $\underline{x}_S(t)$ is a chain of pulses (red signal in Figure \ref{fig:ch04:sampling_of_signal}). The chain of pulses can then be reinterpreted as a time-discrete signal $\underline{x}[n]$. The value of $\underline{x}[n]$ is:
 \begin{equation}
@@ -265,6 +285,8 @@ The sampled signal $\underline{x}_S(t)$ is a chain of pulses (red signal in Figu
 	\caption{An abstract view on sampling}
 \end{figure}
 
+\subsubsection{Irreversibility of Sampling}
+
 \begin{fact}
 	The act of sampling is irreversible.
 \end{fact}
@@ -280,8 +302,467 @@ But there is generally no way back to reconstruct the original signal. $\mathrm{
 
 Sampling is always lossy in general.
 
-\subsection{Sampling Theorem and Aliasing}
+\subsection{Sampling Theorem, Aliasing and Reconstruction}
 
+\subsubsection{Frequency Domain Representation}
+
+\begin{excursus}{Fourier transform of the Dirac comb}
+	The Fourier transform of the Dirac comb is again a Dirac comb:
+	\begin{equation}
+		\begin{split}
+			\Sha_{T}(t) \TransformHoriz \mathcal{F}\left\{\Sha_{T}(t)\right\} &= \frac{2 \pi}{T} \Sha_{\frac{2 \pi}{T}}(\omega) \\
+			 &= \frac{2 \pi}{T} \sum\limits_{k = -\infty}^{\infty} \delta\left(\omega - k \frac{2 \pi}{T}\right) \\
+			 &= \sum\limits_{k = -\infty}^{\infty} e^{- j \omega k T}
+		\end{split}
+		\label{eq:ch04:dirac_comb_fourier_tranform}
+	\end{equation}
+\end{excursus}
+
+\eqref{eq:ch04:ideal_sampling} pointed out, that the sampled signal $\underline{x}_S(t)$ is the multiplication of the original time-domain signal $\underline{x}(t)$ and the Dirac comb $\Sha_{T_S}(t)$ with a periodicity of the sampling period $T_S$.
+\begin{equation}
+	\begin{split}
+		\underline{x}_S(t) &= \underline{x}(t) \cdot \Sha_{T_S}(t) \\
+		 &= \underline{x}(t) \cdot \frac{1}{T_S} \sum\limits_{n = -\infty}^{\infty} e^{j n \frac{2 \pi}{T_S} t} \\
+		 &= \frac{1}{T_S} \sum\limits_{n = -\infty}^{\infty} \underbrace{\underline{x}(t) e^{j n \frac{2 \pi}{T_S} t}}_{\text{Frequency shift by } n \frac{2 \pi}{T_S}} \\
+	\end{split}
+\end{equation}
+
+The ideally sampled signal $\underline{x}_S(t)$ can be expressed as a sum of \emph{frequency shifts} of the original signal $\underline{x}(t)$. Its Fourier transform is:
+\begin{equation}
+	\begin{split}
+		\underline{X}_S\left(j \omega\right) &= \mathcal{F}\left\{\frac{1}{T_S} \sum\limits_{k = -\infty}^{\infty} \underline{x}(t) e^{j k \frac{2 \pi}{T_S} t}\right\} \\
+		 & \qquad \text{Using the linearity of the Fourier transform:} \\
+		 &= \frac{1}{T_S} \sum\limits_{k = -\infty}^{\infty} \mathcal{F}\left\{\underline{x}(t) e^{j k \frac{2 \pi}{T_S} t}\right\} \\
+		 & \qquad \text{Using the frequency shift theorem of the Fourier transform:} \\
+		 &= \frac{1}{T_S} \sum\limits_{k = -\infty}^{\infty} \underline{X}\left(j \left(\omega - k \frac{2 \pi}{T_S} \right)\right)
+	\end{split}
+\end{equation}
+
+\begin{proof}{}
+	An alternative way is using the Fourier transform of this multiplication in the time-domain is a convolution in the frequency domain:
+	\begin{equation}
+		\begin{split}
+			\underline{X}_S\left(j \omega\right) &= \mathcal{F}\left\{\underline{x}(t) \cdot \Sha_{T_S}(t)\right\} \\
+			 &= \frac{1}{2 \pi} \underline{X}\left(j \omega\right) * \left(\frac{2 \pi}{T_S} \Sha_{\frac{2 \pi}{T_S}}(\omega)\right) \\
+			 &= \frac{1}{T_S} \int\limits_{-\infty}^{\infty} \underline{X}\left(j \left(\omega - \zeta\right)\right) \Sha_{\frac{2 \pi}{T_S}}\left(\zeta\right) \, \mathrm{d} \zeta \\
+			 &= \frac{1}{T_S} \int\limits_{-\infty}^{\infty} \underline{X}\left(j \left(\omega - \zeta\right)\right) \sum\limits_{k = -\infty}^{\infty} \delta\left(\zeta - k \frac{2 \pi}{T_S}\right) \, \mathrm{d} \zeta \\
+			 &= \frac{1}{T_S} \sum\limits_{k = -\infty}^{\infty} \int\limits_{-\infty}^{\infty} \underline{X}\left(j \left(\omega - \zeta\right)\right) \delta\left(\zeta - k \frac{2 \pi}{T_S}\right) \, \mathrm{d} \zeta \\
+			 & \qquad \text{Using the Dirac measure:} \\
+			 &= \frac{1}{T_S} \sum\limits_{k = -\infty}^{\infty} \underline{X}\left(j \left(\omega - k \frac{2 \pi}{T_S}\right)\right) \\
+		\end{split}
+	\end{equation}
+\end{proof}
+
+\textbf{Conclusion:} The spectrum of the sampled signal $\underline{X}_S\left(j \omega\right)$
+\begin{itemize}
+	\item consists of superimposed, frequency-shifted copies of the spectra of the original signal $\underline{X}\left(j\omega\right)$ and
+	\item the periodicity of the superimposed, frequency-shifted copies is the sampling angular frequency $\omega_S = \frac{2 \pi}{T_S}$ or sampling frequency $f_S$, respectively,
+	\item each frequency-shifted copy starts at $k \omega_S - \frac{\omega_S}{2}$ and ends at $k \omega_S + \frac{\omega_S}{2}$.
+\end{itemize}
+
+\begin{figure}[H]
+	\subfloat[Original signal $\underline{X}\left(j\omega\right)$] {
+		\centering
+		\begin{tikzpicture}
+				\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-1, -0.5, 0, 0.5, 1},
+				xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				ytick={0},
+			]
+				\draw[green, thick] (axis cs:-0.4,0) -- (axis cs:0,0.7);
+				\draw[red, thick] (axis cs:0,0.7) -- (axis cs:0.4,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Spectrum of the Dirac comb $\frac{2 \pi}{T} \Sha_{\frac{2 \pi}{T}}(\omega)$] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$t$},
+				ylabel={$|\frac{2 \pi}{T} \Sha_{\frac{2 \pi}{T}}(\omega)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-3, -2, ..., 3},
+				xticklabels={$-3 \omega_S$, $-2 \omega_S$, $- \omega_S$, $0$, $\omega_S$, $2 \omega_S$, $3 \omega_S$},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{-3, -2, ..., 3}{
+					\draw[-latex, blue, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Sampled signal $\underline{X}_S\left(j\omega\right)$] {
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.15\textheight},
+			width=0.9\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$|\underline{X}_S\left(j\omega\right)|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-3.5,
+			xmax=3.5,
+			ymin=0,
+			ymax=1.2,
+			xtick={-3, -2, -1, -0.5, 0, 0.5, 1, 2, 3},
+			xticklabels={$-3 \omega_S$, $-2 \omega_S$, $- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$, $2 \omega_S$, $3 \omega_S$},
+			ytick={0},
+		]
+			\pgfplotsinvokeforeach{-3, -2, ..., 3}{
+				\draw[-latex, blue, dashed, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+				\draw[green, thick] (axis cs:{#1-0.4},0) -- (axis cs:#1,0.7);
+				\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.4},0);
+			}
+		\end{axis}
+	\end{tikzpicture}
+	}
+
+	\caption{Spectrum of the sampled signal}
+\end{figure}
+
+\begin{attention}
+	The spectrum of the original signal $\underline{X}\left(j\omega\right)$ has both negative and positive frequencies. Remember that the symmetry rules apply \underline{only} for real-valued time-domain signals.
+\end{attention}
+
+\subsubsection{Aliasing}
+
+The original signal in the previous example was limited to $- \frac{\omega_S}{2} \leq \omega \leq \frac{\omega_S}{2}$. The spectrum sampled signal consists of the frequency-shifted copies of the original signal's spectrum. Although they are superimposed, they do not overlap.
+
+A problem arises when the original signal is \underline{not} limited to $- \frac{\omega_S}{2} \leq \omega \leq \frac{\omega_S}{2}$. The original signal's spectrum will overlap.
+
+\begin{figure}[H]
+	\subfloat[Original signal $\underline{X}\left(j\omega\right)$ violating the band-limitation $- \frac{\omega_S}{2} \leq \omega \leq \frac{\omega_S}{2}$. The original signal's spectrum will overlap.
+	] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-3, -2, -1, -0.5, 0, 0.5, 1, 2, 3},
+				xticklabels={$-3 \omega_S$, $-2 \omega_S$, $- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$, $2 \omega_S$, $3 \omega_S$},
+				ytick={0},
+			]
+				\draw[green, thick] (axis cs:-0.7,0) -- (axis cs:0,0.7);
+				\draw[red, thick] (axis cs:0,0.7) -- (axis cs:0.8,0);
+				\draw[olive, thick] (axis cs:2.1,0) -- (axis cs:2.1,0.5) -- (axis cs:2.3,0.5) -- (axis cs:2.3,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Spectrum of the Dirac comb $\frac{2 \pi}{T} \Sha_{\frac{2 \pi}{T}}(\omega)$] {
+		\centering
+		\begin{tikzpicture}
+		\begin{axis}[
+		height={0.15\textheight},
+		width=0.9\linewidth,
+		scale only axis,
+		xlabel={$t$},
+		ylabel={$|\frac{2 \pi}{T} \Sha_{\frac{2 \pi}{T}}(\omega)|$},
+		%grid style={line width=.6pt, color=lightgray},
+		%grid=both,
+		grid=none,
+		legend pos=north east,
+		axis y line=middle,
+		axis x line=middle,
+		every axis x label/.style={
+			at={(ticklabel* cs:1.05)},
+			anchor=north,
+		},
+		every axis y label/.style={
+			at={(ticklabel* cs:1.05)},
+			anchor=east,
+		},
+		xmin=-3.5,
+		xmax=3.5,
+		ymin=0,
+		ymax=1.2,
+		xtick={-3, -2, ..., 3},
+		xticklabels={$-3 \omega_S$, $-2 \omega_S$, $- \omega_S$, $0$, $\omega_S$, $2 \omega_S$, $3 \omega_S$},
+		ytick={0},
+		]
+		\pgfplotsinvokeforeach{-3, -2, ..., 3}{
+			\draw[-latex, blue, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+		}
+		\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Sampled signal $\underline{X}_S\left(j\omega\right)$ showing aliasing] {
+		\centering
+		\begin{tikzpicture}
+		\begin{axis}[
+		height={0.15\textheight},
+		width=0.9\linewidth,
+		scale only axis,
+		xlabel={$\omega$},
+		ylabel={$|\underline{X}_S\left(j\omega\right)|$},
+		%grid style={line width=.6pt, color=lightgray},
+		%grid=both,
+		grid=none,
+		legend pos=north east,
+		axis y line=middle,
+		axis x line=middle,
+		every axis x label/.style={
+			at={(ticklabel* cs:1.05)},
+			anchor=north,
+		},
+		every axis y label/.style={
+			at={(ticklabel* cs:1.05)},
+			anchor=east,
+		},
+		xmin=-3.5,
+		xmax=3.5,
+		ymin=0,
+		ymax=1.2,
+		xtick={-3, -2, -1, -0.5, 0, 0.5, 1, 2, 3},
+		xticklabels={$-3 \omega_S$, $-2 \omega_S$, $- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$, $2 \omega_S$, $3 \omega_S$},
+		ytick={0},
+		]
+		\pgfplotsinvokeforeach{-3, -2, ..., 3}{
+			\draw[-latex, blue, dashed, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+			\draw[green, thick] (axis cs:{#1-0.7},0) -- (axis cs:#1,0.7);
+			\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.8},0);
+			\draw[olive, thick] (axis cs:{#1+0.1},0) -- (axis cs:{#1+0.1},0.5) -- (axis cs:{#1+0.3},0.5) -- (axis cs:{#1+0.3},0);
+		}
+		\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\caption{Aliasing}
+\end{figure}
+
+The sampled signal $\underline{X}_S\left(j\omega\right)$ contains overlapping, frequency-shifted copies of the original signal's spectrum. This is not feasible for most applications.
+
+\begin{definition}{Anti-aliasing filter}
+	A signal $\underline{x}(t)$ must be band-limited by an \index{anti-aliasing filter} \textbf{anti-aliasing filter} to avoid aliasing. The anti-aliasing filter is a \ac{LPF} with the cut-off frequency $\omega_o = \frac{\omega_S}{2}$.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{adjustbox}{scale=0.7}
+			\begin{circuitikz}
+				\node[draw, block] (Sampler) {Ideal sampler};
+				\node[draw, block, right=3cm of Sampler] (ReInterp) {Reinterpret as\\ time-discrete signal};
+				
+				\draw[<-o] (Sampler.west) to[lowpass] ++(-2.5cm, 0) -- ++(-0.7cm,0) node[above, align=center]{Time-continuous\\ signal $\underline{x}(t)$};
+				\draw[->] (Sampler.east) -- (ReInterp.west) node[midway, above, align=center]{Series of pulses\\ $\underline{x}_S(t)$};
+				\draw[<-] (Sampler.south) -- ++(0, -0.75cm) node[below, align=center]{Dirac comb\\ $\Sha_{T_S}(t)$};
+				\draw[->] (ReInterp.east) -- ++(1.5cm, 0) node[above, align=center]{Time-discrete\\ signal $\underline{x}[n]$};
+				
+				\draw[dashed] (ReInterp.north) -- ++(0, 2cm) node[below left, align=right]{Time-continuous\\ domain} node[below right, align=left]{Time-discrete\\ domain};
+				\draw[dashed] (ReInterp.south) -- ++(0, -1cm);
+			\end{circuitikz}
+		\end{adjustbox}
+		\caption{An abstract view on sampling, including the anti-aliasing filter}
+	\end{figure}
+\end{definition}
+
+The anti-aliasing filter's cut-off frequency must be half of the sampling frequency, because its bandwidth $\omega_S$ or $f_S$, respectively, must be distributed equally over the negative and positive part of the frequency axis.
+
+\subsubsection{Reconstruction}
+
+\textit{Remark:} Due to aliasing, there is no inverse function $\mathrm{Sampling}^{-1} \left(\underline{x}_S(t)\right)$ reversing the sampling process.
+
+However, the original signal $\underline{x}(t)$ can be reconstructed if it was band-limited to the sampling (angular) frequency $\omega_S$ or $f_S$, respectively, before sampling.
+
+\begin{definition}{Shannon-Nyquist sampling theorem}
+	According to the \index{Shannon-Nyquist sampling theorem} \textbf{Shannon-Nyquist sampling theorem}, the original signal $\underline{x}(t)$ can be reconstructed if the sample rate $T_S$ is at least twice the inverse of signal's highest (angular) frequency $\omega_B$ or $f_B$, respectively.
+	\begin{equation}
+		T_S \geq \frac{1}{2 f_B} = \frac{\pi}{\omega_B}
+	\end{equation}
+\end{definition}
+
+The \index{reconstruction} \textbf{reconstruction} of a sampled signal is done by:
+\begin{itemize}
+	\item Reinterpreting the time-discrete signal $\underline{x}[n]$ again as a time-continuous, sampled signal $\underline{x}_S(t)$.
+	\item Removing the copies of the original signal in the frequency domain, using a \ac{LPF} (\index{reconstruction filter} \textbf{reconstruction filter}) with the cut-off frequency $\omega_o = \frac{\omega_S}{2}$.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.7}
+		\begin{circuitikz}
+			\node[draw, block, right=3cm of Sampler] (ReInterp) {Reinterpret as\\ time-continuous signal};
+			
+			\draw[<-o] (ReInterp.west) -- ++(-1.5cm, 0) node[above, align=center]{Time-discrete\\ signal $\underline{x}[n]$};
+			\draw (ReInterp.east) -- ++(3cm,0) node[midway, above, align=center]{Series of pulses\\ $\underline{x}_S(t)$}
+				to[lowpass] ++(2.5cm,0 ) -- ++(0.7cm, 0) node[above, align=center]{Reconstructed\\ time-continuous\\ signal $\underline{\tilde{x}}(t)$};
+			
+			\draw[dashed] (ReInterp.north) -- ++(0, 2cm) node[below left, align=right]{Time-discrete\\ domain} node[below right, align=left]{Time-continuous\\ domain};
+			\draw[dashed] (ReInterp.south) -- ++(0, -1cm);
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{An abstract view on reconstruction}
+\end{figure}
+
+The reconstructed signal $\underline{\tilde{x}}(t)$ equals the original signal $\underline{x}(t)$ only if the Shannon-Nyquist theorem is fulfilled.
+\begin{equation}
+	\underline{\tilde{x}}(t) = \underline{x}(t) \qquad \text{if $\underline{x}(t)$ band-limtied to $-\frac{\omega_S}{2} \leq \omega \leq \frac{\omega_S}{2}$}
+\end{equation}
+
+\begin{figure}[H]
+	
+	\subfloat[Sampled signal $\underline{X}_S\left(j\omega\right)$] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_S\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-3, -2, -1, -0.5, 0, 0.5, 1, 2, 3},
+				xticklabels={$-3 \omega_S$, $-2 \omega_S$, $- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$, $2 \omega_S$, $3 \omega_S$},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{-3, -2, ..., 3}{
+					\draw[-latex, blue, dashed, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+					\draw[green, thick] (axis cs:{#1-0.4},0) -- (axis cs:#1,0.7);
+					\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.4},0);
+				}
+			
+				\draw[black, thick, dashed] (axis cs:-0.5,0) -- (axis cs:-0.5,0.9) -- (axis cs:0.5,0.9) -- (axis cs:0.5,0);
+				\draw (axis cs:0.3,0.9) -- (axis cs:0.4,1.0) node[above right, align=left]{Reconstruction filter};
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Reconstructed signal $\underline{\tilde{X}}\left(j\omega\right)$] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{\tilde{X}}\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-1, -0.5, 0, 0.5, 1},
+				xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				ytick={0},
+			]
+				\draw[green, thick] (axis cs:-0.4,0) -- (axis cs:0,0.7);
+				\draw[red, thick] (axis cs:0,0.7) -- (axis cs:0.4,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\caption{Reconstruction of a sampled signal}
+\end{figure}
 
 \subsection{Discrete-Time Fourier Transform}
 
