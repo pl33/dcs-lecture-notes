@@ -262,7 +262,7 @@ A \index{sampler} \textbf{sampler} is a system which
 
 The sampled signal $\underline{x}_S(t)$ is a chain of pulses (red signal in Figure \ref{fig:ch04:sampling_of_signal}). The chain of pulses can then be reinterpreted as a time-discrete signal $\underline{x}[n]$. The value of $\underline{x}[n]$ is:
 \begin{equation}
-	\underline{x}[n] = \underline{x}_S\left(n T_S\right) = \underline{x}\left(n T_S\right) \qquad \forall \; n \in \mathbb{Z}
+	\underline{x}[n] = T_S \underline{x}_S\left(n T_S\right) = \underline{x}\left(n T_S\right) \qquad \forall \; n \in \mathbb{Z}
 	\label{eq:ch04:sample_value}
 \end{equation}
 
@@ -284,6 +284,39 @@ The sampled signal $\underline{x}_S(t)$ is a chain of pulses (red signal in Figu
 	\end{adjustbox}
 	\caption{An abstract view on sampling}
 \end{figure}
+
+\begin{excursus}{Normalisation of the sampled signal}
+	\label{ref:ch04:normalization_xs}
+	
+	You may wonder about the equation \eqref{eq:ch04:sample_value}. Where does the $T_S$ in $T_S \underline{x}_S\left(n T_S\right)$ come from?
+	
+	\vspace{0.5em}
+	
+	The value of the sampled signal $\underline{x}_S\left(n T_S\right)$ is normalized by $\frac{1}{T_S}$. This is a result of the normalization of the Dirac delta function. Its argument shall be unitless. However, its argument $t - n T_S$ is a time unit. Consequently, the argument must be normalized by $T_S$.
+	\begin{equation}
+		\delta\left(t - n T_S\right) = \frac{1}{T_S} \delta\left(\frac{t}{T_S} - n\right)
+	\end{equation}
+	using the scaling property of the Dirac delta function, which is:
+	\begin{equation}
+		\delta\left(t\right) = \frac{1}{|a|} \left(\frac{t}{a}\right)
+	\end{equation}
+	\eqref{eq:ch04:ideal_sampling} can be rewritten to
+	\begin{equation}
+		\begin{split}
+			\underline{x}_S(t) &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(n T_S\right) \delta\left(t - n T_S\right) \\
+			 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(n T_S\right) \cdot \frac{1}{T_S} \delta\left(\frac{t}{T_S} - n\right) \\
+			T_S \underline{x}_S(t) &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(n T_S\right) \delta\left(\frac{t}{T_S} - n\right) \\
+		\end{split}
+	\end{equation}
+	The reason why $\underline{x}_S(t)$ needs to be normalized is, that it is an indefinitely small Dirac delta pulse. $T_S$ is the equidistant spacing between the pulses.
+	
+	\vspace{0.5em}
+	
+	Why is $\underline{x}[n]$ not scaled? It is, but its normalization constant is not explicitly written. The equidistant spacing between $\underline{x}[n]$ and $\underline{x}[n+1]$ is $1$. Thus, their normalization constant is $1$, too.
+	\begin{equation*}
+		1 \cdot \underline{x}[n] = T_S \underline{x}_S\left(n T_S\right) = \underline{x}\left(n T_S\right)
+	\end{equation*}
+\end{excursus}
 
 \subsubsection{Irreversibility of Sampling}
 
@@ -327,6 +360,8 @@ Sampling is always lossy in general.
 	\end{split}
 \end{equation}
 
+\textit{Remark:} Please note the normalization of the sampled signal by $T_S$, as explained on page \pageref{ref:ch04:normalization_xs}.
+
 The ideally sampled signal $\underline{x}_S(t)$ can be expressed as a sum of \emph{frequency shifts} of the original signal $\underline{x}(t)$. Its Fourier transform is:
 \begin{equation}
 	\begin{split}
@@ -337,6 +372,8 @@ The ideally sampled signal $\underline{x}_S(t)$ can be expressed as a sum of \em
 		 &= \frac{1}{T_S} \sum\limits_{k = -\infty}^{\infty} \underline{X}\left(j \left(\omega - k \frac{2 \pi}{T_S} \right)\right)
 	\end{split}
 \end{equation}
+
+\textit{Remark:} Please note the normalization of the sampled signal by $T_S$, as explained on page \pageref{ref:ch04:normalization_xs}.
 
 \begin{proof}{}
 	An alternative way is using the Fourier transform of this multiplication in the time-domain is a convolution in the frequency domain:
@@ -778,46 +815,55 @@ The Fourier transform of the sampled signal $\underline{x}_S(t)$ is:
 		\underline{X}_S \left(j \omega\right) &= \mathcal{F} \left\{\underline{x}_S(t)\right\} \\
 		 &= \mathcal{F} \left\{\sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S)\right\} \\
 		 &= \int\limits_{t = -\infty}^{\infty} \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S) \cdot e^{-j \omega t} \, \mathrm{d} t \\
-		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \int\limits_{t = -\infty}^{\infty} \cdot \delta(t - n T_S) \cdot e^{-j \omega t} \, \mathrm{d} t \\
+		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \int\limits_{t = -\infty}^{\infty} \delta(t - n T_S) \cdot e^{-j \omega t} \, \mathrm{d} t \\
 		 &\qquad \text{Using the Dirac measure:} \\
-		 &= \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \omega n T_S}
+		 &= \underbrace{\sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \omega n T_S}}_{= \underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)}
 	\end{split}
+	\label{eq:ch04:sampled_signal_spectrum}
 \end{equation}
 
 Redefining $\phi = T_S \omega$:
 \begin{equation}
-	\underline{X}_S \left(j \omega\right) = \underline{X}_{2 \pi} \left(e^{j \phi}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \phi n}
+	\underline{X}_S \left(j \omega\right) = \left.\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)\right|_{T_S \omega = \phi} = \underline{X}_{2 \pi} \left(e^{j \phi}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \phi n}
 \end{equation}
 
-$\underline{X}_{2 \pi} \left(e^{j \phi}\right)$ is the discrete-time Fourier transform of the time-discrete, sampled signal $\underline{x}[n]$.
+$\underline{X}_{2 \pi} \left(e^{j \phi}\right)$ or $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)$, respectively, is the discrete-time Fourier transform of the time-discrete, sampled signal $\underline{x}[n]$.
 \begin{itemize}
-	\item The spectrum of the sampled signal $\underline{x}[n]$ is $\omega_S$-periodic.
+	\item The spectrum of the sampled signal $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)$ is $\omega_S$-periodic or (with $\omega_S = \frac{2\pi}{T_S}$) $\frac{2\pi}{T_S}$-periodic.
+	\item The $\frac{2\pi}{T_S}$-periodicity is equivalent to to a full $2\pi$-rotation on the unit circle $e^{j \phi}$ in the complex plane.
 	\item The real-valued frequency-continuous variable $\omega$ is replaced by the complex-valued frequency-continuous variable $e^{j \phi}$ representing the periodicity of the spectrum.
 	\item $\phi = T_S \omega$
-	\item The $\omega_S$-periodicity is equivalent to to a full $2\pi$-rotation on the unit circle $e^{j \phi}$ in the complex plane.
+	\item An alternate but equivalent expression $\underline{X}_{2 \pi} \left(e^{j \phi}\right)$ uses the $2\pi$-periodicity.
 \end{itemize}
+
+Both $\underline{X}_{2 \pi} \left(e^{j \phi}\right)$ and $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)$ are equivalent. However, they are normalized differently.
+\begin{itemize}
+	\item The spectrum of $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)$ is normalized to the sampling angular frequency $\frac{2 \pi}{T_S}$.
+	\item The spectrum of $\underline{X}_{2 \pi} \left(e^{j \phi}\right)$ is normalized to the full rotation on the unit circle $2 \pi$.
+\end{itemize}
+The normalization is of minor importance for the \ac{DTFT}, but must be considered for the inverse \ac{DTFT}. Both $\underline{X}_{2 \pi} \left(e^{j \phi}\right)$ and $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)$ are complex-valued Fourier series (see \eqref{eq:ch04:sampled_signal_spectrum}). For $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)$, the normalization factor $\frac{T_S}{2 \pi}$ must be considered and, for $\underline{X}_{2 \pi} \left(e^{j \phi}\right)$, the normalization factor $\frac{1}{2 \pi}$.
 
 \begin{definition}{Discrete-time Fourier transform}
 	The \index{discrete-time Fourier transform} \textbf{\acf{DTFT}} of a time-discrete signal $\underline{x}[n]$ with the sampling period $T_S$ is:
 	\begin{itemize}
-		\item Using the $T$-periodicity:
+		\item normalized to $\omega_S = \frac{2\pi}{T_S}$ ($\omega_S$-periodicity):
 		\begin{equation}
-			\underline{X}_{\frac{1}{T}} \left(e^{j T \omega}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j T \omega n}
+			\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j T_S \omega n}
 		\end{equation}
-		\item Using the $2 \pi$-periodicity:
+		\item normalized to $2 \pi$ ($2 \pi$-periodicity):
 		\begin{equation}
 			\underline{X}_{2 \pi} \left(e^{j \phi}\right) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{-j \phi n}
 		\end{equation}
 	\end{itemize}
-	Both expressions are equivalent. $\phi = T_S \omega$
+	Both expressions are equivalent ($\phi = T_S \omega$).
 	
-	The \index{discrete-time Fourier transform!inverse} \textbf{inverse discrete-time Fourier transform} of a time-discrete signal $\underline{x}[n]$ with the sampling period $T_S$ is:
+	The \index{discrete-time Fourier transform!inverse} \textbf{inverse discrete-time Fourier transform} is:
 	\begin{itemize}
-		\item Using the $T$-periodicity: \todo{$T$ ???}
+		\item normalized to $\omega_S = \frac{2\pi}{T_S}$ ($\omega_S$-periodicity):
 		\begin{equation}
-			\underline{x}[n] = \frac{T}{2 \pi} \int\limits_{- \frac{\pi}{T}}^{+ \frac{\pi}{T}} \underline{X}_{\frac{1}{T}}(e^{j T \omega}) \cdot e^{+ j \omega T n} \, \mathrm{d} \omega
+			\underline{x}[n] = \frac{T_S}{2 \pi} \int\limits_{- \frac{\pi}{T_S}}^{+ \frac{\pi}{T_S}} \underline{X}_{\frac{2\pi}{T_S}}(e^{j T_S \omega}) \cdot e^{+ j \omega T_S n} \, \mathrm{d} \omega
 		\end{equation}
-		\item Using the $2 \pi$-periodicity:
+		\item normalized to $2 \pi$ ($2 \pi$-periodicity):
 		\begin{equation}
 			\underline{x}[n] = \frac{1}{2 \pi} \int\limits_{- \pi}^{+ \pi} \underline{X}_{2\pi}(e^{j \phi}) \cdot e^{+ j \phi n} \, \mathrm{d} \phi
 		\end{equation}
