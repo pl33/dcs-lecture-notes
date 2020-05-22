@@ -308,7 +308,7 @@ The sampled signal $\underline{x}_S(t)$ is a chain of pulses (red signal in Figu
 			T_S \underline{x}_S(t) &= \sum\limits_{n = -\infty}^{\infty} \underline{x}\left(n T_S\right) \delta\left(\frac{t}{T_S} - n\right) \\
 		\end{split}
 	\end{equation}
-	The reason why $\underline{x}_S(t)$ needs to be normalized is, that it is an indefinitely small Dirac delta pulse. $T_S$ is the equidistant spacing between the pulses.
+	The reason why $\underline{x}_S(t)$ needs to be normalized is, that it is an indefinitely small Dirac delta pulse. $T_S$ is the equidistant spacing between the pulses. $\frac{t}{T_S}$ guarantees a normalized spacing of $1$ between the samples.
 	
 	\vspace{0.5em}
 	
@@ -803,7 +803,6 @@ The reconstructed signal $\underline{\tilde{x}}(t)$ equals the original signal $
 
 \subsection{Discrete-Time Fourier Transform}
 
-% TODO
 Using \eqref{eq:ch04:ideal_sampling} and \eqref{eq:ch04:sample_value}, a expression depending on the time-discrete signal $\underline{x}[n]$ can be formulated:
 \begin{equation}
 	\underline{x}_S(t) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \delta(t - n T_S)
@@ -906,7 +905,126 @@ The normalization is of minor importance for the \ac{DTFT}, but must be consider
 	Figure \ref{fig:ch04:ztrafo_z_cmplx_plane} makes evident the $2 \pi$-periodicity of both the \ac{DTFT} and z-transform. The frequency $e^{j \phi}$ repeats every $2 \pi$.
 \end{excursus}
 
+\subsubsection{Properties}
+
+The \ac{DTFT} is derived from the \ac{CTFT}. Therefore, all properties apply likewise.
+\begin{itemize}
+	\item Linearity
+	\item Time shift, frequency shift
+	\item Convolution theorem
+	\item Duality
+	\item Symmetry rules
+\end{itemize}
+
 \subsection{Discrete Fourier Transform}
+
+\subsubsection{Periodic Sequences}
+
+Given is an $N$-periodic sequence of samples $\underline{x}_p[n]$:
+\begin{equation}
+	\underline{x}_p[n] = \underline{x}_p[n + mN] \qquad \forall \; m \in \mathbb{Z}
+\end{equation}
+
+A corollary of the periodicity is that the \ac{DTFT} $\underline{X}_{2 \pi} \left(e^{j \phi}\right)$ or $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)$, respectively, is not only periodic. It is zero for
+\begin{itemize}
+	\item $\underline{X}_{2 \pi} \left(e^{j \phi}\right) = 0$ for $\phi \neq m \frac{2\pi}{N}$ where $m \in \mathbb{Z}$, or
+	\item $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right) = 0$ for $\omega \neq m \frac{2\pi}{T_S N}$ where $m \in \mathbb{Z}$.
+\end{itemize}
+The \ac{DTFT} itself becomes a series of pulses (Dirac comb) with an equidistant spacing of
+\begin{itemize}
+	\item $\frac{2\pi}{N}$ for $\underline{X}_{2 \pi} \left(e^{j \phi}\right)$, or
+	\item $\frac{2\pi}{T_S N}$ for $\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)$, respectively.
+\end{itemize}
+
+This can be explained using the duality of the \ac{DTFT}:
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.75}
+		\begin{tikzpicture}
+			\node[align=center, minimum width=2.5cm, minimum height=1.5cm] (TD1) {Sampled data is a Dirac comb\\ $\underline{x}_S(t) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \delta\left(t - n T_S\right)$};
+			\node[align=center, minimum width=2.5cm, minimum height=1.5cm, right=3.5cm of TD1] (TD2) {Sampled data is periodic\\ $\underline{x}_S(t) = \underline{x}_S(t + m N {T_S})$};
+			\node[align=center, minimum width=2.5cm, minimum height=1.5cm, below=2cm of TD1] (FD1) {Spectrum is periodic\\ $\underline{X}_{\frac{2\pi}{T_S}}(e^{j T_S \omega}) = \underline{X}_{\frac{2\pi}{T_S}}(e^{j T_S \left(\omega + \omega_S\right)})$};
+			\node[align=center, minimum width=2.5cm, minimum height=1.5cm, below=2cm of TD2] (FD2) {Spectrum is a Dirac comb\\ $\underline{X}_{\frac{2\pi}{T_S}}(e^{j T_S \omega}) = \frac{1}{N} \sum\limits_{n = -\infty}^{\infty} \underline{X}[k] \delta\left(\omega - \frac{k}{N} \omega_S\right)$};
+			
+			\node[align=right, anchor=east, left=3cm of TD1] (LabelTD) {\textbf{Time domain}};
+			\node[align=right, anchor=east, below=2cm of LabelTD] (LabelFD) {\textbf{Frequency domain}};
+			\node[align=right, above=1cm of TD1] (Func1) {\textbf{Non-periodic function}};
+			\node[align=right, above=1cm of TD2] (Func2) {\textbf{Periodic function}};
+			
+			%\draw (TD1) node[midway, align=right, rotate=-90]{$\TransformHoriz$} (FD1);
+			%\draw (TD2) node[midway, align=right, rotate=-90]{$\TransformHoriz$} (FD2);
+			\draw[o-*, thick] (TD1.south) -- (FD1.north);
+			\draw[o-*, thick] (TD2.south) -- (FD2.north);
+			
+			\draw[thick] (TD1.south east) -- (FD2.north west);
+			\draw[thick] (TD2.south west) -- (FD1.north east);
+		\end{tikzpicture}
+	\end{adjustbox}
+	\caption{Due to the duality, the \ac{DTFT} of a periodic signal is series of pulses (Dirac comb).}
+\end{figure}
+
+The \ac{DTFT} of a periodic signal is still periodic. The maximum number of unique, discrete frequency samples in the \ac{DTFT} is
+\begin{equation}
+	\frac{\text{Periodicity of the \ac{DTFT}}}{\text{Spacing between the pulses}} = \frac{\frac{2\pi}{T_S}}{\frac{2\pi}{T_S N}} = N
+\end{equation}
+
+Because of the periodicity of both the time-domain and frequency-domain signal, the signal is fully determined by either
+\begin{itemize}
+	\item $N$ samples in the time domain, or
+	\item $N$ samples in the frequency domain.
+\end{itemize}
+
+The samples in the frequency domain are
+\begin{equation}
+	\underline{X}[k] = \left.\underline{X}_{2 \pi} \left(e^{j \phi}\right)\right|_{\phi = k \frac{2\pi}{N}} = \left.\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right)\right|_{\omega = k \frac{2\pi}{T_S N}} = \sum\limits_{n = 0}^{N-1} \underline{x}[n] e^{-j 2\pi \frac{k}{N} n}
+\end{equation}
+where $k \in \mathbb{Z}$ is the discrete frequency variable. The summation boundaries $[0, N-1]$ can be replaced by any sequence of length $N$, because $\underline{x}[n]$ is $N$-periodic.
+
+$\underline{X}[k]$ is the \ac{DFT}. $\underline{X}[k]$ is $N$-periodic.
+
+The \ac{DTFT} is obtained by:
+\begin{equation}
+	\underline{X}_{\frac{2\pi}{T_S}} \left(e^{j T_S \omega}\right) = \frac{2\pi}{N T_S} \sum\limits_{k = -\infty}^{\infty} \underline{X}[k] \cdot \delta\left(\omega - \frac{k}{N} \underbrace{\frac{2\pi}{T_S}}_{= \omega_S}\right)
+\end{equation}
+
+\textit{Remark:} $\omega$ is normalized to $\frac{N T_S}{2\pi}$. Accordingly, the sum is normalized to $\frac{2\pi}{N T_S}$. Considerations analogous to the explanation on page \pageref{ref:ch04:normalization_xs} apply.
+
+The inverse \ac{DTFT} is:
+\begin{equation}
+	\begin{split}
+		\underline{x}[n] &= \frac{T_S}{2 \pi} \int\limits_{- \frac{\pi}{T_S}}^{+ \frac{\pi}{T_S}} \frac{2\pi}{N T_S} \sum\limits_{k = -\infty}^{\infty} \underline{X}[k] \cdot \delta\left(\omega - \frac{k}{N} \frac{2\pi}{T_S}\right) \cdot e^{+ j \omega T_S n} \, \mathrm{d} \omega \\
+		 &\qquad \text{Integration boundaries propagate to summation boundaries via $\omega - \frac{k}{N} \frac{2\pi}{T_S} \stackrel{!}{=} 0$:} \\
+		 &= \frac{1}{N} \sum\limits_{k = -\frac{N}{2}}^{\frac{N}{2}} \underline{X}[k] \cdot \int\limits_{- \frac{\pi}{T_S}}^{+ \frac{\pi}{T_S}} \delta\left(\omega - \frac{k}{N} \frac{2\pi}{T_S}\right) \cdot e^{+ j \omega T_S n} \, \mathrm{d} \omega \\
+		 &\qquad \text{Using the Dirac measure:} \\
+		 &= \frac{1}{N} \sum\limits_{k = -\frac{N}{2}}^{\frac{N}{2}} \underline{X}[k] \cdot e^{+ j 2\pi \frac{k}{N} n}
+	\end{split}
+\end{equation}
+This is the inverse \ac{DFT}. Again the summation boundaries of $[-\frac{N}{2}, \frac{N}{2}]$ can be replaced by any sequence of length $N$, because $\underline{X}[k]$ is $N$-periodic.
+
+\begin{definition}{Discrete Fourier transform}
+	The \index{discrete Fourier transform} \textbf{\acf{DFT}} of a $N$-periodic sequence $\underline{x}[n]$ is:
+	\begin{equation}
+		\underline{X}[k] = \sum\limits_{n \in N} \underline{x}[n] \cdot e^{-j 2\pi \frac{k}{N} n}
+	\end{equation}
+	
+	The \index{inverse discrete Fourier transform} \textbf{inverse discrete Fourier transform} is:
+	\begin{equation}
+		\underline{x}[n] = \frac{1}{N} \sum\limits_{k \in N} \underline{X}[k] \cdot e^{+ j 2\pi \frac{k}{N} n}
+	\end{equation}
+	
+	Both $\underline{X}[k]$ and $\underline{x}[n]$ are $N$-periodic. The summation boundaries can be chosen to any sequence of length $N$.
+\end{definition}
+
+\subsubsection{Properties}
+
+The \ac{DFT} is derived from the \ac{DTFT} and \ac{CTFT}. Therefore, all properties apply likewise.
+\begin{itemize}
+	\item Linearity
+	\item Time shift, frequency shift
+	\item Convolution theorem
+	\item Duality
+	\item Symmetry rules
+\end{itemize}
 
 \section{Analogies Of Time-Continuous and Time-Discrete Signals and Systems}
 
