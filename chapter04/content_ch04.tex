@@ -880,41 +880,6 @@ The normalization is of minor importance for the \ac{DTFT}, but must be consider
 	Both expressions are equivalent.
 \end{definition}
 
-\begin{excursus}{z-Transform}
-	Analogous to the Fourier and Laplace transform, the \acf{DTFT} is a special case of the z-transform. The \index{z-transform} \textbf{z-transform} is:
-	\begin{equation}
-		\underline{X}\left(\underline{z}\right) = \mathcal{Z}\left\{\underline{x}[n]\right\} = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \underline{z}^{-n}
-	\end{equation}
-	$\underline{z}$ is the complex frequency variable, which can be decomposed into:
-	\begin{equation}
-		\underline{z} = A e^{j \phi}
-	\end{equation}
-	where $A$ represents the gain and $e^{j \phi}$ the frequency.
-	\begin{figure}[H]
-		\centering
-		\begin{tikzpicture}
-			\draw[->] (-2.2,0) -- (2.2,0) node[below, align=left]{$\Re\left\{\underline{z}\right\}$};
-			\draw[->] (0,-2.2) -- (0,2.2) node[left, align=right]{$\Im\left\{\underline{z}\right\}$};
-			%\draw (0:1) arc(0:360:1);
-			\draw (1,0.2) -- (1,-0.2) node[below]{$1$};
-			\draw (-1,0.2) -- (-1,-0.2) node[below]{$-1$};
-			\draw (0.2,1) -- (-0.2,1) node[left]{$1$};
-			\draw (0.2,-1) -- (-0.2,-1) node[left]{$-1$};
-			
-			\draw[thick, red] (0:1) arc(0:360:1);
-			\draw[dashed, red] (60:1) -- (45:1.5) node[right, align=left, color=red]{$e^{j \phi}$};
-		\end{tikzpicture}
-		\caption{Complex plane of the complex frequency variable $\underline{z}$}
-		\label{fig:ch04:ztrafo_z_cmplx_plane}
-	\end{figure}
-	
-	In the \acf{DTFT}, $A = 1$ as a special case. The remainig $e^{j \phi}$ describes the unit circle in the complex plane. Like the Fourier transform, it assumes a steady-state, whereas the z-transform delivers a complete description of a time-discrete system. The z-transform is preferred for transient analysis of a time-discrete system. Its zeros $\underline{z}_0$ and poles $\underline{z}_\infty$ determine the stability of the system.
-	
-	\vspace{0.5em}
-	
-	Figure \ref{fig:ch04:ztrafo_z_cmplx_plane} makes evident the $2 \pi$-periodicity of both the \ac{DTFT} and z-transform. The frequency $e^{j \phi}$ repeats every $2 \pi$.
-\end{excursus}
-
 \subsubsection{Properties}
 
 The \ac{DTFT} is derived from the \ac{CTFT}. Therefore, all properties apply likewise.
@@ -925,6 +890,51 @@ The \ac{DTFT} is derived from the \ac{CTFT}. Therefore, all properties apply lik
 	\item Duality
 	\item Symmetry rules
 \end{itemize}
+
+\subsection{z-Transform}
+
+Analogous to the Fourier and Laplace transform, the \acf{DTFT} is a special case of the z-transform.
+
+\begin{definition}{Discrete-time Fourier transform}
+	The \index{z-transform} \textbf{z-transform} of a time-discrete signal $\underline{x}[n]$ with the sampling period $T_S$ is:
+	\begin{equation}
+		\underline{X}\left(\underline{z}\right) = \mathcal{Z}\left\{\underline{x}[n]\right\} = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \underline{z}^{-n}
+	\end{equation}
+	$\underline{z}$ is the complex frequency variable.
+	
+	The  \index{z-transform!inverse} \textbf{inverse z-transform} is:
+	\begin{equation}
+		\underline{x}[n] = \mathcal{Z}^{-1}\left\{\underline{x}[n]\right\} = \frac{1}{2 \pi j} \oint\limits_{C} \underline{X}\left(\underline{z}\right) \underline{z}^{n-1} \, \mathrm{d} \underline{z}
+	\end{equation}
+	$C$ is a counter-clockwise closed path enclosing the origin and the region of convergence. In the case of the \ac{DTFT}, $C$ is the unit circle, i.e., $C = [e^{-j \pi}, e^{j \pi}]$.
+\end{definition}
+
+$\underline{z}$ can be decomposed into:
+\begin{equation}
+	\underline{z} = A e^{j \phi}
+\end{equation}
+where $A$ represents the gain and $e^{j \phi}$ the frequency.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\draw[->] (-2.2,0) -- (2.2,0) node[below, align=left]{$\Re\left\{\underline{z}\right\}$};
+		\draw[->] (0,-2.2) -- (0,2.2) node[left, align=right]{$\Im\left\{\underline{z}\right\}$};
+		%\draw (0:1) arc(0:360:1);
+		\draw (1,0.2) -- (1,-0.2) node[below]{$1$};
+		\draw (-1,0.2) -- (-1,-0.2) node[below]{$-1$};
+		\draw (0.2,1) -- (-0.2,1) node[left]{$1$};
+		\draw (0.2,-1) -- (-0.2,-1) node[left]{$-1$};
+		
+		\draw[thick, red] (0:1) arc(0:360:1);
+		\draw[dashed, red] (60:1) -- (45:1.5) node[right, align=left, color=red]{$e^{j \phi}$};
+	\end{tikzpicture}
+	\caption{Complex plane of the complex frequency variable $\underline{z}$}
+	\label{fig:ch04:ztrafo_z_cmplx_plane}
+\end{figure}
+
+In the \acf{DTFT}, $A = 1$ as a special case. The remainig $e^{j \phi}$ describes the unit circle in the complex plane. Like the Fourier transform, it assumes a steady-state, whereas the z-transform delivers a complete description of a time-discrete system. The z-transform is preferred for transient analysis of a time-discrete system. Its zeros $\underline{z}_0$ and poles $\underline{z}_\infty$ determine the stability of the system.
+
+Figure \ref{fig:ch04:ztrafo_z_cmplx_plane} makes evident the $2 \pi$-periodicity of both the \ac{DTFT} and z-transform. The frequency $e^{j \phi}$ repeats every $2 \pi$.
 
 \subsection{Discrete Fourier Transform}
 
@@ -1014,12 +1024,14 @@ This is the inverse \ac{DFT}. Again the summation boundaries of $[-\frac{N}{2}, 
 \begin{definition}{Discrete Fourier transform}
 	The \index{discrete Fourier transform} \textbf{\acf{DFT}} of a $N$-periodic sequence $\underline{x}[n]$ is:
 	\begin{equation}
-		\underline{X}[k] = \sum\limits_{n \in N} \underline{x}[n] \cdot e^{-j 2\pi \frac{k}{N} n}
+		\underline{X}[k] = \mathcal{F}_{\text{DFT}}\left\{\underline{x}[n]\right\} = \sum\limits_{n \in N} \underline{x}[n] \cdot e^{-j 2\pi \frac{k}{N} n}
+		\label{eq:ch04:dft}
 	\end{equation}
 	
 	The \index{inverse discrete Fourier transform} \textbf{inverse discrete Fourier transform} is:
 	\begin{equation}
-		\underline{x}[n] = \frac{1}{N} \sum\limits_{k \in N} \underline{X}[k] \cdot e^{+ j 2\pi \frac{k}{N} n}
+		\underline{x}[n] = \mathcal{F}_{\text{DFT}}^{-1}\left\{\underline{X}[k]\right\} = \frac{1}{N} \sum\limits_{k \in N} \underline{X}[k] \cdot e^{+ j 2\pi \frac{k}{N} n}
+		\label{eq:ch04:idft}
 	\end{equation}
 	
 	Both $\underline{X}[k]$ and $\underline{x}[n]$ are $N$-periodic. The summation boundaries can be chosen to any sequence of length $N$.
@@ -1036,7 +1048,87 @@ The \ac{DFT} is derived from the \ac{DTFT} and \ac{CTFT}. Therefore, all propert
 	\item Symmetry rules
 \end{itemize}
 
+\subsection{Orthogonality of the \acs{DFT} Frequency Vectors}
+
+Both the time-domain sequence $\underline{x}[n]$ and frequency-domain sequence $\underline{X}[k]$ can be interpreted as vectors:
+\begin{itemize}
+	\item $\cmplxvect{x} = \left[\underline{x}[0], \underline{x}[1], \dots, \underline{x}[N-1]\right]^{\mathrm{T}}$
+	\item $\cmplxvect{X} = \left[\underline{X}[0], \underline{X}[1], \dots, \underline{X}[N-1]\right]^{\mathrm{T}}$
+\end{itemize}
+
+The \ac{DFT} \eqref{eq:ch04:dft} can be expressed as a linear system of equation:
+\begin{equation}
+	\cmplxvect{X} = \underline{\mat{F}} \cdot \cmplxvect{x}
+\end{equation}
+
+The $N \times N$ transformation matrix $\underline{\mat{F}}$ is the \index{DFTmatrx} \textbf{ac{DFT} matrix} with the elements:
+\begin{equation}
+	\underline{F}_{pq} = \underline{w}^{p \cdot q}
+\end{equation}
+where $\underline{w}$ is the $N$-th \index{primitive root of unity} \textbf{primitive root of unity}\footnote{The primitive root of unity divide the unit circle $e^{j \phi}$ into equally sized segments.}.
+\begin{equation}
+	\underline{w} = e^{j \frac{2 \pi}{N}}
+\end{equation}
+So
+\begin{equation}
+	\underline{\mat{F}} = \left[
+	\begin{matrix}
+		1 & 1 & 1 & 1 & \ldots & 1 \\
+		1 & \underline{w} & \underline{w}^2 & \underline{w}^3 & \ldots & \underline{w}^{N-1} \\
+		1 & \underline{w}^2 & \underline{w}^4 & \underline{w}^6 & \ldots & \underline{w}^{2\left(N-1\right)} \\
+		1 & \underline{w}^3 & \underline{w}^6 & \underline{w}^9 & \ldots & \underline{w}^{3\left(N-1\right)} \\
+		\vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+		1 & \underline{w}^{N-1} & \underline{w}^{2\left(N-1\right)} & \underline{w}^{3\left(N-1\right)} & \ldots & \underline{w}^{\left(N-1\right)\left(N-1\right)} \\
+	\end{matrix}
+	\right]
+\end{equation}
+
+The inverse \ac{DFT} is, using the conjugate complex $\overline{\underline{\mat{F}}}$:
+\begin{equation}
+	\cmplxvect{x} = \frac{1}{N} \overline{\underline{\mat{F}}} \cdot \cmplxvect{X}
+\end{equation}
+
+Each row and column of $\underline{\mat{F}}$ is a vector of powers of the $N$-th primitive root of unity $\underline{w}$. A row with the index $k$ is $\cmplxvect{u}_k$.
+\begin{equation}
+	\begin{split}
+		\cmplxvect{u}_k &= \left[\left.\underline{w}^{k \cdot q}\right| q = 0, 1, \dots, N-1\right]^{\mathrm{T}} \\
+		 &= \left[1, \underline{w}^{k}, \underline{w}^{2 k}, \underline{w}^{3 k}, \dots, \underline{w}^{k \left(N-1\right)} \right]^{\mathrm{T}} \\
+		 &= \left[1, e^{j \frac{2 \pi}{N} k}, e^{j \frac{2 \pi}{N} 2 k}, e^{j \frac{2 \pi}{N} 3 k}, \dots, e^{j \frac{2 \pi}{N} k \left(N-1\right)} \right]^{\mathrm{T}} \\
+	\end{split}
+\end{equation}
+Each vector $\cmplxvect{u}_k$ is the basis for the associated frequency sample $\underline{X}[k]$.
+
+It can be shown that the vectors $\cmplxvect{u}_k$ are orthogonal. They form an \index{orthogonal basis} \textbf{orthogonal basis}. This can be proven by their inner product:
+\begin{equation}
+	\begin{split}
+		\langle \cmplxvect{u}_p, \overline{\cmplxvect{u}_q} \rangle &= \sum\limits_{n=0}^{N-1} \left(e^{j \frac{2 \pi}{N} p n}\right) \overline{\left(e^{j \frac{2 \pi}{N} q n}\right)} \\
+		 &= \sum\limits_{n=0}^{N-1} e^{j \frac{2 \pi}{N} \left(p - q\right) n} \\
+		 &= N \delta_{pq}
+	\end{split}
+\end{equation}
+
+\textit{Remark:} $\delta_{pq}$ is the Kronecker delta here.
+
+\begin{itemize}
+	\item The vectors $\cmplxvect{u}_p$ and $\cmplxvect{u}_q$ are orthogonal ($\delta_{pq} = 0$) for $p \neq q$.
+	\item $\delta_{pq}$ is non-zero only if $p = q$.
+\end{itemize}
+
+\begin{fact}
+	The basis of the frequency samples of a \ac{DFT} are orthogonal.
+\end{fact}
+
+\subsection{Windowing Non-Periodic Signals}
+
+\todo{Windowing and Periodic continuation}
+
+\todo{Window Filters}
+
+\todo{Spectral Leakage}
+
 \section{Analogies Of Time-Continuous and Time-Discrete Signals and Systems}
+
+All relations shown here are analogous to the \ac{CTFT}. Their deduction is analogous to Chapters 2 and 3.
 
 \subsection{Transforms}
 
@@ -1061,7 +1153,7 @@ The \ac{DFT} is derived from the \ac{DTFT} and \ac{CTFT}. Therefore, all propert
 	
 	\vspace{0.5em}
 	
-	Fourier transform:
+	\acf{CTFT}:
 	\begin{equation*}
 		\underline{X}(j \omega) = \int\limits_{t = -\infty}^{\infty} \underline{x}(t) \cdot e^{-j \omega t} \, \mathrm{d} t
 	\end{equation*}
@@ -1082,7 +1174,7 @@ The \ac{DFT} is derived from the \ac{DTFT} and \ac{CTFT}. Therefore, all propert
 	
 	\vspace{0.5em}
 	
-	Discrete-time Fourier transform:
+	\acf{DTFT}:
 	\begin{equation*}
 		\underline{X}_{2\pi}(e^{j \phi}) = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot e^{- j \phi n}
 	\end{equation*}
@@ -1126,7 +1218,7 @@ The \ac{DFT} is derived from the \ac{DTFT} and \ac{CTFT}. Therefore, all propert
 	
 	\vspace{0.5em}
 	
-	Discrete Fourier transform:
+	\acf{DFT}:
 	\begin{equation*}
 		\underline{X}[k] = \sum\limits_{n = 0}^{N - 1} \underline{x}[n] \cdot e^{- j \frac{2 \pi}{N} k n}
 	\end{equation*}
@@ -1142,21 +1234,271 @@ The \ac{DFT} is derived from the \ac{DTFT} and \ac{CTFT}. Therefore, all propert
 	\end{itemize}
 \end{minipage}
 
+\subsubsection{Properties of the \acs{DFT}}
+
+\begin{itemize}
+	\item Linearity:
+	\begin{equation}
+		\mathcal{F}_{\text{DFT}}\left\{a \underline{x}[n] + b \underline{y}[n]\right\} = a \mathcal{F}_{\text{DFT}}\left\{\underline{x}[n]\right\} + b \mathcal{F}_{\text{DFT}}\left\{\underline{y}[n]\right\}
+	\end{equation}
+	\item Time shift:
+	\begin{equation}
+		\mathcal{F}_{\text{DFT}}\left\{\underline{x}[n - m]\right\}[k] = \underline{X}[k] \cdot e^{-j 2 \pi \frac{k}{N} m}
+	\end{equation}
+	\item Frequency shift:
+	\begin{equation}
+		\mathcal{F}_{\text{DFT}}\left\{\underline{x}[n] \cdot e^{-j 2 \pi \frac{n}{N} m}\right\}[k] = \underline{X}[k-m]
+	\end{equation}
+	\item Multiplication in the time-domain becomes convolution in the frequency domain:
+	\begin{equation}
+		\mathcal{F}_{\text{DFT}}\left\{\underline{x}[n] \cdot \underline{y}[n]\right\}[k] = \underline{X}[k] * \underline{Y}[k] = \sum_{l=0}^{N} \underline{X}[l] \underline{Y}[(k - l) \mod N]
+	\end{equation}
+	\item Convolution in the time-domain becomes multiplication in the frequency domain:
+	\begin{equation}
+		\mathcal{F}_{\text{DFT}}\left\{\underline{x}[n] * \underline{y}[n]\right\}[k] = \mathcal{F}_{\text{DFT}}\left\{\sum_{l=0}^{N} \underline{x}[l] \underline{y}[(n - l) \mod N]\right\}[k] = \underline{X}[k] \cdot \underline{Y}[k]
+	\end{equation}
+	\item Duality:
+	\begin{equation}
+		\mathcal{F}_{\text{DFT}}\left\{\underline{X}[n]\right\}[k] = N \cdot \underline{x}[N - k]
+	\end{equation}
+	where $\underline{x} \TransformHoriz \underline{X}$.
+	\item Symmetry for real-valued $\underline{x}[n]$:
+	\begin{equation}
+		\underline{X}[k] = \overline{\underline{X}[N-k]} \qquad \forall \; \underline{x}[n] \in \mathbb{R}
+	\end{equation}
+\end{itemize}
+
+%\subsubsection{Spectrum}
+
 \subsection{Systems}
 
-\subsection{Cross-Correlation and Autocorrelation}
+\textit{Remark:} In contrast to signals, systems are analysed using the z-transform (general form of the \ac{DTFT}). For signals, the \ac{DFT} is preferred.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[draw, block] (System) {System\\ $\underline{h}[n]$};
+		\draw[<-o] (System.west) -- ++(-2cm, 0) node[above, align=center]{Input signal\\ $\underline{x}[n]$};
+		\draw[->] (System.east) -- ++(2cm, 0) node[above, align=center]{Output signal\\ $\underline{y}[n]$};
+	\end{tikzpicture}
+	\caption{A time-discrete system with input and output}
+\end{figure}
+
+A time-discrete system is characterized by either
+\begin{itemize}
+	\item its \index{transfer function} transfer function
+	\begin{equation}
+		\underline{H}(\underline{z}) = \frac{\underline{Y}(\underline{z})}{\underline{X}(\underline{z})}
+	\end{equation}
+	or
+	\item its impulse response.
+	\begin{equation}
+		\underline{h}[n] = \mathcal{Z}^{-1}\left\{\underline{H}(\underline{z})\right\}
+	\end{equation}
+\end{itemize}
+
+In the time domain, the output is a convolution of the input and the impulse response.
+\begin{equation}
+	\underline{y}[n] = \underline{h}[n] * \underline{x}[n] = \sum\limits_{l = -\infty}^{\infty} \underline{h}[l] \underline{x}[n-l]
+\end{equation}
+
+The systems output is the impulse response $\underline{y}[n] = \underline{h}[n]$ if the input is a Kronecker delta function $\underline{x}[n] = \delta[n]$.
+\begin{equation}
+	\underline{h}[n] * \delta[n] = \underline{h}[n]
+\end{equation}
+Or in the frequency domain
+\begin{equation}
+	\underline{H}(\underline{z}) \cdot \underbrace{\mathcal{Z}\left\{\delta[n]\right\}}_{= 1} = \underline{H}(\underline{z})
+\end{equation}
+
+\begin{excursus}{Kronecker delta}
+	The \index{Kronecker delta} Kronecker delta $\delta[n]$ equivalent of the Dirac delta function $\delta(t)$ in the discrete domain.
+	
+	\begin{equation*}
+		\delta(t) = \begin{cases}
+			\infty & \quad \text{if } t = 0, \\
+			0 & \quad \text{if } t \neq 0.
+		\end{cases}
+	\end{equation*}
+	
+	\begin{equation*}
+		\delta[n] = \begin{cases}
+			1 & \quad \text{if } n = 0, \\
+			0 & \quad \text{if } n \neq 0.
+		\end{cases}
+	\end{equation*}
+	
+	The Dirac delta function $\delta(t)$ is an indefinitely narrow pulse but indefinitely high. In contrast to that, the Kronecker delta $\delta[n]$ is of unity length and unity height. Both functions sum up to $1$.
+	\begin{equation}
+		\int\limits_{-\infty}^{\infty} \delta(t) \, \mathrm{d} t = \sum\limits_{n = -\infty}^{\infty} \delta[n] = 1
+	\end{equation}
+\end{excursus}
 
 \subsection{Spectral Density}
 
-\subsection{Noise}
+\subsubsection{Cross-Correlation and Autocorrelation}
+
+All considerations apply for ergodic or \ac{WSS} processes only:
+
+\begin{itemize}
+	\item Cross-correlation:
+	\begin{equation}
+		\underline{\mathrm{R}}_{xy}[n] = \left(\underline{x} \star \underline{y}\right)[n] = \sum\limits_{m=0}^{N-1} \underline{x}[m] \overline{\underline{y}[(m+n) \mod N]}
+	\end{equation}
+	\item Autocorrelation:
+	\begin{equation}
+		\underline{\mathrm{R}}_{xx}[n] = \left(\underline{x} \star \underline{x}\right)[n] = \sum\limits_{m=0}^{N-1} \underline{x}[m] \overline{\underline{x}[m+n]}
+	\end{equation}
+\end{itemize}
+
+\subsection{Energy Spectral Density}
+
+%TODO
+
+Parseval's theorem for discrete systems:
+\begin{equation}
+	\sum\limits_{n=0}^{N-1} \left|\underline{x}[n]\right|^2 = \frac{1}{N} \sum\limits_{k=0}^{N-1} \left|\underline{X}[k]\right|^2
+\end{equation}
+
+\begin{equation}
+	E = \sum\limits_{n=0}^{N-1} \left|\underline{x}[n]\right|^2
+\end{equation}
+
+\begin{equation}
+	\underline{\mathrm{S}}_{E,xx}[k] = \left|\underline{X}[k]\right|^2
+\end{equation}
+
+%\subsection{Noise}
 
 \section{Digital Signals and Systems}
 
+Now, we are in the time-discrete domain. However, values are still continuous.
+
+Let's recapitulate the signal processing chain from the analogue to digital signals from Chapter 1:
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{tikzpicture}
+		\draw node[draw, block](Continuous){Value-continuous,\\ time-continuous\\ signal};
+		\draw node[draw, block, right=3cm of Continuous](Sampled){Value-continuous,\\ time-discrete\\ signal};
+		\draw node[draw, block, right=3cm of Sampled](Digital){Value-discrete,\\ time-discrete\\ signal};
+		
+		\draw [-latex] (Continuous) -- node[midway, align=center, above]{Sampling} (Sampled);
+		\draw [-latex] (Sampled) -- node[midway, align=center, above]{Quantization} (Digital);
+		
+		\draw[decorate, decoration={brace, amplitude=3mm, mirror}] ([yshift=-5mm] Continuous.south west) -- ([yshift=-5mm] Sampled.south east) node[midway, below, yshift=-3mm]{\textbf{Analogue}};
+		\draw[decorate, decoration={brace, amplitude=3mm, mirror}] ([yshift=-5mm] Digital.south west) -- ([yshift=-5mm] Digital.south east) node[midway, below, yshift=-3mm]{\textbf{Digital}};
+		\end{tikzpicture}
+	\end{adjustbox}
+	\caption{Conversion from analogue to digital signals (recap from Chapter 1)}
+	\label{fig:ch04:signals_sampling_recap}
+\end{figure}
+
+The device converting an analogue signal to a digital signal is a \index{analog-to-digital converter} \textbf{\ac{ADC}}. An \ac{ADC} comprises the two processes \emph{sampling} and \emph{quantization}.
+
 \subsection{Quantization}
 
-\subsection{Quantization Error}
+Quantization is the process of
+\begin{itemize}
+	\item \textbf{mapping} the continuous (analogue) values of the samples to a finite set of discrete (digital) of values
+	\item by \textbf{rounding} and \textbf{truncating} the values.
+\end{itemize}
 
-\subsection{Window Filters}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.25\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			xmajorgrids=false,
+			ymajorgrids=true,
+			grid style={color=lightgray, dashed},
+			axis lines=left,
+			legend pos=north east,
+			xmin=0,
+			xmax=7,
+			ymin=0,
+			ymax=3,
+			xtick={0, 1, ..., 6},
+			ytick={0, 0.5, ..., 2.5}
+		]
+			\addplot[smooth, blue, dashed] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
+			\addplot[red, thick] coordinates {(0, 0) (0, 1.0)};
+			\addplot[red, thick] coordinates {(1, 0) (1, 2.0)};
+			\addplot[red, thick] coordinates {(2, 0) (2, 2.0)};
+			\addplot[red, thick] coordinates {(3, 0) (3, 1.0)};
+			\addplot[red, thick] coordinates {(4, 0) (4, 1.0)};
+			\addplot[red, thick] coordinates {(5, 0) (5, 1.5)};
+			\addplot[red, thick] coordinates {(6, 0) (6, 2.5)};
+			\addplot[only marks, red, thick, mark=o] coordinates {(0, 1.0) (1, 2.0) (2, 2.0) (3, 1.0) (4, 1.0) (5, 1.5) (6, 2.5)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[A digital, value-discrete, time-discrete signal]{A digital, value-discrete, time-discrete signal. Only certain time points and a limited set of values (in this case multiples of $0.5$) are valid. (Recap from Chapter 1)}
+	\label{fig:ch04:recap2}
+\end{figure}
+
+The mapping is an irreversible function $\mathcal{Q}\left\{\cdot\right\}$.
+
+\begin{definition}{Quantization}
+	In this chapter, the process of quantization is denoted by $\mathcal{Q}\left\{\cdot\right\}$. The digital signal $\underline{x}_Q[n]$ can be distinguished by its index $Q$ from its analogue counterpart $\underline{x}[n]$.
+	\begin{equation}
+		\underline{x}_Q[n] = \mathcal{Q}\left\{\underline{x}[n]\right\}
+	\end{equation}%
+	\nomenclature[Fq]{$\mathcal{Q}\left\{\cdot\right\}$}{Quantization}
+	
+	Later chapters will assume digital signals, unless noted otherwise. The index $Q$ will not be used there.
+\end{definition}
+
+The finite set of discrete numbers has the length $K$.
+\begin{itemize}
+	\item There are $K$ possible, unique values of $\underline{x}_Q[n]$.
+	\item Usually, $K$ is a power of $2$. $K = 2^M$. $M$ is the number of bits.
+\end{itemize}
+
+\subsubsection{Linear Mapping}
+
+The most common implementations distribute the $K$ discrete values equally between an interval of the continuous values $[\underline{\hat{X}}_L, \underline{\hat{X}}_H]$. So, the discrete values are spaced by
+\begin{equation}
+	\Delta \underline{\hat{X}} = \frac{\underline{\hat{X}}_H - \underline{\hat{X}}_L}{K}
+\end{equation}
+This is called \index{linear mapping} \textbf{linear mapping}.
+
+\todo{step map}
+
+\todo{Example circuit}
+
+\textit{Remark:} There are other mapping like logarithmic mapping. However, this lecture only considers linear mapping.
+
+\subsection{Quantization Noise}
+
+Once values have been quantized, their original, continuous values cannot be reconstructed.
+
+\begin{fact}
+	The process of quantization is irreversible.
+\end{fact}
+
+Furthermore, the quantized values differ from their original value due to rounding and truncation. This difference $\underline{e}[n]$ is the \index{quantization error} \textbf{quantization error}.
+
+\begin{definition}{Quantization error}
+	Each value-discrete (quantized) value $\underline{x}_Q[n]$ has an error $\underline{e}[n]$ from its original, value-continuous, analogue value $\underline{x}[n]$.
+	\begin{equation}
+		\underline{x}_Q[n] = \mathcal{Q}\left\{\underline{x}[n]\right\} = \underline{x}[n] + \underline{e}[n]
+	\end{equation}
+	
+	The error is bounded to
+	\begin{equation}
+		\left|\underline{e}[n]\right| \leq \frac{1}{2} \Delta \underline{\hat{X}}
+	\end{equation}
+\end{definition}
+
+\todo{Quantization Noise Floor}
+
+\todo{Dynamic Range, dBFS}
 
 \subsection{Time Recovery}
 
