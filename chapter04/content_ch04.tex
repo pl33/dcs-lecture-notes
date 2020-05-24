@@ -1118,13 +1118,259 @@ It can be shown that the vectors $\cmplxvect{u}_k$ are orthogonal. They form an 
 	The basis of the frequency samples of a \ac{DFT} are orthogonal.
 \end{fact}
 
-\subsection{Windowing Non-Periodic Signals}
+\subsection{Processing of Non-Periodic Signals}
 
-\todo{Windowing and Periodic continuation}
+In practical digital systems, signals are non-periodic. A non-periodic sequence $\underline{x}[n]$ can be fully transformed by the \ac{DTFT}.
+\begin{equation}
+	\underline{x}[n] \TransformHoriz \mathcal{F}_{\text{DTFT}}\left\{\underline{x}[n]\right\} = \underline{X}_{\frac{2\pi}{T_S}}\left(e^{j T_S \omega}\right)
+\end{equation}
 
-\todo{Window Filters}
+However, it is not feasible to implement a \ac{DTFT}, because the sums and integrals run over an indefinite interval. Therefore, the transforms are approximated by the \ac{DFT}.
 
-\todo{Spectral Leakage}
+\subsubsection{Windowing and Periodic Continuation}
+
+A sequence of length $N$ is taken out of $\underline{x}[n]$:
+\begin{equation}
+	\underline{\tilde{x}}_N[n] = \left[\underline{x}[m], \underline{x}[m+1], \underline{x}[m+1], \dots, \underline{x}[m+N-1]\right]
+\end{equation}
+The act of extracting $N$ subsequent samples out of $\underline{x}[n]$ is called \index{windowing} \textbf{windowing}. To illustrate this, imagine that you watch a sequence moving to the left through a window. The movement to the left is the time advance. Because of the window, you see a certain extract of $\underline{x}[n]$ only at one time.
+
+\todo{Window illustration}
+
+This sequence is repeated indefinitely (\emph{periodic continuation}):
+\begin{equation}
+	\underline{x}_N[n] = \underline{\tilde{x}}_N[n \mod N]
+\end{equation}
+Thus, $\underline{x}_N[n]$ is periodic:
+\begin{equation}
+	\underline{x}_N[n] = \underline{x}_N[n + q N] \qquad \forall \; q \in \mathbb{Z}
+\end{equation}
+
+Now, $\underline{x}_N[n]$ can be transformed to the frequency-domain using the \ac{DFT}.
+\begin{equation}
+	\underline{x}_N[n] \TransformHoriz \mathcal{F}_{\text{DFT}}\left\{\underline{x}[n]\right\} = \underline{X}[k]
+\end{equation}
+
+The periodic continuation is just a theoretical explanation. In practise, it is enough to calculate the \ac{DFT} over $N$ subsequent samples out of $\underline{x}[n]$.
+\begin{equation}
+	\begin{split}
+		\underline{X}_{\frac{2\pi}{T_S}}\left(e^{j T_S \omega}\right) &\approx \begin{cases}
+			\left.\underline{X}[k]\right|_{k = N \frac{T_S}{2\pi} \omega} & \quad \text{if } \left(N \frac{T_S}{2\pi} \omega\right) \in \mathbb{Z}, \\
+			0 & \quad \text{if } \left(N \frac{T_S}{2\pi} \omega\right) \notin \mathbb{Z}.
+		\end{cases} \\
+		\underline{X}_{\frac{2\pi}{T_S}}\left(e^{j 2 \pi \frac{k}{N}}\right) &\approx \underline{X}[k] = \sum\limits_{n=0}^{N-1} \underline{x}_N[n] e^{-j 2 \pi \frac{k}{N} n}
+	\end{split}
+	\label{eq:ch04:dtft_sampling}
+\end{equation}
+
+Windowing and periodic continuation is, in fact, a sampling of the \ac{DTFT} (see \eqref{eq:ch04:dtft_sampling}).
+
+\subsubsection{Window Functions}
+
+The widowing of $\underline{x}[n]$ to obtain $\underline{x}_N[n]$ as discussed before did not change the values of $\underline{x}[n]$. This can be expressed as a multiplication of the original sequence with the rectangular function:
+\begin{equation}
+	\underline{x}_W[n] = \underline{x}_N[n] \cdot \underbrace{w_{rect,N}[n]}_{\text{Rectangular window}}
+\end{equation}
+where
+\begin{equation}
+	w_{rect,N}[n] = \begin{cases}
+		1 &\quad \text{if } \; 0 \geq n < N, \\
+		0 &\quad \text{else}.
+	\end{cases}
+\end{equation}
+
+$w[n]$ is called \index{window function} \textbf{window function}.
+\begin{definition}{Window function}
+	A \index{window function} \textbf{window function} $w[n]$ is applied to the periodically continued sequence $\underline{x}_N[n]$ by multiplication:
+	\begin{equation}
+		\underline{x}_N[n] \equiv \underline{x}[n] \cdot w[n]
+	\end{equation}
+\end{definition}
+
+\subsubsection{Spectral Leakage}
+
+In the frequency-domain, the multiplication becomes a convolution:
+\begin{equation}
+	\begin{split}
+		\underline{X}_W[k] &= \mathcal{F}_{\text{DFT}}\left\{\underline{x}_W[n]\right\} \\
+		 &= \mathcal{F}_{\text{DFT}}\left\{\underline{x}_N[n] \cdot w[n]\right\} \\
+		 &= \underline{X}_N[k] * \underline{W}[k] \\
+		 &= \sum\limits_{l=0}^{N-1} \underline{X}_N[l] * \underline{W}[k-l]
+	\end{split}
+\end{equation}
+
+This has some implications:
+\begin{itemize}
+	\item Each frequency component in $\underline{X}_N[k]$ creates frequency components in \underline{all} $\underline{X}_W[k]$.
+	\item A mono-chromatic signal, which would be non-zero at only one $k$ and zero everywhere else, has non-zero components everywhere in $\underline{X}_W[k]$.
+	\item The non-zero frequency components produced by the convolution show up as noise and \underline{decrease the \ac{SNR}}.
+\end{itemize}
+This effect is called \index{spectral leakage} \textbf{spectral leakage}.
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Original analogue signal]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$t$},
+				ylabel={$x(t)$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=4.5,
+				ymin=-1.2,
+				ymax=1.2,
+				%xtick={-1, -0.5, 0, 0.5, 1},
+				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				%ytick={0},
+			]
+				\addplot[red, thick, smooth, domain=0:4, samples=50] plot(\x, {cos(deg(pi*\x))});
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfloat[Window function in the time-domain]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$n$},
+				ylabel={$w[n]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-0.5,
+				xmax=8.5,
+				ymin=0,
+				ymax=1.2,
+				%xtick={-1, -0.5, 0, 0.5, 1},
+				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				%ytick={0},
+			]
+				\addplot[blue, thick] coordinates {(-0.5,0) (0,0)};
+				\addplot[blue, thick] coordinates {(0,1) (8,1)};
+				\addplot[blue, thick] coordinates {(8,0) (8.5,0)};
+				
+				\addplot[blue, thick, dashed] coordinates {(0,0) (0,1)};
+				\addplot[blue, thick, dashed] coordinates {(8,1) (8,0)};
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Amplitude spectrum of the periodically continued signal $\underline{X}_N[k]$]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$k$},
+				ylabel={$\underline{X}_N[k]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=4.5,
+				ymin=-1.2,
+				ymax=1.2,
+				%xtick={-1, -0.5, 0, 0.5, 1},
+				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				%ytick={0},
+			]
+				\addplot[red, thick, smooth, domain=0:4, samples=50] plot(\x, {cos(deg(pi*\x))});
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfloat[Amplitude spectrum of the window ]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$k$},
+				ylabel={$\underline{W}[k]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-4.5,
+				xmax=4.5,
+				ymin=0,
+				ymax=1.2,
+				%xtick={-1, -0.5, 0, 0.5, 1},
+				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				%ytick={0},
+			]
+				\addplot[blue, thick] coordinates {(-0.5,0) (0,0)};
+				\addplot[blue, thick] coordinates {(0,1) (8,1)};
+				\addplot[blue, thick] coordinates {(8,0) (8.5,0)};
+				
+				\addplot[blue, thick, dashed] coordinates {(0,0) (0,1)};
+				\addplot[blue, thick, dashed] coordinates {(8,1) (8,0)};
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\caption{Spectral leakage of a mono-chromatic signal}
+\end{figure}
+
+\begin{landscape}
+	\subsubsection{Some Window Functions}
+\end{landscape}
+
 
 \section{Analogies Of Time-Continuous and Time-Discrete Signals and Systems}
 
@@ -1368,6 +1614,8 @@ Parseval's theorem for discrete systems:
 	\underline{\mathrm{S}}_{E,xx}[k] = \left|\underline{X}[k]\right|^2
 \end{equation}
 
+\todo{PSD}
+
 %\subsection{Noise}
 
 \section{Digital Signals and Systems}
@@ -1411,15 +1659,24 @@ Quantization is the process of
 			height={0.25\textheight},
 			width=0.6\linewidth,
 			scale only axis,
-			xlabel={$t$},
+			xlabel={$n$},
 			ylabel={$x$},
 			%grid style={line width=.6pt, color=lightgray},
 			%grid=both,
 			xmajorgrids=false,
 			ymajorgrids=true,
 			grid style={color=lightgray, dashed},
-			axis lines=left,
 			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
 			xmin=0,
 			xmax=7,
 			ymin=0,
@@ -1460,19 +1717,167 @@ The finite set of discrete numbers has the length $K$.
 	\item Usually, $K$ is a power of $2$. $K = 2^M$. $M$ is the number of bits.
 \end{itemize}
 
-\subsubsection{Linear Mapping}
+\subsubsection{Linear Rounding Quantizer}
+
+Rounding is a common model for quantization. \textit{Remark:} There are other methods like dead-zone quantizers, which are not subject to this lecture. Refer to literature about electronics to get a comprehensive overview.
 
 The most common implementations distribute the $K$ discrete values equally between an interval of the continuous values $[\underline{\hat{X}}_L, \underline{\hat{X}}_H]$. So, the discrete values are spaced by
 \begin{equation}
-	\Delta \underline{\hat{X}} = \frac{\underline{\hat{X}}_H - \underline{\hat{X}}_L}{K}
+	\Delta \underline{\hat{X}} = \frac{\underline{\hat{X}}_H - \underline{\hat{X}}_L}{K - 1} \qquad \forall \, K \geq 1
 \end{equation}
-This is called \index{linear mapping} \textbf{linear mapping}.
+The mapping between $\underline{x}[n]$ and $\underline{x}_Q[n]$ is therefore \emph{linear}.
 
-\todo{step map}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.4\textheight},
+			width=0.8\linewidth,
+			scale only axis,
+			xlabel={$x[n]$},
+			ylabel={$x_Q[n]$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			xmajorgrids=false,
+			ymajorgrids=true,
+			grid style={color=lightgray, dashed},
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xticklabel style={rotate=90, anchor=east},
+			xmin=0,
+			xmax=9,
+			ymin=0,
+			ymax=9,
+			xtick={0, 1, ..., 8},
+			xticklabels={$0$, $\hat{X}_L$, $\hat{X}_L + \Delta \hat{X}$, $\hat{X}_L + 2 \Delta \hat{X}$, $\hat{X}_L + 3 \Delta \hat{X}$, $\hat{X}_L + 4 \Delta \hat{X}$, $\hat{X}_L + 5 \Delta \hat{X}$, $\hat{X}_L + 6 \Delta \hat{X}$, $\hat{X}_H$},
+			ytick={0, 1, ..., 8},
+			yticklabels={$0$, $\hat{X}_L$, $\hat{X}_L + \Delta \hat{X}$, $\hat{X}_L + 2 \Delta \hat{X}$, $\hat{X}_L + 3 \Delta \hat{X}$, $\hat{X}_L + 4 \Delta \hat{X}$, $\hat{X}_L + 5 \Delta \hat{X}$, $\hat{X}_L + 6 \Delta \hat{X}$, $\hat{X}_H$},
+		]
+			\addplot[red, thick] coordinates {(0, 1) (1.5, 1)};
+			\addplot[red, thick, dashed] coordinates {(1.5, 1) (1.5, 2)};
+			\pgfplotsinvokeforeach{2, 3, ..., 7}{
+				\addplot[red, thick] coordinates {({#1-0.5}, #1) ({#1+0.5}, #1)};
+				\addplot[red, thick, dashed] coordinates {({#1+0.5}, #1) ({#1+0.5}, {#1+1})};
+			}
+			\addplot[red, thick] coordinates {(7.5, 8) (9, 8)};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[A rounding quantizer with linear mapping and a set of $K = 8$ discrete values]{A rounding quantizer with linear mapping and a set of $K = 8$ discrete values. All values $x[n] < \hat{X}_L$ are mapped to $\hat{X}_L$ and all values $x[n] > \hat{X}_H$ are mapped to $\hat{X}_H$.}
+	\label{fig:ch04:linear_ammping}
+\end{figure}
 
-\todo{Example circuit}
 
-\textit{Remark:} There are other mapping like logarithmic mapping. However, this lecture only considers linear mapping.
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\node[op amp] (Cmp1){};
+		\node[op amp, below=1.5cm of Cmp1] (Cmp2){};
+		\node[below=1cm of Cmp2] (Cmpx){$\vdots$};
+		\node[op amp, below=1cm of Cmpx] (Cmpn){};
+		
+		\draw (Cmp1.-) to[short] ++(-1cm, 0);
+		\draw (Cmp2.-) to[short] ++(-1cm, 0);
+		\draw (Cmpn.-) to[short] ++(-1cm, 0);
+		\draw ([shift={(-1cm,1.5cm)}] Cmp1.-) node[vcc]{$U_{ref}$} to[R,l=$R$,-*] ([shift={(-1cm,0)}] Cmp1.-)
+			to[R,l=$R$,-*] ([shift={(-1cm,0)}] Cmp2.-)
+			to[short] ++(0,-1.5cm)
+			to[open] ([shift={(-1cm,1.5cm)}] Cmpn.-)
+			to[short,-*] ([shift={(-1cm,0)}] Cmpn.-)
+			to[short] ([shift={(-1cm,-1.5cm)}] Cmpn.-)
+			to[R,l=$R$] ([shift={(-1cm,-3cm)}] Cmpn.-) node[rground]{};
+			
+		\draw ([shift={(-4cm,0)}] Cmp1.+) node[left]{$u_{in}(t)$} to[short,o-] (Cmp1.+);
+		\draw ([shift={(-2cm,0)}] Cmp1.+) to[short,*-] ([shift={(-2cm,0)}] Cmp2.+) to[short,-] (Cmp2.+);
+		\draw ([shift={(-2cm,0)}] Cmp2.+) to[short,*-] ++(0,-1cm);
+		\draw ([shift={(-2cm,2cm)}] Cmpn.+) to[short,-] ([shift={(-2cm,0)}] Cmpn.+) to[short,-] (Cmpn.+);
+		
+		\node[below] at([shift={(-1cm,-1.5cm)}] Cmp2.-){$\vdots$};
+		\node[below] at([shift={(-2cm,-1cm)}] Cmp2.+){$\vdots$};
+		
+		\draw (Cmpn.out) to[short,-o] ++(2cm,0) node[right,align=left]{$1 \quad \text{if } u_{in}(t) \geq \frac{1}{K-1} U_{ref}$};
+		\draw (Cmp2.out) to[short,-o] ++(2cm,0) node[right,align=left]{$1 \quad \text{if } u_{in}(t) \geq \frac{K-3}{K-1} U_{ref}$};
+		\draw (Cmp1.out) to[short,-o] ++(2cm,0) node[right,align=left]{$1 \quad \text{if } u_{in}(t) \geq \frac{K-2}{K-1} U_{ref}$};
+	\end{circuitikz}
+	\caption[An example quantizer circuit implementing the rounding quantization using comparators]{An example quantizer circuit implementing the rounding quantization using comparators. $K$ resistors $R$ and $K-1$ linearly quantize $u_{in}$ into $K$ discrete values. The range is \SI{0}{V} to $U_{ref}$.}
+\end{figure}
+
+\textit{Remark:} There are other mappings like logarithmic mapping. However, this lecture only considers linear mapping.
+
+\subsection{Pulse-Code Modulation}
+
+One piece of the \ac{ADC} is missing. So far, we a have quantized, discrete signal $\underline{x}_Q[n]$.
+
+\begin{itemize}
+	\item To be processed by a computer, the values of $\underline{x}_Q[n]$ must be coded in way a computer can handle.
+	\item A computer processes signals with two discrete states $0$ and $1$. These binary signals are called \index{bit} \textbf{bits}.
+	\item Multiple bits are grouped to symbols.
+	\begin{itemize}
+		\item \index{nibble} 1 nibble: 4 bits
+		\item \index{byte} 1 byte: 8 bits
+		\item \index{word} 1 word: natural data size of a computer architecture (most commonly 32 bits or 64 bits)
+	\end{itemize}
+\end{itemize}
+
+The discrete values of $\underline{x}_Q[n]$ are coded as computer readable symbols. This mapping is called \index{pulse-code modulation} \textbf{\ac{PCM}}.
+
+\begin{table}[H]
+	\centering
+	\caption[Example PCM for $K = 8$]{Example \ac{PCM} for $K = 8$}
+	\begin{tabular}{|l|r|r|}
+		\hline
+		$\underline{x}_Q[n]$ & Data & Data (binary) \\
+		\hline
+		\hline
+		$\hat{X}_L$ & 0 & 000 \\
+		\hline
+		$\hat{X}_L + \Delta \hat{X}$ & 1 & 001 \\
+		\hline
+		$\hat{X}_L + 2 \Delta \hat{X}$ & 2 & 010 \\
+		\hline
+		$\hat{X}_L + 3 \Delta \hat{X}$ & 3 & 011 \\
+		\hline
+		$\hat{X}_L + 4 \Delta \hat{X}$ & 4 & 100 \\
+		\hline
+		$\hat{X}_L + 5 \Delta \hat{X}$ & 5 & 101 \\
+		\hline
+		$\hat{X}_L + 6 \Delta \hat{X}$ & 6 & 110 \\
+		\hline
+		$\hat{X}_H$ & 7 & 111 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+The complete processing chain of the \ac{PCM}, implemented by an \ac{ADC}, be completed to:
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{tikzpicture}
+			\node[draw, block] (Sampler){Sampling};
+			\node[draw, block, right=1cm of Sampler] (Quantizer){Quantizer};
+			\node[draw, block, right=1cm of Quantizer] (Coder){Coder};
+			
+			\draw[o->] ([xshift=-1.5cm] Sampler.west) node[left,align=right]{Time-continuous,\\ value-continuous\\ (analog) signal\\ $\underline{x}(t)$} -- (Sampler.west);
+			\draw[->] (Sampler.east) -- (Quantizer.west);
+			\draw[->] (Quantizer.east) -- (Coder.west);
+			\draw[->] (Coder.east) -- ++(1.5cm,0) node[right,align=left]{Time-discrete,\\ value-discrete,\\ and coded\\ (digital) data};
+			
+			\draw[o->] ([yshift=1cm] Sampler.north) node[above, align=center]{Sampling clock\\ $\Sha_{T_S}(t)$} -- (Sampler.north);
+			
+			\draw[decorate, decoration={brace, amplitude=3mm, mirror}] ([yshift=-5mm] Sampler.south west) -- ([yshift=-5mm] Coder.south east) node[midway, below, yshift=-3mm]{\textbf{\acf{ADC}}};
+		\end{tikzpicture}
+	\end{adjustbox}
+	\caption[Generating a PCM signal from an analogue signal $\underline{x}(t)$ using an ADC]{Generating a \ac{PCM} signal from an analogue signal $\underline{x}(t)$ using an \ac{ADC}}
+	\label{fig:ch04:signals_to_data}
+\end{figure}
 
 \subsection{Quantization Noise}
 
@@ -1492,17 +1897,334 @@ Furthermore, the quantized values differ from their original value due to roundi
 	
 	The error is bounded to
 	\begin{equation}
-		\left|\underline{e}[n]\right| \leq \frac{1}{2} \Delta \underline{\hat{X}}
+		\left|\underline{e}[n]\right| \leq \frac{1}{2} \left|\Delta \underline{\hat{X}}\right|
 	\end{equation}
 \end{definition}
 
-\todo{Quantization Noise Floor}
+\subsubsection{Quantization Error of PCM Data}
 
-\todo{Dynamic Range, dBFS}
+\ac{PCM} data is usually coded as symbols consisting of $B$ (binary) bits.
+\begin{itemize}
+	\item Subsequent symbols have a spacing of $1$ (unity spacing).
+	\item The \ac{PCM} normalizes the value spacing of the quantizer $\underline{\hat{X}}$ to unity spacing $1$.
+	\item A corollary is that the quantization error $\left|\underline{\tilde{e}}[n]\right| = \frac{1}{2}$.
+\end{itemize}
+For example if the \ac{PCM} value is $\left(10010100\right)_2$, its real value is between $\left(10010011\right)_2$ (equivalent to $\left(10010100\right)_2 - 0.5$) and $\left(10010110\right)_2$ (equivalent to $\left(10010100\right)_2 + 0.5$).
+
+\begin{itemize}
+	\item The quantization error of a \ac{PCM} signal resides in \ac{LSB}.
+	\item The quantization error is uniformly distributed between $\SI{-1/2}{LSB} = -2^{-B}$ and $\SI{+1/2}{LSB} = +2^{-B}$, where $B$ is the number of bits.
+\end{itemize}
+
+\begin{excursus}{The \ac{LSB}}
+	A binary number can be decomposed:
+	\begin{equation}
+		\left(10010101\right)_2 = 1 \cdot 2^7 + 0 \cdot 2^6 + 0 \cdot 2^5 + 1 \cdot 2^4 + 1 \cdot 2^3 + 1 \cdot 2^2 + 0 \cdot 2^1 + 1 \cdot 2^0
+	\end{equation}%
+	\nomenclature[Nb]{$\left(\cdot\right)_2$}{Binary number}%
+	\nomenclature[Nh]{$\left(\cdot\right)_{16}$}{Hexadecimal number}%
+	\nomenclature[Nd]{$\left(\cdot\right)_{10}$}{Explicit decimal number}
+	
+	The \index{least significant bit} \textbf{\ac{LSB}} is the digit with the exponent $2^0$.
+\end{excursus}
+
+\todo{Plot error}
+
+The quantization error superimposes the original signal and is therefore noise -- the \index{quantization noise} \textbf{quantization noise}.
+
+The \emph{quantization noise power} of the error, which is distributed between $-2^{-B}$ and $+2^{-B}$, is:
+\begin{equation}
+	P_{Q,N} = \hat{X}_H^2 2^{B-1} \int\limits_{-2^{-B}}^{+2^{-B}} e^2 \, \mathrm{d} e = \frac{\hat{X}_H^2}{3 \cdot 4^B}
+\end{equation}
+where $\hat{X}_H$ is the highest discrete value of the quantizer for input signals $x[n]$.
+
+\begin{definition}{The \acf{SQNR}}
+	A \ac{SNR} which is referenced to the quantization noise is called \index{signal-to-qunatization-noise ratio} \textbf{\acf{SQNR}}.
+	\begin{equation}
+		\mathrm{SQNR} = \frac{P_{Q,S}}{P_{Q,N}} = \frac{P_{Q,S} \cdot 3 \cdot 4^B}{\hat{X}_H^2}
+	\end{equation}
+	where $\hat{X}_H$ is the highest discrete value of the quantizer for input signals $x[n]$.
+	Or in the logarithmic scale:
+	\begin{equation}
+		\begin{split}
+			L_{\mathrm{SQNR}} &= \SI{10}{dB} \log_{10}\left(\frac{P_{Q,S}}{P_{Q,N}}\right) \\
+			 &= \SI{10}{dB} \log_{10}\left(\frac{P_{Q,S} \cdot 3 \cdot 4^B}{\hat{X}_H^2}\right) \\
+			 &= \SI{10}{dB} \log_{10}\left(\frac{P_{Q,S}}{\hat{X}_H^2}\right) + \SI{4.77}{dB} + B \cdot \SI{6.02}{dB}
+		\end{split}
+	\end{equation}
+\end{definition}
+
+%TODO Is this correct?
+%As a rule of thumb,
+%\begin{itemize}
+%	\item The overall \ac{SNR} is the \ac{SQNR} for \underline{strong} input signals. The quantization noise dominates the thermal noise.
+%	\item The overall \ac{SNR} is the signal-to-thermal-noise ratio for \underline{weak} input signals. The quantization noise is dominated by the thermal noise.
+%\end{itemize}
+
+\subsubsection{Dynamic Range}
+
+The maximum range of a quantizer is $\hat{X}_H - \hat{X}_L$. $\hat{X}_L$ is zero is most applications. $\hat{X}_H$ is the highest discrete value of the quantizer for input signals $x[n]$.
+
+An important characteristic of an \ac{ADC} is its \emph{resolution}. It is approximately $\frac{\hat{X}_H}{2^B}$.
+
+Let's consider the \ac{SQNR} for a sine wave at maximum amplitude $\hat{X}_H$. The power of the quantized sine wave is:
+\begin{equation}
+	P_{Q,S} = \frac{1}{2} \hat{X}_H^2
+\end{equation}
+The \ac{SQNR} is:
+\begin{equation}
+	\left.L_{\mathrm{SQNR}}\right|_{\text{Sine}} = \SI{10}{dB} \log_{10}\left(\frac{1}{2}\right) + \SI{4.77}{dB} + B \cdot \SI{6.02}{dB} = \SI{1.761}{dB} + B \cdot \SI{6.02}{dB}
+\end{equation}
+
+The \ac{SQNR} of a sine wave is the \index{dynamic range} \textbf{dynamic range} of an \ac{ADC}.
+\begin{definition}{Dynamic range of an \ac{ADC}}
+	\begin{equation}
+		L_{\mathrm{DR}} = \SI{1.761}{dB} + B \cdot \SI{6.02}{dB}
+	\end{equation}
+\end{definition}
+
+The dynamic range increases, when more bits $B$ are added. However, the number of bits $B$ correlates with the complexity of the \ac{ADC} hardware. Therefore, a trade-off between sufficient dynamic range and reasonable hardware complexity must be chosen. Typical bit numbers:
+\begin{itemize}
+	\item $B = 8$ to $B = 10$ for \ac{RF} applications with high sampling rates ($> \SI{1}{MHz}$),
+	\item $B = 16$ or $B = 24$ for audio applications with medium sampling rates ($\approx \SI{44}{kHz}$).
+\end{itemize}
+
+%\begin{excursus}{\si{dBFS}}
+%	When talking about signals in relation to an \ac{ADC}, they are referenced.
+%\end{excursus}
+
+%\subsubsection{Quantization Noise Floor}
+%
+%Analogous to the thermal noise floor,
 
 \subsection{Time Recovery}
 
-\subsection{Practical Issues}
+For wideband \ac{RF} applications, the sampling rate is chosen close to the maximum frequency of the signal, so that the Shannon-Nyquist sampling theorem can be fulfilled.
+
+The sampling rate $f_S$ is not the only important parameter. The time instance at which the sample is taken must fit, too. Thus, both period and phase of the Dirac comb $\Sha_{T_S}(t)$ used by the sampler must fit.
+
+The problem with a non-optimal sampling phase is depicted below. The difference between the current sample timing and the optimal sample timing is the \index{timing error} \textbf{timing error}.
+
+\begin{figure}[H]
+	\centering
+	\subfloat[Optimal sample timing]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.20\textheight},
+				width=0.6\linewidth,
+				scale only axis,
+				xlabel={$t$},
+				ylabel={$x$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=outer north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=4.5,
+				ymin=-1.2,
+				ymax=1.2,
+				xtick={0, 1, ..., 4},
+				ytick={-1, -0.5, ..., 1}
+			]
+				\addplot[red, smooth, domain=0:4, samples=50] plot (\x, {cos(deg(pi*\x))});
+				\addlegendentry{Original signal};
+				\addplot[green, dashed, smooth, domain=0:4, samples=50] plot (\x, {cos(deg(pi*\x))});
+				\addlegendentry{Sampled signal};
+				\addplot[blue, only marks, mark=o] coordinates {(0, 1) (1, -1) (2, 1) (3, -1) (4, 1)};
+				\addlegendentry{Sample times};
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Non-optimal sample timing]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.20\textheight},
+				width=0.6\linewidth,
+				scale only axis,
+				xlabel={$t$},
+				ylabel={$x$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=outer north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=4.5,
+				ymin=-1.7,
+				ymax=1.2,
+				xtick={0, 1, ..., 4},
+				ytick={-1, -0.5, ..., 1}
+			]
+				\addplot[red, smooth, domain=0:4, samples=50] plot (\x, {cos(deg(pi*\x))});
+				\addlegendentry{Original signal};
+				\addplot[green, dashed, smooth, domain=0:4, samples=50] plot (\x, {0.707*cos(deg(pi*\x-(pi/4)))});
+				\addlegendentry{Sampled signal};
+				\addplot[blue, only marks, mark=o] coordinates {(0.25, 0.707) (1.25, -0.707) (2.25, 0.707) (3.25, -0.707)};
+				\addlegendentry{Sample times};
+				
+				\draw[dashed] (axis cs:2,1.2) -- (axis cs:2,-1.2);
+				\draw[dashed] (axis cs:2.25,1.2) -- (axis cs:2.25,-1.2);
+				\draw[<->] (axis cs:2,-1.1) -- node[midway,yshift=-2mm,below,align=center]{Timing error} (axis cs:2.25,-1.1);
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Poor sample timing]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.20\textheight},
+				width=0.6\linewidth,
+				scale only axis,
+				xlabel={$t$},
+				ylabel={$x$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=outer north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=4.5,
+				ymin=-1.7,
+				ymax=1.2,
+				xtick={0, 1, ..., 4},
+				ytick={-1, -0.5, ..., 1}
+			]
+				\addplot[red, smooth, domain=0:4, samples=50] plot (\x, {cos(deg(pi*\x))});
+				\addlegendentry{Original signal};
+				\addplot[green, dashed] coordinates {(0, 0) (4, 0)};
+				\addlegendentry{Sampled signal};
+				\addplot[blue, only marks, mark=o] coordinates {(0.5, 0) (1.5, 0) (2.5, 0) (3.5, 0)};
+				\addlegendentry{Sample times};
+				
+				\draw[dashed] (axis cs:2,1.2) -- (axis cs:2,-1.2);
+				\draw[dashed] (axis cs:2.5,1.2) -- (axis cs:2.5,-1.2);
+				\draw[<->] (axis cs:2,-1.1) -- node[midway,yshift=-2mm,below,align=center]{Timing error} (axis cs:2.5,-1.1);
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\caption[Different situations of sample timing]{Different situations of sample timing. In this example, the signal frequency is close to half of the sampling rate (maximum allowed frequency according to the Nyquist-Shannon sampling theorem).}
+	\label{fig:ch04:timing_error}
+\end{figure}
+
+The phase (time offset) of the sampler must be adjusted to obtain an optimal sample timing. This adjustment is called \index{timing recovery} \textbf{timing recovery}. The goal is to reduce the \emph{timing error} to zero.
+
+There are different approaches to implement the timing recovery:
+\begin{itemize}
+	\item Analogue timing recovery (with forward prediction)
+	\item Hybrid timing recovery (with closed control loop)
+	\item Digital timing recovery (with forward prediction or closed control loop)
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{circuitikz}
+			\node[draw, block] at(0,0) (Sampler){Sampler};
+			\node[oscillator, below=of Sampler](Clock){};
+			\node[draw, block, left=of Clock] (Filter){Loop filter};
+			\node[draw, block, left=of Filter] (Pred){Timing error\\ prediction};
+			
+			\draw[dashed] (Sampler.north) -- ++(0, 2cm) node[below left, align=right]{Analogue\\ domain} node[below right, align=left]{Digital\\ domain};
+			\node[right=2mm of Clock, align=left]{Sampling clock};
+			
+			\draw[o->] (-11,0) node[left,align=right]{Input} -- (Sampler.west);
+			\draw[->] (Sampler.east) -- ++(1.5,0) node[right,align=left]{Further signal\\ processing};
+			
+			\draw[*->] (-10,0) |- (Pred.west);
+			\draw[->] (Pred.east) -- (Filter.west);
+			\draw[->] (Filter.east) -- (Clock.west);
+			\draw[->] (Clock.north) -- (Sampler.south);
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{Analogue timing recovery (with forward prediction)}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{circuitikz}
+			\node[draw, block] at(0,0) (Sampler){Sampler};
+			\node[oscillator, below=of Sampler](Clock){};
+			\node[draw, block, right=of Clock] (Filter){Loop filter};
+			\node[draw, block, right=of Filter] (Pred){Timing error\\ estimator};
+			
+			\draw[dashed] (Sampler.north) -- ++(0, 2cm) node[below left, align=right]{Analogue\\ domain} node[below right, align=left]{Digital\\ domain};
+			\node[left=2mm of Clock, align=right]{Sampling clock};
+			
+			\draw[o->] (-2.5,0) node[left,align=right]{Input} -- (Sampler.west);
+			\draw[->] (Sampler.east) -- ++(11,0) node[right,align=left]{Further signal\\ processing};
+			
+			\draw[*->] (10,0) |- (Pred.east);
+			\draw[->] (Pred.west) -- (Filter.east);
+			\draw[->] (Filter.west) -- (Clock.east);
+			\draw[->] (Clock.north) -- (Sampler.south);
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{Hybrid timing recovery (with closed control loop)}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{circuitikz}
+			\node[draw, block] at(0,0) (Sampler){Sampler};
+			\node[oscillator, below=of Sampler](Clock){};
+			\node[draw, block, right=of Sampler] (Resampler){Interpolation\\ and resampling};
+			\node[draw, block, below=of Resampler] (Filter){Loop filter};
+			\node[draw, block, right=of Filter] (Pred){Timing error\\ estimator};
+			
+			\draw[dashed] (Sampler.north) -- ++(0, 2cm) node[below left, align=right]{Analogue\\ domain} node[below right, align=left]{Digital\\ domain};
+			\node[left=2mm of Clock, align=right]{Free-running\\ sampling clock};
+			
+			\draw[o->] (-2.5,0) node[left,align=right]{Input} -- (Sampler.west);
+			\draw[->] (Sampler.east) -- (Resampler.west);
+			\draw[->] (Resampler.east) -- ++(6,0) node[right,align=left]{Further signal\\ processing};
+			
+			\draw[*->] (11,0) |- (Pred.east);
+			\draw[->] (Pred.west) -- (Filter.east);
+			\draw[->] (Filter.north) -- (Resampler.south);
+			
+			\draw[->] (Clock.north) -- (Sampler.south);
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{Analogue timing recovery (with closed control loop)}
+\end{figure}
+
+There various algorithms to implement the timing recovery, which will not be discussed in detail in this lecture.
+
+%\subsection{Practical Issues}
 
 \phantomsection
 \addcontentsline{toc}{section}{References}
