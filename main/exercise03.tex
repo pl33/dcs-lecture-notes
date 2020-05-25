@@ -1,0 +1,74 @@
+% SPDX-License-Identifier: CC-BY-SA-4.0
+%
+% Copyright (c) 2020 Philipp Le
+%
+% Except where otherwise noted, this work is licensed under a
+% Creative Commons Attribution-ShareAlike 4.0 License.
+%
+% Please find the full copy of the licence at:
+% https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration
+\def\thekindofdocument{Exercise}
+\def\thesubtitle{Chapter 3: Stochastic and Deterministic Processes}
+\def\therevision{1}
+\def\therevisiondate{2020-05-26}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Header
+\input{../common/settings.tex}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title Page
+\pagenumbering{Alph}
+\pagestyle{empty}
+
+% Title Page
+\input{../common/titlepage.tex}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Preface
+\pagenumbering{arabic}
+\pagestyle{headings}
+
+% Inhaltsverzeichnis
+%\tableofcontents
+%\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Content
+
+\setcounter{chapter}{3}
+
+\input{../exercise03/exercise03.tex}
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendix
+
+\begin{appendix}
+
+\chapter{Solutions}
+
+\printsolutions
+\clearpage
+
+\end{appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nachtrag
+
+% Imprint
+\input{../common/imprint.tex}
+\newpage
+
+% To Do
+\pagenumbering{alph}
+%\listoftodos
+
+\end{document}

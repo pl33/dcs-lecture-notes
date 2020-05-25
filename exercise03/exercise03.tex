@@ -1,0 +1,521 @@
+% SPDX-License-Identifier: CC-BY-SA-4.0
+%
+% Copyright (c) 2020 Philipp Le
+%
+% Except where otherwise noted, this work is licensed under a
+% Creative Commons Attribution-ShareAlike 4.0 License.
+%
+% Please find the full copy of the licence at:
+% https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+\phantomsection
+\addcontentsline{toc}{section}{Exercise 3}
+\section*{Exercise 3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Stochastic Process}]
+	A normally distributed random process produces the sequences $x_1(t)$, $x_2(t)$ and $x_3(t)$.
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|r|r|r|r|r|r|r|r|r|r|}
+			\hline
+			$t$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+			\hline
+			\hline
+			$x_1(t)$ & 4.99 & 4.37 & 8.57 & 4.01 & 3.77 & 3.35 & 3.87 & 8.39 & 6.89 & 1.96 \\
+			\hline
+			$x_2(t)$ & 3.95 & 5.35 & 2.94 & 6.38 & 4.78 & 7.62 & 5.25 & 6.81 & 5.65 & 5.29 \\
+			\hline
+			$x_3(t)$ & 7.01 & 4.40 & 4.26 & 6.54 & 4.53 & 6.85 & 4.46 & 5.81 & 6.49 & 4.11 \\
+			\hline
+		\end{tabular}
+	\end{table}
+	\begin{tasks}
+		\task
+		Calculate the stochastic mean for each time instance!
+		
+		\task
+		Calculate the temporal mean for each sequence!
+		
+		\task
+		The process is ergodic with $\mu_x = 5.00$. However, why is the condition $\E\left\{\vect{x}\right\} = \overline{x} = \mu_x$ not fulfilled?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|l|r|r|r|r|r|r|r|r|r|r|}
+				\hline
+				$t$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+				\hline
+				\hline
+				$\E\left\{\vect{x}(t)\right\}$ & 5.32 & 4.71 & 5.26 & 5.64 & 4.36 & 5.94 & 4.53 & 7.00 & 6.34 & 3.79 \\
+				\hline
+			\end{tabular}
+		\end{table}
+	
+		\task
+		\begin{itemize}
+			\item $\overline{x_1} = 5.01$
+			\item $\overline{x_1} = 5.40$
+			\item $\overline{x_1} = 5.45$
+		\end{itemize}
+	
+		\task
+		\begin{itemize}
+			\item There are only $N = 3$ sequences drawn from the random process. $\E\left\{\vect{x}\right\}$ will converge to $5.00$ for $N \rightarrow \infty$. $N = 3$ is too short.
+			\item Each sequence is only $L = 10$ samples long. $\overline{x}$ will converge to $5.00$ for $L \rightarrow \infty$. $L = 10$ is too short.
+		\end{itemize}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Cross-Correlation and Autocorrelation}]
+	Two signals are given $f_1(t)$ and $f_2(t)$. The signals are value- and time-continuous. Ten samples are given. Both signals are zero for $t < -5$ and $t > 5$.
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|r|r|r|r|r|r|r|r|r|r|r|}
+			\hline
+			$t$ & -5 & -4 & -3 & -2 & -1 & 0 & 1 & 2 & 3 & 4 & 5 \\
+			\hline
+			\hline
+			$f_1(t)$ & 0 & 1 & 2 & 3 & 4 & 5 & 4 & 3 & 2 & 1 & 0 \\
+			$f_2(t)$ & -1.34 & 0.30 & 14.54 & -1.54 & -3.03 & -1.72 & 14.16 & 2.70 & 1.17 & -2.44 & -4.66 \\
+			\hline
+		\end{tabular}
+	\end{table}
+	\begin{tasks}
+		\task
+		Calculate the cross-correlation
+		\begin{equation*}
+			\mathrm{R}_{f_1 f_2}(\tau) \approx \left(f_1 \star f_2\right)(\tau) = \sum\limits_{t=-5}^{5} f_1(t) f_2(t + \tau)
+		\end{equation*}
+		for $t = -2$, $t = -1$ and $t = 0$.
+		
+		\task
+		Signal $f_2(t)$ contains signal $f_1(t)$ which is superimposed by noise. Using the values calculated in a), how much is the time $\Delta t$ lag between $f_1(t)$ and $f_2(t)$?
+		
+		\task
+		Calculate the autocorrelation
+		\begin{equation*}
+			\mathrm{R}_{f_1 f_1}(\tau) \approx \left(f_1 \star f_1\right)(\tau) = \sum\limits_{t=-5}^{5} f_1(t) f_1(t + \tau)
+		\end{equation*}
+		for $t = -2$, $t = -1$, $t = 0$, $t = 1$ and $t = 2$.
+		
+		\task
+		How much is the signal energy $E$ of $f_1(t)$?
+		\begin{equation*}
+			E \approx \frac{1}{T} \sum\limits_{t=-5}^{5} \left|f_1(t)\right|^2
+		\end{equation*}
+		with $T = 11$?
+	\end{tasks}
+
+	\textit{Remark:} Only samples of the functions with a spacing of $1$ are given. Therefore, the indefinite integrals of both cross-correlation and autocorrelation can be approximated using the sums.
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		Full cross-correlation between $-10 \geq t \geq 10$. The cross-correlation is zero everywhere outside of the interval.
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|l|r|r|r|r|r|r|r|r|r|}
+				\hline
+				$\tau$ & -10 & -9 & -8 & -7 & -6 & -5 & -4 & -3 & -2 \\
+				\hline
+				$\mathrm{R}_{f_1 f_2}(\tau)$ & 0.0   &  -4.66 & -11.76 & -17.69 & -20.92 &  -9.99 &   8.54 &  28.92 & 45.42 \\
+				\hline
+				\hline
+				$\tau$ & -1 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+				\hline
+				$\mathrm{R}_{f_1 f_2}(\tau)$ &  71.06 &  68.68 &  63.74 &  62.42 &  65.35 &  41.9  &  32.01 & 23.08 &  11.12 \\
+				\hline
+				\hline
+				$\tau$ & 8 & 9 & 10 & & & & & & \\
+				\hline
+				$\mathrm{R}_{f_1 f_2}(\tau)$ & -2.38 &  -1.34 &   0.0 & & & & & & \\
+				\hline
+			\end{tabular}
+		\end{table}
+		\begin{itemize}
+			\item $\left(f_1 \star f_2\right)(-2) = 45.42$
+			\item $\left(f_1 \star f_2\right)(-1) = 71.06$
+			\item $\left(f_1 \star f_2\right)(0) = 68.68$
+		\end{itemize}
+	
+		\task
+		\begin{itemize}
+			\item The maximum value is at $\tau = -1$.
+			\item $f_2(t)$ is advanced by $\Delta t = 1$ in relation to $f_1(t)$.
+		\end{itemize}
+	
+		\task
+		Full autocorrelation between $-10 \geq t \geq 10$. The autocorrelation is zero everywhere outside of the interval.
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|l|r|r|r|r|r|r|r|r|r|r|r|}
+				\hline
+				$\tau$ & -10 & -9 & -8 & -7 & -6 & -5 & -4 & -3 & -2 & -1 & 0 \\
+				\hline
+				$\mathrm{R}_{f_1 f_1}(\tau)$ & 0 &  0 &  1 &  4 & 10 & 20 & 3. & 52 & 68 & 80 & 85 \\
+				\hline
+				\hline
+				$\tau$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & \\
+				\hline
+				$\mathrm{R}_{f_1 f_1}(\tau)$ & 80 & 68 & 52 & 35 & 20 & 10 &  4 &  1 &  0 &  0 & \\
+				\hline
+			\end{tabular}
+		\end{table}
+		Only three values must be calculated:
+		\begin{itemize}
+			\item $\mathrm{R}_{f_1 f_1}(\tau)(-2) = 68$
+			\item $\mathrm{R}_{f_1 f_1}(\tau)(-1) = 80$
+			\item $\mathrm{R}_{f_1 f_1}(\tau)(0) = 85$
+		\end{itemize}
+		The other two values can be deducted from the symmetry rules:
+		\begin{itemize}
+			\item $\mathrm{R}_{f_1 f_1}(\tau)(1) = \mathrm{R}_{f_1 f_1}(\tau)(-1) = 80$
+			\item $\mathrm{R}_{f_1 f_1}(\tau)(2) = \mathrm{R}_{f_1 f_1}(\tau)(-2) = 68$
+		\end{itemize}
+	
+		\task
+		\begin{itemize}
+			\item It is not necessary to solve the sum again.
+			\item The sum is $\mathrm{R}_{f_1 f_1}(\tau)(0)$.
+			\item The energy is
+			\begin{equation*}
+				E = \frac{1}{11} \mathrm{R}_{f_1 f_1}(\tau)(0) = 7.23
+			\end{equation*}
+		\end{itemize}
+	\end{tasks}
+\end{solution}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Power Spectral Density}]
+	Are the following statements about the power spectral density (PSD) true or false? If false, correct the statement!
+	\begin{tasks}
+		\task
+		The PSD is measure for the fraction of power which is located at a certain frequency.
+		
+		\task
+		The unit of the PSD is the same as the signal.
+		
+		\task
+		The PSD is even, if the signal is purely real-valued.
+		
+		\task
+		The PSD is odd, if the signal is complex-valued.
+		
+		\task
+		The PSD is always real-valued.
+		
+		\task
+		The PSD can be used to determine the output signal of an LTI system in amplitude and phase.
+		
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		True. The signal power can be obtained by integration of the PSD over all frequencies.
+		\begin{equation*}
+			P = \int\limits_{-\infty}^{\infty} \mathrm{S}_{xx}(\omega) \; \mathrm{d} \omega
+		\end{equation*}
+		
+		\task
+		False.
+		\begin{equation*}
+			\left(\text{Unit of PSD}\right) = \frac{\left(\text{Unit of signal}\right)^2}{\left(\text{Unit of frequency}\right)}
+		\end{equation*}
+		
+		For example \si{W/Hz}. Never \si{W} only, because it is the density of the power across the frequency.
+		
+		\task
+		True
+		
+		\task
+		False. There are no symmetry rules for the PSD, if the signal is complex-valued.
+		
+		\task
+		True.
+		\begin{itemize}
+			\item The autocorrelation function is always Hermitian.
+			\item The Fourier transform of a Hermitian function is always real-valued.
+			\item Therefore, the PSD is real-valued.
+		\end{itemize}
+		
+		\task
+		False.
+		\begin{itemize}
+			\item Only the amplitude can be calculated.
+			\item The phase information of the system is lost by squaring the absolute value of the transfer funtion.
+			\item Furthermore, the PSD does not contain phase information of the signal.
+		\end{itemize}
+	\begin{equation*}
+		\mathrm{S}_{yy}(\omega) = \left|\underline{H}\left(j \omega\right)\right|^2 \cdot \mathrm{S}_{xx}(\omega)
+	\end{equation*}
+	\end{tasks}
+\end{solution}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Decibel}]
+	\begin{tasks}
+		\task
+		Convert to logarithmic scale or vice versa!
+		\begin{enumerate}
+			\item \SI{2}{mW}, $P_0 = \SI{1}{mW}$
+			\item \SI{2}{V}, $U_0 = \SI{1}{V}$
+			\item \num{400000}
+			\item \SI{5}{GHz}, $f_0 = \SI{1}{Hz}$
+			\item \SI{8}{fW/MHz}, $P_0 = \SI{1}{mW}$
+			\item \SI{5}{dB\micro\volt}
+			\item \SI{-10}{dBm}
+		\end{enumerate}
+	
+		\task
+		Convert to logarithmic scale or vice versa!
+		\begin{enumerate}
+			\item $1$
+			\item $2$
+			\item $4$
+			\item $0.5$
+			\item $0.25$
+			\item $10$
+			\item $100$
+			\item $0.1$
+			\item $0.01$
+			\item $500$
+			\item $0.04$
+		\end{enumerate}
+	
+		\task
+		A signal is transmitted with a power of \SI{13}{dBm}. The signal is attenuated by \SI{86}{dB} on its way to the receiver. Assume that a ohmic resistance of \SI{50}{\ohm} is connected to the antenna. What voltage can be measured at this resistance? Give your result in linear and logarithmic scale!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{enumerate}
+			\item $\SI{10}{dBm} \cdot \log_{10} \left(\frac{\SI{2}{mW}}{\SI{1}{mW}}\right) = \SI{3}{dBm}$
+			\item $\SI{20}{dBV} \cdot \log_{10} \left(\frac{\SI{2}{V}}{\SI{1}{V}}\right) = \SI{6}{dBV}$ (20 instead of 10 for voltages and currents)
+			\item $\SI{10}{dB} \cdot \log_{10} \left(400000\right) = \SI{53}{dB}$
+			\item $\SI{10}{dBHz} \cdot \log_{10} \left(\frac{\SI{5}{GHz}}{\SI{1}{Hz}}\right) = \SI{97}{dbHz}$
+			\item $\SI{10}{dBm/Hz} \cdot \log_{10} \left(\frac{\SI{8}{fW}}{\SI{1}{mW}}\right) = \SI{-111}{dB/Hz}$
+			\item $\SI{1}{\micro\volt} \cdot 10^{\SI{5}{dB\micro\volt} / 20} = \SI{1.8}{\micro\volt}$
+			\item $\SI{1}{mW} \cdot 10^{\SI{-10}{dBm} / 10} = \SI{100}{\micro.W}$
+		\end{enumerate}
+	
+		\task
+		\begin{enumerate}
+			\item $\SI{0}{dB}$
+			\item $\SI{3}{dB}$
+			\item $\SI{6}{dB}$, Hint: $4 = 2 \cdot 2 \equiv \SI{3}{dB} + \SI{3}{dB} = \SI{6}{dB}$
+			\item $\SI{-3}{dB}$
+			\item $\SI{-6}{dB}$, Hint: $0.25 = 0.5 \cdot 0.5 \equiv \SI{-3}{dB} + \SI{-3}{dB} = \SI{-6}{dB}$
+			\item $\SI{10}{dB}$
+			\item $\SI{20}{dB}$
+			\item $\SI{-10}{dB}$
+			\item $\SI{-20}{dB}$
+			\item $\SI{27}{dB}$, Hint: $50 = 10 \cdot 10 \cdot 10 \cdot 0.5 \equiv \SI{10}{dB} + \SI{10}{dB} + \SI{10}{dB} - \SI{3}{dB} = \SI{27}{dB}$
+			\item $\SI{-14}{dB}$, Hint: $0.04 = 0.1 \cdot 0.1 \cdot 2 \cdot 2 \equiv \SI{-10}{dB} + \SI{-10}{dB} + \SI{3}{dB} + \SI{3}{dB} = \SI{-14}{dB}$
+		\end{enumerate}
+		Remember these rules as an RF engineer! You will need them often. ;)
+		
+		\task
+		Power at the receiver antenna:
+		\begin{equation*}
+			\SI{13}{dBm} \underbrace{- \SI{86}{dB}}_{\text{Atennuation}} = \SI{-73}{dBm}
+		\end{equation*}
+		
+		\begin{itemize}
+			\item 1st way: Convert to linear scale, then back to logarithmic scale
+			\begin{equation*}
+				\begin{split}
+					\SI{-73}{dBm} &\equiv \SI{50.1}{pW} \\
+					U = \sqrt{P \cdot R} &= \sqrt{\SI{50.1}{pW} \cdot \SI{50}{\ohm}} = \SI{50}{\micro\volt} \\
+					\SI{50}{\micro\volt} &\equiv \SI{17}{dB\micro\volt}
+				\end{split}
+			\end{equation*}
+			\item 2nd way: Convert everything to logarithmic scale. The multiplication of power and resistance must happen with ``pure'' SI units.
+			\begin{equation*}
+			\begin{split}
+				\SI{50}{\ohm} &\equiv \SI{10}{dB\ohm} \cdot \log_{10} \left(\frac{\SI{50}{\ohm}}{\SI{1}{\ohm}}\right) = \SI{17}{dB\ohm} \\
+				\SI{-73}{dBm} \underbrace{- \SI{30}{dB}}_{\text{\si{mW} to \si{W}}} &= \SI{-103}{dBW} \quad \text{SI unit!} \\
+				\SI{-103}{dBW} + \SI{17}{dB\ohm} &= \SI{-86}{dBV} \quad \text{SI unit!} \\
+				\SI{-86}{dBV} \underbrace{+ \SI{120}{dB}}_{\text{\si{V} to \si{\micro\volt}}} &= \SI{34}{dB\micro\volt} \\
+				\SI{34}{dB\micro\volt} &\equiv \SI{50}{\micro\volt}
+			\end{split}
+			\end{equation*}
+		\end{itemize}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Noise}]
+	The following system is given:
+	\begin{figure}[H]
+		\centering
+		\begin{adjustbox}{scale=0.7}
+			\begin{tikzpicture}
+				\node[draw, block] (BPF){Band-pass filter\\ $L_{G,1} = \SI{-3}{dB}$\\ $L_{F,1} = \SI{3}{dB}$};
+				\node[draw, block, right=of BPF] (Mix){Mixer\\ $L_{G,2} = \SI{3}{dB}$\\ $L_{F,2} = \SI{20}{dB}$};
+				\node[draw, block, right=of Mix] (Demod){Demodulator\\ $L_{G,3} = \SI{6}{dB}$\\ $L_{F,3} = \SI{10}{dB}$};
+				\node[draw, block, right=of Demod] (Amp){Amplifier\\ $L_{G,4} = \SI{50}{dB}$\\ $L_{F,4} = \SI{16}{dB}$};
+				
+				\draw[o->] ([xshift=-1cm]BPF.west) node[left,align=right]{Input $u(t)$} -- (BPF.west);
+				\draw[->] (BPF.east) -- (Mix.west);
+				\draw[->] (Mix.east) -- (Demod.west);
+				\draw[->] (Demod.east) -- (Amp.west);
+				\draw[->] (Amp.east) -- ([xshift=1cm]Amp.east) node[right,align=left]{Output};
+			\end{tikzpicture}
+		\end{adjustbox}
+	\end{figure}
+	\begin{itemize}
+		\item The band-pass filter has an input impedance of $\SI{50}{\ohm}$.
+		\item The band-pass filter has a bandwidth of $\SI{2}{MHz}$.
+		\item All system components are at room temperature: \SI{25}{\degreeCelsius}.
+	\end{itemize}
+	The input signal is:
+	\begin{equation*}
+		u(t) = \SI{70.71}{\micro\volt} \cdot \cos\left(\omega_0 t\right)
+	\end{equation*}
+	
+	Give all results in the logarithmic scale!
+	\begin{tasks}
+		\task
+		What is the signal power, the thermal noise power and the SNR at the input?
+		
+		\task
+		What is the overall noise figure and overall gain of the chain? What is the signal power, the thermal noise power and the SNR at the output of the chain?
+		
+		\task
+		Now a low noise amplifier is placed in front of the mixer. The gain of the last amplifier is reduced, so that the overall gain does not change.
+		\begin{figure}[H]
+			\centering
+			\begin{adjustbox}{scale=0.5}
+				\begin{tikzpicture}
+					\node[draw, block] (Amp){Low noise amplifier\\ $L_{G,0} = \SI{30}{dB}$\\ $L_{F,0} = \SI{6}{dB}$};
+					\node[draw, block, right=of Amp] (BPF){Band-pass filter\\ $L_{G,1} = \SI{-3}{dB}$\\ $L_{F,1} = \SI{3}{dB}$};
+					\node[draw, block, right=of BPF] (Mix){Mixer\\ $L_{G,2} = \SI{3}{dB}$\\ $L_{F,2} = \SI{20}{dB}$};
+					\node[draw, block, right=of Mix] (Demod){Demodulator\\ $L_{G,3} = \SI{6}{dB}$\\ $L_{F,3} = \SI{10}{dB}$};
+					\node[draw, block, right=of Demod] (Amp2){Amplifier\\ $L_{G,4} = \SI{20}{dB}$\\ $L_{F,4} = \SI{16}{dB}$};
+					
+					\draw[o->] ([xshift=-1cm]Amp.west) node[left,align=right]{Input $u(t)$} -- (Amp.west);
+					\draw[->] (Amp.east) -- (BPF.west);
+					\draw[->] (BPF.east) -- (Mix.west);
+					\draw[->] (Mix.east) -- (Demod.west);
+					\draw[->] (Demod.east) -- (Amp2.west);
+					\draw[->] (Amp2.east) -- ([xshift=1cm]Amp2.east) node[right,align=left]{Output};
+				\end{tikzpicture}
+			\end{adjustbox}
+		\end{figure}
+		For this new constellation: What is the overall noise figure and overall gain of the chain? What is the signal power, the thermal noise power and the SNR at the output of the chain?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{itemize}
+			\item The RMS value of the signals is: $\frac{\SI{70.71}{\micro\volt}}{\sqrt{2}} = \SI{50}{\micro\volt}$
+			\item At $\SI{50}{\ohm}$, this yields a power of: $P = \frac{U^2}{R} = \SI{50}{pW} \equiv L_{P,S} = \SI{-73}{dBm}$
+			\item The noise floor at room temperature is: $k_B T \equiv \SI{-174}{dBm/Hz}$
+			\item The filter's bandwidth is: $\SI{63}{dBHz}$
+			\item The noise power is: $k_B T \Delta f \equiv L_{P,N} = \SI{-174}{dBm/Hz} + \SI{63}{dBHz} = \SI{-111}{dBm}$
+			\item The SNR is: $L_{\mathrm{SNR}} = L_{P,S} - L_{P,N} = \SI{-73}{dBm} - (\SI{-111}{dBm}) = \SI{38}{dBm}$
+		\end{itemize}
+	
+		\task
+		Convert to linear scale:
+		\begin{itemize}
+			\item $G_1 = 0.5$
+			\item $F_1 = 2$
+			\item $G_2 = 2$
+			\item $F_2 = 100$
+			\item $G_3 = 4$
+			\item $F_3 = 10$
+			\item $G_4 = 100000$
+			\item $F_4 = 40$
+		\end{itemize}
+	
+		Using the Friis formula:
+		\begin{equation*}
+			\begin{split}
+				F_{\text{total}} &= F_1 + \frac{F_2 - 1}{G_1} + \frac{F_3 - 1}{G_1 G_2} + \frac{F_4 - 1}{G_1 G_2 G_3} \\
+				 &= 218 \\
+				L_{F,\text{total}} &= \SI{23.4}{dB}
+			\end{split}
+		\end{equation*}
+		Overall gain:
+		\begin{equation*}
+			L_{G,\text{total}} = \SI{-3}{dB} + \SI{3}{dB} + \SI{6}{dB} + \SI{50}{dB} = \SI{56}{dB}
+		\end{equation*}
+		\begin{itemize}
+			\item Output signal power: $\SI{-73}{dBm} + L_{G,\text{total}} = \SI{-17}{dBm}$
+			\item Output noise power: $\SI{-111}{dBm} + L_{G,\text{total}} + L_{F,\text{total}} = \SI{-31.6}{dBm}$
+			\item Output SNR: $\SI{38}{dBm} - L_{F,\text{total}} = \SI{14.6}{dB}$
+		\end{itemize}
+	
+		\task
+		Convert to linear scale:
+		\begin{itemize}
+			\item $G_0 = 1000$
+			\item $F_0 = 4$
+			\item $G_1 = 0.5$
+			\item $F_1 = 2$
+			\item $G_2 = 2$
+			\item $F_2 = 100$
+			\item $G_3 = 4$
+			\item $F_3 = 10$
+			\item $G_4 = 10$
+			\item $F_4 = 40$
+		\end{itemize}
+	
+		Using the Friis formula:
+		\begin{equation*}
+			\begin{split}
+				F_{\text{total}} &= F_0 + \frac{F_1 - 1}{G_0} + \frac{F_2 - 1}{G_0 G_1} + \frac{F_3 - 1}{G_0 G_1 G_2} + \frac{F_4 - 1}{G_0 G_1 G_2 G_3} \\
+				 &= 4.22 \\
+				L_{F,\text{total}} &= \SI{6.3}{dB}
+			\end{split}
+		\end{equation*}
+		Overall gain:
+		\begin{equation*}
+			L_{G,\text{total}} = \SI{50}{dB} + \SI{-3}{dB} + \SI{3}{dB} + \SI{6}{dB} = \SI{56}{dB}
+		\end{equation*}
+		\begin{itemize}
+			\item Output signal power: $\SI{-73}{dBm} + L_{G,\text{total}} = \SI{-17}{dBm}$
+			\item Output noise power: $\SI{-111}{dBm} + L_{G,\text{total}} + L_{F,\text{total}} = \SI{-48.7}{dBm}$
+			\item Output SNR: $\SI{38}{dBm} - L_{F,\text{total}} = \SI{31.7}{dB}$
+		\end{itemize}
+	
+		\textbf{Conclusion:}
+		\begin{itemize}
+			\item Placing the low noise amplifier in front of the chain, gives a much better ($\SI{16.1}{dB}$) SNR. The gain is equal.
+			\item The overall noise figure is dominated by the first component in the chain.
+			\item In this constellation, first component is a low noise amplifier with high gain and low noise figure.
+			\item The high gain scales down the noise contribution of the components following in the chain.
+			\item Therefore, it is always feasible to place a low noise amplifier (high gain, low noise) to the front of the chain.
+		\end{itemize}
+	\end{tasks}
+\end{solution}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{question}[subtitle={Decibel}]
+%	\begin{tasks}
+%	\end{tasks}
+%\end{question}
+%
+%\begin{solution}
+%	\begin{tasks}
+%	\end{tasks}
+%\end{solution}
