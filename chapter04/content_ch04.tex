@@ -1061,7 +1061,7 @@ The \ac{DFT} \eqref{eq:ch04:dft} can be expressed as a linear system of equation
 	\cmplxvect{X} = \underline{\mat{F}} \cdot \cmplxvect{x}
 \end{equation}
 
-The $N \times N$ transformation matrix $\underline{\mat{F}}$ is the \index{DFTmatrx} \textbf{ac{DFT} matrix} with the elements:
+The $N \times N$ transformation matrix $\underline{\mat{F}}$ is the \index{DFT matrx} \textbf{\ac{DFT} matrix} with the elements:
 \begin{equation}
 	\underline{F}_{pq} = \underline{w}^{p \cdot q}
 \end{equation}
@@ -1135,7 +1135,8 @@ A sequence of length $N$ is taken out of $\underline{x}[n]$:
 \end{equation}
 The act of extracting $N$ subsequent samples out of $\underline{x}[n]$ is called \index{windowing} \textbf{windowing}. To illustrate this, imagine that you watch a sequence moving to the left through a window. The movement to the left is the time advance. Because of the window, you see a certain extract of $\underline{x}[n]$ only at one time.
 
-\todo{Window illustration}
+%TODO
+%\todo{Window illustration}
 
 This sequence is repeated indefinitely (\emph{periodic continuation}):
 \begin{equation}
@@ -1169,22 +1170,31 @@ Windowing and periodic continuation is, in fact, a sampling of the \ac{DTFT} (se
 
 The widowing of $\underline{x}[n]$ to obtain $\underline{x}_N[n]$ as discussed before did not change the values of $\underline{x}[n]$. This can be expressed as a multiplication of the original sequence with the rectangular function:
 \begin{equation}
-	\underline{x}_W[n] = \underline{x}_N[n] \cdot \underbrace{w_{rect,N}[n]}_{\text{Rectangular window}}
+	\underline{x}_W[n] = \underline{x}_N[n] \cdot \underbrace{w_{rect,M}[n]}_{\text{Rectangular window}}
 \end{equation}
-where
+where $w_{rect,M}[n]$ is the rectangular function of the length $M$:
 \begin{equation}
-	w_{rect,N}[n] = \begin{cases}
-		1 &\quad \text{if } \; 0 \geq n < N, \\
+	w_{rect,M}[n] = \begin{cases}
+		1 &\quad \text{if } \; -\frac{M-1}{2} \leq n \leq \frac{M-1}{2}, \\
 		0 &\quad \text{else}.
 	\end{cases}
 \end{equation}
+$M$ shall be an odd number.
 
-$w[n]$ is called \index{window function} \textbf{window function}.
+$w_M[n]$ is called \index{window function} \textbf{window function}.
 \begin{definition}{Window function}
-	A \index{window function} \textbf{window function} $w[n]$ is applied to the periodically continued sequence $\underline{x}_N[n]$ by multiplication:
+	A \index{window function} \textbf{window function} $w_M[n]$ is applied to the periodically continued sequence $\underline{x}_N[n]$ by multiplication:
 	\begin{equation}
-		\underline{x}_N[n] \equiv \underline{x}[n] \cdot w[n]
+		\underline{x}_N[n] \equiv \underline{x}[n] \cdot w_M[n]
 	\end{equation}
+	
+	Window functions are $w_M[n]$:
+	\begin{itemize}
+		\item limited to a length of $M$
+		\item where $M$ is an odd number,
+		\item always symmetric (even functions), and
+		\item real-valued.
+	\end{itemize}
 \end{definition}
 
 \subsubsection{Spectral Leakage}
@@ -1206,6 +1216,16 @@ This has some implications:
 	\item The non-zero frequency components produced by the convolution show up as noise and \underline{decrease the \ac{SNR}}.
 \end{itemize}
 This effect is called \index{spectral leakage} \textbf{spectral leakage}.
+
+\begin{fact}
+	The window changes only the amplitude spectrum, but not the phase of the sampled signal.
+\end{fact}
+\begin{itemize}
+	\item The window function is an even, real-valued function.
+	\item Its Fourier transform is therefore always real-valued, too.
+	\item The purely real-valued ($\arg{\cdot} = 0 \text{ or } \pm \pi$) Fourier transform cannot change the phase of the signal.
+\end{itemize}
+
 
 \begin{figure}[H]
 	\centering
@@ -1242,6 +1262,11 @@ This effect is called \index{spectral leakage} \textbf{spectral leakage}.
 				%ytick={0},
 			]
 				\addplot[red, thick, smooth, domain=0:4, samples=50] plot(\x, {cos(deg(pi*\x))});
+				
+				\pgfplotsinvokeforeach{0,0.25,...,4}{
+					\addplot[blue] coordinates {(#1,0) (#1,{cos(deg(pi*#1))})};
+					\addplot[blue, only marks, mark=o] coordinates {(#1,{cos(deg(pi*#1))})};
+				}
 			\end{axis}
 		\end{tikzpicture}
 	}
@@ -1254,7 +1279,7 @@ This effect is called \index{spectral leakage} \textbf{spectral leakage}.
 				width=0.35\linewidth,
 				scale only axis,
 				xlabel={$n$},
-				ylabel={$w[n]$},
+				ylabel={$w_9[n]$},
 				%grid style={line width=.6pt, color=lightgray},
 				%grid=both,
 				grid=none,
@@ -1269,7 +1294,7 @@ This effect is called \index{spectral leakage} \textbf{spectral leakage}.
 					at={(ticklabel* cs:1.05)},
 					anchor=east,
 				},
-				xmin=-0.5,
+				xmin=-8.5,
 				xmax=8.5,
 				ymin=0,
 				ymax=1.2,
@@ -1277,12 +1302,23 @@ This effect is called \index{spectral leakage} \textbf{spectral leakage}.
 				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
 				%ytick={0},
 			]
-				\addplot[blue, thick] coordinates {(-0.5,0) (0,0)};
-				\addplot[blue, thick] coordinates {(0,1) (8,1)};
-				\addplot[blue, thick] coordinates {(8,0) (8.5,0)};
-				
-				\addplot[blue, thick, dashed] coordinates {(0,0) (0,1)};
-				\addplot[blue, thick, dashed] coordinates {(8,1) (8,0)};
+				\pgfplotsinvokeforeach{-4,-3,...,4}{
+					\addplot[blue] coordinates {(#1,0) (#1,1)};
+					\addplot[blue, only marks, mark=o] coordinates {(#1,1)};
+				}
+				\pgfplotsinvokeforeach{-8,-7,...,-5}{
+					\addplot[blue, only marks, mark=o] coordinates {(#1,0)};
+				}
+				\pgfplotsinvokeforeach{5,6,...,8}{
+					\addplot[blue, only marks, mark=o] coordinates {(#1,0)};
+				}
+			
+%				\addplot[blue, thick] coordinates {(-0.5,0) (0,0)};
+%				\addplot[blue, thick] coordinates {(0,1) (8,1)};
+%				\addplot[blue, thick] coordinates {(8,0) (8.5,0)};
+%				
+%				\addplot[blue, thick, dashed] coordinates {(0,0) (0,1)};
+%				\addplot[blue, thick, dashed] coordinates {(8,1) (8,0)};
 			\end{axis}
 		\end{tikzpicture}
 	}
@@ -1310,15 +1346,26 @@ This effect is called \index{spectral leakage} \textbf{spectral leakage}.
 					at={(ticklabel* cs:1.05)},
 					anchor=east,
 				},
-				xmin=0,
-				xmax=4.5,
-				ymin=-1.2,
+				xmin=-8.5,
+				xmax=8.5,
+				ymin=0,
 				ymax=1.2,
 				%xtick={-1, -0.5, 0, 0.5, 1},
 				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
 				%ytick={0},
 			]
-				\addplot[red, thick, smooth, domain=0:4, samples=50] plot(\x, {cos(deg(pi*\x))});
+				\addplot[red] coordinates {(2,0) (2,1)};
+				\addplot[red] coordinates {(-2,0) (-2,1)};
+				\addplot[red, only marks, mark=o] coordinates {(-2,1) (2,1)};
+				\pgfplotsinvokeforeach{-8,-7,...,-3}{
+					\addplot[red, only marks, mark=o] coordinates {(#1,0)};
+				}
+				\pgfplotsinvokeforeach{-1,0,1}{
+					\addplot[red, only marks, mark=o] coordinates {(#1,0)};
+				}
+				\pgfplotsinvokeforeach{3,4,...,8}{
+					\addplot[red, only marks, mark=o] coordinates {(#1,0)};
+				}
 			\end{axis}
 		\end{tikzpicture}
 	}
@@ -1346,20 +1393,65 @@ This effect is called \index{spectral leakage} \textbf{spectral leakage}.
 					at={(ticklabel* cs:1.05)},
 					anchor=east,
 				},
-				xmin=-4.5,
-				xmax=4.5,
+				xmin=-8.5,
+				xmax=8.5,
 				ymin=0,
-				ymax=1.2,
+				ymax=9.5,
 				%xtick={-1, -0.5, 0, 0.5, 1},
 				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
 				%ytick={0},
 			]
-				\addplot[blue, thick] coordinates {(-0.5,0) (0,0)};
-				\addplot[blue, thick] coordinates {(0,1) (8,1)};
-				\addplot[blue, thick] coordinates {(8,0) (8.5,0)};
-				
-				\addplot[blue, thick, dashed] coordinates {(0,0) (0,1)};
-				\addplot[blue, thick, dashed] coordinates {(8,1) (8,0)};
+				\addplot[blue, dashed, smooth, domain=-8:8, samples=50] plot(\x, {9*abs(asinc((pi*\x/8), 9))});
+				\pgfplotsinvokeforeach{-8,-7,...,8}{
+					\addplot[red] coordinates {(#1,0) (#1,{9*abs(asinc((pi*#1/8), 9))})};
+					\addplot[red, only marks, mark=o] coordinates {(#1,{9*abs(asinc((pi*#1/8), 9))})};
+				}
+			
+				\draw[blue, dashed] (axis cs:1.5,7) -- (axis cs:2.5,7) node[right,align=left,color=blue]{$\underline{W}\left(e^{j\phi}\right)$\\ $\phi=2\pi\frac{k}{N}$};
+				\draw (axis cs:-1,7) node[left,align=right,color=blue]{Main lobe};
+				\draw (axis cs:-2,3) node[left,align=right,color=blue]{Side lobes};
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+
+	\subfloat[Amplitude spectrum of the windowed signal, showing spectral leakage]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.7\linewidth,
+				scale only axis,
+				xlabel={$k$},
+				ylabel={$\underline{X}_W[k]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-8.5,
+				xmax=8.5,
+				ymin=0,
+				ymax=12.5,
+				%xtick={-1, -0.5, 0, 0.5, 1},
+				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				%ytick={0},
+			]
+				\addplot[blue, dashed, smooth, domain=-8:8, samples=50] plot(\x, {9*abs(asinc((pi*(\x+2)/8), 9)) + 9*abs(asinc((pi*(\x-2)/8), 9))});
+				\pgfplotsinvokeforeach{-8,-7,...,8}{
+					\addplot[red] coordinates {(#1,0) (#1,{9*abs(asinc((pi*(#1+2)/8), 9)) + 9*abs(asinc((pi*(#1-2)/8), 9))})};
+					\addplot[red, only marks, mark=o] coordinates {(#1,{9*abs(asinc((pi*(#1+2)/8), 9)) + 9*abs(asinc((pi*(#1-2)/8), 9))})};
+				}
+				\draw[blue, dashed] (axis cs:3,9) -- (axis cs:3.7,9) node[right,align=left,color=blue]{$\left.\underline{X}_W\left(e^{j\phi}\right)\right|_{\phi=2\pi\frac{k}{N}}$};
 			\end{axis}
 		\end{tikzpicture}
 	}
@@ -1367,8 +1459,54 @@ This effect is called \index{spectral leakage} \textbf{spectral leakage}.
 	\caption{Spectral leakage of a mono-chromatic signal}
 \end{figure}
 
+In the above example:
+\begin{itemize}
+	\item The monochromatic signal has two ideal pulses in its amplitude spectrum.
+	\item The rectangular window has a sinc-like amplitude spectrum.
+	\item Due to the convolution, the ideal pulses of the monochromatic signal are ``leak'' across the frequency axis and take a sinc-like pattern, too.
+\end{itemize}
+
+The selection of the window function has implications on the spectral leakage:
+\begin{itemize}
+	\item The width of the \emph{main lobe}, defines how much the sampled signal is spread across the frequency axis.
+	\item The \emph{main lobe} should be narrow, in order to retain the original shape of the signal.
+	\item The amplitudes of the \emph{side lobes} define the noise, which emerges.
+	\item The \emph{side lobes} should be as weak as possible regarding their amplitudes, in order to reduce the noise and improve the \ac{SNR}.
+\end{itemize}
+
+\begin{fact}
+	Generally, window functions with narrow main lobes have strong side lobes, and vice versa. So, there is always a trade-off.
+\end{fact}
+
 \begin{landscape}
 	\subsubsection{Some Window Functions}
+	
+	\begin{longtable}[H]{|l|l|l|l|l|}
+		\hline
+		Name & Function $w[n]$ & Peak side lobe & Main lobe width & Time domain and frequency response \\
+		\hline
+		\hline
+		Rectangular & $w[n] = \begin{cases}1, &\quad 0 \leq n \leq M,\\ 0, &\quad \text{otherwise}.\end{cases}$ & \SI{-13}{dB} & $\frac{4\pi}{M+1}$ & \includegraphics[width=5cm]{svg/ch04_win_rect.pdf} \\
+		\hline
+		Hamming & $w[n] = \begin{cases}0.54 - 0.46 \cos\left(\frac{2 \pi n}{M}\right), &\quad 0 \leq n \leq M,\\ 0, &\quad \text{otherwise}.\end{cases}$ & \SI{-41}{dB} & $\frac{8\pi}{M}$ &  \includegraphics[width=5cm]{svg/ch04_win_hamming.pdf} \\
+		\hline
+		Hann & $w[n] = \begin{cases}0.5 - 0.5 \cos\left(\frac{2 \pi n}{M}\right), &\quad 0 \leq n \leq M,\\ 0, &\quad \text{otherwise}.\end{cases}$ & \SI{-31}{dB} & $\frac{8\pi}{M}$ &  \includegraphics[width=5cm]{svg/ch04_win_hann.pdf} \\
+		\hline
+		Blackman & $w[n] = \begin{cases}0.42 - 0.5 \cos\left(\frac{2 \pi n}{M}\right) & \\ \quad + 0.08 \cos\left(\frac{4 \pi n}{M}\right), &\quad 0 \leq n \leq M,\\ 0, &\quad \text{otherwise}.\end{cases}$ & \SI{-57}{dB} & $\frac{12\pi}{M}$ &  \includegraphics[width=5cm]{svg/ch04_win_blackman.pdf} \\
+		\hline
+		Bartlett & $w[n] = \begin{cases}2n/M, &\quad 0 \leq n \leq M/2,\\ 2 - 2n/M, &\quad M/2 < n \leq M,\\ 0, &\quad \text{otherwise}.\end{cases}$ & \SI{-25}{dB} & $\frac{8\pi}{M}$ &  \includegraphics[width=5cm]{svg/ch04_win_tri.pdf} \\
+		\hline
+		Gauss & $w[n] = \begin{cases}\exp\left(- \frac{1}{2} \left(\frac{n - M/2}{\sigma M / 2}\right)^2\right), &\quad 0 \leq n \leq M,\\ 0, &\quad \text{otherwise}.\end{cases}$ & \multicolumn{2}{l|}{Adjustable by $\sigma$} &  \includegraphics[width=5cm]{svg/ch04_win_gauss.pdf} \\
+		\hline
+	\end{longtable}
+
+	\textit{Picture credits:} \licensequote{\cite{Niemitalo2013}}{Olli Niemitalo}{\href{https://creativecommons.org/publicdomain/zero/1.0/deed.en}{CC0 1.0}}
+	
+	\begin{itemize}
+		\item Now, you see the trade-off which must be made between narrow main lobe and weak side lobes.
+		\item The rectangular window has a narrow main lobe but strong side lobes.
+		\item The Blackman window has weak side lobes but a wide main lobe.
+	\end{itemize}
 \end{landscape}
 
 
@@ -1597,26 +1735,36 @@ All considerations apply for ergodic or \ac{WSS} processes only:
 	\end{equation}
 \end{itemize}
 
-\subsection{Energy Spectral Density}
-
-%TODO
+\subsubsection{Energy Spectral Density}
 
 Parseval's theorem for discrete systems:
 \begin{equation}
 	\sum\limits_{n=0}^{N-1} \left|\underline{x}[n]\right|^2 = \frac{1}{N} \sum\limits_{k=0}^{N-1} \left|\underline{X}[k]\right|^2
 \end{equation}
 
+The signal energy is defined to:
 \begin{equation}
-	E = \sum\limits_{n=0}^{N-1} \left|\underline{x}[n]\right|^2
+	E = T_S^2 \sum\limits_{n=0}^{N-1} \left|\underline{x}[n]\right|^2 \stackrel{!}{=} \sum\limits_{n=0}^{N-1} \underline{\mathrm{S}}_{E,xx}[k]
+\end{equation}
+The sampling period $T_S$ (spacing between the samples) must be kept, because the physical energy depends on the duration of the samples.
+
+The energy spectral density is:
+\begin{equation}
+	\underline{\mathrm{S}}_{E,xx}[k] = \frac{T_S^2}{N} \left|\underline{X}[k]\right|^2
 \end{equation}
 
+\subsubsection{Power Spectral Density}
+
+The signal power is:
 \begin{equation}
-	\underline{\mathrm{S}}_{E,xx}[k] = \left|\underline{X}[k]\right|^2
+	P = \frac{T_S^2}{T} \sum\limits_{n=0}^{N-1} \left|\underline{x}[n]\right|^2 \stackrel{!}{=} \sum\limits_{n=0}^{N-1} \underline{\mathrm{S}}_{xx}[k]
 \end{equation}
+Where $T = N T_S$ is the duration of the signal.
 
-\todo{PSD}
-
-%\subsection{Noise}
+Using the Parseval's theorem:
+\begin{equation}
+	\underline{\mathrm{S}}_{xx}[k] = \underline{\mathrm{S}}_{P,xx}[k] = \frac{T_S}{N} \sum\limits_{n=0}^{N-1} \left|\underline{X}[k]\right|^2
+\end{equation}
 
 \section{Digital Signals and Systems}
 
@@ -1928,7 +2076,8 @@ For example if the \ac{PCM} value is $\left(10010100\right)_2$, its real value i
 	The \index{least significant bit} \textbf{\ac{LSB}} is the digit with the exponent $2^0$.
 \end{excursus}
 
-\todo{Plot error}
+%TODO
+%\todo{Plot error}
 
 The quantization error superimposes the original signal and is therefore noise -- the \index{quantization noise} \textbf{quantization noise}.
 
