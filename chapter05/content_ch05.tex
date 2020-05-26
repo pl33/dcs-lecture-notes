@@ -1,0 +1,90 @@
+% SPDX-License-Identifier: CC-BY-SA-4.0
+%
+% Copyright (c) 2020 Philipp Le
+%
+% Except where otherwise noted, this work is licensed under a
+% Creative Commons Attribution-ShareAlike 4.0 License.
+%
+% Please find the full copy of the licence at:
+% https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+\chapter{Modulation}
+
+\begin{refsection}
+	
+The task of a communication system is transmitting information.
+
+Example: Voice transmission
+\begin{itemize}
+	\item Voice has a spectrum from about \SI{20}{Hz} to \SI{20}{kHz}
+	\item It is not feasible to transmit the spectrum directly as electromagnetic waves.
+	\item The electromagnetic spectrum must be shared with myriads of other users.
+	\item So, the voice is shifted to a higher frequency, for example, \SI{144.3}{MHz}.
+	\item The voice is \emph{modulated} on this \emph{carrier} of \SI{144.3}{MHz}.
+	\item The voice is then located from about \SI{144.28}{MHz} to \SI{144.32}{MHz}.
+\end{itemize}
+
+\begin{definition}{Modulation}
+	\index{modulation} \textbf{Modulation} is the process of altering a signal -- the \index{carrier} \textbf{carrier} -- so that it contains the information of the \index{baseband} \textbf{baseband} signal.
+\end{definition}
+
+In the previous example, the voice was the baseband signal. This can be transferred to any kind of information. In this chapter, we will discuss techniques to modulate data on carriers which can be transmitted over wired and wireless channels.
+
+\section{Modulation in The Time and Frequency Domain}
+
+Generally, the carrier is a \emph{monochromatic} signal, i.e., it is a sinusoidal function. A sinusoidal function has three parameters: (angular) frequency $\omega_C$, phase $\varphi_C$ and amplitude $\hat{X}_C$.
+\begin{equation}
+	x_C(t) = \hat{X}_C \cos\left(\omega_C t + \varphi_C\right)
+\end{equation}
+The frequency is fixed to the carrier frequency. The other two parameters can be altered and the information can be modulated into them.
+
+There are two classes of modulation:
+\begin{itemize}
+	\item \textbf{Amplitude modulation} The amplitude of the carrier is altered.
+	\begin{equation}
+		x_{S,AM}(t) = f_{\hat{X}(t)} \cos\left(\omega_C t + \varphi_C\right)
+	\end{equation}
+	\item \textbf{Phase modulation} The phase of the carrier is altered.
+	\begin{equation}
+		x_{S,PM}(t) = \hat{X}_C \cos\left(\omega_C t + f_{\varphi}(t)\right)
+	\end{equation}
+\end{itemize}
+
+\subsection{Amplitude Modulation}
+
+\subsection{Phase Modulation}
+
+\subsection{Technical Realization}
+
+\todo{Non-linear component}
+
+\todo{IP3}
+
+\section{Digital Modulation Techniques}
+
+\subsection{Phase Shift Keying}
+
+\subsection{Coherent and Non-Coherent Demodulation}
+
+\subsection{Constellation Diagrams}
+
+\todo{What is a symbol?}
+
+\todo{Data to symbol mapping}
+
+\todo{QAM}
+
+\subsection{IQ Modulator}
+
+\todo{signal chain: S/P -> constellation diagram -> iFFT -> IQ}
+
+\subsection{Synchronization 2: Carrier Recovery}
+
+\todo{Frequency and phase offset}
+
+
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\printbibliography[heading=subbibliography]
+\end{refsection}
+
