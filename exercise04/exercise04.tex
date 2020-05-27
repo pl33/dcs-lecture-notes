@@ -1,0 +1,100 @@
+% SPDX-License-Identifier: CC-BY-SA-4.0
+%
+% Copyright (c) 2020 Philipp Le
+%
+% Except where otherwise noted, this work is licensed under a
+% Creative Commons Attribution-ShareAlike 4.0 License.
+%
+% Please find the full copy of the licence at:
+% https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+\phantomsection
+\addcontentsline{toc}{section}{Exercise 4}
+\section*{Exercise 4}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Sampling Periodic Signals}]
+	\begin{equation*}
+		u(t) = \SI{2}{V} \cos\left(2\pi \SI{2}{MHz} t + \SI{60}{\degree}\right)
+	\end{equation*}
+	The signal is sampled with a sampling period of $T_S = \SI{125}{\nano\second}$. The first sample taken is $u(t = 0)$.
+	
+	\begin{tasks}
+		\task
+		Plot the function from $t = 0$ to $t = \SI{1}{\micro\second}$!
+		
+		\task
+		Calculate the samples $n = 0 \dots 8$!
+		
+		\task
+		What is the DTFT of the signal?
+		
+		Hints:
+		\begin{equation*}
+			\begin{split}
+				x[n] = e^{-j a n} &= \underline{X}_{\frac{2\pi}{T_S}}\left(e^{-j T_S \omega}\right) = 2 \pi \cdot \delta \left(\omega + a\right) \\
+				\cos\left(b\right) &= \frac{1}{2} \left(e^{j b} + e^{-j b}\right)
+			\end{split}
+		\end{equation*}
+		
+		\task
+		Can the DFT directly applied to the signal? If yes, determine the smallest $N$ and give the values of all $\underline{U}[k]$!
+		
+		\task
+		What is the longest possible sampling period? What must be considered at this sampling period?
+		
+		\task
+		Now, the sampling period is changed to $T_S = \SI{0.5}{\micro\second}$. There is no anti-aliasing filter. The reconstruction filter is an ideal low-pass filter with a cut-off frequency of \SI{50}{kHz}. Give the reconstructed output function in the time domain! Give an explanation in the frequency domain!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{question}[subtitle={Sampling Non-Periodic Signals}]
+%	\begin{tasks}
+%	\end{tasks}
+%\end{question}
+%
+%\begin{solution}
+%	\begin{tasks}
+%	\end{tasks}
+%\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Quantization}]
+	The signal of task 1b) is now quantized. The quantizer has $8$ discrete values. These values are equally distributed between \SI{-2}{V} and \SI{2}{V}. Prior to sampling, the original time-continuous signal passed through an ideal low-pass filter with a cut-off frequency of \SI{4}{MHz}.
+	
+	\begin{tasks}
+		\task
+		Define a mapping from the value-continuous samples to the value-discrete samples!
+		
+		\task
+		The value-discrete samples are now pulse-code modulated. How many bits are required?
+		
+		\task
+		Determine the quantization error for each value-discrete sample! How much is the signal-to-noise ratio?
+		
+		\task
+		3 bits are a very poor resolution. How many bits are appropriate for the quantizer to obtain the best signal-to-noise ratio? Effects of the window filter are neglected. Assume that the signal has passed through a processing chain with a total gain of \SI{25}{dB} and noise figure of \SI{12}{dB} prior to quantization. The input of the quantizer has an impedance of \SI{50}{\ohm}. % 14 bits
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{question}[subtitle={Decibel}]
+%	\begin{tasks}
+%	\end{tasks}
+%\end{question}
+%
+%\begin{solution}
+%	\begin{tasks}
+%	\end{tasks}
+%\end{solution}
