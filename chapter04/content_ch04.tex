@@ -1871,7 +1871,7 @@ Rounding is a common model for quantization. \textit{Remark:} There are other me
 
 The most common implementations distribute the $K$ discrete values equally between an interval of the continuous values $[\underline{\hat{X}}_L, \underline{\hat{X}}_H]$. So, the discrete values are spaced by
 \begin{equation}
-	\Delta \underline{\hat{X}} = \frac{\underline{\hat{X}}_H - \underline{\hat{X}}_L}{K - 1} \qquad \forall \, K \geq 1
+	\Delta \underline{\hat{X}} = \frac{\underline{\hat{X}}_H - \underline{\hat{X}}_L}{K - 1} \qquad \forall \, K \geq 2, K \in \mathbb{N}
 \end{equation}
 The mapping between $\underline{x}[n]$ and $\underline{x}_Q[n]$ is therefore \emph{linear}.
 
@@ -1906,9 +1906,9 @@ The mapping between $\underline{x}[n]$ and $\underline{x}_Q[n]$ is therefore \em
 			ymin=0,
 			ymax=9,
 			xtick={0, 1, ..., 8},
-			xticklabels={$0$, $\hat{X}_L$, $\hat{X}_L + \Delta \hat{X}$, $\hat{X}_L + 2 \Delta \hat{X}$, $\hat{X}_L + 3 \Delta \hat{X}$, $\hat{X}_L + 4 \Delta \hat{X}$, $\hat{X}_L + 5 \Delta \hat{X}$, $\hat{X}_L + 6 \Delta \hat{X}$, $\hat{X}_H$},
+			xticklabels={$0$, $\hat{X}_L = \hat{X}_L + 0 \Delta \hat{X}$, $\hat{X}_L + 1 \Delta \hat{X}$, $\hat{X}_L + 2 \Delta \hat{X}$, $\hat{X}_L + 3 \Delta \hat{X}$, $\hat{X}_L + 4 \Delta \hat{X}$, $\hat{X}_L + 5 \Delta \hat{X}$, $\hat{X}_L + 6 \Delta \hat{X}$, $\hat{X}_H = \hat{X}_L + 7 \Delta \hat{X}$},
 			ytick={0, 1, ..., 8},
-			yticklabels={$0$, $\hat{X}_L$, $\hat{X}_L + \Delta \hat{X}$, $\hat{X}_L + 2 \Delta \hat{X}$, $\hat{X}_L + 3 \Delta \hat{X}$, $\hat{X}_L + 4 \Delta \hat{X}$, $\hat{X}_L + 5 \Delta \hat{X}$, $\hat{X}_L + 6 \Delta \hat{X}$, $\hat{X}_H$},
+			yticklabels={$0$, $\hat{X}_L = \hat{X}_L + 0 \Delta \hat{X}$, $\hat{X}_L + 1 \Delta \hat{X}$, $\hat{X}_L + 2 \Delta \hat{X}$, $\hat{X}_L + 3 \Delta \hat{X}$, $\hat{X}_L + 4 \Delta \hat{X}$, $\hat{X}_L + 5 \Delta \hat{X}$, $\hat{X}_L + 6 \Delta \hat{X}$, $\hat{X}_H = \hat{X}_L + 7 \Delta \hat{X}$},
 		]
 			\addplot[red, thick] coordinates {(0, 1) (1.5, 1)};
 			\addplot[red, thick, dashed] coordinates {(1.5, 1) (1.5, 2)};
@@ -1935,13 +1935,13 @@ The mapping between $\underline{x}[n]$ and $\underline{x}_Q[n]$ is therefore \em
 		\draw (Cmp1.-) to[short] ++(-1cm, 0);
 		\draw (Cmp2.-) to[short] ++(-1cm, 0);
 		\draw (Cmpn.-) to[short] ++(-1cm, 0);
-		\draw ([shift={(-1cm,1.5cm)}] Cmp1.-) node[vcc]{$U_{ref}$} to[R,l=$R$,-*] ([shift={(-1cm,0)}] Cmp1.-)
+		\draw ([shift={(-1cm,1.5cm)}] Cmp1.-) node[vcc]{$U_{ref}$} to[R,l=$\frac{1}{2}R$,-*] ([shift={(-1cm,0)}] Cmp1.-)
 			to[R,l=$R$,-*] ([shift={(-1cm,0)}] Cmp2.-)
 			to[short] ++(0,-1.5cm)
 			to[open] ([shift={(-1cm,1.5cm)}] Cmpn.-)
 			to[short,-*] ([shift={(-1cm,0)}] Cmpn.-)
 			to[short] ([shift={(-1cm,-1.5cm)}] Cmpn.-)
-			to[R,l=$R$] ([shift={(-1cm,-3cm)}] Cmpn.-) node[rground]{};
+			to[R,l=$\frac{1}{2}R$] ([shift={(-1cm,-3cm)}] Cmpn.-) node[rground]{};
 			
 		\draw ([shift={(-4cm,0)}] Cmp1.+) node[left]{$u_{in}(t)$} to[short,o-] (Cmp1.+);
 		\draw ([shift={(-2cm,0)}] Cmp1.+) to[short,*-] ([shift={(-2cm,0)}] Cmp2.+) to[short,-] (Cmp2.+);
@@ -1985,9 +1985,9 @@ The discrete values of $\underline{x}_Q[n]$ are coded as computer readable symbo
 		$\underline{x}_Q[n]$ & Data & Data (binary) \\
 		\hline
 		\hline
-		$\hat{X}_L$ & 0 & 000 \\
+		$\hat{X}_L = \hat{X}_L + 0 \Delta \hat{X}$ & 0 & 000 \\
 		\hline
-		$\hat{X}_L + \Delta \hat{X}$ & 1 & 001 \\
+		$\hat{X}_L + 1 \Delta \hat{X}$ & 1 & 001 \\
 		\hline
 		$\hat{X}_L + 2 \Delta \hat{X}$ & 2 & 010 \\
 		\hline
@@ -1999,7 +1999,7 @@ The discrete values of $\underline{x}_Q[n]$ are coded as computer readable symbo
 		\hline
 		$\hat{X}_L + 6 \Delta \hat{X}$ & 6 & 110 \\
 		\hline
-		$\hat{X}_H$ & 7 & 111 \\
+		$\hat{X}_H = \hat{X}_L + 7 \Delta \hat{X}$ & 7 & 111 \\
 		\hline
 	\end{tabular}
 \end{table}
