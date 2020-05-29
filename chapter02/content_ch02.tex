@@ -325,11 +325,11 @@ Now, you can prove that the cosine and sine functions are orthogonal to each oth
 
 Furthermore, the sine and cosine functions with \underline{different} indices are orthogonal to each other.
 \begin{equation}
-	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \cos\left(n \omega_0 t\right) \cos\left(p \omega_0 t\right) \, \mathrm{d} t = \frac{\pi}{\omega_0} \cdot \delta_{np} \qquad \forall \; n, p \in \mathbb{N}
+	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \cos\left(n \omega_0 t\right) \cos\left(p \omega_0 t\right) \, \mathrm{d} t = \frac{\pi}{\omega_0} \cdot \delta_{np} \qquad \forall \; n, p \in \mathbb{N} \backslash \{0\}
 	\label{eq:ch02:orth_rel_cos}
 \end{equation}
 \begin{equation}
-	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \sin\left(m \omega_0 t\right) \sin\left(q \omega_0 t\right) \, \mathrm{d} t = \frac{\pi}{\omega_0} \cdot \delta_{mq} \qquad \forall \; m, q \in \mathbb{N}
+	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \sin\left(m \omega_0 t\right) \sin\left(q \omega_0 t\right) \, \mathrm{d} t = \frac{\pi}{\omega_0} \cdot \delta_{mq} \qquad \forall \; m, q \in \mathbb{N} \backslash \{0\}
 	\label{eq:ch02:orth_rel_sin}
 \end{equation}
 with the Kronecker delta
@@ -362,10 +362,13 @@ The orthogonality relations are useful to extract the coefficients $a_n$ and $b_
 Using the orthogonality relations, the coefficients $\tilde{a}_n$ and $\tilde{b}_n$ can be obtained by:
 \begin{subequations}
 	\begin{align}
-		\tilde{a}_n &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \cos\left(n \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_an} \\
-		\tilde{b}_m &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \sin\left(m \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_bm}
+		\tilde{a}_n &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \cos\left(n \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_an} \qquad \forall \; n > 0 \\
+		\tilde{b}_m &= \frac{\omega_0}{\pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \cdot \sin\left(m \omega_0 t\right) \, \mathrm{d} t \label{eq_ch02_fourier_series_coeff_bm} \qquad \forall \; m > 0 \\
+		\tilde{a}_0 &= \frac{\omega_0}{2 \pi} \int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} \tilde{x}_p(t) \, \mathrm{d} t \\
+		\tilde{b}_0 &= 0
 	\end{align}
 \end{subequations}
+\textit{Remark: } $a_0$ and $b_0$ need a special treatment, because of slightly changed orthogonality relations.
 
 \begin{proof}{Parameter Extraction for $\tilde{a}_n$}
 	Given is a periodic function $\tilde{x}_p(t)$, which can be decomposed into:
@@ -440,6 +443,8 @@ It is based on the orthogonality relation:
 	\int\limits_{-\frac{T_0}{2}}^{\frac{T_0}{2}} e^{j n \omega_0 t} e^{-j p \omega_0 t} \, \mathrm{d} t = \frac{2 \pi}{\omega_0} \cdot \delta_{np} \qquad \forall \; n, p \in \mathbb{Z}
 	\label{eq:ch02:orth_rel_exp}
 \end{equation}
+
+\vspace*{1em}
 
 \begin{definition}{Complex-Valued Fourier series}
 	A complex-valued, periodic signal $\underline{x_p}(t)$ can be decomposed into a series complex-valued mono-chromatic signals \eqref{eq:ch02:fourier_series_cmplx} -- the \index{Fourier series!complex-valued} \textbf{complex-valued Fourier series}.

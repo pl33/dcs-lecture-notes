@@ -139,10 +139,10 @@
 				 &= \frac{1}{\pi n} \left(
 				 	\SI{0.8}{V} \cdot \left(
 				 		\sin\left(\frac{\pi}{2}n\right)
-				 		- \underbrace{\sin\left(-\frac{\pi}{2}n\right)}_{= \sin\left(\frac{\pi}{2}n\right)}
+				 		- \underbrace{\sin\left(-\frac{\pi}{2}n\right)}_{= -\sin\left(\frac{\pi}{2}n\right)}
 				 	\right)
 				 	- \SI{0.2}{V} \cdot \left(
-				 		\underbrace{\sin\left(\frac{3\pi}{2}n\right)}_{= \sin\left(\frac{\pi}{2}n\right)}
+				 		\underbrace{\sin\left(\frac{3\pi}{2}n\right)}_{= -\sin\left(\frac{\pi}{2}n\right)}
 				 		- \sin\left(\frac{\pi}{2}n\right)
 				 	\right)
 				 \right) \\
@@ -806,7 +806,7 @@
 		\end{equation*}
 		Using the time-shift theorem:
 		\begin{equation*}
-			u_o(t) = \mathcal{F}^{-1}\left\{\underline{U}_i\left(j \omega\right)\right\} = \SI{1.19}{V} \cdot \cos\left(2 \pi \cdot \SI{2.5}{kHz} \cdot t - \SI{53.6}{\degree}\right)
+			u_o(t) = \mathcal{F}^{-1}\left\{\underline{U}_i\left(j \omega\right)\right\} = \SI{1.19}{V} \cdot \cos\left(2 \pi \cdot \SI{2.5}{kHz} \cdot t + \SI{53.6}{\degree}\right)
 		\end{equation*}
 		The signal has been attenuated and phase-shifted.
 	\end{tasks}
