@@ -25,10 +25,10 @@ Example: Voice transmission
 \end{itemize}
 
 \begin{definition}{Modulation}
-	\index{modulation} \textbf{Modulation} is the process of altering a signal -- the \index{carrier} \textbf{carrier} -- so that it contains the information of the \index{baseband} \textbf{baseband} signal.
+	\index{modulation} \textbf{Modulation} is the process of altering a signal -- the \index{carrier} \textbf{carrier} -- so that it contains the information to be transmitted.
 \end{definition}
 
-In the previous example, the voice was the baseband signal. This can be transferred to any kind of information. In this chapter, we will discuss techniques to modulate data on carriers which can be transmitted over wired and wireless channels.
+In the previous example, the voice was the information-carrying signal. This can be transferred to any kind of information. In this chapter, we will discuss techniques to modulate data on carriers which can be transmitted over wired and wireless channels.
 
 \todo{Block diagram modulator}
 
@@ -53,9 +53,16 @@ There are two classes of modulation:
 	\end{equation}
 \end{itemize}
 
+This section covers basic modulation techniques of analogue signals.
+\begin{itemize}
+	\item The considerations are explanatory and are extended to digital signals in the following section.
+	\item This section shall offer an understanding of how modulation works in general (for both analogue and digital signals).
+	\item A digital signal must be converted to an analogue signal in order to physically exists. It can then be modulated onto a carrier and transmitted as an electromagnetic wave.
+\end{itemize}
+
 \subsection{Amplitude Modulation}
 
-\index{amplitude modulation} \textbf{\ac{AM}} is the alteration of the carrier's amplitude.
+The \index{amplitude modulation} \textbf{\ac{AM}} is the alteration of the carrier's amplitude.
 
 \begin{attention}
 	By now, all signals are real, because the technical realization is considered. Physical signals must always be real.
@@ -72,20 +79,20 @@ where
 	\item $\varphi_C$ is the phase offset of the carrier.
 \end{itemize}
 
-The carrier amplitude can be altered by multiplying it with the instantaneous value of the baseband signal $x_B(t)$:
+The carrier amplitude can be altered by multiplying it with the instantaneous value of the information-carrying signal $x_B(t)$:
 \begin{equation}
-	x_M(t) = x_B(t) \cdot \left(1 + \mu x_C(t)\right)
+	x_{DSB-TC}(t) = x_B(t) \cdot \left(1 + \mu x_C(t)\right)
 	\label{eq:ch05:amdsb_timedomain}
 \end{equation}
 \begin{itemize}
 	\item The waveform of the carrier is retained. The carrier is still present in the modulated signal. This is represented by the $+1$ in the sum.
-	\item Its amplitude is changed by the instantaneous value of the baseband signal. The contribution of the baseband signal is defined by the factor $\mu$.
+	\item Its amplitude is changed by the instantaneous value of the information-carrying signal. The contribution of the information-carrying signal is defined by the factor $\mu$.
 \end{itemize}
 
 \begin{figure}[H]
 	\centering
 	
-	\subfloat[Carier and signal signals]{
+	\subfloat[Carrier and information-carrying signals]{
 		\centering
 		\begin{tikzpicture}
 			\begin{axis}[
@@ -119,12 +126,12 @@ The carrier amplitude can be altered by multiplying it with the instantaneous va
 				\addplot[blue, smooth, domain=0:8, samples=200] plot(\x, {cos(deg(2*pi*2*\x))});
 				\addlegendentry{Carrier $x_C(t)$};
 				\addplot[red, smooth, domain=0:8, samples=50] plot(\x, {cos(deg(2*pi*0.25*\x))});
-				\addlegendentry{Baseband $x_B(t)$};
+				\addlegendentry{Information $x_B(t)$};
 			\end{axis}
 		\end{tikzpicture}
 	}
 
-	\subfloat[\acs{DSB} \acs{AM} (with carrier)]{
+	\subfloat[\acs{DSB-TC} \acs{AM} (with carrier)]{
 		\centering
 		\begin{tikzpicture}
 			\begin{axis}[
@@ -132,7 +139,7 @@ The carrier amplitude can be altered by multiplying it with the instantaneous va
 				width=0.6\linewidth,
 				scale only axis,
 				xlabel={$t$},
-				ylabel={$x_{DSB}(t)$},
+				ylabel={$x_{DSB-TC}(t)$},
 				%grid style={line width=.6pt, color=lightgray},
 				%grid=both,
 				grid=none,
@@ -156,13 +163,223 @@ The carrier amplitude can be altered by multiplying it with the instantaneous va
 				%ytick={0},
 			]
 				\addplot[red, smooth, domain=0:8, samples=150] plot(\x, {cos(deg(2*pi*2*\x)) * (1+0.5*cos(deg(2*pi*0.25*\x)))});
-				\addlegendentry{\acs{DSB} Signal $x_{DSB}(t)$};
+				\addlegendentry{\acs{DSB} Signal $x_{DSB-TC}(t)$};
 				\addplot[olive, dashed, smooth, domain=0:8, samples=150] plot(\x, {(1+0.5*cos(deg(2*pi*0.25*\x)))});
 				\addlegendentry{Envelope of $x_B(t)$};
 			\end{axis}
 		\end{tikzpicture}
 	}
 
+	\caption{\acs{DSB} \acs{AM} of analogue signals}
+\end{figure}
+
+\subsubsection{Frequency Domain}
+
+Assumptions for the information-carrying signal:
+\begin{itemize}
+	\item The information-carrying signal is band-limited to $-f_B \geq f \geq f_B$ ($\underline{X}_B\left(j\omega\right) = 0 \quad \forall \; |f| > f_B$).
+	\item The information-carrying signal is real-valued. Its spectrum is therefore symmetric ($\underline{X}_B\left(j\omega\right) = \overline{\underline{X}_B\left(-j\omega\right)}$).
+\end{itemize}
+
+The carrier is monochromatic \eqref{eq:ch05:carrier_timedomain}. Its \ac{CTFT} is:
+\begin{equation}
+	\underline{X}_C\left(j\omega\right) = \hat{X}_C \pi \left( \delta\left(\omega + 2 \pi f_C \right) + \delta\left(\omega - 2 \pi f_C \right) \right)
+\end{equation}
+
+The time-domain expression \eqref{eq:ch05:amdsb_timedomain} of the \ac{AM} is in the frequency domain:
+\begin{equation}
+	\underline{X}_{DSB-TC}\left(j\omega\right) = \underline{X}_C\left(j\omega\right) + \mu \underline{X}_C\left(j\omega\right) * \underline{X}_B\left(j\omega\right)
+\end{equation}
+The multiplication becomes a convolution.
+\begin{equation}
+	\underline{X}_{DSB-TC}\left(j\omega\right) = \hat{X}_C \pi \left( \underbrace{\delta\left(\omega + 2 \pi f_C \right) + \mu \underline{X}_B\left(j\left(\omega + 2 \pi f_C\right)\right)}_{\text{Carrier plus frequency-shifted information (-)}} + \underbrace{\delta\left(\omega - 2 \pi f_C \right) + \mu \underline{X}_B\left(j\left(\omega - 2 \pi f_C\right)\right)}_{\text{Carrier plus frequency-shifted information (+)}} \right)
+\end{equation}
+
+\textbf{The \ac{AM} is a frequency shift of the information-carrying in both the positive and the negative direction.}
+
+Due to the symmetry of the information-carrying signal, there is an \emph{upper sideband} and a \emph{lower sideband}, carrying the identical information, around the carrier.
+
+Because of the presence of the carrier and both sidebands, the modulation is called \index{double-sideband!transmitted carrier} \textbf{\acf{DSB-TC}}.
+
+\begin{definition}{Transmission bandwidth of \acs{DSB} \acs{AM}}
+	The modulated signal of the \acs{DSB} \acs{AM} consists of the positive and negative part of the information-carrying signal shifted in frequency to the carrier frequency. The information-carrying signal emerges as sidebands.
+	
+	Therefore, the bandwidth of the modulated signal is $[\omega_C - \omega_B, \omega_C + \omega_B]$. The difference $2 \omega_B$ is called \index{transmission bandwidth} \textbf{transmission bandwidth}.
+\end{definition}
+
+\begin{fact}
+	The transmission bandwidth of \acs{DSB} \acs{AM} is the double of the maximum frequency in the information-carrying signal $2 \omega_B$.
+\end{fact}
+
+\begin{figure}[H]
+	\subfloat[Information-carrying signal $\underline{X}_B\left(j\omega\right)$ (real-valued in time-domain)] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_B\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-0.5, 0, 0.5},
+				xticklabels={$- \omega_B$, $0$, $\omega_B$},
+				ytick={0},
+			]
+				\draw[red, thick] (axis cs:-0.5,0) -- (axis cs:0,0.7);
+				\draw[red, thick] (axis cs:0,0.7) -- (axis cs:0.5,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Carrier signal $\underline{X}_C\left(j\omega\right)$ (real-valued in time-domain)] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_C\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, 0, 2},
+				xticklabels={$- \omega_C$, $0$, $\omega_C$},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{-2, 2}{
+					\draw[-latex, blue, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[\acs{AM} \acs{DSB-TC} modulated signal $\underline{X}_{DSB-TC}\left(j\omega\right)$ with frequency-shifted information and carrier (real-valued in time-domain)] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_{DSB-TC}\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, 0, 2},
+				xticklabels={$- \omega_C$, $0$, $\omega_C$},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{-2, 2}{
+					\draw[-latex, red, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+					\draw[red, thick] (axis cs:{#1-0.5},0) -- (axis cs:#1,0.7);
+					\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.5},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\caption{Spectrum of the \acs{DSB-TC} \acs{AM} signal}
+\end{figure}
+
+\subsection{Carrier Suppression}
+
+The carrier does not contain any information. It can therefore be removed from the modulated signal. The $+1$ of \eqref{eq:ch05:amdsb_timedomain} is dropped. The \ac{AM} becomes a simple multiplication.
+\begin{equation}
+	x_{DSB-SC}(t) = x_B(t) \cdot x_C(t)
+	\label{eq:ch05:amdsbsc_timedomain}
+\end{equation}
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Carrier and information-carrying signals]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.6\linewidth,
+				scale only axis,
+				xlabel={$t$},
+				ylabel={$x(t)$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=outer north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-0.5,
+				xmax=8.5,
+				ymin=-1.2,
+				ymax=1.2,
+				%xtick={0,0.125,...,1},
+				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				%ytick={0},
+			]
+				\addplot[blue, smooth, domain=0:8, samples=200] plot(\x, {cos(deg(2*pi*2*\x))});
+				\addlegendentry{Carrier $x_C(t)$};
+				\addplot[red, smooth, domain=0:8, samples=50] plot(\x, {cos(deg(2*pi*0.25*\x))});
+				\addlegendentry{Information $x_B(t)$};
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
 	\subfloat[\acs{DSB-SC} \acs{AM} (carrier suppressed)]{
 		\centering
 		\begin{tikzpicture}
@@ -201,47 +418,159 @@ The carrier amplitude can be altered by multiplying it with the instantaneous va
 			\end{axis}
 		\end{tikzpicture}
 	}
-
-	\caption{\acs{DSB} \acs{AM} of analogue signals}
+	
+	\caption{\acs{DSB-SC} \acs{AM} of analogue signals}
 \end{figure}
 
-\subsubsection{Frequency Domain of AM Signals}
+The multiplication in the time-domain becomes a convolution in the frequency domain:
+\begin{equation}
+	\begin{split}
+		\underline{X}_{DSB-SC}\left(j\omega\right) &= \underline{X}_C\left(j\omega\right) * \underline{X}_B\left(j\omega\right) \\
+		 &= \hat{X}_C \pi \left( \underbrace{\underline{X}_B\left(j\left(\omega + 2 \pi f_C\right)\right)}_{\text{Frequency-shifted information (-)}} + \underbrace{\underline{X}_B\left(j\left(\omega - 2 \pi f_C\right)\right)}_{\text{Frequency-shifted information (+)}} \right)
+	\end{split}
+\end{equation}
 
-Assumptions for the baseband signal:
+The information-carrying signal is frequency-shifted in both positive and negative directions. It emerges as two sidebands at carrier frequency. However, the carrier is not present in the output signal. Therefore, the modulation is called \index{double-sideband!suppressed carrier} \textbf{\acf{DSB-SC}}.
+
+Like the \ac{DSB-TC}, the transmission bandwidth of the \ac{DSB-SC} is $2 \omega_B$.
+
+\begin{figure}[H]
+	\subfloat[Information-carrying signal $\underline{X}_B\left(j\omega\right)$ (real-valued in time-domain)] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_B\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-0.5, 0, 0.5},
+				xticklabels={$- \omega_B$, $0$, $\omega_B$},
+				ytick={0},
+			]
+				\draw[red, thick] (axis cs:-0.5,0) -- (axis cs:0,0.7);
+				\draw[red, thick] (axis cs:0,0.7) -- (axis cs:0.5,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Carrier signal $\underline{X}_C\left(j\omega\right)$ (real-valued in time-domain)] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_C\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, 0, 2},
+				xticklabels={$- \omega_C$, $0$, $\omega_C$},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{-2, 2}{
+					\draw[-latex, blue, very thick] (axis cs:#1,0) -- (axis cs:#1,1);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[\acs{AM} \acs{DSB} modulated signal $\underline{X}_{DSB}\left(j\omega\right)$ with frequency-shifted information (real-valued in time-domain). The carrier is suppressed.] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_{DSB}\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3.5,
+				xmax=3.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, 0, 2},
+				xticklabels={$- \omega_C$, $0$, $\omega_C$},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{-2, 2}{
+					\draw[red, thick] (axis cs:{#1-0.5},0) -- (axis cs:#1,0.7);
+					\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.5},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\caption{Spectrum of the \acs{DSB-SC} \acs{AM} signal}
+\end{figure}
+
+\subsubsection{Sideband suppression}
+
 \begin{itemize}
-	\item The baseband signal is band-limited to $-f_B \geq f \geq f_B$ ($\underline{X}_B\left(j\omega\right) = 0 \quad \forall \; |f| > f_B$).
-	\item The baseband signal is real-valued. Its spectrum is therefore symmetric ($\underline{X}_B\left(j\omega\right) = \overline{\underline{X}_B\left(-j\omega\right)}$).
+	\item The two sidebands contain identical information.
+	\item Therefore, one sideband can be removed without losing information.
+	\item High-quality filters with steep slopes in the amplitude response may be used to suppress one the side bands.
+	\item The resulting \index{single-sideband} \textbf{\ac{SSB} \ac{AM}} is mainly used for analogue signals, which is out of the scope of this lecture.
 \end{itemize}
 
-The carrier is monochromatic \eqref{eq:ch05:carrier_timedomain}. Its \ac{CTFT} is:
-\begin{equation}
-	\underline{X}_C\left(j\omega\right) = \hat{X}_C \pi \left( \delta\left(\omega + 2 \pi f_C \right) + \delta\left(\omega - 2 \pi f_C \right) \right)
-\end{equation}
+\subsection{Phase Modulation}
 
-The time-domain expression \eqref{eq:ch05:amdsb_timedomain} of the \ac{AM} is in the frequency domain:
-\begin{equation}
-	\underline{X}_M\left(j\omega\right) = \underline{X}_C\left(j\omega\right) + \mu \underline{X}_C\left(j\omega\right) * \underline{X}_B\left(j\omega\right)
-\end{equation}
-The multiplication becomes a convolution.
-\begin{equation}
-	\underline{X}_M\left(j\omega\right) = \hat{X}_C \pi \left( \underbrace{\delta\left(\omega + 2 \pi f_C \right) + \mu \underline{X}_B\left(j\left(\omega + 2 \pi f_C\right)\right)}_{\text{Carrier plus modulated baseband (-)}} + \underbrace{\delta\left(\omega - 2 \pi f_C \right) + \mu \underline{X}_B\left(j\left(\omega - 2 \pi f_C\right)\right)}_{\text{Carrier plus modulated baseband (+)}} \right)
-\end{equation}
 
-\textbf{The \ac{AM} is a frequency shift of the baseband in both the positive and the negative direction.}
+\section{Frequency mixer}
 
-Due to the symmetry of the baseband, there is an \emph{upper sideband} and a \emph{lower sideband}, carrying the identical information, around the carrier.
+\todo{Modulation vs. Mixing}
 
-\todo{frequency domain plot}
+\todo{Baseband}
 
-\todo{carrier suppression}
-
-\todo{single-sideband}
-
-\subsection{Sideband suppression}
-
-%\subsection{Phase Modulation}
-
-\subsection{Modulation vs. Mixing}
+\subsection{Mirror Frequencies}
 
 \subsection{Technical Realization of Mixers}
 
@@ -249,7 +578,10 @@ Due to the symmetry of the baseband, there is an \emph{upper sideband} and a \em
 
 \todo{IP3}
 
-\subsection{Coherent and Non-Coherent Demodulation}
+\subsection{Zero-Intermediate-Frequency}
+
+\subsection{Mixing Complex-Valued Baseband Signals}
+
 
 \section{Digital Modulation Techniques}
 
@@ -268,6 +600,10 @@ Due to the symmetry of the baseband, there is an \emph{upper sideband} and a \em
 \subsection{IQ Modulator}
 
 \todo{signal chain: S/P -> constellation diagram -> iFFT -> IQ}
+
+\subsection{Coherent and Non-Coherent Demodulation}
+
+\subsection{Inter-Symbol Interference}
 
 \subsection{Synchronization 2: Carrier Recovery}
 
