@@ -307,7 +307,7 @@
 			\item $\SI{20}{dBV} \cdot \log_{10} \left(\frac{\SI{2}{V}}{\SI{1}{V}}\right) = \SI{6}{dBV}$ (20 instead of 10 for voltages and currents)
 			\item $\SI{10}{dB} \cdot \log_{10} \left(400000\right) = \SI{53}{dB}$
 			\item $\SI{10}{dBHz} \cdot \log_{10} \left(\frac{\SI{5}{GHz}}{\SI{1}{Hz}}\right) = \SI{97}{dbHz}$
-			\item $\SI{10}{dBm/Hz} \cdot \log_{10} \left(\frac{\SI{8}{fW}}{\SI{1}{mW}}\right) = \SI{-111}{dB/Hz}$
+			\item $\SI{10}{dBm/Hz} \cdot \log_{10} \left(\frac{\SI{8}{fW/MHz}}{\SI{1}{mW/Hz}}\right) = \SI{10}{dBm/Hz} \cdot \log_{10} \left(\frac{10^{-6} \cdot \SI{8}{fW/Hz}}{\SI{1}{mW/Hz}}\right) = \SI{-171}{dBm/Hz}$
 			\item $\SI{1}{\micro\volt} \cdot 10^{\SI{5}{dB\micro\volt} / 20} = \SI{1.8}{\micro\volt}$
 			\item $\SI{1}{mW} \cdot 10^{\SI{-10}{dBm} / 10} = \SI{100}{\micro.W}$
 		\end{enumerate}
@@ -340,7 +340,7 @@
 				\begin{split}
 					\SI{-73}{dBm} &\equiv \SI{50.1}{pW} \\
 					U = \sqrt{P \cdot R} &= \sqrt{\SI{50.1}{pW} \cdot \SI{50}{\ohm}} = \SI{50}{\micro\volt} \\
-					\SI{50}{\micro\volt} &\equiv \SI{17}{dB\micro\volt}
+					\SI{50}{\micro\volt} &\equiv \underbrace{\SI{20}{dB\micro\volt}}_{\text{Attention!}} \cdot \log_{10}\left(\frac{\SI{50}{\micro\volt}}{\SI{1}{\micro\volt}}\right) = \SI{34}{dB\micro\volt}
 				\end{split}
 			\end{equation*}
 			\item 2nd way: Convert everything to logarithmic scale. The multiplication of power and resistance must happen with ``pure'' SI units.
@@ -350,8 +350,26 @@
 				\SI{-73}{dBm} \underbrace{- \SI{30}{dB}}_{\text{\si{mW} to \si{W}}} &= \SI{-103}{dBW} \quad \text{SI unit!} \\
 				\SI{-103}{dBW} + \SI{17}{dB\ohm} &= \SI{-86}{dBV} \quad \text{SI unit!} \\
 				\SI{-86}{dBV} \underbrace{+ \SI{120}{dB}}_{\text{\si{V} to \si{\micro\volt}}} &= \SI{34}{dB\micro\volt} \\
-				\SI{34}{dB\micro\volt} &\equiv \SI{50}{\micro\volt}
+				\SI{34}{dB\micro\volt} &\equiv \SI{1}{\micro\volt} \cdot 10^{\frac{34}{20}} = \SI{50}{\micro\volt}
 			\end{split}
+			\end{equation*}
+		\end{itemize}
+	
+		\textit{Remarks:} Conversion of different SI prefixes:
+		\begin{itemize}
+			\item From \si{mW} to \si{W}:
+			\begin{equation*}
+				\begin{split}
+					\SI{1}{mW} &= \SI{0.001}{W} \\
+					\SI{10}{dB} \cdot \log_{10}\left(\frac{\SI{0.001}{W}}{\SI{1}{mW}}\right) &= \SI{-30}{dB}
+				\end{split}
+			\end{equation*}
+			\item From \si{V} to \si{\micro\volt}:
+			\begin{equation*}
+				\begin{split}
+					\SI{1}{V} &= \SI{1000000}{\micro\volt} \\
+					\SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{1000000}{\micro\volt}}{\SI{1}{V}}\right) &= \SI{120}{dB}
+				\end{split}
 			\end{equation*}
 		\end{itemize}
 	\end{tasks}
