@@ -650,6 +650,7 @@ The information-carrying signal and the carrier are usually at different frequen
 	}
 
 	\caption{A selection of heterodyne architectures}
+	\label{fig:ch05:trx_if_arch}
 \end{figure}
 
 Definitions:
@@ -875,18 +876,722 @@ So, the input signal's spectrum consists of a positive and a negative part:
 
 \subsection{Technical Realization of Mixers}
 
-\todo{Non-linear component}
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=1}
+		\begin{circuitikz}
+			\node[adder](Adder){};
+			\node[block,draw,right=of Adder](NonLin){Non-linear\\ component};
+			\node[oscillator,below=of Adder](LO){};
+			
+			\draw (LO.south) node[below,align=center,yshift=-5mm]{\acs{LO}};
+			
+			\draw[latex-o] (Adder.west) -- ++(-2cm,0) node[left,align=right]{Input\\ signal $x_i(t)$};
+			\draw[-latex] (Adder.east) -- (NonLin.west);
+			\draw[-latex] (NonLin.east) -- ++(2cm,0) node[right,align=left]{Output\\ signal $x_o(t)$};
+			\draw[-latex] (LO.north) -- node[midway,right,align=left]{$u_{LO}(t)$} (Mix.south);
+			\draw[latex-o] (Adder.north) -- (0,1.5cm) node[above,align=center]{\acs{DC} bias\\ (optional)};
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption[Basic principle of a mixer]{Basic principle of a mixer. The input signals and optionally a \acs{DC} bias are combined. A non-linearity implements the mixing process.}
+\end{figure}
 
-\todo{IP3}
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=1}
+		\begin{circuitikz}
+			\draw (0,2) node[left,align=right]{Input\\ signal} to[short,o-] (1,2) to[R,l=$R$] (3,2);
+			\draw (0,0) node[left,align=right]{\acs{LO}\\ signal} to[short,o-] (1,0) to[R,l=$R$] (3,0) to[short,-*] (3,2);
+			\draw (3,2) to[R,l=$R$] (5,2) to[C,l=$C$] (7,2) to[empty diode] (9,2) to[short,-o] (10,2) node[right,align=left]{Output\\ signal};
+			\draw (7,4) node[above,align=center]{\acs{DC} bias} to[L,l=$L$,o-*] (7,2);
+			
+			\draw[dashed] (1,3) -- (5,3) -- (5,-1) -- (1,-1) node[below right,align=left]{Power combiner} -- cycle;
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption[Passive unbalanced mixer]{Passive unbalanced mixer. The input signals are added. Then a \acs{DC} bias is injected. The diode is the non-linearity where the mixing happens. The carrier is not suppressed.}
+	\label{fig:ch05:pass_unbal_mixer}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{circuitikz}
+			% current source
+			\draw(0,0) to[I=$2 I_T$,*-] ++(0,-2)
+			node[rground]{};
+			
+			% driver stage
+			\draw(-3,1) node[npn](Q5){} node[right]{Q5};
+			\draw(3,1) node[npn,xscale=-1](Q6){} node[left]{Q6};
+			\draw(0,0) to[R,l^=$Z_e$] ++(-3,0)
+				|- (Q5.E);
+			\draw(0,0) to[R,l_=$Z_e$] ++(3,0)
+				|- (Q6.E);
+			\draw(Q5.B) to[short,-o] ++(-1,0)
+				node[left]{Differential input (+)};
+			\draw(Q6.B) to[short,-o] ++(1,0)
+				node[right]{Differential input (-)};
+			
+			% switching quad
+			\draw(Q5) ++(-1,1.5) node[npn](Q7){} node[right]{Q7};
+			\draw(Q5) ++(1,1.5) node[npn,xscale=-1](Q8){} node[left]{Q8};
+			\draw(Q6) ++(-1,1.5) node[npn](Q9){} node[right]{Q9};
+			\draw(Q6) ++(1,1.5) node[npn,xscale=-1](Q10){} node[left]{Q10};
+			\draw(Q5.C) to[short,*-] ++(-1,0)
+				|- (Q7.E);
+			\draw(Q5.C) to[short] ++(1,0)
+				|- (Q8.E);
+			\draw(Q6.C) to[short,*-] ++(-1,0)
+				|- (Q9.E);
+			\draw(Q6.C) to[short] ++(1,0)
+				|- (Q10.E);
+			\draw(Q7.B) to[short,-o] ++(-1,0)
+				node[left]{Differential \acs{LO} (-)};
+			\draw(Q10.B) to[short,-o] ++(1,0)
+				node[right]{Differential \acs{LO} (-)};
+			\draw(Q8.B) to[short] (Q9.B);
+			\draw(0,|-Q8.B) to[short,*-o] ++(0,-0.5)
+				node[below]{Differential \acs{LO} (+)};
+			\draw(Q7.C) to[short] ++(0,0.5)
+				to[R,l_=$R$] ++(0,2)
+				node[vcc]{};
+			\draw(Q9.C) to[short] (Q7.C)
+				to[short,*-o] ++(-2,0)
+				node[left]{Differential output (-)};
+			\draw(Q10.C) to[short] ++(0,0.5) node(AboveQ10){}
+				to[R,l_=$R$] ++(0,2)
+				node[vcc]{};
+			\draw(Q8.C) to[short] ++(0,0.5)
+				to[short] (AboveQ10)
+				to[short,*-o] ++(2,0)
+				node[right]{Differential output (+)};
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption[Active double-balanced mixer with differential inputs and output]{Active double-balanced mixer with differential inputs and output. The switching stages (balanced transistor pairs) implement the non-linearity. The balanced switching mode suppresses the carrier.}
+\end{figure}
+
+The core component of a mixer is a non-linear device.
+
+Figure \ref{fig:ch05:pass_unbal_mixer} depicts a simple mixer with a diode as the non-linear device. The characteristic curve of a diode is an exponential function -- the \emph{Schockley diode equation}.
+\begin{equation}
+	I = I_S \left(e^{\frac{V_D}{n V_T}} - 1\right)
+\end{equation}
+The equation describes the relation of the diode current $I$ and its forward voltage $V_D$. The equation is non-linear.
+
+A mathematical model is depicted in Figure \ref{fig:ch05:math_model_mixer}.
+\begin{figure}
+	\centering
+	\begin{circuitikz}
+		\draw(0,0) node[mixer](Mix){};
+		\draw(-3,|-Mix) node[adder](Add){};
+		\draw(Mix.4) node[above]{$M(x)$};
+		\draw(Add.3) -- (Mix.1) node[inputarrow]{};
+		\draw(Add.1) +(-1,0) node[above]{$x_{i}$} -- (Add.1) node[inputarrow]{};
+		\draw(Add.4) +(0,1) node[right]{$a$} -- (Add.4) node[inputarrow,rotate=-90]{};
+		\draw(Add.2) +(0,-1) node[right]{$x_{LO}$} -- (Add.2) node[inputarrow,rotate=90]{};
+		\draw(Mix.3) -- +(1,0) node[inputarrow]{$x_{o}$};
+	\end{circuitikz}
+	\caption[Mathematical model of the mixer]{Mathematical model of the mixer with a signal combiner ($x_{i} + x_{LO} + a$) and a non-linear device with the characteristic $M(x)$. $x_{i}$ is the input, $x_{LO}$ is the \acs{LO}, $x_{o}$ is the output and $a$ is the \acs{DC} bias defining the operating point.}
+	\label{fig:ch05:math_model_mixer}
+\end{figure}
+
+The non-linearity $M(x)$ of the diode or any other non-linear devices can be expressed as a \emph{Taylor series}. The Taylor series is developed around a operating point of non-linear device which is defined by the bias $a$.
+\begin{equation}
+	\begin{split}
+		x_{o} &= M(x_{i} + x_{LO} + a) = \sum\limits_{n=0}^{\infty} \frac{1}{n!} \left.\frac{\mathrm{d}^n M(x)}{\mathrm{d} x^n}\right|_{x=a} \left(x_{i} + x_{LO} + a - a\right)^n \\
+		 &= M(a) + \underbrace{M^{(1)}(a) \left(x_{i} + x_{LO}\right)}_{\text{Linear term}} + \underbrace{\frac{M^{(2)}(a)}{2} \left(x_{i} + x_{LO}\right)^2}_{\text{Quadratic term}} + \underbrace{\frac{M^{(3)}(a)}{6} \left(x_{i} + x_{LO}\right)^2}_{\text{Qubic term}} + \dots
+	\end{split}
+\end{equation}
+
+\begin{itemize}
+	\item The \underline{linear term} is used in electronics for the small signal analysis of a circuit.
+	\item Mixers are driven with relatively strong signals. Therefore, the \underline{quadratic term} comes into play.
+	\item The contribution of high-order polynomials decreases with their order due to the coefficient $\frac{1}{n!}$. Because of that, polynomials of order three or higher are neglected.
+\end{itemize}
+
+The quadratic term is the important part in the mixing process.
+\begin{equation}
+	\left(x_{i} + x_{LO}\right)^2 = x_{i}^2 + 2 \underbrace{x_{i} x_{LO}}_{\text{Mixing}} + x_{LO}^2
+\end{equation}
+
+The quadratic term devolves, amongst others, into a multiplication of the input signals. This is where the mixing process happens.
+
+\begin{excursus}{Spurious components in the output signal}
+	The equation
+	\begin{equation*}
+		\left(x_{i} + x_{LO}\right)^2 = x_{i}^2 + 2 x_{i} x_{LO} + x_{LO}^2
+	\end{equation*}
+	points out that there are more signals than the desired signals.
+	\begin{itemize}
+		\item The term $x_{i} x_{LO}$ yields the desired components in the output signal.
+		\begin{itemize}
+			\item A signal at a frequency of $\omega_i - \omega_{LO}$
+			\item Another signal at the mirror frequency of $\omega_i + \omega_{LO}$
+		\end{itemize}
+		\item The two other terms produce spurious signals
+		\begin{itemize}
+			\item at the double frequency of the \ac{LO} $2 \omega_{LO}$ and
+			\item at the double frequency of the input $2 \omega_{i}$.
+		\end{itemize}
+	\end{itemize}
+\end{excursus}
+
+The spurious signals distort the output signal, decrease the \ac{SNR} and are therefore unwanted. \textbf{The output of the mixer must always be filtered, to remove spurious components.}
+
+\begin{excursus}{Intermodulation}
+	Other spurious signals are created by higher order polynomials.
+	\begin{itemize}
+		\item For weak inputs, their contribution is low (due to the coefficient $\frac{1}{n!}$) and can be neglected.
+		\item If the input signal is strong enough, polynomials of orders higher than 2 cannot be neglected any longer and must be considered as well.
+		\item Especially, the 3rd order polynomial comes into effect firstly. It amongst others contributes the following output frequencies:
+		\begin{itemize}
+			\item $2 \omega_a - \omega_b$
+			\item $2 \omega_b - \omega_a$
+		\end{itemize}
+		\item Example:
+		\begin{itemize}
+			\item The \ac{LO} is \SI{100}{MHz}. The \ac{RF} signal at \SI{110}{MHz} shall be mixed down to \SI{10}{MHz}.
+			\item There are two more very strong, disturbing signals -- so called \emph{blockers} -- at \SI{107}{MHz} and \SI{104}{MHz}.
+			\item These very strong blockers mix to: $2 \cdot \SI{107}{MHz} - \SI{104}{MHz} = \SI{110}{MHz}$.
+			\item The mixer product of the blockers disturbs the input signal and decreases its \ac{SNR}.
+			\item This effect is called \index{intermodulation} \textbf{intermodulation}.
+		\end{itemize}
+	\end{itemize}
+
+	We will not bother with the theory behind this. However, the consequences are:
+	\begin{itemize}
+		\item The mixer input should be filtered to eliminate out-of-band disturbances.
+		\item The input signal power must not exceed a certain limit. This characteristic is given in mixer datasheets as the \index{interception point} \textbf{interception point of the 3rd order (IP3)}.
+		\item Too strong signals will cause intermodulation.
+	\end{itemize}
+\end{excursus}
 
 \subsection{Zero-Intermediate-Frequency}
 
-\todo{coherency}
+Figure \ref{fig:ch05:trx_if_arch} considers different receiver architectures with a variation in \acf{IF} stages.
+\begin{itemize}
+	\item Superheterodyne receivers allow the implementation of high quality filter to archive a good selectivity.
+	\item However, the cost of the implementation increases with an increasing number of \ac{IF} stages.
+	\item A common implementation in modern digital communication systems is omitting the \ac{IF} stages can convert directly from \ac{RF} to the baseband.
+	\item The filtering is accomplished in the digital signal processing chain.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{circuitikz}
+			\node[ampshape](RFAmplifier){};
+			\node[mixer, right=2cm of RFAmplifier](Mixer){};
+			\node[oscillator, below=1cm of Mixer](LO){};
+			\node[ampshape, right=2.5cm of Mixer](BBAmplifier){};
+			\node[adcshape, right=2.5cm of BBAmplifier](ADC){};
+			\node[block, draw, right=1cm of ADC](Baseband){Digital signal\\ processing};
+			
+			\draw (LO.south) node[below,align=center,yshift=-5mm]{\acs{LO}};
+			\draw (RFAmplifier.south) node[below,align=center,yshift=-5mm]{\acs{RF}\\ amplifier};
+			\draw (Mixer.north) node[above,align=center,yshift=3mm]{Mixer};
+			\draw (BBAmplifier.south) node[below,align=center,yshift=-5mm]{Baseband\\ amplifier};
+			\draw (ADC.south) node[below,align=center,yshift=-5mm]{\acs{ADC}};
+			
+			\draw (RFAmplifier.west) to[bandpass] ++(-2cm,0) node[rxantenna,xscale=-1]{};
+			
+			\draw[-latex] (LO.north) -- (Mixer.south);
+			\draw[-latex] (RFAmplifier.east) -- node[midway,above,align=center]{\acs{RF}\\ signal} (Mixer.west);
+			\draw[-latex] (Mixer.east) to[lowpass] ++(2cm,0) -- (BBAmplifier.west);
+			\draw[-latex] (BBAmplifier.east) -- node[midway,above,align=center]{Baseband\\ signal} (ADC.west);
+			\draw[-latex] (ADC.east) -- (Baseband.west);
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{Zero-\acs{IF} receiver}
+\end{figure}
+
+\begin{itemize}
+	\item The \ac{RF} is directly converted to the baseband close to a frequency of zero. The baseband can be seen as a \ac{IF} of zero.
+	\item The \ac{LO} is tuned directly to the \ac{RF} frequency.
+	\item The receiver architecture is called \index{zero-IF} \textbf{zero-\acs{IF}} or \index{direct conversion receiver} \textbf{direct conversion receiver}.
+\end{itemize}
+
+This special design requires a careful consideration. Assume that the \ac{RF} signal is monochromatic. The baseband signal $x_B(t)$ is:
+\begin{equation}
+	x_B(t) = \underbrace{\hat{X}_{RF} \cos\left(\omega_{RF} t + \varphi_{RF}\right)}_{= x_{RF}(t)} \cdot \underbrace{\cos\left(\omega_{RF} t\right)}_{= x_{RF}(t) \text{ with } \omega_{LO} = \omega_{RF}}
+\end{equation}
+
+\begin{itemize}
+	\item If the phase shift $\varphi_{RF}$ of the \ac{RF} signal is $0$, the \ac{RF} signal can be received without problems.
+	\item If the phase shift $\varphi_{RF}$ of the \ac{RF} signal is $\pm \frac{\pi}{2}$, the \ac{RF} signal is orthogonal to the \ac{LO} signal. The baseband signal be zero. The \ac{RF} signal cannot be received.
+	\item Values of $0 < \varphi_{RF} < \frac{\pi}{2}$ reduce the amplitude of the baseband signal, which decreases the \ac{SNR}.
+\end{itemize}
+
+\begin{proof}{}
+	\begin{equation*}
+		\begin{split}
+			x_B(t) &= \hat{X}_{RF} \cos\left(\omega_{RF} t + \frac{\pi}{2}\right) \cdot \cos\left(\omega_{RF} t\right) \\
+			 & \quad \text{Fourier transform} \\
+			\underline{X}_B\left(j\omega\right) &= \hat{X}_{RF} \pi^2 \left( e^{j \frac{\pi}{2}} \delta\left(\omega-\omega_{RF}\right) + e^{-j \frac{\pi}{2}} \delta\left(\omega+\omega_{RF}\right) \right) * \left( \delta\left(\omega-\omega_{RF}\right) + \delta\left(\omega+\omega_{RF}\right) \right) \\
+			 &= \hat{X}_{RF} \pi^2 \left( \underbrace{e^{j \frac{\pi}{2}} \delta\left(\omega\right) + e^{-j \frac{\pi}{2}} \delta\left(\omega\right)}_{\text{Baseband signal at zero \acs{IF}}} + \underbrace{e^{j \frac{\pi}{2}} \delta\left(\omega-2\omega_{RF}\right) + e^{-j \frac{\pi}{2}} \delta\left(\omega+2\omega_{RF}\right)}_{\text{Eliminated by the \ac{LPF}}} \right) \\
+			 &= \hat{X}_{RF} \pi^2 \left( \underbrace{j \delta\left(\omega\right) - j \delta\left(\omega\right)}_{= 0} \right) \\
+			 &= 0
+		\end{split}
+	\end{equation*}
+	
+	If the \ac{RF} and \ac{LO} signals are orthogonal, no signal will be present in a band-limited (\ac{LPF}) baseband signal.
+\end{proof}
+
+The problem is that the phase of the \ac{RF} $\varphi_{RF}$ is not known. The phase of the \ac{LO} must be aligned to the \ac{RF} signal phase to reduce $\varphi_{RF}$ to zero. 
+
+To solve this issue, the mixer principle of the zero-\acs{IF} mixer must be adapted.
+\begin{itemize}
+	\item The \ac{RF} signal is split and fed into two mixer branches.
+	\item One of the mixers multiplies the \ac{RF} signal with the \ac{LO} signal.
+	\item The other mixer multiplies the \ac{RF} signal with a $\frac{\pi}{2}$-phase-shifted copy of the \ac{LO} signal.
+	\item The \ac{LO} signals of the mixers are orthogonal.
+	\item Due to the orthogonality of the \ac{LO} signals, all variations of the \ac{RF} signal phase shift $\varphi_{RF}$ can be reliably received without \ac{SNR} degradation.
+\end{itemize}
+This mixer architecture is called \index{coherent mixer} \textbf{coherent}.
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{circuitikz}
+			\node[mixer](MixI) at(5cm,3cm) {};
+			\node[mixer](MixQ) at(5cm,-3cm) {};
+			\node[oscillator](LO) at(3cm,0cm){};
+			\node[block, draw, minimum height=8cm](DSP) at(11cm,0cm){Digital\\ signal\\ processing};
+			
+			\draw (LO.south) node[below,align=center,yshift=-3mm]{\acs{LO}\\ $\omega_{LO} = \omega_{RF}$};
+			\draw (MixI.north) node[above,align=center,yshift=1cm]{In-phase (\acs{I}) branch};
+			\draw (MixQ.south) node[below,align=center,yshift=-1cm]{Quadrature (\acs{Q}) branch};
+			
+			\draw (0cm,0cm) node[left,align=right]{Input\\ signal} to[short,o-*] (1cm,0cm);
+			\draw (1cm,0cm) to[short] ([xshift=-4cm] MixI) to[lowpass] (MixI.west);
+			\draw (1cm,0cm) to[short] ([xshift=-4cm] MixQ) to[lowpass] (MixQ.west);
+			
+			\draw (LO.east) to[short,-*] (5cm,0cm);
+			\draw (5cm,0cm) to[short] (MixI.south);
+			\draw (5cm,0cm) to[phaseshifter,l=$\SI{90}{\degree}$] (MixQ.north);
+			
+			\draw (MixI.east) to[amp] ++(2cm,0cm) to[adc] ([yshift=3cm] DSP.west);
+			\draw (MixQ.east) to[amp] ++(2cm,0cm) to[adc] ([yshift=-3cm] DSP.west);
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{Coherent mixer suitable for zero-\acs{IF} receiver architectures (IQ demodulator)}
+	\label{fig:ch05:iq_down_circuit}
+\end{figure}
+
+The coherent mixer, also called \index{IQ demodulator} \textbf{IQ demodulator}, (Figure \ref{fig:ch05:iq_down_circuit}) consists of two branches (also called paths):
+\begin{itemize}
+	\item The \ac{I} path mixes the original \ac{LO} signal to the replica of the \ac{RF} signal.
+	\item The \ac{Q} path mixes the $\frac{\pi}{2}$-phase-shifted \ac{LO} signal to the replica of the \ac{RF} signal.
+\end{itemize}
+The coherent mixer is capable of receiving all variations of the \ac{RF} signal phase shift $\varphi_{RF}$, while the amplitude is kept intact.
+
+\begin{excursus}{Non-coherent demodulation}
+	\todo{Non-coherent demodulation}
+\end{excursus}
+
+\begin{fact}
+	Pure \ac{AM} signals can be demodulated either coherently or non-coherently. \ac{PM} signals or mixed \ac{AM} and \ac{PM} signals require a coherent demodulation, because a non-coherent demodulation drops the signal phase.
+\end{fact}
 
 \subsection{Mixing Complex-Valued Baseband Signals}
 
-\todo{IQ Modulator}
+\subsubsection{Down-Conversion}
 
+A coherent mixer (Figure \ref{fig:ch05:iq_down_circuit}) retains the phase of the \ac{RF} signal. The phase information is coded into the \ac{I} and \ac{Q} parts of the baseband signal.
+
+Let's consider the \ac{RF} signal $x_{RF}(t) \TransformHoriz \underline{X}_{RF}\left(j\omega\right)$ contains the information whose power is concentrated close to the \ac{RF} frequency $\omega_{RF}$. $\underline{X}_{RF}\left(j\omega\right)$ devolves into a positive and negative frequency part.
+\begin{equation}
+	\underline{X}_{RF}\left(j\omega\right) = \begin{cases}
+		\underline{X}_{RF}^{+}\left(j\omega\right) & \quad \text{ if } \omega \geq 0 \\
+		\underline{X}_{RF}^{-}\left(j\omega\right) & \quad \text{ if } \omega \leq 0
+	\end{cases}
+\end{equation}
+$x_{RF}(t)$ is real-valued. Therefore, $\underline{X}_{RF}^{+}\left(j\omega\right) = \overline{\underline{X}_{RF}^{-}\left(-j\omega\right)}$. So, both the positive and negative part in fact carry the same information.
+
+Now, the \ac{RF} signal is mixed down to the baseband by a coherent mixer.
+\begin{itemize}
+	\item The \ac{I} path of the coherent mixer (Figure \ref{fig:ch05:iq_down_circuit}):
+	\begin{equation}
+		\begin{split}
+			x_{B,I}(t) &= x_{RF}(t) \cdot \cos\left(\omega_{RF} t\right) \\
+			 &\quad \text{Fourier transform:} \\
+			\underline{X}_{B,I}\left(j\omega\right) &= \underline{X}_{RF}\left(j\omega\right) * \left(\delta\left(\omega-\omega_{RF}\right) + \delta\left(\omega+\omega_{RF}\right)\right) \pi \\
+			 &= \pi \left(\underline{X}_{RF}\left(j\omega-j\omega_{RF}\right) + \underline{X}_{RF}\left(j\omega+j\omega_{RF}\right)\right) \\
+			 &= \pi \left(\underbrace{\underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right) + \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right)}_{\text{\acs{I} component of the baseband signal}} \right. \\ &\qquad + \left. \underbrace{\underline{X}_{RF}^{+}\left(j\omega-j\omega_{RF}\right) + \underline{X}_{RF}^{-}\left(j\omega+j\omega_{RF}\right)}_{\text{Mirror frequencies close to $\pm 2 \omega_{RF}$, eliminated by \acs{LPF}}} \right) \\
+			 &\quad \text{After the \acs{LPF}:} \\
+			 &= \pi \left(\underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right) + \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right) \right)
+		\end{split}
+	\end{equation}
+	\item The \ac{Q} path of the coherent mixer (Figure \ref{fig:ch05:iq_down_circuit}):
+	\begin{equation}
+		\begin{split}
+			x_{B,Q}(t) &= x_{RF}(t) \cdot \underbrace{\cos\left(\omega_{RF} t + \frac{\pi}{2}\right)}_{= \sin\left(\omega_{RF} t\right)} \\
+			 &\quad \text{Fourier transform:} \\
+			\underline{X}_{B,Q}\left(j\omega\right) &= \underline{X}_{RF}\left(j\omega\right) * \left(e^{j\frac{\pi}{2}} \delta\left(\omega-\omega_{RF}\right) + e^{-j\frac{\pi}{2}} \delta\left(\omega+\omega_{RF}\right)\right) \pi \\
+			 &= \pi \left(e^{j\frac{\pi}{2}}\underline{X}_{RF}\left(j\omega-j\omega_{RF}\right) + e^{-j\frac{\pi}{2}}\underline{X}_{RF}\left(j\omega+j\omega_{RF}\right)\right) \\
+			 &= \pi \left(\underbrace{e^{j\frac{\pi}{2}} \underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right) + e^{-j\frac{\pi}{2}} \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right)}_{\text{\acs{I} component of the baseband signal}} \right. \\ &\qquad + \left. \underbrace{e^{j\frac{\pi}{2}} \underline{X}_{RF}^{+}\left(j\omega-j\omega_{RF}\right) + e^{-j\frac{\pi}{2}} \underline{X}_{RF}^{-}\left(j\omega+j\omega_{RF}\right)}_{\text{Mirror frequencies close to $\pm 2 \omega_{RF}$, eliminated by \acs{LPF}}} \right) \\
+			 &\quad \text{After the \acs{LPF}:} \\
+			 &= \pi \left(e^{j\frac{\pi}{2}} \underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right) + e^{-j\frac{\pi}{2}} \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right) \right) \\
+			 &= j \pi \left( \underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right) - \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right) \right)
+		\end{split}
+	\end{equation}
+	\item Both $\underline{X}_{B,I}\left(j\omega\right)$ and $\underline{X}_{B,Q}\left(j\omega\right)$ are Hermitian and fulfil the symmetry rules.
+	\item Thus, both $x_{B,I}(t)$ and $x_{B,Q}(t)$ are real-valued signals. \textit{Anything else would make no sense, because the \ac{I} and \ac{Q} components exist as physical signals at the mixer outputs.}
+	\item Now, the \ac{I} and \ac{Q} components are composed to a complex-valued signal:
+	\begin{equation}
+		\underline{x}_B(t) = x_{B,I}(t) + j \cdot x_{B,Q}(t)
+	\end{equation}
+	\item The composition can be thought of interpreting the \ac{I} component $x_{B,I}(t)$ as the real part of $\underline{x}_B(t)$ and the \ac{Q} component $x_{B,Q}(t)$ as the imaginary part of $\underline{x}_B(t)$. This interpretation usually happens in the digital signal processing.
+	\item The effect of this re-interpretation becomes clear in the frequency-domain:
+	\begin{equation}
+		\begin{split}
+			\underline{X}_{B}\left(j\omega\right) &= \mathcal{F}\left\{\underline{x}_B(t)\right\} = \mathcal{F}\left\{x_{B,I}(t) + j \cdot x_{B,Q}(t)\right\} \\
+			 &= \mathcal{F}\left\{x_{B,I}(t)\right\} + j \cdot \mathcal{F}\left\{\cdot x_{B,Q}(t)\right\} \\
+			 &= \pi \left(\underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right) + \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right) \right) \\ & \qquad + \underbrace{j^2}_{= -1} \pi \left( \underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right) - \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right) \right) \\
+			 &= \pi \left( \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right) + \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right) \right. \\ & \qquad + \left. \underbrace{\underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right) - \underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right)}_{= 0} \right) \\
+			 &= 2 \pi \underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right)
+		\end{split}
+	\end{equation}
+	\item $\underline{X}_{B}\left(j\omega\right)$ is not Hermitian. $\underline{x}_B(t)$ is complex-valued.
+	\item In $\underline{X}_{B}\left(j\omega\right)$ the negative part of the baseband signal $\underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right)$ is completely eliminated.
+	\item In contrast to that, both $\underline{X}_{B,I}\left(j\omega\right)$ and $\underline{X}_{B,Q}\left(j\omega\right)$ contained the two equivalent parts $\underline{X}_{RF}^{+}\left(j\omega+j\omega_{RF}\right)$ and $\underline{X}_{RF}^{-}\left(j\omega-j\omega_{RF}\right)$.
+\end{itemize}
+
+\textbf{In fact, the band around the \ac{RF} frequency $\omega_{RF}$ is shifted down to zero-\acs{IF} as a whole without losing the information contained. This is the reason, why the phase information of the \ac{RF} signal is retained.}
+
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[The \ac{RF} signal and \acs{LO} signal in the frequency-domain] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.1\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_{RF}|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-4.6,
+				xmax=4.6,
+				ymin=0,
+				ymax=1.2,
+				xtick={-1.9, 0, 1.9},
+				xticklabels={$-\omega_{RF}$, $0$, $\omega_{RF}$},
+				ytick={0},
+			]
+				\draw[red, thick] (axis cs:-1.8,0) -- (axis cs:-2,0.7) node[above left,align=right]{$\underline{X}_{RF}^{-}$} -- (axis cs:-2.5,0);
+				\draw[red, thick] (axis cs:1.8,0) -- (axis cs:2,0.7) node[above right,align=left]{$\underline{X}_{RF}^{+}$} -- (axis cs:2.5,0);
+				
+				\draw[-latex, blue, very thick] (axis cs:-1.9,0) -- (axis cs:-1.9,1) node[above,align=center]{\acs{LO}};
+				\draw[-latex, blue, very thick] (axis cs:1.9,0) -- (axis cs:1.9,1) node[above,align=center]{\acs{LO}};
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[\acs{I} component of the baseband signal in the frequency-domain] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.12\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$\Re\left\{\underline{X}_{B,I}\right\}$ (real)},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-4.6,
+				xmax=4.6,
+				ymin=0,
+				ymax=1.2,
+				xtick={-3.8, -1.9, 0, 1.9, 3.8},
+				xticklabels={$-2\omega_{RF}$, $-\omega_{RF}$, $0$, $\omega_{RF}$, $2\omega_{RF}$},
+				ytick={0},
+			]
+				% X-
+				\draw[red, dashed, thick] (axis cs:-3.7,0) -- (axis cs:-3.9,0.7) node[above right,align=left]{Eliminated by \acs{LPF}} -- (axis cs:-4.4,0);
+				\draw[red, thick] (axis cs:0.1,0) -- (axis cs:-0.1,0.7) -- (axis cs:-0.6,0);
+				
+				% X+
+				\draw[red, dashed, thick] (axis cs:3.7,0) -- (axis cs:3.9,0.7) node[above left,align=right]{Eliminated by \acs{LPF}} -- (axis cs:4.4,0);
+				\draw[red, thick] (axis cs:-0.1,0) -- (axis cs:0.1,0.7) -- (axis cs:0.6,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[\acs{Q} component of the baseband signal in the frequency-domain] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.2\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$\Im\left\{\underline{X}_{B,Q}\right\}$ (imaginary)},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-4.6,
+				xmax=4.6,
+				ymin=-1.2,
+				ymax=1.2,
+				xtick={-3.8, -1.9, 0, 1.9, 3.8},
+				xticklabels={$-2\omega_{RF}$, $-\omega_{RF}$, $0$, $\omega_{RF}$, $2\omega_{RF}$},
+				ytick={0},
+			]
+				% X-
+				\draw[red, dashed, thick] (axis cs:-3.7,0) -- (axis cs:-3.9,-0.7) node[below right,align=left]{Eliminated by \acs{LPF}} -- (axis cs:-4.4,0);
+				\draw[red, thick] (axis cs:0.1,0) -- (axis cs:-0.1,0.7) -- (axis cs:-0.6,0);
+				
+				% X+
+				\draw[red, dashed, thick] (axis cs:3.7,0) -- (axis cs:3.9,0.7) node[above left,align=right]{Eliminated by \acs{LPF}} -- (axis cs:4.4,0);
+				\draw[red, thick] (axis cs:-0.1,0) -- (axis cs:0.1,-0.7) -- (axis cs:0.6,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Complex-valued baseband signal in the frequency-domain] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.1\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_{B}|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-4.6,
+				xmax=4.6,
+				ymin=0,
+				ymax=1.2,
+				xtick={-3.8, -1.9, 0, 1.9, 3.8},
+				xticklabels={$-2\omega_{RF}$, $-\omega_{RF}$, $0$, $\omega_{RF}$, $2\omega_{RF}$},
+				ytick={0},
+			]
+				\draw[red, thick] (axis cs:-0.1,0) -- (axis cs:0.1,0.7) -- (axis cs:0.6,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\caption{Coherent down-conversion}
+	\label{fig:ch05:iq_down_freqdomain}
+\end{figure}
+
+\subsubsection{Up-Conversion}
+
+The process can be reversed.
+\begin{itemize}
+	\item A complex-valued baseband signal can be mixed to a real-valued \ac{RF} signal.
+	\item The spectrum of the baseband signal is shifted up to $\omega_{RF}$ as a whole without losing any information.
+	\item The device mixing the complex baseband up to the \ac{RF} band is called \index{IQ modulator} \textbf{IQ modulator}.
+	\item The \emph{IQ modulator} is the counterpart of the \emph{IQ demodulator} (\emph{coherent mixer}).
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{circuitikz}
+			\node[block, draw, minimum height=8cm](DSP) at(0cm,0cm){Digital\\ signal\\ processing};
+			\node[mixer](MixI) at([shift={(6cm,3cm)}] DSP.east) {};
+			\node[mixer](MixQ) at([shift={(6cm,-3cm)}] DSP.east) {};
+			\node[oscillator](LO) at([shift={(4cm,0cm)}] DSP.east){};
+			\node[adder](Add) at([shift={(10cm,0cm)}] DSP.east){};
+			
+			\draw (LO.south) node[below,align=center,yshift=-3mm]{\acs{LO}\\ $\omega_{LO} = \omega_{RF}$};
+			\draw (MixI.north) node[above,align=center,yshift=1cm]{In-phase (\acs{I}) branch};
+			\draw (MixQ.south) node[below,align=center,yshift=-1cm]{Quadrature (\acs{Q}) branch};
+			
+			\draw (LO.east) to[short,-*] ([shift={(6cm,0cm)}] DSP.east);
+			\draw ([shift={(6cm,0cm)}] DSP.east) to[short] (MixI.south);
+			\draw ([shift={(6cm,0cm)}] DSP.east) to[phaseshifter,l=$\SI{90}{\degree}$] (MixQ.north);
+			
+			\draw ([shift={(0cm,3cm)}] DSP.east) to[dac] ++(2cm,0cm) to[lowpass] ++(2cm,0cm) to[amp] (MixI.west);
+			\draw ([shift={(0cm,-3cm)}] DSP.east) to[dac] ++(2cm,0cm) to[lowpass] ++(2cm,0cm) to[amp] (MixQ.west);
+			
+			\draw[-latex] (MixI.east) to[lowpass] ++(2cm,0cm) -| (Add.north);
+			\draw[-latex] (MixQ.east) to[lowpass] ++(2cm,0cm) -| (Add.south);
+			\draw[-latex] (Add.east) -- ++(1cm,0cm) node[right,align=left]{\acs{RF}\\ signal};
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{IQ modulator mixing up a complex-valued zero-\acs{IF} baseband}
+	\label{fig:ch05:iq_up_circuit}
+\end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Complex-valued baseband signal and \acs{LO} signal in the frequency-domain] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.1\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_{B}|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3,
+				xmax=3,
+				ymin=0,
+				ymax=1.2,
+				xtick={-1.9, 0, 1.9},
+				xticklabels={$-\omega_{RF}$, $0$, $\omega_{RF}$},
+				ytick={0},
+			]
+				\draw[red, thick] (axis cs:-0.1,0) -- (axis cs:0.1,0.7) -- (axis cs:0.6,0);
+				
+				\draw[-latex, blue, very thick] (axis cs:-1.9,0) -- (axis cs:-1.9,1) node[above,align=center]{\acs{LO}};
+				\draw[-latex, blue, very thick] (axis cs:1.9,0) -- (axis cs:1.9,1) node[above,align=center]{\acs{LO}};
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[The \ac{RF} signal in the frequency-domain] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.1\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_{RF}|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-3,
+				xmax=3,
+				ymin=0,
+				ymax=1.2,
+				xtick={-1.9, 0, 1.9},
+				xticklabels={$-\omega_{RF}$, $0$, $\omega_{RF}$},
+				ytick={0},
+			]
+				\draw[red, thick] (axis cs:-1.8,0) -- (axis cs:-2,0.7) -- (axis cs:-2.5,0);
+				\draw[red, thick] (axis cs:1.8,0) -- (axis cs:2,0.7) -- (axis cs:2.5,0);
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\caption{Up-conversion of a complex-valued baseband signal}
+	\label{fig:ch05:iq_up_freqdomain}
+\end{figure}
+
+The \ac{RF} signal is always real-valued and contains the basebased shifted as a whole (including its non-symmetric positive and negative parts) to the \ac{RF} frequency $\omega_{RF}$.
+
+\begin{proof}{}
+	The complex-valued baseband signal $\underline{x}_{B}(t)$ can be decomposed into its real and imaginary values, the \ac{I} and \ac{Q} components.
+	\begin{equation}
+		\underline{x}_{B}(t) = x_{B,I}(t) + j \cdot x_{B,Q}(t)
+	\end{equation}
+	In the frequency-domain:
+	\begin{equation}
+		\underline{X}_{B}\left(j\omega\right) = \underline{X}_{B,I}\left(j\omega\right) + j \cdot \underline{X}_{B,Q}\left(j\omega\right)
+		\label{eq:ch05:baseband_tx_freqdom}
+	\end{equation}
+	
+	Both $\underline{X}_{B,I}\left(j\omega\right)$ and $\underline{X}_{B,Q}\left(j\omega\right)$ must be Hermitian (real-valued in time-domain) and can be decomposed into:
+	\begin{subequations}
+		\begin{align}
+			\underline{X}_{B,I}\left(j\omega\right) &= \begin{cases}
+				\underline{X}_{B,I}^{+}\left(j\omega\right) & \quad \text{ if } \omega \geq 0 \\
+				\underline{X}_{B,I}^{-}\left(j\omega\right) & \quad \text{ if } \omega \leq 0
+			\end{cases} \\
+			\underline{X}_{B,Q}\left(j\omega\right) &= \begin{cases}
+				\underline{X}_{B,Q}^{+}\left(j\omega\right) & \quad \text{ if } \omega \geq 0 \\
+				\underline{X}_{B,Q}^{-}\left(j\omega\right) & \quad \text{ if } \omega \leq 0
+			\end{cases}
+		\end{align}
+	\end{subequations}
+
+	Following conditions must be true to fulfil \eqref{eq:ch05:baseband_tx_freqdom} and the symmetry rules of $\underline{X}_{B,I}\left(j\omega\right)$ and $\underline{X}_{B,Q}\left(j\omega\right)$:
+	\begin{subequations}
+		\begin{align}
+			\underline{X}_{B,I}^{+}\left(j\omega\right) = -j \underline{X}_{B,Q}^{+}\left(j\omega\right) &= \begin{cases}
+				\frac{1}{2} \underline{X}_{B}\left(j\omega\right) & \quad \text{ if } \omega \geq 0 \\
+				0 & \quad \text{ if } \omega \leq 0
+			\end{cases} \\
+			\underline{X}_{B,I}^{-}\left(j\omega\right) = j \underline{X}_{B,Q}^{-}\left(j\omega\right) &= \begin{cases}
+				0 & \quad \text{ if } \omega \geq 0 \\
+				\frac{1}{2} \overline{\underline{X}_{B}\left(j\omega\right)} & \quad \text{ if } \omega \leq 0
+			\end{cases}
+		\end{align}
+	\end{subequations}
+\end{proof}
 
 \section{Digital Modulation Techniques}
 
@@ -905,9 +1610,11 @@ So, the input signal's spectrum consists of a positive and a negative part:
 
 \todo{signal chain: S/P -> constellation diagram -> iFFT -> IQ}
 
-\subsection{Coherent and Non-Coherent Demodulation}
+%\subsection{Coherent and Non-Coherent Demodulation}
 
 \subsection{Inter-Symbol Interference}
+
+\todo{Cyclic Prefixes? No -> OFDM}
 
 \subsection{Synchronization 2: Carrier Recovery}
 
