@@ -1553,7 +1553,7 @@ The process can be reversed.
 
 The \ac{RF} signal is always real-valued and contains the basebased shifted as a whole (including its non-symmetric positive and negative parts) to the \ac{RF} frequency $\omega_{RF}$.
 
-\begin{proof}{}
+\begin{proof}{IQ modulation}
 	The complex-valued baseband signal $\underline{x}_{B}(t)$ can be decomposed into its real and imaginary values, the \ac{I} and \ac{Q} components.
 	\begin{equation}
 		\underline{x}_{B}(t) = x_{B,I}(t) + j \cdot x_{B,Q}(t)
@@ -1578,37 +1578,403 @@ The \ac{RF} signal is always real-valued and contains the basebased shifted as a
 		\end{align}
 	\end{subequations}
 
-	Following conditions must be true to fulfil \eqref{eq:ch05:baseband_tx_freqdom} and the symmetry rules of $\underline{X}_{B,I}\left(j\omega\right)$ and $\underline{X}_{B,Q}\left(j\omega\right)$:
+	Following conditions must be true to fulfil \eqref{eq:ch05:baseband_tx_freqdom} and the symmetry rules $\underline{X}_{B,I}\left(j\omega\right) = \overline{\underline{X}_{B,I}\left(-j\omega\right)}$ and $\underline{X}_{B,Q}\left(j\omega\right) = \overline{\underline{X}_{B,Q}\left(-j\omega\right)}$:
 	\begin{subequations}
 		\begin{align}
-			\underline{X}_{B,I}^{+}\left(j\omega\right) = -j \underline{X}_{B,Q}^{+}\left(j\omega\right) &= \begin{cases}
+			\underline{X}_{B,I}^{+}\left(j\omega\right) = j \underline{X}_{B,Q}^{+}\left(j\omega\right) &= \begin{cases}
 				\frac{1}{2} \underline{X}_{B}\left(j\omega\right) & \quad \text{ if } \omega \geq 0 \\
 				0 & \quad \text{ if } \omega \leq 0
 			\end{cases} \\
-			\underline{X}_{B,I}^{-}\left(j\omega\right) = j \underline{X}_{B,Q}^{-}\left(j\omega\right) &= \begin{cases}
+			\underline{X}_{B,I}^{-}\left(j\omega\right) = -j \underline{X}_{B,Q}^{-}\left(j\omega\right) &= \begin{cases}
 				0 & \quad \text{ if } \omega \geq 0 \\
-				\frac{1}{2} \overline{\underline{X}_{B}\left(j\omega\right)} & \quad \text{ if } \omega \leq 0
+				\frac{1}{2} \overline{\underline{X}_{B}\left(-j\omega\right)} & \quad \text{ if } \omega \leq 0
 			\end{cases}
 		\end{align}
 	\end{subequations}
+
+	The \ac{I} component mixed up to the \ac{RF} band is:
+	\begin{equation}
+		\begin{split}
+			x_{RF,I}(t) &= x_{B,I}(t) \cdot \cos\left(\omega_{RF} t\right) \\
+			\underline{X}_{RF,I}\left(j\omega\right) &= \underline{X}_{B,I}\left(j\omega\right) * \left(\delta\left(\omega-\omega_{RF}\right) + \delta\left(\omega+\omega_{RF}\right)\right) \pi \\
+			 &= \pi \left(\underline{X}_{B,I}^{+}\left(j\omega-j\omega_{RF}\right) + \underline{X}_{B,I}^{-}\left(j\omega+j\omega_{RF}\right)\right. \\ &\qquad \left. + \underline{X}_{B,I}^{-}\left(j\omega-j\omega_{RF}\right) + \underline{X}_{B,I}^{+}\left(j\omega+j\omega_{RF}\right)\right) \\
+			 &= \pi \left(\frac{1}{2} \underline{X}_{B}\left(j\omega-j\omega_{RF}\right) + \frac{1}{2} \overline{\underline{X}_{B}\left(-j\omega-j\omega_{RF}\right)}\right. \\ &\qquad \left. + \frac{1}{2} \overline{\underline{X}_{B}\left(-j\omega+j\omega_{RF}\right)} + \frac{1}{2} \underline{X}_{B}\left(j\omega+j\omega_{RF}\right)\right)
+		\end{split}
+	\end{equation}
+	
+	The \ac{Q} component mixed up to the \ac{RF} band is:
+	\begin{equation}
+		\begin{split}
+			x_{RF,Q}(t) &= x_{B,Q}(t) \cdot \underbrace{\cos\left(\omega_{RF} t + \frac{\pi}{2}\right)}_{= \sin\left(\omega_{RF} t\right)} \\
+			\underline{X}_{RF,Q}\left(j\omega\right) &= \underline{X}_{B,Q}\left(j\omega\right) * \left(e^{j\frac{\pi}{2}} \delta\left(\omega-\omega_{RF}\right) + e^{-j\frac{\pi}{2}} \delta\left(\omega+\omega_{RF}\right)\right) \pi \\
+			&= \pi \left(j \underline{X}_{B,Q}^{+}\left(j\omega-j\omega_{RF}\right) - j \underline{X}_{B,Q}^{-}\left(j\omega+j\omega_{RF}\right)\right. \\ &\qquad \left. + j \underline{X}_{B,Q}^{-}\left(j\omega-j\omega_{RF}\right) - j \underline{X}_{B,Q}^{+}\left(j\omega+j\omega_{RF}\right)\right) \\
+			&= \pi \left(\frac{1}{2} \underline{X}_{B}\left(j\omega-j\omega_{RF}\right) + \frac{1}{2} \overline{\underline{X}_{B}\left(-j\omega-j\omega_{RF}\right)}\right. \\ &\qquad \left. - \frac{1}{2} \overline{\underline{X}_{B}\left(-j\omega+j\omega_{RF}\right)} - \frac{1}{2} \underline{X}_{B}\left(j\omega+j\omega_{RF}\right)\right)
+		\end{split}
+	\end{equation}
+	
+	The sum of both components mixed up to the \ac{RF} band is:
+	\begin{equation}
+		\begin{split}
+			x_{RF}(t) &= x_{RF,I}(t) + x_{RF,Q}(t) \\
+			\underline{X}_{RF}\left(j\omega\right) &= \underline{X}_{RF,I}\left(j\omega\right) + \underline{X}_{RF,Q}\left(j\omega\right) \\
+			 &= \pi \left( \underline{X}_{B}\left(j\omega-j\omega_{RF}\right) + \overline{\underline{X}_{B}\left(-j\omega-j\omega_{RF}\right)} \right) \\
+			 &= \pi \left( \underbrace{\underline{X}_{B}\left(j\left(\omega-\omega_{RF}\right)\right)}_{\text{Baseband shifted to $+\omega_{RF}$}} + \underbrace{\overline{\underline{X}_{B}\left(-j\left(\omega+\omega_{RF}\right)\right)}}_{\text{Conjugate complex baseband mirrored and shifted to $-\omega_{RF}$}} \right) 
+		\end{split}
+	\end{equation}
+	
+	\begin{itemize}
+		\item $\underline{X}_{RF}\left(j\omega\right)$ is Hermitian. $x_{RF}(t)$ is therefore real-valued.
+		\item $\underline{X}_{RF}\left(j\omega\right)$ contains the baseband shifted up to $\omega_{RF}$ as a whole leaving amplitudes and phases of both the positive and negative frequencies of the baseband intact.
+	\end{itemize}
 \end{proof}
 
 \section{Digital Modulation Techniques}
 
-\subsection{Amplitude-Shift Keying}
+\begin{itemize}
+	\item The goal of a digital communication system is conveying data from the sender to the receiver.
+	\item The source of the data is somewhere outside the radio.
+	\item \textbf{The \index{radio} \emph{radio} is the part of a digital communication system concerning with data coding, signal processing and \ac{RF} modulation.}
+	\item Example sources of data:
+	\begin{itemize}
+		\item Higher protocol layers, especially layer 2 (data link layer)
+		\item Buttons (e.g. remote control)
+		\item External devices (the radio acts as a modem)
+		\item \ac{PCM}-encoded voice
+		\item ...
+	\end{itemize}
+	\item In general, digital data is any kind of time-discrete and value-discrete information.
+	\begin{itemize}
+		\item In a computer system the smallest chunk of data is one bit. A bit stream is handed over to the radio which modulates it onto a carrier.
+		\item We will stick to bits to represent information for explanatory reasons. However, keep in mind that data can be any kind of time-discrete and value-discrete information.
+	\end{itemize}
+\end{itemize}
+
+After we have learnt about the theory of modulation, let's have a look at practical modulation techniques for digital data.
+
+\subsection{Symbols}
+
+\subsubsection{Symbol Concept}
+
+All digital modulation techniques take time-discrete and value-discrete data.
+\begin{itemize}
+	\item The modulation changes a property (amplitude, phase) of the carrier for a certain amount of time.
+	\item This time is the \index{symbol period} \textbf{symbol period} $T_{sym}$. Its inverse is the \index{symbol rate} \textbf{symbol rate} $f_{sym}$.
+	\item We already know these terms from the chapter about sampling.
+	\begin{itemize}
+		\item The time-discrete data is transferred back to a time-continuous, but still value-discrete domain.
+		\item Each instantaneous value of the time-discrete data points is prolonged to the symbol period $T_{sym}$.
+		\item The result is a series of symbols $x_{sym}(t)$.
+	\end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.15\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x_{sym}(t)$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=outer north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-0.5,
+			xmax=9.5,
+			ymin=0,
+			ymax=1.7,
+			%xtick={0,0.125,...,1},
+			%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+			%ytick={0},
+			ytick={0, 0.25, 0.5, 0.75, 1},
+			yticklabels={0, $(00)_2 \mapsto 0.25$, $(01)_2 \mapsto 0.5$, $(10)_2 \mapsto 0.75$, $(11)_2 \mapsto 1$},
+		]
+			\draw[blue] (axis cs:0,1) -- (axis cs:2,1) -- (axis cs:2,0.25) -- (axis cs:4,0.25) -- (axis cs:4,0.75) -- (axis cs:6,0.75) -- (axis cs:6,0.5) -- (axis cs:8,0.5) -- (axis cs:8,1) -- (axis cs:9,1);
+			
+			\draw[latex-latex] (axis cs:2,1.1) -- node[midway,above,align=center]{Symbol period $T_{sym}$} (axis cs:4,1.1);
+			
+%			\draw (1,-0.5) node{11};
+%			\draw (3,-0.5) node{00};
+%			\draw (5,-0.5) node{10};
+%			\draw (7,-0.5) node{01};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Series of symbols, each encoding 2 bits}
+\end{figure}
+
+\subsubsection{Symbol Mapping}
+
+Assume that the data is represented by a $N$-dimensional vector (time-discrete) of information with $K_d$ possible discrete values.
+\begin{equation}
+	\vec{d} = \left[d_0, d_1, d_2, \cdots, d_{N-1}\right]^{\mathrm{T}}
+\end{equation}
+
+However, the modulation is capable of encoding only $K_m$ discrete values. \textbf{So, a mapping of the $K_d$ discrete data states to the $K_m$ modulator symbol states is necessary.} This mapping is called \index{symbol mapping} \textbf{symbol mapping}.
+
+\begin{table}[H]
+	\centering
+	\caption[Example symbol mapping]{Example symbol mapping: There are $K_d = 2$ discrete data states, but $K_m = 4$ modulator symbol states. Two data point are mapped to one symbol. So one symbol carries two data points.}
+	\begin{tabular}{|l|l|}
+		\hline
+		Data & Symbol \\
+		\hline
+		\hline
+		$\left[0, 0\right]^{\mathrm{T}}$ & 0.25 \\
+		\hline
+		$\left[1, 0\right]^{\mathrm{T}}$ & 0.5 \\
+		\hline
+		$\left[0, 1\right]^{\mathrm{T}}$ & 0.75 \\
+		\hline
+		$\left[1, 1\right]^{\mathrm{T}}$ & 1 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[block,draw](Mapper){Symbol mapping};
+		\node[block,draw,right=2cm of Mapper](Mod){Modulation};
+		
+		\draw[latex-o] (Mapper.west) -- +(-2cm,0) node[left,align=right]{Data};
+		\draw[-latex] (Mapper.east) -- node[midway,above,align=left]{Symbols} (Mod.west);
+		\draw[-latex] (Mod.east) -- +(2cm,0) node[right,align=left]{\ac{RF}};
+	\end{tikzpicture}
+	\caption{Abstract transmitter signal chain of symbol mapping and modulation}
+\end{figure}
+
+\subsubsection{Data Detection}
+
+On the receiver side, the \emph{symbol mapping} must be reversed. This is accomplished by the \index{data detection} \textbf{data detection}.
+\begin{itemize}
+	\item The demodulator delivers a series of symbols.
+	\item Each symbol is mapped to the data. $K_m$ modulator symbol states are mapped to $K_d$ discrete data states.
+	\item The mapping is a kind of quantization of the modulator output.
+\end{itemize}
+
+Remember that the received signal is subject to noise (thermal noise, quantization noise, ...).
+\begin{itemize}
+	\item The modulator output is in fact value-discrete.
+	\item Noise is added to the modulator output.
+	\item The received symbol may be mapped to a false data value, because the additive noise pushes the signal outside the detection region for the correct data value.
+\end{itemize}
+
+\begin{fact}
+	Reconstructed data at the receiver side can differ from the true value at the transmitter. This is called \emph{data error}.
+\end{fact}
+
+\begin{itemize}
+	\item Noise is a stochastic process. Therefore, the data error is random.
+	\item The probability for the data error increases as the \ac{SNR} decreases.
+	\item A high \ac{SNR} makes data errors unlikely.
+	\item Measures for the data error are (which can be defined in relation to the \ac{SNR}) amongst others:
+	\begin{itemize}
+		\item The \index{bit error rate} \textbf{\acf{BER}}, measuring the proportion of erroneous bits, when the output data is a bit stream.
+		\item The \index{packet error rate} \textbf{packet error rate}, measuring the proportion of erroneous packets, where packets are a collection of data processed by higher protocol layers. Higher protocol layers may not be able to process the packet if a number of their data entities are incorrect.
+	\end{itemize}
+\end{itemize}
+
+\begin{fact}
+	The number of modulator symbol states $K_m$ influences the probability for data errors.
+\end{fact}
+
+\begin{itemize}
+	\item Low numbers of modulator symbol states $K_m$ perform better under noisy conditions with a low \ac{SNR}.
+	\item Higher numbers of modulator symbol states $K_m$ are sensitive to noise, because the spacing between the discrete values gets smaller. The performance is bad under noisy conditions with a low \ac{SNR}.
+	\item Communication systems may mitigate this problem by adapting the number of modulator symbol states $K_m$ dynamically.
+	\begin{itemize}
+		\item The link quality is estimated.
+		\item If the link quality is good, the modulator is configured to a high $K_m$. The data rate is thereby increased.
+		\item When the link quality drops, the modulator is configured to a low $K_m$. The data rate must be decreased for the sake of reliability under noisy conditions.
+		\item The adaption requires some additional overhead in the implementation. Usually, higher protocol layers, especially the data link layer (layer 2), is involved, because the $K_m$ value must be announced to the receiver.
+	\end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[block,draw](Det){Symbol mapping};
+		\node[block,draw,right=2cm of Det](Demod){Demodulation};
+		
+		\draw[-latex] (Det.west) -- +(-2cm,0) node[left,align=right]{Reconstructed\\ data};
+		\draw[latex-] (Det.east) -- node[midway,above,align=left]{Noisy\\ symbols} (Demod.west);
+		\draw[latex-o] (Demod.east) -- +(2cm,0) node[right,align=left]{\ac{RF}};
+	\end{tikzpicture}
+	\caption{Abstract receiver signal chain of demodulation and data detection}
+\end{figure}
+
+\subsection{Amplitude-Shift Keying and Symbol Mapping}
+
+The application of the \ac{AM} in digital communication system is the \index{amplitude-shift keying} \acf{ASK}.
+\begin{itemize}
+	\item The amplitude of a carrier is altered to modulate the data.
+	\item Because only the amplitude carries the information, the demodulator can be coherent or non-coherent.
+	\item Advantage: Both modulator and demodulator circuits are simple and can be realized at low cost. Therefore, \ac{ASK} is favoured for simple and cost-efficient applications.
+	\item Drawback: The amplitude can be strongly affected by disturbances. \ac{ASK} signals are not very immune against noise.
+\end{itemize}
+
+The amplitude can take $K_m$ discrete values. The data is mapped to symbols $x_{sym}(t)$ which alter the amplitude of the carrier.
+\begin{equation}
+	x_{ASK}(t) = x_{sym}(t) \underbrace{\cos\left(\omega_{RF} t\right)}_{\text{Carrier}}
+\end{equation}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.15\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x_{ASK}(t)$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=outer north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-0.5,
+			xmax=9.5,
+			ymin=-1.7,
+			ymax=1.7,
+			%xtick={0,0.125,...,1},
+			%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+			%ytick={0},
+		]
+			\addplot[red, smooth, domain=0:2, samples=50] plot(\x, {sin(deg(2*pi*2*\x))});
+			\addplot[red, smooth, domain=2:4, samples=50] plot(\x, {0.2*sin(deg(2*pi*2*\x))});
+			\addplot[red, smooth, domain=4:6, samples=50] plot(\x, {sin(deg(2*pi*2*\x))});
+			\addplot[red, smooth, domain=6:8, samples=50] plot(\x, {0.2*sin(deg(2*pi*2*\x))});
+			\addplot[red, smooth, domain=8:9, samples=50] plot(\x, {sin(deg(2*pi*2*\x))});
+			\addlegendentry{\acs{ASK} Signal $x_{ASK}(t)$};
+			\draw[olive, dashed] (axis cs:0,1) -- (axis cs:2,1) -- (axis cs:2,0.2) -- (axis cs:4,0.2) -- (axis cs:4,1) -- (axis cs:6,1) -- (axis cs:6,0.2) -- (axis cs:8,0.2) -- (axis cs:8,1) -- (axis cs:9,1);
+			%\addlegendentry{Envelope of $x_B(t)$};
+			
+			\draw[dashed] (axis cs:2,-1.2) -- (axis cs:2,1.2);
+			\draw[dashed] (axis cs:4,-1.2) -- (axis cs:4,1.2);
+			\draw[latex-latex] (axis cs:2,1.1) -- node[midway,above,align=center]{Symbol period $T_{sym}$} (axis cs:4,1.1);
+			
+			\draw (1,-1.5) node{1};
+			\draw (3,-1.5) node{0};
+			\draw (5,-1.5) node{1};
+			\draw (7,-1.5) node{0};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{\acs{ASK} with $K_m = 2$ discrete states capable of encoding 1 bit}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+		height={0.15\textheight},
+		width=0.6\linewidth,
+		scale only axis,
+		xlabel={$t$},
+		ylabel={$x_{ASK}(t)$},
+		%grid style={line width=.6pt, color=lightgray},
+		%grid=both,
+		grid=none,
+		legend pos=outer north east,
+		axis y line=middle,
+		axis x line=middle,
+		every axis x label/.style={
+			at={(ticklabel* cs:1.05)},
+			anchor=north,
+		},
+		every axis y label/.style={
+			at={(ticklabel* cs:1.05)},
+			anchor=east,
+		},
+		xmin=-0.5,
+		xmax=9.5,
+		ymin=-1.7,
+		ymax=1.7,
+		%xtick={0,0.125,...,1},
+		%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+		%ytick={0},
+	]
+		\addplot[red, smooth, domain=0:2, samples=50] plot(\x, {sin(deg(2*pi*2*\x))});
+		\addplot[red, smooth, domain=2:4, samples=50] plot(\x, {0.2*sin(deg(2*pi*2*\x))});
+		\addplot[red, smooth, domain=4:6, samples=50] plot(\x, {0.8*sin(deg(2*pi*2*\x))});
+		\addplot[red, smooth, domain=6:8, samples=50] plot(\x, {0.5*sin(deg(2*pi*2*\x))});
+		\addplot[red, smooth, domain=8:9, samples=50] plot(\x, {sin(deg(2*pi*2*\x))});
+		\addlegendentry{\acs{ASK} Signal $x_{ASK}(t)$};
+		\draw[olive, dashed] (axis cs:0,1) -- (axis cs:2,1) -- (axis cs:2,0.2) -- (axis cs:4,0.2) -- (axis cs:4,0.8) -- (axis cs:6,0.8) -- (axis cs:6,0.5) -- (axis cs:8,0.5) -- (axis cs:8,1) -- (axis cs:9,1);
+		%\addlegendentry{Envelope of $x_B(t)$};
+		
+		\draw (1,-1.5) node{11};
+		\draw (3,-1.5) node{00};
+		\draw (5,-1.5) node{10};
+		\draw (7,-1.5) node{01};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{\acs{ASK} with $K_m = 4$ discrete states capable of encoding 2 bits}
+\end{figure}
+
+\subsubsection{Phasor Representation}
+
+The above examples depicted different constellations for $K_m$.
+
+The \ac{ASK} is a multiplication of the symbol stream $x_{sym}(t)$ which the mono-chromatic carrier. This causes an amplitude change with each new symbol.
+
+\textbf{An alternate representation is known from Chapter 2 -- the phasors.} Each symbol of the $K_m$ states is assigned a phasor.
+
+\begin{table}[H]
+	\centering
+	\caption{Example phasor representation of the symbols}
+	\begin{tabular}{|l|l|}
+		\hline
+		Symbol & Phasor \\
+		\hline
+		\hline
+		0 & $0.25 \cdot e^{j 0}$ \\
+		\hline
+		1 & $0.5 \cdot e^{j 0}$ \\
+		\hline
+		2 & $0.75 \cdot e^{j 0}$ \\
+		\hline
+		3 & $1 \cdot e^{j 0}$ \\
+		\hline
+	\end{tabular}
+\end{table}
+
+At each transition to a new symbol, the phasor is switched. The new phasor alters the carrier amplitude.
 
 \subsection{Phase-Shift Keying}
 
-\subsection{Constellation Diagrams}
+The application of the \ac{PM} in digital communication system is the \index{phase-shift keying} \acf{PSK}.
+
+\todo{Constellation Diagrams}
+
+\subsection{Quadrature Amplitude Modulation}
 
 \todo{What is a symbol?}
 
 \todo{Data to symbol mapping}
 
-\todo{QAM}
-
-
 \todo{signal chain: S/P -> constellation diagram -> iFFT -> IQ}
+
+\todo{IQ Imbalance}
 
 %\subsection{Coherent and Non-Coherent Demodulation}
 
