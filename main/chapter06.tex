@@ -11,10 +11,10 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Configuration
-\def\thekindofdocument{Exercise}
-\def\thesubtitle{Chapter 5: Modulation and Mixing}
+\def\thekindofdocument{Lecture Notes}
+\def\thesubtitle{Chapter 6: Digital Signal Processing and Spread Spectrum}
 \def\therevision{1}
-\def\therevisiondate{2020-05-26}
+\def\therevisiondate{2020-06-06}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Header
@@ -45,7 +45,7 @@
 
 \setcounter{chapter}{5}
 
-\input{../exercise05/exercise05.tex}
+\input{../chapter06/content_ch06.tex}
 \clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,15 +53,56 @@
 
 \begin{appendix}
 
-\chapter{Solutions}
-
-\printsolutions
-\clearpage
+%\include{appendix/crlb}
 
 \end{appendix}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Nachtrag
+
+% References
+%\bibliographystyle{unsrt}
+%\bibliography{Masterarbeit}
+
+% List of Acronyms
+\input{../common/acronym.tex}
+\newpage
+
+% Notation
+%\include{formales/notation}
+%\newpage
+
+% List of Symbols
+%\include{formales/formelzeichen}
+\newpage
+
+% List of Block Diagram Symbols
+%\include{formales/blockfigures}
+\newpage
+
+% Print default index
+\phantomsection
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+\newpage
+
+% List of Figures
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\newpage
+
+% List of Tables
+\phantomsection
+\addcontentsline{toc}{chapter}{\listtablename}
+\listoftables
+\newpage
+
+% Nomenclature
+\phantomsection
+\addcontentsline{toc}{chapter}{Nomenclature}
+\printnomenclature
+\newpage
 
 % Imprint
 \input{../common/imprint.tex}
