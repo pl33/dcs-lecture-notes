@@ -34,7 +34,17 @@ Example: Voice transmission
 
 In the previous example, the voice was the information-carrying signal. This can be transferred to any kind of information. In this chapter, we will discuss techniques to modulate data on carriers which can be transmitted over wired and wireless channels.
 
-\todo{Block diagram modulator}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[block,draw](Mod){Modulator};
+		
+		\draw[latex-o] (Mod.west) -- +(-2cm,0) node[left,align=right]{Information};
+		\draw[latex-o] (Mod.south) -- +(0,-1cm) node[below,align=center]{\acs{RF} carrier};
+		\draw[-latex] (Mod.east) -- +(2cm,0) node[right,align=left]{Modulated\\ \acs{RF} signal};
+	\end{tikzpicture}
+	\caption{The purpose of modulation}
+\end{figure}
 
 \section{Modulation in The Time and Frequency Domain}
 
@@ -47,13 +57,14 @@ The frequency is fixed to the carrier frequency. The other two parameters can be
 
 There are two classes of modulation:
 \begin{itemize}
-	\item \textbf{Amplitude modulation} The amplitude of the carrier is altered.
+	\item The \index{amplitude modulation} \textbf{\acf{AM}} -- The amplitude of the carrier is altered.
 	\begin{equation}
 		x_{S,AM}(t) = f_{\hat{X}}(t) \cos\left(\omega_C t + \varphi_C\right)
 	\end{equation}
-	\item \textbf{Phase modulation} The phase of the carrier is altered.
+	\item The \index{phase modulation} \textbf{\acf{PM}} -- The phase of the carrier is altered.
 	\begin{equation}
-		x_{S,PM}(t) = \hat{X}_C \cos\left(\omega_C t + f_{\varphi}(t)\right)
+		x_{S,PM}(t) = \hat{X}_C \cos\left(\omega_C t + \phi_{\Delta} f_{\varphi}(t)\right)
+		\label{eq:ch05:pm_general}
 	\end{equation}
 \end{itemize}
 
@@ -64,9 +75,11 @@ This section covers basic modulation techniques of analogue signals.
 	\item A digital signal must be converted to an analogue signal in order to physically exists. It can then be modulated onto a carrier and transmitted as an electromagnetic wave.
 \end{itemize}
 
+\label{sec:ch05:am}
+
 \subsection{Amplitude Modulation}
 
-The \index{amplitude modulation} \textbf{\ac{AM}} is the alteration of the carrier's amplitude.
+The \index{amplitude modulation} \textbf{\acf{AM}} is the alteration of the carrier's amplitude.
 
 \begin{attention}
 	By now, all signals are real, because the technical realization is considered. Physical signals must always be real.
@@ -175,6 +188,7 @@ The carrier amplitude can be altered by multiplying it with the instantaneous va
 	}
 
 	\caption{\acs{DSB} \acs{AM} of analogue signals}
+	\label{fig:ch05:dsbtc}
 \end{figure}
 
 \subsubsection{Frequency Domain}
@@ -208,7 +222,7 @@ Because of the presence of the carrier and both sidebands, the modulation is cal
 \begin{definition}{Transmission bandwidth of \acs{DSB} \acs{AM}}
 	The modulated signal of the \acs{DSB} \acs{AM} consists of the positive and negative part of the information-carrying signal shifted in frequency to the carrier frequency. The information-carrying signal emerges as sidebands.
 	
-	Therefore, the bandwidth of the modulated signal is $[\omega_C - \omega_B, \omega_C + \omega_B]$. The difference $2 \omega_B$ is called \index{transmission bandwidth} \textbf{transmission bandwidth}.
+	Therefore, the bandwidth of the modulated signal is $[\omega_C - \omega_B, \omega_C + \omega_B]$. The difference $2 \omega_B$ is called \index{transmission bandwidth!amplitude modulation} \textbf{transmission bandwidth}.
 \end{definition}
 
 \begin{fact}
@@ -565,9 +579,291 @@ Like the \ac{DSB-TC}, the transmission bandwidth of the \ac{DSB-SC} is $2 \omega
 	\item The resulting \index{single-sideband} \textbf{\ac{SSB} \ac{AM}} is mainly used for analogue signals, which is out of the scope of this lecture.
 \end{itemize}
 
+\label{sec:ch05:pm}
+
 \subsection{Phase Modulation}
 
-\todo{Phase Modulation}
+\eqref{eq:ch05:pm_general} gave a general expression for the \index{phase modulation} \textbf{\acf{PM}}.
+\begin{equation*}
+	x_{S,PM}(t) = \hat{X}_C \cos\left(\omega_C t + \phi_{\Delta} f_{\varphi}(t)\right)
+\end{equation*}
+where $f_{\varphi}(t)$ is the signal carrying the information and $\phi_{\Delta}$ is a scaling factor.
+
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Carrier and information-carrying signals]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.6\linewidth,
+				scale only axis,
+				xlabel={$t$},
+				ylabel={$x(t)$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=outer north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-0.5,
+				xmax=8.5,
+				ymin=-1.2,
+				ymax=1.2,
+				%xtick={0,0.125,...,1},
+				%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+				%ytick={0},
+			]
+				\addplot[blue, smooth, domain=0:8, samples=200] plot(\x, {cos(deg(2*pi*2*\x))});
+				\addlegendentry{Carrier $x_C(t)$};
+				\addplot[red, smooth, domain=0:8, samples=50] plot(\x, {cos(deg(2*pi*0.25*\x))});
+				\addlegendentry{Information $x_B(t)$};
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[\acs{PM}]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+			height={0.15\textheight},
+			width=0.6\linewidth,
+			scale only axis,
+			xlabel={$t$},
+			ylabel={$x_{PM}(t)$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=outer north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-0.5,
+			xmax=8.5,
+			ymin=-1.2,
+			ymax=1.2,
+			%xtick={0,0.125,...,1},
+			%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+			%ytick={0},
+		]
+			\addplot[red, smooth, domain=0:8, samples=150] plot(\x, {cos( deg(2*pi*2*\x + (3*(cos(deg(2*pi*0.25*\x)))) ))});
+			\addlegendentry{\acs{PM} signal};
+		\end{axis}
+		\end{tikzpicture}
+	}
+\end{figure}
+
+$x_{S,PM}(t)$ can be decomposed by a Fourier analysis:
+\begin{equation}
+	x_{S,PM}(t) = \sum_{n=-\infty}^{\infty} \underline{c}_n \cdot e^{j n \omega_C t}
+\end{equation}
+The coefficients are:
+\begin{equation}
+	\underline{c}_n = \begin{cases}
+		\frac{\hat{X}_C}{2} e^{j \phi_{\Delta} f_{\varphi}(t)} &\quad \text{if } n = 1, \\
+		\frac{\hat{X}_C}{2} e^{-j \phi_{\Delta} f_{\varphi}(t)} &\quad \text{if } n = -1, \\
+		0 &\quad \text{if } n \neq 1 \text{ and } n \neq -1. \\
+	\end{cases}
+\end{equation}
+
+Let's consider the positive and negative frequencies separately.
+\begin{equation}
+	\begin{split}
+		\underline{x}_{S,PM}^{+}(t) &= \frac{\hat{X}_C}{2} e^{j \phi_{\Delta} f_{\varphi}(t)} \cdot e^{j \omega_C t} \\
+		 &= \frac{\hat{X}_C}{2} \left(\cos\left(\phi_{\Delta} f_{\varphi}(t)\right) + j \sin\left(\phi_{\Delta} f_{\varphi}(t)\right)\right) \left(\cos\left(\omega_C t\right) + j \sin\left(\omega_C t\right)\right)
+	\end{split}
+	\label{eq:ch05:pm_fourier_pos}
+\end{equation}
+The negative frequencies are symmetric.
+\begin{equation}
+	\begin{split}
+		\underline{x}_{S,PM}^{-}(t) &= \frac{\hat{X}_C}{2} e^{-j \phi_{\Delta} f_{\varphi}(t)} \cdot e^{-j \omega_C t} \\
+		&= \frac{\hat{X}_C}{2} \left(\cos\left(\phi_{\Delta} f_{\varphi}(t)\right) - j \sin\left(\phi_{\Delta} f_{\varphi}(t)\right)\right) \left(\cos\left(\omega_C t\right) - j \sin\left(\omega_C t\right)\right)
+	\end{split}
+	\label{eq:ch05:pm_fourier_neg}
+\end{equation}
+
+A simplification is made: The \emph{narrowband \ac{PM}} is considered.
+\begin{itemize}
+	\item $\phi_{\Delta} f_{\varphi}(t)$ is much smaller than $1$, i.e., $f_{\varphi}(t) \ll 1$.
+	\item Therefore, $\phi_{\Delta} \cos\left(f_{\varphi}(t)\right) \approx 1$ and
+	\item $\phi_{\Delta} \sin\left(f_{\varphi}(t)\right) \approx \phi_{\Delta} f_{\varphi}(t)$.
+\end{itemize}
+
+\eqref{eq:ch05:pm_fourier_pos} simplifies to
+\begin{equation}
+	\begin{split}
+		\underline{x}_{S,PM}^{+}(t) &\approx \frac{\hat{X}_C}{2} \left(1 + j \phi_{\Delta} f_{\varphi}(t)\right) \left(\cos\left(\omega_C t\right) + j \sin\left(\omega_C t\right)\right) \\
+		 &\approx \frac{\hat{X}_C}{2} \left(\cos\left(\omega_C t\right) + j \sin\left(\omega_C t\right) + j \phi_{\Delta} f_{\varphi}(t) \cos\left(\omega_C t\right) - \phi_{\Delta} f_{\varphi}(t) \sin\left(\omega_C t\right)\right)
+	\end{split}
+\end{equation}
+\eqref{eq:ch05:pm_fourier_neg} simplifies to
+\begin{equation}
+	\begin{split}
+		\underline{x}_{S,PM}^{-}(t) &\approx \frac{\hat{X}_C}{2} \left(1 - j \phi_{\Delta} f_{\varphi}(t)\right) \left(\cos\left(\omega_C t\right) - j \sin\left(\omega_C t\right)\right) \\
+		&\approx \frac{\hat{X}_C}{2} \left(\cos\left(\omega_C t\right) - j \phi_{\Delta} \sin\left(\omega_C t\right) - j \phi_{\Delta} f_{\varphi}(t) \cos\left(\omega_C t\right) - f_{\varphi}(t) \sin\left(\omega_C t\right)\right)
+	\end{split}
+\end{equation}
+
+Consequently,
+\begin{equation}
+	\begin{split}
+		\underline{x}_{S,PM}(t) &= \underline{x}_{S,PM}^{+}(t) + \underline{x}_{S,PM}^{-}(t) \\
+		 &\approx \hat{X}_C \left(\cos\left(\omega_C t\right) - \phi_{\Delta} f_{\varphi}(t) \sin\left(\omega_C t\right)\right)
+	\end{split}
+\end{equation}
+
+The Fourier transform of $\underline{x}_{S,PM}(t)$ is approximately:
+\begin{equation}
+	\underline{X}_{S,PM}\left(j\omega\right) \approx \frac{\hat{X}_C}{2} \left( \delta\left(\omega-\omega_C\right) + \delta\left(\omega+\omega_C\right) - j \phi_{\Delta} \underline{F}_{\varphi}\left(j\omega-j\omega_C\right) + j \phi_{\Delta} \underline{F}_{\varphi}\left(j\omega+j\omega_C\right)\right)
+\end{equation}
+where $\underline{F}_{\varphi}\left(j\omega\right)$ is the Fourier transform of the information signal $f_{\varphi}(t)$.
+
+For simplicity, let's consider the positive part of the spectrum only.
+\begin{equation}
+	\underline{X}_{S,PM}^{+}\left(j\omega\right) \approx \frac{\hat{X}_C}{2} \left( \delta\left(\omega-\omega_C\right) - j \phi_{\Delta} \underline{F}_{\varphi}\left(j\omega-j\omega_C\right) \right) \quad \forall \; \omega_C > 0
+\end{equation}
+
+\begin{definition}{Transmission bandwidth}
+	The \index{transmission bandwidth!narrowband phase modulation} \emph{transmission bandwidth of a narrowband \ac{PM}} is approximately the bandwidth of the information signal.
+\end{definition}
+
+%\subsubsection{Narrowband Tone Modulation}
+%
+%To obtain an estimate for the \index{transmission bandwidth!phase modulation} \emph{transmission bandwidth}, a sinusoidal input is applied to the \ac{PM}.
+%\begin{equation}
+%	f_{\varphi}(t) = \hat{A_b} \cos\left(\omega_b t\right)
+%\end{equation}
+%where $\hat{A_b}$ is the signal amplitude and $\omega_b$ is its angular frequency.
+%
+%The \emph{narrowband \ac{PM}} requires that $\phi_{\Delta} \hat{A_b} \ll 1$.
+
+The transmission bandwidth is controlled by the scaling factor $\phi_{\Delta}$. For high values of $\phi_{\Delta}$, the narrowband approximation is not valid. The transmission bandwidth increases.
+
+\begin{excursus}{Wideband \ac{PM}}
+	When the narrowband condition is not fulfilled, the approximations are not valid. The spectrum of the \ac{PM} signal is a series of superimposed Bessel functions. Let's assume that a sinusoidal input is applied to the \ac{PM}.
+	\begin{equation}
+		f_{\varphi}(t) = \hat{A_b} \cos\left(\omega_b t\right)
+	\end{equation}
+	where $\hat{A_b}$ is the signal amplitude and $\omega_b$ is its angular frequency. The \ac{PM} is:
+	\begin{equation}
+		x_{S,PM}(t) = \hat{X}_C \cos\left(\omega_C t + \phi_{\Delta} \hat{A_b} \cos\left(\omega_b t\right)\right)
+	\end{equation}
+	The product $\beta = \phi_{\Delta} \hat{A_b}$ is the \index{modulation index} \textbf{modulation index}.
+	
+	The solution for the \ac{PM} signal in the time-domain using applied mathematics is:
+	\begin{equation}
+		\underline{x}_{S,PM,WB}(t) = \hat{X}_C \sum_{n=-\infty}^{\infty} J_n(\beta) \cos\left(\left(\omega_C + n \omega_{b}\right)t\right)
+	\end{equation}
+	where $J_n(\beta)$ is the Bessel function of the $n$-th order.
+	
+	\begin{figure}[H]
+		\centering
+		
+		\subfloat[Small modulation index $\beta$ (narrowband)]{
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+					height={0.1\textheight},
+					width=0.35\linewidth,
+					scale only axis,
+					xlabel={$\omega$},
+					ylabel={$|\underline{X}_{PM}|$},
+					%grid style={line width=.6pt, color=lightgray},
+					%grid=both,
+					grid=none,
+					legend pos=outer north east,
+					axis y line=middle,
+					axis x line=middle,
+					every axis x label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=north,
+					},
+					every axis y label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=east,
+					},
+					xmin=0,
+					xmax=8.5,
+					ymin=0,
+					ymax=1.2,
+					%xtick={0,0.125,...,1},
+					%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+					%ytick={0},
+				]
+					\addplot[red,very thick] coordinates{(4,0) (4,1)};
+					\addplot[red,very thick] coordinates{(3,0) (3,0.7)};
+					\addplot[red,very thick] coordinates{(5,0) (5,0.7)};
+				\end{axis}
+			\end{tikzpicture}
+		}
+
+		\subfloat[Large modulation index $\beta$]{
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+					height={0.1\textheight},
+					width=0.35\linewidth,
+					scale only axis,
+					xlabel={$\omega$},
+					ylabel={$|\underline{X}_{PM}|$},
+					%grid style={line width=.6pt, color=lightgray},
+					%grid=both,
+					grid=none,
+					legend pos=outer north east,
+					axis y line=middle,
+					axis x line=middle,
+					every axis x label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=north,
+					},
+					every axis y label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=east,
+					},
+					xmin=0,
+					xmax=8.5,
+					ymin=0,
+					ymax=1.2,
+					%xtick={0,0.125,...,1},
+					%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+					%ytick={0},
+				]
+					\addplot[red,very thick] coordinates{(4,0) (4,0.3)};
+					
+					\pgfplotsinvokeforeach{-1,1}{
+						\addplot[red,very thick] coordinates{({4+(#1*1.5)-(#1*1.125)},0) ({4+(#1*1.5)-(#1*1.125)},0.1)};
+						\addplot[red,very thick] coordinates{({4+(#1*1.5)-(#1*0.75)},0) ({4+(#1*1.5)-(#1*0.75)},0.3)};
+						\addplot[red,very thick] coordinates{({4+(#1*1.5)-(#1*0.375)},0) ({4+(#1*1.5)-(#1*0.375)},0.6)};
+						\addplot[red,very thick] coordinates{({4+(#1*1.5)},0) ({4+(#1*1.5)},1)};
+						\addplot[red,very thick] coordinates{({4+(#1*1.5)+(#1*0.375)},0) ({4+(#1*1.5)+(#1*0.375)},0.9)};
+						\addplot[red,very thick] coordinates{({4+(#1*1.5)+(#1*0.75)},0) ({4+(#1*1.5)+(#1*0.75)},0.2)};
+						\addplot[red,very thick] coordinates{({4+(#1*1.5)+(#1*1.125)},0) ({4+(#1*1.5)+(#1*1.125)},0.5)};
+					}
+				\end{axis}
+			\end{tikzpicture}
+		}
+	
+		\caption{Example spectra at different modulation indices}
+	\end{figure}
+\end{excursus}
 
 \section{Frequency mixer}
 
@@ -1178,7 +1474,7 @@ This mixer architecture is called \index{coherent mixer} \textbf{coherent}.
 	\label{fig:ch05:iq_down_circuit}
 \end{figure}
 
-The coherent mixer, also called \index{IQ demodulator} \textbf{IQ demodulator}, (Figure \ref{fig:ch05:iq_down_circuit}) consists of two branches (also called paths):
+The coherent mixer (Figure \ref{fig:ch05:iq_down_circuit}), also called \index{IQ demodulator} \textbf{IQ demodulator}, consists of two branches (also called paths):
 \begin{itemize}
 	\item The \ac{I} path mixes the original \ac{LO} signal to the replica of the \ac{RF} signal.
 	\item The \ac{Q} path mixes the $\frac{\pi}{2}$-phase-shifted \ac{LO} signal to the replica of the \ac{RF} signal.
@@ -1186,7 +1482,26 @@ The coherent mixer, also called \index{IQ demodulator} \textbf{IQ demodulator}, 
 The coherent mixer is capable of receiving all variations of the \ac{RF} signal phase shift $\varphi_{RF}$, while the amplitude is kept intact.
 
 \begin{excursus}{Non-coherent demodulation}
-	\todo{Non-coherent demodulation}
+	Retain the phase information is important for any kind of \ac{PM}. Therefore, signals must be demodulated coherently.
+	
+	For \ac{AM} modulations, it is sufficient to extract the envelope of the modulated \ac{RF} signal (see Figure \ref{fig:ch05:dsbtc}). A non-coherent demodulator reduces the hardware complexity, as the following example circuit shows.
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[left,align=right,xshift=-3mm]{Modulated\\ \acs{RF} signal} to[short,o-] ++(1,0) to[empty diode,l=$D$] ++(2,0) to[R,l=$R$] ++(2,0) to[short,-o] ++(1,0) node[right,align=left,xshift=3mm]{Demodulated\\ baseband signal\\ (\ac{RF} envelope)};
+			\draw (5,0) to[C,l=$C$,*-] ++(0,-2) node[rground]{};
+		\end{circuitikz}
+	\end{figure}
+
+	It consists of a simple non-linear component (diode) and a $RC$-low-pass filter. The diode implements a mixer, which mixes the \ac{RF} signal down to the zero-\acs{IF} baseband. The low-apss eliminates the high-frequent mirror frequencies. The circuit is similar to that shown in Figure \ref{fig:ch05:pass_unbal_mixer}.
+	
+	\vspace{0.5em}
+	
+	\textbf{But if the diode is a mixer, where is the \ac{LO}?} Not every \ac{AM} is suitable for non-coherent demodulation. Only those transmitting the carrier like the \ac{DSB-TC} may be used. The \ac{RF} signal consists of the modulated sidebands containing the information and the carrier. At the non-linear component, the carrier mixes with the sidebands. The sideband are moved to zero-\ac{IF}.
+	
+	\vspace{0.5em}
+	
+	Non-coherent demodulation has thus special requirements on the \ac{RF} signal. Because, modern digital communication systems use some kind of \ac{PM}, they will likely implement coherent demodulation. However, in some applications employing a digital \ac{AM}, non-coherent demodulators are still used to reduce the hardware cost.
 \end{excursus}
 
 \begin{fact}
@@ -2250,11 +2565,11 @@ The number $K_m$ of the $K_m$-\acs{QAM} selects the number of possible symbols i
 	\end{itemize}
 \end{itemize}
 
-\begin{excursus}{Signal bandwidth}
-	The bandwidth is matters!
+\begin{excursus}{Transmission bandwidth}
+	The transmission bandwidth is matters!
 	\begin{itemize}
 		\item The electromagnetic spectrum is shared with many other applications and services.
-		\item \textbf{The electromagnetic spectrum is a sparse resource.}
+		\item \textbf{The electromagnetic spectrum is a sparse resource.} Its use is regulated by laws and norms.
 		\item Its important to use it efficiently. Therefore, each symbol should encode as much data as possible to obtain a high data rate at a moderately narrow bandwidth.
 		\item A trade-off must be made between
 		\begin{itemize}
@@ -2263,6 +2578,18 @@ The number $K_m$ of the $K_m$-\acs{QAM} selects the number of possible symbols i
 		\end{itemize}
 		\item Modern digital communication system are capable of adapting the value of $K_m$ to the current propagation conditions to archive optimal results.
 	\end{itemize}
+
+	\vspace{1em}
+	
+	The transmission bandwidth is related symbol rate $f_{sym}$.
+	\begin{itemize}
+		\item Simple approximations set the symbol rate $f_{sym}$ and transmission equal.
+		\item However, the exact transmission bandwidth depends on the selection of filters and the modulation technique.
+		\item Spectral considerations of the \ac{AM} (Section \ref{sec:ch05:am}) and \ac{PM} (Section \ref{sec:ch05:pm}) apply to the \ac{QAM}, too.
+		\item The \ac{PSD} can be tuned to reduce interference with other users of the electromagnetic spectrum by the selection of the right modulation technique.
+	\end{itemize}
+
+	This chapter gave an overview about modulation techniques. There are many variants which are derived from these basic techniques.
 \end{excursus}
 
 \subsection{Inter-Symbol Interference}
@@ -2613,7 +2940,7 @@ In addition to the phase offset, the frequency of the transmitter \ac{LO} and re
 	\item The \ac{RF} carrier is synchronized to the transmitter \ac{LO}. Its frequency differs by $\Delta \omega_{C}$ from the receiver \ac{LO}.
 	\item A corollary is that the phase offset integrates over time.
 	\begin{equation}
-		\Delta \varphi_{C}(t) = \underbrace{\Delta \varphi_{C,0}}_{\text{Initial offset}} + \int\limits_{t_0}^{t} \omega_{C} \, \mathrm{d} t
+		\Delta \varphi_{C}(t) = \underbrace{\Delta \varphi_{C,0}}_{\text{Initial offset}} + \int\limits_{t_0}^{t} \Delta \omega_{C} \, \mathrm{d} t
 	\end{equation}
 	\item The constellation diagram rotates at $\omega_{C}$ and constantly changes its angle.
 \end{itemize}
@@ -2654,7 +2981,7 @@ In addition to the phase offset, the frequency of the transmitter \ac{LO} and re
 				\draw[-latex,red,thick] (0,0) -- (2.6,0) node[above right, align=left]{$\underline{X}_{LO,Tx,I}$};
 				\draw[-latex,red,thick] (0,0) -- (0,2.6) node[above right, align=left]{$\underline{X}_{LO,Tx,Q}$};
 				
-				\draw[-latex,red,thick] (70:1.2) arc(70:110:1.2) node[left, align=right]{$\omega_{C}$};
+				\draw[-latex,red,thick] (70:1.2) arc(70:110:1.2) node[left, align=right]{$\Delta \omega_{C}$};
 			\end{scope}
 			
 			\draw[-latex,green,thick] (0,0) -- (2.6,0) node[above right, align=left]{$\underline{X}_{LO,Rx,I}$};
@@ -2764,6 +3091,7 @@ The synchronization is called \index{carrier recovery} \textbf{carrier recovery}
 	\caption{Digital timing recovery and carrier recovery}
 \end{figure}
 
+\nocite{carlson1986}
 
 \phantomsection
 \addcontentsline{toc}{section}{References}
