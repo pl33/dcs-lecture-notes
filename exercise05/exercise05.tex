@@ -12,6 +12,137 @@
 \addcontentsline{toc}{section}{Exercise 5}
 \section*{Exercise 5}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Mixers}]
+	\begin{tasks}
+		\task
+		Is the mixer a linear device like filters and amplifiers?
+		\task
+		What is the difference between unbalanced and balanced mixers?
+		\task
+		Why do mixers need a non-linear component?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Mirror frequencies}]
+	This is simplified block diagram of a receiver.
+	\begin{figure}[H]
+		\centering
+		\begin{adjustbox}{scale=0.8}
+			\begin{circuitikz}
+				\node[mixer](Mixer){};
+				\node[oscillator, below=1cm of Mixer](LO){};
+				\node[adcshape, right=2cm of Mixer](ADC){};
+				\node[block, draw, right=1cm of ADC](Baseband){Digital signal\\ processing};
+				
+				\draw (LO.south) node[below,align=center,yshift=-5mm]{LO};
+				\draw (Mixer.north) node[above,align=center,yshift=3mm]{Mixer};
+				
+				\draw (Mixer.west) -- ++(-1cm,0) node[rxantenna,xscale=-1]{};
+				
+				\draw[-latex] (LO.north) -- (Mixer.south);
+				\draw[-latex] (Mixer.east) to[lowpass] (ADC.west);
+				\draw[-latex] (ADC.east) -- (Baseband.west);
+			\end{circuitikz}
+		\end{adjustbox}
+	\end{figure}
+	A signal of \SI{868}{MHz} should be received. The baseband is not zero-IF. The signal shall be mixed to \SI{1}{MHz} centre frequency.
+
+	\begin{tasks}
+		\task
+		How much is the minimum ADC sampling rate?
+		\task
+		To which frequencies can the LO be tuned to?
+		\task
+		The \SI{868}{MHz}-band is shared with lots of other users. Which important piece is missing in the receiver signal chain?
+		\task
+		An IQ demodulator is used instead of the single mixer. Sketch the spectrum of the complex-valued baseband signal for both possible LO frequencies!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Constellation diagrams}]
+	Draw a constellation diagram of:
+	\begin{tasks}
+		\task
+		ASK (with 2 steps)
+		\task
+		BPSK
+		\task
+		QPSK
+		\task
+		16-QAM
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Constellation diagrams}]
+	A QPSK modulator has the following mapping and symbol constellation:
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|l|l|}
+			\hline
+			Data & Symbol & Phasor \\
+			\hline
+			\hline
+			$(00)_2$ & 0 & $\SI{2}{mV} \cdot e^{j 0}$ \\
+			\hline
+			$(01)_2$ & 1 & $\SI{2}{mV} \cdot e^{j \frac{\pi}{2}}$ \\
+			\hline
+			$(10)_2$ & 2 & $\SI{2}{mV} \cdot e^{j \pi}$ \\
+			\hline
+			$(11)_2$ & 3 & $\SI{2}{mV} \cdot e^{j \frac{3 \pi}{2}}$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+	The carrier is:
+	\begin{equation}
+		x_C(t) = \SI{2}{mV} \cdot \cos\left(2\pi \cdot \SI{50}{MHz} \cdot t\right)
+	\end{equation}
+	The symbol rate is $\SI{25}{MHz}$. After the DAC, an ideal low-pass filter with $\SI{25}{MHz}$ cut-off frequency is applied.
+	
+	\begin{tasks}
+		\task
+		How much is the transmission bandwidth?
+		\task
+		How many bits can be encoded per QPSK symbol? How many symbols are required to encode one byte (8 bits)?
+		\task
+		Draw the constellation diagram!
+		\task
+		The data byte $(2E)_{16}$ shall be transmitted. Give the sequence of phasors representing the data byte!
+		\task
+		Describe the problem with inter-symbol interference!
+		\task
+		Plot the I and Q baseband signals! Plot the RF signal after IQ modulation!
+		\task
+		The following phasors are received at the receiver:
+		\begin{equation}
+			[\SI{1.5}{mV} e^{j \SI{120}{\degree}}, \SI{1.5}{mV} e^{j \SI{300}{\degree}}, \SI{1.5}{mV} e^{j \SI{30}{\degree}}, \SI{1.5}{mV} e^{j \SI{210}{\degree}}]
+		\end{equation}
+		What would the decoded data be? What is the matter?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{question}[subtitle={Decibel}]

@@ -186,8 +186,8 @@ However, the filter is implemented in the time-domain.
 	\caption{Block diagram of an example \acs{IIR} filter}
 	\label{fig:ch06:iir_filt}
 \end{figure}%
-\nomenclature[Bm]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[twoport,t=$z^{-1}$,>] (2,0);\end{circuitikz}}{Delay element}%
-\nomenclature[Bm]{\begin{circuitikz}[baseline={(current bounding box.center)}]\node[adder](){};\end{circuitikz}}{Adder}
+\nomenclature[Bd]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[twoport,t=$z^{-1}$,>] (2,0);\end{circuitikz}}{Delay element}%
+\nomenclature[Ba]{\begin{circuitikz}[baseline={(current bounding box.center)}]\node[adder](){};\end{circuitikz}}{Adder}
 
 Figure \ref{fig:ch06:iir_filt} shows an example filter. The block diagram has following digital components:
 \begin{itemize}
@@ -251,7 +251,7 @@ A stable filter has always a value-limited impulse response (\ac{BIBO} stable).
 	\end{equation}
 	\item The conditions for \ac{BIBO} stability is that all poles are located \underline{within the unit circle}.
 	\begin{equation}
-		\left|\underline{z}_{\infty,l}\right| < 1 \qquad \forall \; 0 \leq l \leq Q
+		\left|\underline{z}_{\infty,l}\right| < 1 \qquad \forall \; 0 \leq l \leq P
 	\end{equation}
 \end{itemize}
 
@@ -270,7 +270,7 @@ A digital filter without the feed-back path will not have any problems with stab
 		\underline{H}(\underline{z}) = \sum\limits_{i=0}^{P} \underline{b}_i \underline{z}^{-i}
 	\end{equation}
 	\item The number of feed-back filter taps is $Q = 0$.
-	\item The filter does not have any poles. \textbf{The filter will always be \ac{BIBO} stable.}
+	\item All poles of the filter are $\underline{z}_{\infty,l} = 0 \quad \forall \; 0 \leq l \leq P$. \textbf{The filter will always be \ac{BIBO} stable.}
 \end{itemize}
 
 \begin{figure}[H]
@@ -324,6 +324,8 @@ There is another simple explanation for the \ac{BIBO} stability.
 	Digital filters without a feed-back branch will always have a finite-length impulse response. They are called \index{finite impulse response filter} \textbf{\acf{FIR} filters}. \ac{FIR} filters are always \ac{BIBO} stable.
 \end{definition}
 
+As a drawback, \ac{FIR} filters require higher orders than an equivalent \ac{IIR} filter. This increases the complexity of its implementation.
+
 \begin{example}{Gliding average filter}
 	The formula of the average of a series of $N$ values is:
 	\begin{equation}
@@ -360,7 +362,40 @@ There is another simple explanation for the \ac{BIBO} stability.
 
 Both \ac{IIR} and \ac{FIR} are causal. Their impulse response is $\underline{h}[n] = 0 \quad \forall \; n < 0$.
 
+\section{Digital Mixer}
+
 \section{Resampling}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[block,draw,align=center](High){High sampling rate};
+		\node[block,draw,align=center,right=3cm of High](Low){Low sampling rate};
+		
+		\draw[-latex] ([xshift=5mm] High.north east) -- node[midway,above,align=center]{Down-sampling\\ (Decimation)} ([xshift=-5mm] Low.north west);
+		\draw[-latex] ([xshift=-5mm] Low.south west) -- node[midway,below,align=center]{Up-sampling\\ (Interpolation)} ([xshift=5mm] High.south east);
+	\end{tikzpicture}
+	\caption{Relation between down-sampling (decimation) and up-sampling (interpolation).}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\node[block,draw,minimum height=3cm](Data){Data\\ Processing};
+		
+		\draw ([shift={(-4cm,1cm)}] Data.west) node[left,align=right]{Input} to[adc,>,o-] ++(2cm,0) to[twoport,t=$\downarrow N$,>] ([yshift=1cm] Data.west) node[inputarrow]{};
+		\draw ([yshift=-1cm] Data.west) to[twoport,t=$\uparrow M$,>] ++(-2cm,0) to[dac,>] ++(-2cm,0) node[inputarrow,rotate=180]{} node[left,align=right]{Output};
+	\end{circuitikz}
+	\caption{A system with a down-sampler (decimation factor $N$) and up-sampler (interpolation factor $M$)}
+\end{figure}%
+\nomenclature[Bd]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[twoport,t=$\downarrow N$,>] (2,0);\end{circuitikz}}{Down-sampler (decimation factor $N$)}%
+\nomenclature[Bu]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[twoport,t=$\uparrow M$,>] (2,0);\end{circuitikz}}{Up-sampler (interpolation factor $M$)}%
+
+\textbf{Why resampling?}
+\begin{itemize}
+	\item Signals at lower sampling rates require less computation time and memory (software), or lower hardware complexity (less logic gates). The power consumption is reduced.
+	\item The \ac{ADC} can be operated at maximum sampling rate. The signal is oversampled. Down-sampling provides processing gain and enhances the receiver performance.
+\end{itemize}
 
 \todo{Downsampling, Decimation}
 
@@ -369,8 +404,6 @@ Both \ac{IIR} and \ac{FIR} are causal. Their impulse response is $\underline{h}[
 \todo{Processing Gain}
 
 \todo{CIC filter}
-
-\section{Digital Mixer}
 
 \section{Fast Fourier Transform}
 
