@@ -11,18 +11,354 @@
 \chapter{Digital Signal Processing and Spread Spectrum}
 
 \begin{refsection}
+	
+At this point we have learnt about:
+\begin{itemize}
+	\item Mixing \ac{RF} signals down to the baseband using IQ demodulators. And vice verse, mixing baseband signals up to \ac{RF} using IQ modulators.
+	\item Digitizing these analogue baseband signals.
+\end{itemize}
 
-\todo{Implementation in CPU or ASIC/PLD}
+The digitized baseband signal is now processed digitally.
+\begin{itemize}
+	\item There are no analogue baseband processing hardware components like in a traditional radio.
+	\item The baseband processing is digital after the \ac{ADC}. The time-discrete and value-discrete baseband is processed by:
+	\begin{itemize}
+		\item Software: A \ac{CPU} executes a software processing the digital baseband signal.
+		\item Digital hardware: Digital hardware components (like \ac{PLD}/\ac{FPGA}, \ac{ASIC}) process the digital baseband in logic gates.
+		\item Hybrid: A part of signal processing is done in digital hardware. Another part is done in software.
+	\end{itemize}
+\end{itemize}
+
+\textbf{Benefits and drawbacks of digital hardware}:
+\begin{itemize}
+	\item The signal processing is parallel. The logic gates operate parallelly.
+	\item Large amount of data can be processed (e.g. high- sampling rate).
+	\item The logic gates are programmed (\ac{PLD}, \ac{FPGA}) or statically configured during manufacturing (\ac{ASIC}). Especially, \acp{ASIC} cannot be reconfigured later. An update is not possible.
+	\item Digital hardware is suitable of accomplishing the tasks of lower protocol layers, especially layer 1 (physical layer). The hardware design becomes difficult for higher protocol layers, requiring sequential processing.
+\end{itemize}
+
+\textbf{Benefits and drawbacks of software}:
+\begin{itemize}
+	\item A software is a set of instructions, sequentially executed by a \ac{CPU}.
+	\item Some extent of parallelism can be achieved by multitasking and multiprocessing.
+	\item The lack of parallelism limits the capability of processing large amounts of data.
+	\item Specialized \acp{DSP} offer instructions to speed up some processing tasks requiring intensive, parallel calculations (vector instructions).
+	\item Software is flexible. Software can be easily updated. So the program can be adapted to fit new applications.
+	\item Usually, a software includes higher protocol layers, which tend to require sequential processing.
+\end{itemize}
+
+\begin{fact}
+	Implementing large amounts of the signal processing digitally in software is called \acf{SDR}.
+\end{fact}
+
+\textbf{Hybrid technologies:}
+\begin{itemize}
+	\item A good trade-off is to split the signal processing between digital hardware and software.
+	\item Hardware manufactures may implement general signal processing tasks (filtering, resampling, etc.) in hardware and offer an interface to the software.
+	\item The signal processing is fast, while the software can be updated and re-configure the hardware if required.
+	\item Hybrid technologies are not as flexible as \ac{SDR}, require less \ac{CPU} processing power, which makes them cheaper and reduces the power consumption.
+	\item The digital communication system is flexible and can be easily adapted to meet new requirements and fit new applications, without the need to change the hardware. Hardware changes would require costs for development, production and installation.
+	\item Software updates can be easily deployed. This significantly reduces the maintenance costs.
+\end{itemize}
+
+\begin{fact}
+	Power consumption is an important property. In many \ac{IOT} applications, the devices must have a battery lifetime of several years. Maintenance tasks (and therefore costs) like changing the battery would make those applications infeasible.
+\end{fact}
+
+\section{Digital Systems}
+
+So far, we have learnt about analogue systems:
+\begin{itemize}
+	\item Filters
+	\item Mixers
+	\item Samplers
+	\item Amplifiers
+\end{itemize}
+
+All analogue systems can be transferred to the time-discrete domain and be implemented there. The z-transform is used to describe and analyse digital systems.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\node[draw, block] (System) {System\\ $\underline{h}[n]$};
+		\draw[<-o] (System.west) -- ++(-2cm, 0) node[above, align=center]{Input signal\\ $\underline{x}[n]$};
+		\draw[->] (System.east) -- ++(2cm, 0) node[above, align=center]{Output signal\\ $\underline{y}[n]$};
+	\end{tikzpicture}
+	\caption{A digital system with input and output}
+\end{figure}
+
+The \index{transfer function!time-discrete systems} \textbf{transfer function} $\underline{H}(\underline{z})$ of the system is:
+\begin{equation}
+	\underline{H}(\underline{z}) = \frac{\underline{Y}(\underline{z})}{\underline{X}(\underline{z})} = \frac{\mathcal{Z}\left\{\underline{x}[n]\right\}}{\mathcal{Z}\left\{\underline{y}[n]\right\}}
+\end{equation}
+
+Its time-domain representation is the \index{impulse response!time-discrete systems} \textbf{impulse response} $\underline{h}[n]$.
+\begin{subequations}
+	\begin{align}
+		\underline{H}(\underline{z}) &= \mathcal{Z}\left\{\underline{h}[n]\right\} \\
+		\underline{h}[n] &= \mathcal{Z}^{-1}\left\{\underline{H}(\underline{z})\right\}
+	\end{align}
+\end{subequations}
+
+The impulse response is directly obtained as the system's output when an ideal impulse (Kronecker delta\footnote{The Kronecker delta is the time-discrete variant of the Dirac delta function}) is applied to the system's input.
+\begin{equation}
+	\begin{split}
+		\underline{y}[n] = \underline{h}[n] &= \underline{h}[n] * \underbrace{\delta[n]}_{= 1 \text{ for } n=0, \; 0 \text{ else}.} \\
+		\underline{Y}(\underline{z}) = \underline{H}(\underline{z}) &= \underline{H}(\underline{z}) \cdot \underbrace{\mathcal{Z}^{-1}\left\{\delta[n]\right\}}_{=1} \\
+	\end{split}
+\end{equation}
+
+\begin{remark}
+	The z-transform applies to both value-discrete and value-continuous signals, as long as they are time-discrete. However, in this chapter we are are already in the digital domain, i.e., time-discrete and value-discrete.
+\end{remark}
+
+\begin{remark}
+	While being in the analogue domain, the signals were always assumed to be real-valued in the time-domain. The reason was that they must be able to exists as a physical signal. Now, the time-domain signals may be complex-valued. In the digital domain, the signals are just numbers. Refer to the IQ modulation and modulation of complex baseband signals (Chapter 5) for details.
+\end{remark}
+
+\begin{remark}
+	Digital signals are always band-limited.
+	\begin{itemize}
+		\item Please remember that signals can only be processed up to a certain bandwidth with is related to the sampling rate (Shannon-Nyquist sampling theorem, repeating replica of the spectrum).
+		\item Higher bandwidth baseband signals require a higher sampling rate and more processing power.
+	\end{itemize}
+\end{remark}
 
 \section{Digital Filters}
 
-\todo{Digital Systems}
+Like analogue filters, digital filters eliminate undesired bands and only let desired ones pass. There are:
+\begin{itemize}
+	\item \acf{LPF},
+	\item \acf{HPF},
+	\item \acf{BPF}, and
+	\item \acf{BSF}.
+\end{itemize}
 
-\todo{IIR}
+\begin{remark}
+	This section considers the general theory of filters. The very interesting topic of the filter design is unfortunately beyond the scope of this lecture. There are dedicate lectures on this topic. In addition, you will find plenty of literature and other resources. For practical application, you will find filter design software\footnote{For example, the ``numpy'' and ``scipy'' Python packages provide nice filter design and analysing tools for both scientific and engineering use. It's free software.}.
+\end{remark}
 
-\todo{Stability of IIR Filters}
+\subsection{Infinite Impulse Response Filters}
 
-\todo{FIR}
+Chapter 2 showed the ideal filter shapes in the frequency domain. These shapes can be resembled in digital filters.
+
+However, the filter is implemented in the time-domain.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\foreach \x in {0,1,2}{
+			\draw (4,{-3*\x}) node[adder](AddA\x){};
+			\draw (1,{-3*\x}) to[twoport,t=$z^{-1}$,>,*-] ++(0,-3);
+			\draw (1,{-3*\x}) to[amp,l=$\underline{b}_\x$,>,-] (AddA\x.west);
+			\draw (AddA\x.west) node[inputarrow]{};
+		}
+	
+		\draw (6,0) node[adder](AddB0){};
+		\draw (9,0) to[twoport,t=$z^{-1}$,>,*-] ++(0,-3);
+		\draw (AddB0.east) -- (9,0);
+		\foreach \x in {1,2}{
+			\draw (6,{-3*\x}) node[adder](AddB\x){};
+			\draw (9,{-3*\x}) to[twoport,t=$z^{-1}$,>,*-] ++(0,-3);
+			\draw (9,{-3*\x}) to[amp,l=$\underline{a}_\x$,>,-] (AddB\x.east);
+			\draw (AddB\x.east) node[inputarrow,rotate=180]{};
+		}
+	
+		\draw[-latex] (AddA1.north) -- (AddA0.south);
+		\draw[-latex] (AddA2.north) -- (AddA1.south);
+		\draw (1,-9) to[amp,l=$\underline{b}_3$] ++(3,0) -| (AddA2.south);
+		\draw (AddA2.south) node[inputarrow,rotate=90]{};
+		
+		\draw[-latex] (AddB1.north) -- (AddB0.south);
+		\draw[-latex] (AddB2.north) -- (AddB1.south);
+		\draw (9,-9) to[amp,l=$\underline{a}_3$] ++(-3,0) -| (AddB2.south);
+		\draw (AddB2.south) node[inputarrow,rotate=90]{};
+		
+		\draw[-latex] (AddA0.east) -- (AddB0.west);
+		
+		\draw (2.5,-10.5) node[below,align=center]{\textbf{Feed-forward}};
+		\draw (7.5,-10.5) node[below,align=center]{\textbf{Feed-back}};
+		
+		\draw[o-] (0,0) node[left, align=right]{Input signal\\ $\underline{x}[n]$} -- (1,0);
+		\draw[-latex] (9,0) -- (10,0) node[right, align=left]{Output signal\\ $\underline{y}[n]$};
+		
+		\draw[dashed] (5,-2.4) -- (5,-3.6) -- (0,-3.6) -- node[midway,left,align=right]{Filter tap} (0,-2.4) -- cycle;
+	\end{circuitikz}
+	\caption{Block diagram of an example \acs{IIR} filter}
+	\label{fig:ch06:iir_filt}
+\end{figure}%
+\nomenclature[Bm]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[twoport,t=$z^{-1}$,>] (2,0);\end{circuitikz}}{Delay element}%
+\nomenclature[Bm]{\begin{circuitikz}[baseline={(current bounding box.center)}]\node[adder](){};\end{circuitikz}}{Adder}
+
+Figure \ref{fig:ch06:iir_filt} shows an example filter. The block diagram has following digital components:
+\begin{itemize}
+	\item \begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[twoport,t=$z^{-1}$,>] (2,0);\end{circuitikz} The delay element inserts a delay of one sample. -- It stores one sample. When the next sample is clocked in after the sampling period $T_S$, the delay outputs its memorized value and stores the new input value. Clocking period is the smapling period $T_S$.
+	\item \begin{circuitikz}[baseline={(current bounding box.center)}]\node[adder](){};\end{circuitikz} The adder adds all its input values. The output is the sum of all inputs.
+	\item \begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[amp,l=$\underline{c}$,>] (2,0);\end{circuitikz} The input is multiplied by the constant \index{filter coefficient} \textbf{filter coefficient} $\underline{c}$.
+	\item \begin{circuitikz}[baseline={(current bounding box.center)}]\node[adder](Add){}; \draw ([xshift=-2cm] Add.west) to[amp,l=$\underline{c}$,>] (Add.west);\end{circuitikz} The input is multiplied by the constant filter coefficient $\underline{c}$ and then adds it to another value. This \index{multiply-accumulate instruction} \textbf{multiply-accumulate instruction} is sometimes available on specialized \ac{DSP} to speed up their execution. On all other \acp{CPU}, this instruction must be implemented as a dedicate multiplication and dedicate summation.
+\end{itemize}
+
+The basic form of a digital filter depicted in Figure \ref{fig:ch06:iir_filt} is an \index{infinite impulse response filter} \textbf{\acf{IIR} filter}.
+\begin{itemize}
+	\item The \ac{IIR} filter consists of a feed-forward branch and a feed-back branch.
+	\item Each branch consists of a series of delay elements. The number of delay elements per branch defines the \textbf{filter order}.
+	\item The line between the delay elements is tapped. The \index{filter tap} \textbf{filter tap} takes the delayed value, multiplies it with a constant and then accumulates it to the output of all other filter taps.
+\end{itemize}
+
+The time-domain representation of an \ac{IIR} filter is:
+\begin{equation}
+	\underline{y}[n] = \underbrace{\sum\limits_{i=0}^{P} \underline{b}_i \underline{x}[n-i]}_{\text{Feed-forward branch}} - \underbrace{\sum\limits_{l=1}^{Q} \underline{a}_l \underline{y}[n-l]}_{\text{Feed-back branch}}
+\end{equation}
+where
+\begin{itemize}
+	\item $P$ is the number of feed-forward filter taps,
+	\item $Q$ is the number of feed-back filter taps,
+	\item $\underline{x}[n-i]$ are the time-delayed input samples (from past inputs), and
+	\item $\underline{y}[n-l]$ are the time-delayed output samples (from past outputs).
+\end{itemize}
+
+The equivalent frequency-domain representation is:
+\begin{equation}
+	\underline{H}(\underline{z}) = \frac{\sum\limits_{i=0}^{P} \underline{b}_i \underline{z}^{-i}}{1 + \sum\limits_{l=0}^{Q} \underline{a}_l \underline{z}^{-l}}
+\end{equation}
+Or informally:
+\begin{equation}
+	\underline{H}(\underline{z}) = \frac{\text{Sum of feed-forward taps}}{1 + \text{Sum of feed-back taps}}
+\end{equation}
+
+\begin{remark}
+	Remember that $\underline{z} = A e^{j \phi}$. $A = 1$ for the \ac{DTFT}. However when analysing digital systems, $A$ can differ from 1. So we need to use the general z-transform.
+\end{remark}
+
+\begin{definition}{\ac{IIR} filters}
+	The feed-back branch re-inserts the output samples, so that they again contribute to new output values.	A corollary is that the impulse response (the output when a single Kronecker delta impulse is applied to the input) is indefinitely long in the time-domain. The filters have an \textbf{\acf{IIR}}.
+\end{definition}
+
+\subsubsection{Stability of IIR Filters}
+
+When it comes to stability, the feed-back branch is an issue.
+\begin{itemize}
+	\item It creates a loop from the output samples and re-inserts them time-delayed.
+	\item With a bad selection of filter coefficients $\underline{a}_l$, the output builds up and converges to infinity. The filter is unstable.
+\end{itemize}
+A stable filter has always a value-limited impulse response (\ac{BIBO} stable).
+
+\textbf{But how can we determine, of filter is \ac{BIBO} stable?}
+\begin{itemize}
+	\item The poles $\underline{z}_{\infty}$ and zeros $\underline{z}_{0}$ need to be obtained from the transfer function $\underline{H}(\underline{z})$.
+	\item This can be achieved using a polynomial decomposition.
+	\begin{equation}
+		\underline{H}(\underline{z}) = \frac{\sum\limits_{i=0}^{P} \underline{b}_i \underline{z}^{-i}}{1 + \sum\limits_{l=0}^{Q} \underline{a}_l \underline{z}^{-l}} = \frac{\left(\underline{z}-\underline{z}_{0,0}\right)\left(\underline{z}-\underline{z}_{0,1}\right)\dots\left(\underline{z}-\underline{z}_{0,Q}\right)}{\left(\underline{z}-\underline{z}_{\infty,0}\right)\left(\underline{z}-\underline{z}_{\infty,1}\right)\dots\left(\underline{z}-\underline{z}_{\infty,P}\right)}
+	\end{equation}
+	\item The conditions for \ac{BIBO} stability is that all poles are located \underline{within the unit circle}.
+	\begin{equation}
+		\left|\underline{z}_{\infty,l}\right| < 1 \qquad \forall \; 0 \leq l \leq Q
+	\end{equation}
+\end{itemize}
+
+\begin{fact}
+	\acs{IIR} filter must be always checked for stability.
+\end{fact}
+
+\todo{examples}
+
+\subsection{Finite Impulse Response Filters}
+
+A digital filter without the feed-back path will not have any problems with stability.
+\begin{itemize}
+	\item Removing the feed-back path from Figure \ref{fig:ch06:iir_filt} reduces the filter transfer function to:
+	\begin{equation}
+		\underline{H}(\underline{z}) = \sum\limits_{i=0}^{P} \underline{b}_i \underline{z}^{-i}
+	\end{equation}
+	\item The number of feed-back filter taps is $Q = 0$.
+	\item The filter does not have any poles. \textbf{The filter will always be \ac{BIBO} stable.}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\foreach \x in {1,2,3}{
+			\draw ({1+(3*\x)},0) node[adder](Add\x){};
+			\draw ({1+(3*(\x-1))},3) to[twoport,t=$z^{-1}$,>,*-] ++(3,0)
+				to[amp,l=$\underline{b}_\x$,>,-] (Add\x.north);
+			\draw (Add\x.north) node[inputarrow,rotate=-90]{};
+			\draw (Add\x.west) node[inputarrow,rotate=0]{};
+		}
+		
+		\draw (Add1.east) to[short] (Add2.west);
+		\draw (Add2.east) to[short] (Add3.west);
+		
+		\draw (1,3) to[amp,l=$\underline{b}_0$,>,-] ++(0,-3)
+			to[short] (Add1.west);
+		
+		\draw[o-] (0,3) node[left, align=right]{Input signal\\ $\underline{x}[n]$} -- (1,3);
+		\draw[-latex] (Add3.east) -- ++(1,0) node[right, align=left]{Output signal\\ $\underline{y}[n]$};
+		
+		\draw[dashed] (4.6,-1) -- (3.4,-1) -- (3.4,4) -- node[midway,above,align=center]{Filter tap} (4.6,4) -- cycle;
+	\end{circuitikz}
+	\caption{Block diagram of an example \acs{FIR} filter}
+	\label{fig:ch06:fir_filt}
+\end{figure}
+
+There is another simple explanation for the \ac{BIBO} stability.
+\begin{itemize}
+	\item Only the feed-forward filter taps determine the output signal.
+	\item When a Kronecker delta pulse is given to the filter input, how will the output (impulse response) look like?
+	\item The impulse response will consist of $P$ time-delayed replica of the Kronecker delta pulse scaled by the filter coefficients.
+	\item The impulse response can be directly derived from the filter coefficients.
+	\begin{equation}
+		\begin{split}
+			\underline{y}[n] &= \underline{h}[n] * \delta[n] \\
+			 &= \sum\limits_{l=0}^{P} \underline{h}[l] \delta[n - l] \\
+			 &= \underline{h}[n] \\
+			\underline{h}[n] &= \begin{cases}
+			 	\underline{b}_n &\quad \text{if } 0 \leq n \leq P, \\
+			 	0 &\quad \text{else}.
+			 \end{cases}
+		\end{split}
+		\label{eq:ch06:fir_ir}
+	\end{equation}
+	\item The impulse response has a finite length in the time-domain.
+\end{itemize}
+
+\begin{definition}{\ac{FIR} filters}
+	Digital filters without a feed-back branch will always have a finite-length impulse response. They are called \index{finite impulse response filter} \textbf{\acf{FIR} filters}. \ac{FIR} filters are always \ac{BIBO} stable.
+\end{definition}
+
+\begin{example}{Gliding average filter}
+	The formula of the average of a series of $N$ values is:
+	\begin{equation}
+		\overline{x} = \frac{1}{N} \sum\limits_{i=1}^{N} x_i
+	\end{equation}
+	
+	This averaging can be implemented as a \ac{FIR} filter with $P = N$ filter taps. Each filter coefficient is:
+	\begin{equation}
+		b_i = \begin{cases}
+			\frac{1}{N} &\quad \text{if } 0 \leq i \leq N, \\
+			0 &\quad \text{else}.
+		\end{cases}
+	\end{equation}
+	The impulse response can be derived from the filter coefficients using \eqref{eq:ch06:fir_ir}.
+	
+	The output of the filter is
+	\begin{equation}
+		\begin{split}
+			y[n] &= h[n] * x[n] \\
+			 &= \sum\limits_{l=0}^{P} h[l] x[n - l] \\
+			 &= \frac{1}{N} \sum\limits_{l=0}^{P} x[n - l] \\
+			 &\qquad \text{with } P = N \\
+			 &= \frac{1}{N} \sum\limits_{l=0}^{N} x[n - l]
+		\end{split}
+	\end{equation}
+	where $x[n]$ is the \ac{FIR} filter input. The formula resembles the average of $x[n]$ considering the $N$ most recent samples -- the gliding average.
+	
+	\vspace{0.5em}
+	
+	\textbf{The gliding average filter belongs to the class of \ac{LPF}.}
+\end{example}
+
+\subsubsection{Causality of IIR and FIR Filters}
+
+Both \ac{IIR} and \ac{FIR} are causal. Their impulse response is $\underline{h}[n] = 0 \quad \forall \; n < 0$.
 
 \section{Resampling}
 
