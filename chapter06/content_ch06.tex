@@ -320,6 +320,8 @@ There is another simple explanation for the \ac{BIBO} stability.
 	\item The impulse response has a finite length in the time-domain.
 \end{itemize}
 
+This leads to the definition of \ac{FIR} filters:
+
 \begin{definition}{\ac{FIR} filters}
 	Digital filters without a feed-back branch will always have a finite-length impulse response. They are called \index{finite impulse response filter} \textbf{\acf{FIR} filters}. \ac{FIR} filters are always \ac{BIBO} stable.
 \end{definition}
@@ -364,6 +366,178 @@ Both \ac{IIR} and \ac{FIR} are causal. Their impulse response is $\underline{h}[
 
 \section{Digital Mixer}
 
+A digital mixer implements a frequency shift in the digital domain. It has the same purpose as the analogue mixer. However, there are some differences:
+\begin{itemize}
+	\item There are usually an \ac{I} and \ac{Q} component in the digital domain. \textbf{The digital signal is complex-valued.}
+	\item The signal can be frequency-shifted as a whole, because both input and output are complex-valued.
+\end{itemize}
+
+\begin{remark}
+	A signal is practically never mixed to exactly \SI{0}{Hz}. All ADC have a DC bias. The sampled signal is superimposed by a DC voltage at \SI{0}{Hz} in the time-domain. This adds an error. Therefore, the signal shifted some \si{kHz} away from DC. It can be digitally shifted to \SI{0}{Hz}, without adding any errors.
+\end{remark}
+
+In the frequency-domain\footnote{The \ac{DTFT} is used because of the time-discrete signals.}, the frequency shift by $\omega_0$ is:
+\begin{equation}
+	\underline{Y}_{\frac{2\pi}{T_S}}\left(e^{j \omega T_S}\right) = \underline{X}_{\frac{2\pi}{T_S}}\left(e^{j\left(\omega - \omega_0\right)T_S}\right)
+\end{equation}
+The input signal $\underline{X}_{\frac{2\pi}{T_S}}\left(e^{j \omega T_S}\right)$ is shifted as a whole block. $\underline{Y}_{\frac{2\pi}{T_S}}\left(e^{j \omega T_S}\right)$ is the mixer output signal.
+
+In the time-domain, the frequency shift is:
+\begin{equation}
+	\begin{split}
+		\underline{y}[n] &= \mathcal{F}_{\mathrm{DTFT}}^{-1}\left\{\underline{X}_{\frac{2\pi}{T_S}}\left(e^{j\left(\omega - \omega_0\right)T_S}\right)\right\} \\
+		 &= \underbrace{\underline{x}[n]}_{\text{Mixer input}} \cdot \underbrace{e^{j \omega_c T_S n}}_{\text{\acs{LO} signal}} \\
+		 &= \left(\Re\left\{\underline{x}[n]\right\} + j \cdot \Im\left\{\underline{x}[n]\right\}\right) \left(\cos\left(\omega_c T_S n\right) + j \cdot \sin\left(\omega_c T_S n\right)\right) \\
+		 &= \left( \Re\left\{\underline{x}[n]\right\} \cdot \cos\left(\omega_c T_S n\right) - \Im\left\{\underline{x}[n]\right\} \cdot \sin\left(\omega_c T_S n\right) \right) \\ &\quad + j \left( \Im\left\{\underline{x}[n]\right\} \cdot \cos\left(\omega_c T_S n\right) + \Re\left\{\underline{x}[n]\right\} \cdot \sin\left(\omega_c T_S n\right) \right)
+	\end{split}
+	\label{eq:ch06:digi_mix}
+\end{equation}
+
+Note the following:
+\begin{itemize}
+	\item The mixer input is complex-valued in the time-domain.
+	\item The \ac{LO} signal is complex-valued in the time-domain.
+	\item The mixer output is complex-valued in the time-domain.
+\end{itemize}
+
+The \ac{LO} generates both a cos-signal and a \SI{90}{\degree}-phase-shifted sin-signal. The mixer signal is time-discrete. The digital oscillator is a \index{numerically-controlled oscillator} \textbf{\acf{NCO}} which emits the \ac{LO} real and imaginary values at the sample period $T_S$. The frequency can be configured.
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{tikzpicture}
+			\node[mixer](MixIcos) {};
+			\node[mixer](MixIsin) at([shift={(3cm, -1cm)}]MixIcos) {};
+			\node[mixer](MixQcos) at([shift={(0cm, -2cm)}]MixIcos) {};
+			\node[mixer](MixQsin) at([shift={(3cm, -3cm)}]MixIcos) {};
+			\node[adder](AddI) at([shift={(7cm, 0cm)}]MixIcos) {};
+			\node[adder](AddQ) at([shift={(6cm, 0cm)}]MixQcos) {};
+			\node[block,draw,minimum width=4cm](NCO) at([shift={(0cm, -6cm)}]MixIcos) {\acs{NCO}};
+			
+			\draw ([xshift=-1.5cm]NCO.north) node[above left,align=right]{$\cos\left(\omega_c T_S n\right)$} -- ([shift={(-1.5cm, -1cm)}]MixIcos.south) -- ([shift={(0.147cm, 0.147cm)}]MixIcos.south west) node[inputarrow,rotate=45]{};
+			\draw ([shift={(-1.5cm, -1cm)}]MixQcos.south) to[short,*-] ([shift={(0.147cm, 0.147cm)}]MixQcos.south west) node[inputarrow,rotate=45]{};
+			\draw ([xshift=1.5cm]NCO.north) node[above right,align=left]{$\sin\left(\omega_c T_S n\right)$} -- ([shift={(-1.5cm, -1cm)}]MixIsin.south) -- ([shift={(0.147cm, 0.147cm)}]MixIsin.south west) node[inputarrow,rotate=45]{};
+			\draw ([shift={(-1.5cm, -1cm)}]MixQsin.south) to[short,*-] ([shift={(0.147cm, 0.147cm)}]MixQsin.south west) node[inputarrow,rotate=45]{};
+			
+			\draw ([shift={(-3cm, 0cm)}]MixIcos.west) node[left,align=right]{Input \ac{I} $\Re\left\{\underline{x}[n]\right\}$\\ (real part)} to[short,o-] (MixIcos.west) node[inputarrow]{};
+			\draw ([shift={(-3cm, 0cm)}]MixQcos.west) node[left,align=right]{Input \ac{Q} $\Im\left\{\underline{x}[n]\right\}$\\ (imaginary part)} to[short,o-] (MixQcos.west) node[inputarrow]{};
+			\draw ([shift={(-2cm, 0cm)}]MixIcos.west) to[short,*-] ++(0cm,-0.5cm) |- (MixIsin.west) node[inputarrow]{};
+			\draw ([shift={(-2cm, 0cm)}]MixQcos.west) to[short,*-] ++(0cm,-0.5cm) |- (MixQsin.west) node[inputarrow]{};
+			
+			\draw (MixIcos.east) to[short] (AddI.west) node[inputarrow]{};
+			\draw (MixQcos.east) to[short] (AddQ.west) node[inputarrow]{};
+			\draw (MixQsin.east) to[amp,>,l_=$-1$] ++(2cm,0) -| (AddI.south) node[inputarrow,rotate=90]{};
+			\draw (MixIsin.east) to[short] ++(1cm,0) -| (AddQ.north) node[inputarrow,rotate=-90]{};
+			
+			\draw (AddI.east) to[short] ++(1cm,0) node[inputarrow]{} node[right,align=left,xshift=5mm]{Output \ac{I} $\Re\left\{\underline{y}[n]\right\}$\\ (real part)};
+			\draw (AddQ.east) to[short] ++(2cm,0) node[inputarrow]{} node[right,align=left,xshift=5mm]{Output \ac{Q} $\Im\left\{\underline{y}[n]\right\}$\\ (real part)};
+		\end{tikzpicture}
+	\end{adjustbox}
+	\caption[Block diagram of a digital mixer]{Block diagram of a digital mixer, implementing \eqref{eq:ch06:digi_mix}}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Mixer input $\underline{X}_{\frac{2\pi}{T_S}}\left(e^{j \omega T_S}\right)$] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.10\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_{\frac{2\pi}{T_S}}\left(e^{j \omega T_S}\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-2.5,
+				xmax=2.8,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, -1, -0.5, 0, 0.5, 1, 2},
+				xticklabels={$-2 \omega_S$, $- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$, $2 \omega_S$},
+				ytick={0},
+			]
+				\draw[dashed] (axis cs:-0.5,0) -- (axis cs:-0.5,1) -- (axis cs:0.5,1) --(axis cs:0.5,0);
+			
+				\draw[green, thick] (axis cs:{0-0.2},0) -- (axis cs:0,0.7);
+				\draw[red, thick] (axis cs:0,0.7) -- (axis cs:{0+0.4},0);
+				
+				\pgfplotsinvokeforeach{-2, -1, 1, 2}{
+					\draw[green, thick, dashed] (axis cs:{#1-0.2},0) -- (axis cs:#1,0.7);
+					\draw[red, thick, dashed] (axis cs:#1,0.7) -- (axis cs:{#1+0.4},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Mixer output $\underline{Y}_{\frac{2\pi}{T_S}}\left(e^{j \omega T_S}\right)$] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.13\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{Y}_{\frac{2\pi}{T_S}}\left(e^{j \omega T_S}\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-2.5,
+				xmax=2.8,
+				ymin=-0.4,
+				ymax=1.2,
+				xtick={-2, -1, -0.5, 0, 0.5, 1, 2},
+				xticklabels={$-2 \omega_S$, $- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$, $2 \omega_S$},
+				ytick={0},
+			]
+				\draw[dashed] (axis cs:-0.5,0) -- (axis cs:-0.5,1) -- (axis cs:0.5,1) --(axis cs:0.5,0);
+			
+				\draw[latex-latex] (axis cs:0,-0.1) -- node[midway,below,align=center]{$\omega_0$} (axis cs:0.25,-0.1);
+				\draw[dotted] (axis cs:0.25,-0.2) -- (axis cs:0.25,0.8);
+			
+				\draw[green, thick, dashed] (axis cs:{-0.75-0.2},0) -- (axis cs:-0.75,0.7);
+				\draw[red, thick, dashed] (axis cs:-0.75,0.7) -- (axis cs:{-0.75+0.25},0.262);
+				\draw[red, thick] (axis cs:{-0.75+0.25},0.262) -- (axis cs:{-0.75+0.4},0);
+			
+				\draw[green, thick] (axis cs:{0.25-0.2},0) -- (axis cs:0.25,0.7);
+				\draw[red, thick] (axis cs:0.25,0.7) -- (axis cs:{0.25+0.25},0.262);
+				\draw[red, thick, dashed] (axis cs:{0.25+0.25},0.262) -- (axis cs:{0.25+0.4},0);
+				
+				\pgfplotsinvokeforeach{-1.75, 1.25, 2.25}{
+					\draw[green, thick, dashed] (axis cs:{#1-0.2},0) -- (axis cs:#1,0.7);
+					\draw[red, thick, dashed] (axis cs:#1,0.7) -- (axis cs:{#1+0.4},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\caption[Digital mixing in the frequency-domain]{Digital mixing in the frequency-domain. It must be noted that the spectra of sampled signals are periodic. But only the interval between $[- \frac{\omega_S}{2}, \frac{\omega_S}{2}]$ is visible. Therefore, it might appear that frequencies are moved from one end of the interval to the other end.}
+\end{figure}
+
 \section{Resampling}
 
 \begin{figure}[H]
@@ -397,11 +571,23 @@ Both \ac{IIR} and \ac{FIR} are causal. Their impulse response is $\underline{h}[
 	\item The \ac{ADC} can be operated at maximum sampling rate. The signal is oversampled. Down-sampling provides processing gain and enhances the receiver performance.
 \end{itemize}
 
+\subsection{Down-sampling}
+
 \todo{Downsampling, Decimation}
+
+\todo{Sampling of digital signal, Shannon-Nyquist theorem, filtering}
+
+\todo{Processing Gain (Noise bandwidth)}
+
+\subsection{Up-sampling}
 
 \todo{Upsampling, Interpolation}
 
-\todo{Processing Gain}
+\todo{Inserting zeros, filtering}
+
+\begin{excursus}{\acs{CIC} filter}
+	The \index{cascaded integrator-comb} \textbf{\acf{CIC}} filter an optimized \ac{FIR} filter.
+\end{excursus}
 
 \todo{CIC filter}
 
