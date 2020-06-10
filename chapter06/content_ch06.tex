@@ -540,6 +540,8 @@ The \ac{LO} generates both a cos-signal and a \SI{90}{\degree}-phase-shifted sin
 
 \section{Resampling}
 
+\index{resampling} \textbf{Resampling} refers to the change of the sampling rate in a \index{multi-rate system} \textbf{multi-rate system}.
+
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
@@ -560,7 +562,7 @@ The \ac{LO} generates both a cos-signal and a \SI{90}{\degree}-phase-shifted sin
 		\draw ([shift={(-4cm,1cm)}] Data.west) node[left,align=right]{Input} to[adc,>,o-] ++(2cm,0) to[twoport,t=$\downarrow N$,>] ([yshift=1cm] Data.west) node[inputarrow]{};
 		\draw ([yshift=-1cm] Data.west) to[twoport,t=$\uparrow M$,>] ++(-2cm,0) to[dac,>] ++(-2cm,0) node[inputarrow,rotate=180]{} node[left,align=right]{Output};
 	\end{circuitikz}
-	\caption{A system with a down-sampler (decimation factor $N$) and up-sampler (interpolation factor $M$)}
+	\caption{A muli-rate system with a down-sampler (decimation factor $N$) and up-sampler (interpolation factor $M$)}
 \end{figure}%
 \nomenclature[Bd]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[twoport,t=$\downarrow N$,>] (2,0);\end{circuitikz}}{Down-sampler (decimation factor $N$)}%
 \nomenclature[Bu]{\begin{circuitikz}[baseline={(current bounding box.center)}]\draw (0,0) to[twoport,t=$\uparrow M$,>] (2,0);\end{circuitikz}}{Up-sampler (interpolation factor $M$)}%
@@ -573,11 +575,353 @@ The \ac{LO} generates both a cos-signal and a \SI{90}{\degree}-phase-shifted sin
 
 \subsection{Down-sampling}
 
-\todo{Downsampling, Decimation}
+\begin{definition}{Down-sampling}
+	\index{down-sampling} \textbf{Down-sampling} is the process of reducing the sampling rate.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[left,align=right]{Input $\underline{x}_i[n]$\\ Sample rate: $T_{S,i}$} to[lowpass,>,o-] ++(2,0) to[twoport,t=$\downarrow N$,>] ++(2,0) node[inputarrow,rotate=0]{} node[right,align=left]{Output $\underline{x}_o[n]$\\ Sample rate: $T_{S,o}$};
+		\end{circuitikz}
+		\caption{A down-sampler with a decimation factor of $N$}
+	\end{figure}
 
-\todo{Sampling of digital signal, Shannon-Nyquist theorem, filtering}
+	The ratio between input and output sampling rate is the \index{decimation factor} \textbf{decimation factor} $N$.
+	\begin{equation}
+		N = \frac{T_{S,i}}{T_{S,o}} \qquad, N \in \mathbb{N}
+	\end{equation}
+	The decimation factor $N$ must be a positive integer.
+	
+	\vspace{0.5em}
+	
+	\index{decimation} \textbf{Decimation} can be used synonymous for down-sampling.
+\end{definition}
 
-\todo{Processing Gain (Noise bandwidth)}
+Down-sampling is in fact the sampling of an already sampled time-discrete signal with a lower sampling rate. The term \emph{resampling} is derived from this.
+\begin{itemize}
+	\item Prior to down-sampling, an \index{anti-aliasing filter} \textbf{anti-aliasing filter} is required.
+	\item The actual down-sampling is:
+	\begin{itemize}
+		\item Take every $n$-th sample out of the input signal.
+		\item Discard all samples in between.
+	\end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Input signal]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$n$},
+				ylabel={$x_i[n]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=16.8,
+				ymin=-1.2,
+				ymax=1.2,
+				xtick={0,4,...,16},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{0,0.125,...,2}{
+					\addplot[red, thick] coordinates {({#1*8},0) ({#1*8}, {cos(deg(2*pi*1*#1))})};
+					\addplot[red, only marks, mark=o] coordinates {({#1*8}, {cos(deg(2*pi*1*#1))})};
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfloat[Decimated output signal]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$n$},
+				ylabel={$x_o[n]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=4.2,
+				ymin=-1.2,
+				ymax=1.2,
+				xtick={0,1,...,4},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{0,0.5,...,2}{
+					\addplot[red, thick] coordinates {({#1*2},0) ({#1*2}, {cos(deg(2*pi*1*#1))})};
+					\addplot[red, only marks, mark=o] coordinates {({#1*2}, {cos(deg(2*pi*1*#1))})};
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\caption{Down-sampling by $N = 4$}
+\end{figure}
+
+\subsubsection{Aliasing in Down-Sampling}
+
+Down-sampling means that a time-discrete signal is sampled again with a lower sampling rate.
+
+This has effects on the spectrum of the output signal:
+\begin{itemize}
+	\item The spectrum of the input signal is band-limited by $\omega_i \in [-\frac{\pi}{T_{S,i}}, \frac{\pi}{T_{S,i}}]$.
+	\item The spectrum of the input signal repeats at $\frac{2\pi}{T_{S,i}}$.
+	\item The spectrum of the output signal is band-limited by $\omega_o \in [-\frac{\pi}{T_{S,o}}, \frac{\pi}{T_{So}}] = [-\frac{\pi}{N T_{S,i}}, \frac{\pi}{N T_{S,i}}]$.
+	\item The spectrum of the output signal repeats at $\frac{2\pi}{T_{S,o}} = \frac{2\pi}{N T_{S,i}}$.
+	\item The ``repetition frequency'' of the output signal spectrum is divided by $N$.
+\end{itemize}
+
+\begin{fact}
+	The \index{Shannon-Nyquist sampling theorem} \emph{Shannon-Nyquist sampling theorem} applies to the down-sampling, too. The input signal must be band-limited to $[-\frac{\pi}{T_{S,o}}, \frac{\pi}{T_{So}}]$. Otherwise, the output signal will show \index{aliasing} \emph{aliasing}.
+\end{fact}
+
+Therefore, a low-pass filter is applied as an \emph{anti-aliasing filter}. The anti-aliasing filter is implemented as an \ac{IIR} or \ac{FIR} filter.
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Spectrum of the input signal] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_i\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-2.5,
+				xmax=2.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, -1, -0.5, 0, 0.5, 1, 2},
+				xticklabels={$-2 \omega_{S,i}$, $- \omega_{S,i}$, $- \frac{\omega_{S,i}}{2}$, $0$, $\frac{\omega_{S,i}}{2}$, $\omega_{S,i}$, $2 \omega_{S,i}$},
+				ytick={0},
+			]
+				\draw[latex-latex] (axis cs:0,0.8) -- node[midway,above,align=center]{$\omega_{S,i}$-periodic} (axis cs:1,0.8);
+			
+				\pgfplotsinvokeforeach{-2, -1, ..., 2}{
+					\draw[green, thick] (axis cs:{#1-0.25},0) -- (axis cs:#1,0.7);
+					\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.25},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Spectrum of the decimated output signal (decimation by 2)] {
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_o\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-2.5,
+				xmax=2.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2},
+				xticklabels={$-4 \omega_{S,o}$, $-3 \omega_{S,o}$, $-2 \omega_{S,o}$, $- \omega_{S,o}$, $0$, $\omega_{S,o}$, $2 \omega_{S,o}$, $3 \omega_{S,o}$, $4 \omega_{S,o}$},
+				ytick={0},
+			]
+				\draw[latex-latex] (axis cs:0.5,0.8) -- node[midway,above,align=center]{$\omega_{S,o}$-periodic\\ (i.e. $\omega_{S,i}/N$-periodic)} (axis cs:1,0.8);
+			
+				\pgfplotsinvokeforeach{-2, -1.5, ..., 2}{
+					\draw[green, thick] (axis cs:{#1-0.25},0) -- (axis cs:#1,0.7);
+					\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.25},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\caption[Effects of the down-sampling on the spectrum]{Effects of the down-sampling on the spectrum. If the input signal occupied a little more bandwidth and thereby violated the Shannon-Nyquist sampling theorem, the output signal would show aliasing.}
+\end{figure}
+
+\begin{fact}
+	Changing the sampling rate changes to periodicity of the spectrum of the sampled signal.
+\end{fact}
+
+\subsubsection{Processing Gain}
+
+Digitizing an analogue signal and then down-sampling it seems pointless. Why is the \ac{ADC} not configured to the desired sampling rate?
+
+An advantage of the down-sampling is its \index{processing gain!down-sampling} \textbf{processing gain}.
+
+Let's consider a signal with the power $P_i$ (linear scale, \si{mW}) or $L_{P,i}$ (logarithmic scale, \si{dBm}), respectively. The signal sampled and quantized with $B$ bits. The \ac{SQNR} is:
+\begin{equation}
+	L_{\mathrm{SQNR},i} = \SI{1.761}{dB} + B \cdot \SI{6.02}{dB}
+\end{equation}
+
+The quantization noise power is in the logarithmic scale (\si{dBm}):
+\begin{equation}
+	L_{P,N,i} = L_{P,i} - L_{\mathrm{SQNR},i}
+\end{equation}
+or in the linear scale (\si{mW}):
+\begin{equation}
+	\begin{split}
+		P_{N,i} &= \frac{P_i}{\mathrm{SQNR}_i} \\
+		 &= P_i \cdot 10^{\frac{\SI{1.761}{dB} + B \cdot \SI{6.02}{dB}}{\SI{10}{dB}}}
+	\end{split}
+\end{equation}
+
+The quantization noise power is distributed equally over the frequency axis between $[-\frac{1}{2 T_{S,i}}, \frac{1}{2 T_{S,i}}]$, which is the band limit for the sampled input signal. The \index{noise bandwidth} \textbf{noise bandwidth} is therefore $\Delta f_{S,i} = \frac{1}{T_{S,i}}$. The quantization noise floor $S_{N,i}$, which is a \ac{PSD} (\si{mW/Hz}), is:
+\begin{equation}
+	\begin{split}
+		S_{N,i} = \frac{P_{N,i}}{\Delta f_{S,i}} \\
+		 &= \frac{P_{N,i}}{\frac{1}{T_{S,i}}} \\
+		 &= P_{N,i} T_{S,i}
+	\end{split}
+\end{equation}
+
+\begin{attention}
+	Please note the difference between noise power and noise floor (frequency distribution of the power).
+\end{attention}
+
+\begin{itemize}
+	\item The quantization noise floor depends only on the number of bits of the quantizer $B$.
+	\item Prior to the down-sampling, a low-pass filter is applied.
+	\item The noise bandwidth is reduced to the filter bandwidth $\Delta f_{S,o} = \frac{1}{T_{S,o}} = \frac{1}{N T_{S,i}}$, which is determined by the Shannon-Nyquist sampling theorem.
+\end{itemize}
+
+The quantization noise floor remains constant while the noise bandwidth is divided by $N$. That is, the quantization noise floor in the down-sampler input equals the quantization noise floor in the down-sampler output.
+\begin{equation}
+	S_{N,o} = S_{N,i}
+\end{equation}
+The noise power in the output will be:
+\begin{equation}
+	\begin{split}
+		P_{N,o} &= S_{N,o} \cdot \Delta f_{S,o} \\
+		 &= S_{N,i} \cdot \frac{1}{T_{S,o}} \\
+		 &= P_{N,i} T_{S,i} \cdot \frac{1}{N T_{S,i}} \\
+		 &= \frac{P_{N,i}}{N}
+	\end{split}
+\end{equation}
+In the logarithmic scale:
+\begin{equation}
+	L_{P,N,o} = L_{P,N,i} - \SI{10}{dB} \cdot \log_{10} \left(N\right)
+\end{equation}
+
+\begin{fact}
+	The down-sampling (decimation) divides the quantization noise power by $N$.
+\end{fact}
+
+Now, the \ac{SNR} of the output signal is:
+\begin{equation}
+	\begin{split}
+		\mathrm{SNR}_o &= \frac{P_i}{P_{N,o}}
+	\end{split}
+\end{equation}
+The power of the input signal $P_i$ is not affected and remains the same.
+
+In the logarithmic scale:
+\begin{equation}
+	\begin{split}
+		L_{\mathrm{SNR},o} &= L_{P,i} - L_{P,N,o} \\
+		 &= \underbrace{L_{P,i} - L_{P,N,i}}_{= L_{\mathrm{SQNR},i}} + \SI{10}{dB} \cdot \log_{10} \left(N\right) \\
+		 &= L_{\mathrm{SQNR},i} + \SI{10}{dB} \cdot \log_{10} \left(N\right)
+	\end{split}
+\end{equation}
+
+\begin{definition}{Processing gain of down-sampling}
+	The \emph{down-sampling} by $N$ (or \emph{decimation} by $N$) reduces the quantization noise power by factor $N$. The \ac{SNR} is improved (increased) by factor $N$.
+	
+	\vspace{0.5em}
+	
+	In measures of decibel, the \ac{SNR} is improved by $+ \SI{10}{dB} \cdot \log_{10} \left(N\right)$.
+	
+	\vspace{0.5em}
+	
+	The \ac{SNR} improvement is achieved in the digital signal processing. It is therefore called \index{processing gain} \textbf{processing gain}.
+\end{definition}
+
+Increasing the \ac{SNR} is equivalent with increasing the number of bits:
+\begin{equation}
+	\begin{split}
+		L_{\mathrm{SNR},o} &= \SI{1.761}{dB} + \tilde{B} \cdot \SI{6.02}{dB} \\
+		\tilde{B} &= \frac{L_{\mathrm{SNR},o} - \SI{1.761}{dB}}{\SI{6.02}{dB}} \\
+		\tilde{B} &= \frac{L_{\mathrm{SQNR},i} + \SI{10}{dB} \cdot \log_{10} \left(N\right) - \SI{1.761}{dB}}{\SI{6.02}{dB}} \\
+		\tilde{B} &= \frac{\SI{1.761}{dB} + B \cdot \SI{6.02}{dB} + \SI{10}{dB} \cdot \log_{10} \left(N\right) - \SI{1.761}{dB}}{\SI{6.02}{dB}} \\
+		\tilde{B} &= \frac{B \cdot \SI{6.02}{dB} + \SI{10}{dB} \cdot \log_{10} \left(N\right)}{\SI{6.02}{dB}}
+	\end{split}
+\end{equation}
+$\tilde{B}$ is the \index{effective number of bits!down-sampling} \textbf{\acf{ENOB}}, which would have been necessary if the analogue signal was directly sampled of the decimated sampling frequency $\frac{1}{T_{S,o}} = \frac{1}{N T_{S,i}}$.
+
+The processing gain adds $\Delta B$ bits in significance of the quantized values.
+\begin{equation}
+	\Delta B = \tilde{B} - B = \frac{\SI{10}{dB} \cdot \log_{10} \left(N\right)}{\SI{6.02}{dB}}
+\end{equation}
+\begin{remark}
+	When such a system is implemented in real, the designer must be careful and really add the bits in the implementation. For example, if the input signal is stored at the \ac{ADC} bit size of \SI{8}{bit} and the processing gain adds \SI{3}{bit}, the output must be stored in the next word size that the machine supports, e.g. \SI{16}{bit}. When it is stored as a \SI{8}{bit} value again, the processing gain is immediately lost due to truncation.
+\end{remark}
+
+The real number of bits of the \ac{ADC} is not changed. The new number of bits is solely the corollary of the processing.
+
+\begin{conclusion}
+	The processing gain, which is a result of the decimation, improves the \ac{SNR} and increases the \ac{ENOB}.
+	
+	\vspace{0.5em}
+	
+	Sampling the analogue signal at a much higher frequency than required by the Shannon-Nyquist theorem is called \index{oversampling} \textbf{oversampling}. Oversampling may be used to increase the \ac{ENOB} of the \ac{ADC} and improve the receiver sensitivity.
+\end{conclusion}
 
 \subsection{Up-sampling}
 
