@@ -581,14 +581,14 @@ The \ac{LO} generates both a cos-signal and a \SI{90}{\degree}-phase-shifted sin
 	\begin{figure}[H]
 		\centering
 		\begin{circuitikz}
-			\draw (0,0) node[left,align=right]{Input $\underline{x}_i[n]$\\ Sample rate: $T_{S,i}$} to[lowpass,>,o-] ++(2,0) to[twoport,t=$\downarrow N$,>] ++(2,0) node[inputarrow,rotate=0]{} node[right,align=left]{Output $\underline{x}_o[n]$\\ Sample rate: $T_{S,o}$};
+			\draw (0,0) node[left,align=right]{Input $\underline{x}_i[n]$\\ Sample rate: $f_{S,i}$} to[lowpass,>,o-] ++(2,0) to[twoport,t=$\downarrow N$,>] ++(2,0) node[inputarrow,rotate=0]{} node[right,align=left]{Output $\underline{x}_o[n]$\\ Sample rate: $f_{S,o}$};
 		\end{circuitikz}
 		\caption{A down-sampler with a decimation factor of $N$}
 	\end{figure}
 
 	The ratio between input and output sampling rate is the \index{decimation factor} \textbf{decimation factor} $N$.
 	\begin{equation}
-		N = \frac{T_{S,i}}{T_{S,o}} \qquad, N \in \mathbb{N}
+		N = \frac{f_{S,i}}{f_{S,o}} = \frac{\omega_{S,i}}{\omega_{S,o}} = \frac{T_{S,o}}{T_{S,i}} \qquad, N \in \mathbb{N}
 	\end{equation}
 	The decimation factor $N$ must be a positive integer.
 	
@@ -686,7 +686,7 @@ Down-sampling is in fact the sampling of an already sampled time-discrete signal
 		\end{tikzpicture}
 	}
 
-	\caption{Down-sampling by $N = 4$}
+	\caption[Down-sampling by $N = 4$]{Down-sampling by $N = 4$. Every $N$-th sample is taken, all other ones in between are discarded.}
 \end{figure}
 
 \subsubsection{Aliasing in Down-Sampling}
@@ -752,7 +752,7 @@ Therefore, a low-pass filter is applied as an \emph{anti-aliasing filter}. The a
 		\end{tikzpicture}
 	}
 
-	\subfloat[Spectrum of the decimated output signal (decimation by 2)] {
+	\subfloat[Spectrum of the decimated output signal (decimation by 2). Note that the sampling rate (and therefore the periodicity of the spectrum) changed.] {
 		\centering
 		\begin{tikzpicture}
 			\begin{axis}[
@@ -925,21 +925,452 @@ The real number of bits of the \ac{ADC} is not changed. The new number of bits i
 
 \subsection{Up-sampling}
 
-\todo{Upsampling, Interpolation}
+\begin{definition}{Up-sampling}
+	Increasing the sampling rate of a time-discrete signal is called \index{up-sampling} \textbf{up-sampling} or \index{interpolation} \textbf{interpolation}.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) node[left,align=right]{Input $\underline{x}_i[n]$\\ Sample rate: $T_{S,i}$} to[twoport,t=$\uparrow M$,>,o-] ++(2,0) to[lowpass,>] ++(2,0) node[inputarrow,rotate=0]{} node[right,align=left]{Output $\underline{x}_o[n]$\\ Sample rate: $T_{S,o}$};
+		\end{circuitikz}
+		\caption{A up-sampler with a decimation factor of $M$}
+	\end{figure}
+	
+	The ratio between output and input sampling rate is the \index{interpolation factor} \textbf{interpolation factor} $M$.
+	\begin{equation}
+		M = \frac{T_{S,o}}{T_{S,i}} = \frac{\omega_{S,o}}{\omega_{S,i}} = \frac{T_{S,i}}{T_{S,o}} \qquad, M \in \mathbb{N}
+	\end{equation}
+	The decimation factor $M$ must be a positive integer.
+\end{definition}
 
-\todo{Inserting zeros, filtering}
+\emph{Up-sampling} is implemented in the following steps:
+\begin{enumerate}
+	\item For an \emph{interpolation factor} of $M$, $M - 1$ zeros are inserted after each sample in the input signal $\underline{x}_i[n]$.
+	\item The signal with the inserted zeros is low-pass filtered by an \ac{IIR} or \ac{FIR} filter (\index{interpolation filter} \textbf{interpolation filter}).
+\end{enumerate}
 
-\begin{excursus}{\acs{CIC} filter}
-	The \index{cascaded integrator-comb} \textbf{\acf{CIC}} filter an optimized \ac{FIR} filter.
-\end{excursus}
+The values in between the input samples are interpolated by the low-pass filter.
 
-\todo{CIC filter}
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Input signal]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$n$},
+				ylabel={$x_i[n]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=4.2,
+				ymin=-1.2,
+				ymax=1.2,
+				xtick={0,1,...,4},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{0,0.5,...,2}{
+					\addplot[red, thick] coordinates {({#1*2},0) ({#1*2}, {cos(deg(2*pi*1*#1))})};
+					\addplot[red, only marks, mark=o] coordinates {({#1*2}, {cos(deg(2*pi*1*#1))})};
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	\hfill
+	\subfloat[Zero-filled input signal]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$n$},
+				ylabel={$x_{i,zeros}[n]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=4.2,
+				ymin=-1.2,
+				ymax=1.2,
+				xtick={0,4,...,16},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{0,0.5,...,2}{
+					\addplot[red, thick] coordinates {({#1*2},0) ({#1*2}, {cos(deg(2*pi*1*#1))})};
+					\addplot[red, only marks, mark=o] coordinates {({#1*2}, {cos(deg(2*pi*1*#1))})};
+				}
+			
+				\pgfplotsinvokeforeach{0,1,...,3}{
+					\addplot[red, only marks, mark=o] coordinates {({#1 + 0.25}, 0) ({#1 + 0.5}, 0) ({#1 + 0.75}, 0)};
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Interpolated output signal]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.35\linewidth,
+				scale only axis,
+				xlabel={$n$},
+				ylabel={$x_o[n]$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=16.8,
+				ymin=-1.2,
+				ymax=1.2,
+				xtick={0,4,...,16},
+				ytick={0},
+			]
+				\pgfplotsinvokeforeach{0,0.125,...,2}{
+					\addplot[red, thick] coordinates {({#1*8},0) ({#1*8}, {cos(deg(2*pi*1*#1))})};
+					\addplot[red, only marks, mark=o] coordinates {({#1*8}, {cos(deg(2*pi*1*#1))})};
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\caption[Up-sampling by $M = 4$]{Up-sampling by $M = 4$. $M-1$ zeros are inserted in between the input samples. Then an interpolation filter interpolates the samples in between.}
+\end{figure}
+
+The bandwidth of the interpolation filter shall be less or equal to the input signal bandwidth. \textbf{So the maximum bandwidth of the \emph{interpolation filter} is $\omega_{S,i} = \omega_{S,o}/M$.}
+
+\begin{itemize}
+	\item The insertion of the zeros leaves the input signal spectrum intact, but changes the sampling rate.
+	\item The interpolation filter eliminates the $M-1$ ``in-between replica'' of the input signal spectrum.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Spectrum of the input signal]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_i\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-2.5,
+				xmax=2.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2},
+				xticklabels={$-4 \omega_{S,i}$, $-3 \omega_{S,i}$, $-2 \omega_{S,i}$, $- \omega_{S,i}$, $0$, $\omega_{S,i}$, $2 \omega_{S,i}$, $3 \omega_{S,i}$, $4 \omega_{S,i}$},
+				ytick={0},
+			]
+				\draw[latex-latex] (axis cs:0.5,0.8) -- node[midway,above,align=center]{$\omega_{S,i}$-periodic} (axis cs:1,0.8);
+				
+				\pgfplotsinvokeforeach{-2, -1.5, ..., 2}{
+					\draw[green, thick] (axis cs:{#1-0.25},0) -- (axis cs:#1,0.7);
+					\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.25},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[Spectrum of the zero-filled input signal (interpolation factor of 2). Note that the rate frequency (and therefore the periodicity of the spectrum) changed. However, the frequency distribution of the signal remains the same as in the input signal.]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_{i,zeros}\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-2.5,
+				xmax=2.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, -1, -0.5, 0, 0.5, 1, 2},
+				xticklabels={$-2 \omega_{S,o}$, $- \omega_{S,o}$, $- \frac{\omega_{S,o}}{2}$, $0$, $\frac{\omega_{S,o}}{2}$, $\omega_{S,o}$, $2 \omega_{S,o}$},
+				ytick={0},
+			]
+				\draw[latex-latex] (axis cs:0,0.8) -- node[midway,above,align=center]{$\omega_{S,o}$-periodic\\ (i.e. $M \omega_{S,i}$-periodic)} (axis cs:1,0.8);
+				
+				\draw[dashed, blue] (axis cs:-0.25,0) -- (axis cs:-0.25,0.7) node[above left,align=right,xshift=3mm]{\small\bfseries Interpolation filter} -- (axis cs:0.25,0.7) -- (axis cs:0.25,0);
+				
+				\pgfplotsinvokeforeach{-2, -1.5, ..., 2}{
+					\draw[green, thick] (axis cs:{#1-0.25},0) -- (axis cs:#1,0.7);
+					\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.25},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Spectrum of the interpolated (low-pass filtered) output signal. Neither the sampling rate nor the periodicity of the spectrum have changed.]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.9\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\underline{X}_o\left(j\omega\right)|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=-2.5,
+				xmax=2.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={-2, -1, -0.5, 0, 0.5, 1, 2},
+				xticklabels={$-2 \omega_{S,o}$, $- \omega_{S,o}$, $- \frac{\omega_{S,o}}{2}$, $0$, $\frac{\omega_{S,o}}{2}$, $\omega_{S,o}$, $2 \omega_{S,o}$},
+				ytick={0},
+			]
+				\draw[latex-latex] (axis cs:0,0.8) -- node[midway,above,align=center]{$\omega_{S,o}$-periodic} (axis cs:1,0.8);
+				
+				\pgfplotsinvokeforeach{-2, -1, ..., 2}{
+					\draw[green, thick] (axis cs:{#1-0.25},0) -- (axis cs:#1,0.7);
+					\draw[red, thick] (axis cs:#1,0.7) -- (axis cs:{#1+0.25},0);
+				}
+			\end{axis}
+		\end{tikzpicture}
+	}
+	
+	\caption{Effects of the up-sampling on the spectrum}
+\end{figure}
+
+% TODO This is perhaps something for the future.
+%
+%\begin{excursus}{\acs{CIC} filter}
+%	The \index{cascaded integrator-comb} \textbf{\acf{CIC}} filter an optimized \ac{FIR} filter.
+%	
+%	\begin{figure}[H]
+%		\begin{circuitikz}
+%			
+%		\end{circuitikz}
+%	\end{figure}
+%\end{excursus}
+%
+%\todo{CIC filter}
 
 \section{Fast Fourier Transform}
 
-\todo{FFT}
+In Chapter 4, we have learnt about the \ac{DFT} and how it can be used in digital systems by periodic continuation and windowing. 
+\begin{itemize}
+	\item And indeed, the \ac{DFT} is used to analyse signals.
+	\item An application of the \ac{DFT} in the digital signal processing is the implementation of more sophisticated filters. Whilst \ac{IIR} and \ac{FIR} are time-domain filters (doing a convolution in the time-domain), a filter can be implemented in the frequency domain by multiplying the \ac{DFT} of the signal with its filter shape and then transform it back to the time-domain.
+\end{itemize}
 
-\todo{IFFT}
+The formula of the \ac{DFT} is:
+\begin{equation}
+	\underline{X}[k] = \sum\limits_{n = 0}^{N - 1} \underline{x}[n] \cdot e^{- j \frac{2 \pi}{N} k n}
+	\label{eq:ch06:dft}
+\end{equation}
+
+Its calculation is rather cumbersome.
+\begin{itemize}
+	\item There are $N$ samples in the time-domain and $N$ samples in the frequency domain. 
+	\item $\mathcal{O}\left(N^2\right)$ computations are required\footnote{The Landau notation $\mathcal{O}\left(\cdot\right)$ is used in computer science to describe the complexity of an algorithm. It is not the exact number of required calculation. It is a measure how much the number of calculations grow when the dimension of input data is enlarged.}.
+	\item $N = 8$ requires \num{64} computation. The double $N=16$ requires four times more computations (\num{256}). There is a polynomial growth. $N = 1024$ would require \num{1048576} computations.
+\end{itemize}
+
+\begin{fact}
+	Calculating the \ac{DFT} using \eqref{eq:ch06:dft} is cumbersome and not feasible.
+\end{fact}
+
+The \ac{DFT} is required very often in digital communication system. An efficient algorithm is necessary. The \index{fast Fourier transform} \textbf{\acf{FFT}} solves the problem.
+\begin{itemize}
+	\item It is an efficient algorithm, whose number of required calculation grow by $\mathcal{O}\left(N \log N\right)$.
+	\item For example, if $N=8$ requires \num{24} calculations, $N=16$ would require \num{64} calculations and $N = 1024$ only \num{10240} calculations.
+	\item This is far better than the $\mathcal{O}\left(N^2\right)$ calculation.
+\end{itemize}
+
+The most popular implementation of the \ac{FFT} is the \index{Cooley-Tukey fast Fourier transform algorithm} \textbf{Cooley-Tukey \ac{FFT} algorithm}.
+\begin{itemize}
+	\item It is a \emph{divide-and-conquer algorithm}.
+%	\item The $N$-dimensional vector $\cmplxvect{x}$ represents the time-domain signal ($\underline{x}_n = \underline{x}[n]$).
+%	\begin{equation}
+%		\cmplxvect{x} = \left[\underline{x}[0], \underline{x}[1], \dots, \underline{x}[N]\right]^{\mathrm{T}}
+%	\end{equation}
+%	\item The $N$-dimensional vector $\cmplxvect{X}$ represents the frequency-domain signal ($\underline{X}_k = \underline{X}[k]$).
+%	\begin{equation}
+%		\cmplxvect{X} = \left[\underline{X}[0], \underline{X}[1], \dots, \underline{X}[N]\right]^{\mathrm{T}}
+%	\end{equation}
+	\item $\underline{x}[n]$ is the time-domain signal of length $N$.
+	\item $\underline{X}[k]$ is the frequency-domain signal of length $N$.
+	\item They are connected by the \ac{DFT}.
+	\begin{equation}
+		\underline{X}[k] = \mathcal{F}_{\mathrm{DFT}}\left\{\underline{x}[n]\right\}
+	\end{equation}
+\end{itemize}
+
+The \ac{DFT} formula \eqref{eq:ch06:dft} can be separated by even-numbered indices and odd-numbered indices:
+\begin{equation}
+	\underline{X}[k] = \sum\limits_{m = 0}^{\frac{N}{2} - 1} \underline{x}[2m] \cdot e^{- j \frac{2 \pi}{N} k \left(2m\right)} + \sum\limits_{m = 0}^{\frac{N}{2} - 1} \underline{x}[2m+1] \cdot e^{- j \frac{2 \pi}{N} k \left(2m+1\right)}
+\end{equation}
+$e^{- j \frac{2 \pi}{N} k}$ can be factored out of the second sum:
+\begin{equation}
+	\underline{X}[k] = \underbrace{\sum\limits_{m = 0}^{\frac{N}{2} - 1} \underline{x}[2m] \cdot e^{- j \frac{2 \pi}{N/2} k m}}_{= \underline{E}[k]} + \underbrace{e^{- j \frac{2 \pi}{N} k}}_{= \underline{w}_N^k} \cdot \underbrace{\sum\limits_{m = 0}^{\frac{N}{2} - 1} \underline{x}[2m+1] \cdot e^{- j \frac{2 \pi}{N/2} k m}}_{= \underline{O}[k]}
+	\label{eq:ch06:fft_algo}
+\end{equation}
+where
+\begin{itemize}
+	\item $\underline{E}[k]$ is the \ac{DFT} of the sampled with even-numbered indices,
+	\item $\underline{O}[k]$ is the \ac{DFT} of the sampled with odd-numbered indices and
+	\item $\underline{w}_N^k$ is the $k$-th power of the $N$-th \index{primitive root of unity} \emph{primitive root of unity} with
+	\begin{equation}
+		\underline{w}_N = e^{- j \frac{2 \pi}{N}}
+	\end{equation}
+\end{itemize}
+
+Both $\underline{E}[k]$ and $\underline{O}[k]$ are of length $N/2$.
+\begin{itemize}
+	\item They are \acp{DFT}, too.
+	\item They can be themselves be calculated by \eqref{eq:ch06:fft_algo} with a different length $\tilde{N} = N/2$.
+	\item Thereby, the algorithm becomes recursive.
+	\item The length division in $N/2$ is responsible for the efficient $\mathcal{O}\left(N \log N\right)$ complexity.
+\end{itemize}
+
+\begin{fact}
+	$N$ must be a power of $2$ for the Cooley-Tukey \acs{FFT} algorithm.
+\end{fact}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{svg/ch06_FFT_Butterfly.pdf}
+	\caption[The FFT butterfly graph]{The \acs{FFT} butterfly graph. The \acs{DFT} is divided into two \ac{DFT} of $N/2$ length. The results are combined by summation. Because of the their shape, the summations are called ``butterfly'' operations. The result of the odd \ac{DFT} is multiplied by the primitive roots of unity before. The \acp{DFT} themselves can be calucated using the same algorithm. \licensequote{\cite{Virens2010}}{''Virens''}{\href{https://creativecommons.org/licenses/by/3.0/deed.en}{CC-BY 3.0}}}
+\end{figure}
+
+The algorithm can be further optimized using the periodicity of the \emph{primitive root of unity}
+\begin{equation}
+	\underline{w}_N^{k+\frac{N}{2}} = e^{- j \frac{2 \pi}{N} \left(k+\frac{N}{2}\right)} = e^{- j \pi} e^{- j \frac{2 \pi}{N} k} = -\underline{w}_N^k
+\end{equation}
+The optimization is:
+\begin{equation}
+	\begin{split}
+		\underline{X}[k] &= \underline{E}[k] + \underline{w}_N^k \underline{O}[k] \\
+		\underline{X}[k + N/2] &= \underline{E}[k] - \underline{w}_N^k \underline{O}[k] \\
+		\underline{X}[k] &= \begin{cases}
+			\underline{E}[k] + \underline{w}_N^k \underline{O}[k] &\quad \text{if } 0 \leq k < N/2 \\
+			\underline{E}[k-N/2] - \underline{w}_N^{k-N/2} \underline{O}[k-N/2] &\quad \text{if } N/2 \leq k < N \\
+		\end{cases}
+	\end{split}
+\end{equation}
+$\underline{E}[k]$ and $\underline{O}[k]$ need to be calculated one and can be re-used for both $\underline{X}[k]$ and $\underline{X}[k + N/2]$.
+
+\begin{algorithm}[H]
+	\caption{The Cooley-Tukey \acs{FFT} algorithm in pseudocode}
+	
+	\DontPrintSemicolon
+	
+	\SetKwProg{Fn}{Function}{}{}
+	\SetKwFunction{FFT}{FFT}
+	\Fn(){\FFT{$x_t$, $N$}}{
+		\KwData{$x_t[n]$: Vector of time-domain samples}
+		\KwData{$N$: Dimenstion of vector $x_t$}
+		\KwResult{Vector of $N$ frequency-domain samples}
+		
+		\BlankLine
+		
+		\eIf{$N = 1$}{
+			\tcc{Return $x_t$ without modification}
+			\KwRet{$x_t$} \;
+		}{
+			\tcc{Recursive call with divided vectors}
+			$E \gets $ \FFT{Even-numbered indices of $x$, $N/2$} \;
+			$O \gets $ \FFT{Odd-numbered indices of $x$, $N/2$} \;
+			
+			\BlankLine
+			
+			\KwData{$X_f$ is the vector of $N$ frequency-domain samples}
+			\For{$k \in \left\{0, \dots, N/2 - 1\right\}$}{
+				$X_f[k] \gets E[k] + e^{- j \frac{2 \pi}{N} k} O[k]$ \;
+				$X_f[k + N/2] \gets E[k] - e^{- j \frac{2 \pi}{N} k} O[k]$ \;
+			}
+			\KwRet{$X_f$} \;
+		}
+	}
+
+	\BlankLine
+\end{algorithm}
+
+\subsubsection{Inverse Fast Fourier Transform}
+
+The Cooley-Tukey \acs{FFT} algorithm can be used to calculate the \ac{IFFT}, too.
 
 \section{Spread Spectrum}
 
