@@ -1374,13 +1374,62 @@ The Cooley-Tukey \acs{FFT} algorithm can be used to calculate the \ac{IFFT}, too
 
 \section{Spread Spectrum}
 
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.15\textheight},
+			width=0.8\linewidth,
+			scale only axis,
+			xlabel={$\omega$},
+			ylabel={$|\mathrm{S}_{XX}|$},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=0,
+			xmax=10.5,
+			ymin=0,
+			ymax=1.2,
+			xtick={0},
+			xticklabels={0},
+			ytick={0},
+			axis x discontinuity=parallel,
+		]
+			\addplot[blue, smooth] coordinates {(4.6,0) (4.7,0.02) (4.8,0.2) (4.9,0.71) (5,1) (5.1,0.71) (5.2,0.2) (5.3,0.02) (5.4,0)};
+			\addlegendentry{Narrow-band signal};
+			\addplot[red, smooth] coordinates {(2,0) (2.5,0.01) (3,0.05) (5,0.05) (7,0.05) (7.5,0.01) (8,0)};
+			\addlegendentry{Spread spectrum signal};
+		\end{axis}
+	\end{tikzpicture}
+	\caption[PSD of a narrow-band and spread spectrum signal]{\acs{PSD} of a narrow-band and spread spectrum signal. Both signals carry the same information and have the equal power. The narrow-band signal concentrates the whole signal power in a narrow frequency band. In contrast, the spread spectrum signal distributes the signal power over a wide frequency band.}
+\end{figure}
+
 \todo{Purpose: Noise immunity}
+
+\todo{Noise like}
 
 \todo{Purpose: Immunity against narrowband disturbances}
 
-\todo{Purpose: Coexistence with other services}
+\todo{Purpose: Coexistence with other services, multiple access}
+
+\todo{Purpose: Plausible deniability}
+
+\todo{Purpose: Encryption, confidentiality}
 
 \subsection{Direct-Sequence Spread Spectrum}
+
+\todo{pseudorandom number}
 
 \todo{Processing Gain}
 
