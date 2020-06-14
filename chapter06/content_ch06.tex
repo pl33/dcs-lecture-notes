@@ -8,7 +8,7 @@
 % Please find the full copy of the licence at:
 % https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
-\chapter{Digital Signal Processing and Spread Spectrum}
+\chapter{Digital Signal Processing}
 
 \begin{refsection}
 	
@@ -258,8 +258,6 @@ A stable filter has always a value-limited impulse response (\ac{BIBO} stable).
 \begin{fact}
 	\acs{IIR} filter must be always checked for stability.
 \end{fact}
-
-\todo{examples}
 
 \subsection{Finite Impulse Response Filters}
 
@@ -826,7 +824,7 @@ or in the linear scale (\si{mW}):
 The quantization noise power is distributed equally over the frequency axis between $[-\frac{1}{2 T_{S,i}}, \frac{1}{2 T_{S,i}}]$, which is the band limit for the sampled input signal. The \index{noise bandwidth} \textbf{noise bandwidth} is therefore $\Delta f_{S,i} = \frac{1}{T_{S,i}}$. The quantization noise floor $S_{N,i}$, which is a \ac{PSD} (\si{mW/Hz}), is:
 \begin{equation}
 	\begin{split}
-		S_{N,i} = \frac{P_{N,i}}{\Delta f_{S,i}} \\
+		S_{N,i} &= \frac{P_{N,i}}{\Delta f_{S,i}} \\
 		 &= \frac{P_{N,i}}{\frac{1}{T_{S,i}}} \\
 		 &= P_{N,i} T_{S,i}
 	\end{split}
@@ -1372,74 +1370,7 @@ $\underline{E}[k]$ and $\underline{O}[k]$ need to be calculated one and can be r
 
 The Cooley-Tukey \acs{FFT} algorithm can be used to calculate the \ac{IFFT}, too.
 
-\section{Spread Spectrum}
-
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}
-		\begin{axis}[
-			height={0.15\textheight},
-			width=0.8\linewidth,
-			scale only axis,
-			xlabel={$\omega$},
-			ylabel={$|\mathrm{S}_{XX}|$},
-			%grid style={line width=.6pt, color=lightgray},
-			%grid=both,
-			grid=none,
-			legend pos=north east,
-			axis y line=middle,
-			axis x line=middle,
-			every axis x label/.style={
-				at={(ticklabel* cs:1.05)},
-				anchor=north,
-			},
-			every axis y label/.style={
-				at={(ticklabel* cs:1.05)},
-				anchor=east,
-			},
-			xmin=0,
-			xmax=10.5,
-			ymin=0,
-			ymax=1.2,
-			xtick={0},
-			xticklabels={0},
-			ytick={0},
-			axis x discontinuity=parallel,
-		]
-			\addplot[blue, smooth] coordinates {(4.6,0) (4.7,0.02) (4.8,0.2) (4.9,0.71) (5,1) (5.1,0.71) (5.2,0.2) (5.3,0.02) (5.4,0)};
-			\addlegendentry{Narrow-band signal};
-			\addplot[red, smooth] coordinates {(2,0) (2.5,0.01) (3,0.05) (5,0.05) (7,0.05) (7.5,0.01) (8,0)};
-			\addlegendentry{Spread spectrum signal};
-		\end{axis}
-	\end{tikzpicture}
-	\caption[PSD of a narrow-band and spread spectrum signal]{\acs{PSD} of a narrow-band and spread spectrum signal. Both signals carry the same information and have the equal power. The narrow-band signal concentrates the whole signal power in a narrow frequency band. In contrast, the spread spectrum signal distributes the signal power over a wide frequency band.}
-\end{figure}
-
-\todo{Purpose: Noise immunity}
-
-\todo{Noise like}
-
-\todo{Purpose: Immunity against narrowband disturbances}
-
-\todo{Purpose: Coexistence with other services, multiple access}
-
-\todo{Purpose: Plausible deniability}
-
-\todo{Purpose: Encryption, confidentiality}
-
-\subsection{Direct-Sequence Spread Spectrum}
-
-\todo{pseudorandom number}
-
-\todo{Processing Gain}
-
-\subsection{Frequency-Hopping Spread Spectrum}
-
-\subsection{Time-Hopping Spread Spectrum}
-
-\section{Multi-carrier Modulation}
-
-\todo{OFDM}
+\nocite{rao2018}
 
 \phantomsection
 \addcontentsline{toc}{section}{References}
