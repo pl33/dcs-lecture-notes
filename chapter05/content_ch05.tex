@@ -1980,7 +1980,8 @@ All digital modulation techniques take time-discrete and value-discrete data.
 		\item Each instantaneous value of the time-discrete data points is prolonged to the symbol period $T_{sym}$. In fact, it becomes a rectangle function.
 		\item The result is a series of symbols $x_{sym}(t)$.
 	\end{itemize}
-\end{itemize}
+\end{itemize}%
+\nomenclature[St]{$T_{sym}$}{Symbol period, smybol duration}
 
 The process of converting time-discrete symbols to time-continuous rectangle functions can be mathematically described by:
 \begin{equation}
@@ -2581,7 +2582,7 @@ The number $K_m$ of the $K_m$-\acs{QAM} selects the number of possible symbols i
 
 	\vspace{1em}
 	
-	The transmission bandwidth is related symbol rate $f_{sym}$.
+	The transmission bandwidth is related symbol rate $f_{sym}$. \nomenclature[St]{$f_{sym}$}{Transission bandwidth}
 	\begin{itemize}
 		\item Simple approximations set the symbol rate $f_{sym}$ and transmission equal.
 		\item However, the exact transmission bandwidth depends on the selection of filters and the modulation technique.
