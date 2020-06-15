@@ -136,15 +136,122 @@ A third party who has no knowledge of neither the existence of the spread spectr
 
 \subsection{Direct-Sequence Spread Spectrum}
 
-\todo{pseudorandom number}
+A simple method for increasing the bandwidth systematically re-encoding the symbols using new symbols at a higher symbol rate.
+\begin{itemize}
+	\item The input symbols are at the rate of $f_{sym}$.
+	\item The \emph{spreading} is achieved by re-encoding each symbol by $M$ new symbols, called \index{chip} \textbf{chips}.
+	\item After re-encoding, the rate of the new symbols -- the \emph{chips} -- is $f_{chp}$. $f_{chp}$ is the \index{chip rate} \textbf{chip rate}.
+	\item $M$ is the \index{spreading factor} \textbf{spreading factor}.
+	\begin{equation}
+		M = \frac{f_{chp}}{f_{sym}}
+	\end{equation}
+\end{itemize}
 
-\todo{Processing Gain}
+\begin{example}{\acs{IEEE} 802.11b}
+	\acs{IEEE} 802.11b is an early \ac{WLAN} standard from 1999, defining data rates of \SI{1}{Mbit/s} to \SI{11}{Mbit/s}.\footnote{In comparison to that modern \ac{WLAN} standards like \acs{IEEE} 802.11ax have data rates of several \si{Gbit/s}. But they use other spread spectrum technologies.} Usually, the data rate is proportional to the transmission bandwidth. But, \acs{IEEE} 802.11b uses \ac{DSSS} to implement an adaptive data rate whilst retaining a constant bandwidth (approximately \SI{22}{MHz}).
+	
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\node[mixer](Spreader){};
+			\node[draw,block,below=1.5cm of Spreader](Code){Code\\ generator};
+			\node[draw,block,right=3cm of Spreader](Mod){\acs{BPSK}\\ modulator};
+			
+			\node[above=3mm of Spreader,align=center]{Multiplier as\\ the spreader};
+			
+			\draw[-o] (Spreader.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Input data\\ at $f_{sym}$};
+			\draw (Code.north) -- node[midway,right,align=left]{Spreading code\\ at $f_{chip}$} (Spreader.south) node[inputarrow,rotate=90]{};
+			\draw (Spreader.east) -- node[midway,above,align=center]{Chip\\ sequence} (Mod.west) node[inputarrow]{};
+			\draw (Mod.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Baseband\\ signal};
+		\end{circuitikz}
+		\caption{Simplified spreading and \acs{PSK} modulation signal chain of an \acs{IEEE} 802.11b conforming transmitter}
+	\end{figure}
+
+	Data is represented by bits. At a data rate of $f_{sym} = \SI{1}{Mbit/s}$, the data is spread by a factor $M = 11$. The data symbols are multiplied by the \emph{spreading code}. Because of the multiplication, the same block symbol as the mixer is used. The code has a \emph{chip rate} of $f_{chp} = M f_{sym} = \SI{11}{Mchp/s}$.\footnote{Physically, the units \si{bit} and \si{chp} are dimension-less. Therefore, $\SI{1}{Mbit/s} = \SI{1}{Mchp/s} = \SI{1}{MHz}$. However, the units shall refer to the quantity being considered.}
+	
+	\vspace{0.5em}
+	
+	For $M = 11$, the \index{Barker code} \textbf{Barker code} with $\vect{C}_{11} = \left[+1, +1, +1, -1, -1, -1, +1, -1, -1, +1, -1\right]$ is used as the spreading code. Let's consider a bit stream of $(10)_2$ as th data, which is encoded as the symbols $\vect{D} = \left[-1, +1\right]$. The spread sequence is:
+	\begin{equation}
+		\begin{split}
+			\vect{S} &= \vect{D} \otimes \vect{C}_{11} \\
+			 &= \left[\underbrace{-1, -1, -1, +1, +1, +1, -1, +1, +1, -1, +1}_{\text{Spread symbol } -1},\right. \\ &\qquad \left.  \underbrace{+1, +1, +1, -1, -1, -1, +1, -1, -1, +1, -1}_{\text{Spread symbol } +1}\right]
+		\end{split}
+	\end{equation}
+	
+	The \emph{chip sequence} $\vect{S}$ is at a rate of \SI{11}{Mchp/s}. In this case, the \emph{chip} have two discrete states $-1$ or $+1$. They can be modulated by a \ac{BPSK} modulator. It baseband is then mixed to the \ac{RF} band of \SI{2.4}{GHz} using an IQ modulator.
+	
+	\vspace{0.5em}
+	
+	At a data rate of \SI{11}{Mbit/s}, the data is \underline{not} spread ($M = 1$). The spreading code is $\vect{C}_{1} = \left[+1\right]$. The \emph{chip rate} equals the data bit rate. The \emph{chip rate} remains constant at \SI{11}{Mchp/s}.
+	
+	\vspace{0.5em}
+	
+	\textbf{Why adaptive data rate?} Spreading by $M = 11$ increases the \ac{SNR}. Each symbol is effectively repeated 11 times. This circumstance can be used to achieve a processing gain and increase noise immunity. The higher data rate at a lower spreading factor of $M = 1$ comes at the drawback of decreased noise immunity.
+\end{example}
+
+The \index{direct-sequence spread spectrum} \textbf{\acf{DSSS}} spreads the symbols by multiplying each data symbol with the whole spreading code.
+\begin{itemize}
+	\item The data symbol sequence is represented by the vector $\vect{D}$. A single data symbol is $D_n$.
+	\item The data comes at the rate of $f_{sym}$.
+	\item The code sequence is represented by the $M$-dimensional vector $\vect{C}_M$. $M$ is the length of the code. A single chip of the code is $C_m$.
+	\item The code repeats at $f_{sym}$. The rate of the single code chips is $f_{chp} = M f_{sym}$.
+\end{itemize}
+The process of multiplying each data symbol $D_n$ with the whole code sequence $\left[C_0, C_1, \dots, C_{M-1}\right]$ is represented by the \index{Kronecker product} \textbf{Kronecker product} $\otimes$. \nomenclature[Fk]{$\otimes$}{Kronecker product}
+\begin{equation}
+	\begin{split}
+		\vect{S} &= \vect{D} \otimes \vect{C}_{M} \\
+		S_{n M + m} &= D_n \cdot C_m \qquad \forall 0 \leq m < M
+	\end{split}
+\end{equation}
+$\vect{S}$ is the sequence of output chips -- the \emph{spread spectrum signal}. The chips in $\vect{S}$ are at the chip rate of $f_{chp} = M f_{sym}$.
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\node[draw,block](Spreader){Spreader\\ $\vect{D} \otimes \vect{C}_{M}$};
+		\node[draw,block,below=1.5cm of Spreader](Code){Code\\ generator};
+		\node[draw,block,right=2.5cm of Spreader](Mod){Modulation\\ (\acs{BPSK}, \acs{QPSK},\\ \acs{QAM}, ...)};
+		
+		\draw[-o] (Spreader.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Input symbol\\ sequence $\vect{D}$};
+		\draw (Code.north) -- node[midway,right,align=left]{Spreading\\ code $\vect{C}_{M}$} (Spreader.south) node[inputarrow,rotate=90]{};
+		\draw (Spreader.east) -- node[midway,above,align=center]{Chip\\ sequence\\ $\vect{S}$} (Mod.west) node[inputarrow]{};
+		\draw (Mod.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Baseband\\ signal};
+	\end{circuitikz}
+	\caption{Abstract \acs{DSSS}}
+	\label{fig:ch07:abstract_dsss}
+\end{figure}
+
+Figure \ref{fig:ch07:abstract_dsss} depicts an abstract view on \ac{DSSS}. The \emph{spreading code} is a \index{pseudorandom code} \textbf{pseudorandom code}.
+\begin{itemize}
+	\item The code is generated by an algorithm and is thereby predictable if the algorithm is known.
+	\item For a receiver that does not know the code generation algorithm, the code sequence is random. It is noise-like.
+	\item \textit{The fact, that the code must be known to the receiver, can be used to implement data encryption.}
+\end{itemize}
+
+Example usage of \ac{DSSS}:
+\begin{itemize}
+	\item \acs{IEEE} 802.11b specification for \ac{WLAN}
+	\item \ac{GPS}
+\end{itemize}
 
 \subsection{Frequency-Hopping Spread Spectrum}
 
+Example usage of \ac{FHSS}:
+\begin{itemize}
+	\item \acs{IEEE} 802.15.1 (Bluetooth)
+\end{itemize}
+
 \subsection{Time-Hopping Spread Spectrum}
 
+Example usage of \ac{THSS}:
+\begin{itemize}
+	\item \ac{UWB} systems conforming to \acs{IEEE} 802.15.4
+\end{itemize}
+
 \subsection{Symbol Reconstruction}
+
+\todo{Processing Gain}
 
 \todo{Reception under noise}
 
