@@ -139,16 +139,16 @@ A third party who has no knowledge of neither the existence of the spread spectr
 A simple method for increasing the bandwidth systematically re-encoding the symbols using new symbols at a higher symbol rate.
 \begin{itemize}
 	\item The input symbols are at the rate of $f_{sym}$.
-	\item The \emph{spreading} is achieved by re-encoding each symbol by $M$ new symbols, called \index{chip} \textbf{chips}.
+	\item The \emph{spreading} is achieved by re-encoding each symbol by $L$ new symbols, called \index{chip} \textbf{chips}.
 	\item After re-encoding, the rate of the new symbols -- the \emph{chips} -- is $f_{chp}$. $f_{chp}$ is the \index{chip rate} \textbf{chip rate}.
-	\item $M$ is the \index{spreading factor} \textbf{spreading factor}.
+	\item $L$ is the \index{spreading factor} \textbf{spreading factor}.
 	\begin{equation}
-		M = \frac{f_{chp}}{f_{sym}}
+		L = \frac{f_{chp}}{f_{sym}}
 	\end{equation}
 \end{itemize}
 
-\begin{example}{\acs{IEEE} 802.11b}
-	\acs{IEEE} 802.11b is an early \ac{WLAN} standard from 1999, defining data rates of \SI{1}{Mbit/s} to \SI{11}{Mbit/s}.\footnote{In comparison to that modern \ac{WLAN} standards like \acs{IEEE} 802.11ax have data rates of several \si{Gbit/s}. But they use other spread spectrum technologies.} Usually, the data rate is proportional to the transmission bandwidth. But, \acs{IEEE} 802.11b uses \ac{DSSS} to implement an adaptive data rate whilst retaining a constant bandwidth (approximately \SI{22}{MHz}).
+\begin{example}{\acs{IEEE} 802.11b (Wi-Fi)}
+	\acs{IEEE} 802.11b is an early \ac{WLAN} standard from 1999, defining data rates of \SI{1}{Mbit/s} to \SI{11}{Mbit/s}.\footnote{In comparison to that, modern \ac{WLAN} standards like \acs{IEEE} 802.11ax have data rates of several \si{Gbit/s}. But they use other spread spectrum technologies.} Usually, the data rate is proportional to the transmission bandwidth. But, \acs{IEEE} 802.11b uses \ac{DSSS} to implement an adaptive data rate whilst retaining a constant bandwidth (approximately \SI{22}{MHz}).
 	
 	\begin{figure}[H]
 		\centering
@@ -167,11 +167,11 @@ A simple method for increasing the bandwidth systematically re-encoding the symb
 		\caption{Simplified spreading and \acs{PSK} modulation signal chain of an \acs{IEEE} 802.11b conforming transmitter}
 	\end{figure}
 
-	Data is represented by bits. At a data rate of $f_{sym} = \SI{1}{Mbit/s}$, the data is spread by a factor $M = 11$. The data symbols are multiplied by the \emph{spreading code}. Because of the multiplication, the same block symbol as the mixer is used. The code has a \emph{chip rate} of $f_{chp} = M f_{sym} = \SI{11}{Mchp/s}$.\footnote{Physically, the units \si{bit} and \si{chp} are dimension-less. Therefore, $\SI{1}{Mbit/s} = \SI{1}{Mchp/s} = \SI{1}{MHz}$. However, the units shall refer to the quantity being considered.}
+	Data is represented by bits. At a data rate of $f_{sym} = \SI{1}{Mbit/s}$, the data is spread by a factor $L = 11$. The data symbols are multiplied by the \emph{spreading code}. Because of the multiplication, the same block symbol as the mixer is used. The code has a \emph{chip rate} of $f_{chp} = L f_{sym} = \SI{11}{Mchp/s}$.\footnote{Physically, the units \si{bit} and \si{chp} are dimension-less. Therefore, $\SI{1}{Mbit/s} = \SI{1}{Mchp/s} = \SI{1}{MHz}$. However, the units shall refer to the quantity being considered.}
 	
 	\vspace{0.5em}
 	
-	For $M = 11$, the \index{Barker code} \textbf{Barker code} with $\vect{C}_{11} = \left[+1, +1, +1, -1, -1, -1, +1, -1, -1, +1, -1\right]$ is used as the spreading code. Let's consider a bit stream of $(10)_2$ as th data, which is encoded as the symbols $\vect{D} = \left[-1, +1\right]$. The spread sequence is:
+	For $L = 11$, the \index{Barker code} \textbf{Barker code} with $\vect{C}_{11} = \left[+1, +1, +1, -1, -1, -1, +1, -1, -1, +1, -1\right]$ is used as the spreading code. Let's consider a bit stream of $(10)_2$ as th data, which is encoded as the symbols $\vect{D} = \left[-1, +1\right]$. The spread sequence is:
 	\begin{equation}
 		\begin{split}
 			\vect{S} &= \vect{D} \otimes \vect{C}_{11} \\
@@ -183,25 +183,25 @@ A simple method for increasing the bandwidth systematically re-encoding the symb
 	
 	\vspace{0.5em}
 	
-	At a data rate of \SI{11}{Mbit/s}, the data is \underline{not} spread ($M = 1$). The spreading code is $\vect{C}_{1} = \left[+1\right]$. The \emph{chip rate} equals the data bit rate. The \emph{chip rate} remains constant at \SI{11}{Mchp/s}.
+	At a data rate of \SI{11}{Mbit/s}, the data is \underline{not} spread ($L = 1$). The spreading code is $\vect{C}_{1} = \left[+1\right]$. The \emph{chip rate} equals the data bit rate. The \emph{chip rate} remains constant at \SI{11}{Mchp/s}.
 	
 	\vspace{0.5em}
 	
-	\textbf{Why adaptive data rate?} Spreading by $M = 11$ increases the \ac{SNR}. Each symbol is effectively repeated 11 times. This circumstance can be used to achieve a processing gain and increase noise immunity. The higher data rate at a lower spreading factor of $M = 1$ comes at the drawback of decreased noise immunity.
+	\textbf{Why adaptive data rate?} Spreading by $L = 11$ increases the \ac{SNR}. Each symbol is effectively repeated 11 times. This circumstance can be used to achieve a processing gain and increase noise immunity. The higher data rate at a lower spreading factor of $L = 1$ comes at the drawback of decreased noise immunity.
 \end{example}
 
 The \index{direct-sequence spread spectrum} \textbf{\acf{DSSS}} spreads the symbols by multiplying each data symbol with the whole spreading code.
 \begin{itemize}
 	\item The data symbol sequence is represented by the vector $\vect{D}$. A single data symbol is $D_n$.
 	\item The data comes at the rate of $f_{sym}$.
-	\item The code sequence is represented by the $M$-dimensional vector $\vect{C}_M$. $M$ is the length of the code. A single chip of the code is $C_m$.
-	\item The code repeats at $f_{sym}$. The rate of the single code chips is $f_{chp} = M f_{sym}$.
+	\item The code sequence is represented by the $L$-dimensional vector $\vect{C}_L$. $L$ is the length of the code. A single chip of the code is $C_l$.
+	\item The code repeats at $f_{sym}$. The rate of the single code chips is $f_{chp} = L f_{sym}$.
 \end{itemize}
-The process of multiplying each data symbol $D_n$ with the whole code sequence $\left[C_0, C_1, \dots, C_{M-1}\right]$ is represented by the \index{Kronecker product} \textbf{Kronecker product} $\otimes$. \nomenclature[Fk]{$\otimes$}{Kronecker product}
+The process of multiplying each data symbol $D_n$ with the whole code sequence $\left[C_0, C_1, \dots, C_{L-1}\right]$ is represented by the \index{Kronecker product} \textbf{Kronecker product} $\otimes$. \nomenclature[Fk]{$\otimes$}{Kronecker product}
 \begin{equation}
 	\begin{split}
-		\vect{S} &= \vect{D} \otimes \vect{C}_{M} \\
-		S_{n M + m} &= D_n \cdot C_m \qquad \forall 0 \leq m < M
+		\vect{S} &= \vect{D} \otimes \vect{C}_{L} \\
+		S_{n L + l} &= D_n \cdot C_l \qquad \forall 0 \leq l < L
 	\end{split}
 \end{equation}
 $\vect{S}$ is the sequence of output chips -- the \emph{spread spectrum signal}. The chips in $\vect{S}$ are at the chip rate of $f_{chp} = M f_{sym}$.
@@ -209,12 +209,12 @@ $\vect{S}$ is the sequence of output chips -- the \emph{spread spectrum signal}.
 \begin{figure}[H]
 	\centering
 	\begin{circuitikz}
-		\node[draw,block](Spreader){Spreader\\ $\vect{D} \otimes \vect{C}_{M}$};
+		\node[draw,block](Spreader){Spreader\\ $\vect{D} \otimes \vect{C}_{L}$};
 		\node[draw,block,below=1.5cm of Spreader](Code){Code\\ generator};
 		\node[draw,block,right=2.5cm of Spreader](Mod){Modulation\\ (\acs{BPSK}, \acs{QPSK},\\ \acs{QAM}, ...)};
 		
 		\draw[-o] (Spreader.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Input symbol\\ sequence $\vect{D}$};
-		\draw (Code.north) -- node[midway,right,align=left]{Spreading\\ code $\vect{C}_{M}$} (Spreader.south) node[inputarrow,rotate=90]{};
+		\draw (Code.north) -- node[midway,right,align=left]{Spreading\\ code $\vect{C}_{L}$} (Spreader.south) node[inputarrow,rotate=90]{};
 		\draw (Spreader.east) -- node[midway,above,align=center]{Chip\\ sequence\\ $\vect{S}$} (Mod.west) node[inputarrow]{};
 		\draw (Mod.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Baseband\\ signal};
 	\end{circuitikz}
@@ -226,7 +226,19 @@ Figure \ref{fig:ch07:abstract_dsss} depicts an abstract view on \ac{DSSS}. The \
 \begin{itemize}
 	\item The code is generated by an algorithm and is thereby predictable if the algorithm is known.
 	\item For a receiver that does not know the code generation algorithm, the code sequence is random. It is noise-like.
-	\item \textit{The fact, that the code must be known to the receiver, can be used to implement data encryption.}
+	\item \textit{The fact, that the code must be known to the receiver, can be used to implement data \texttt{}encryption.}
+\end{itemize}
+
+Time-bandwidth product:
+\begin{itemize}
+	\item The bandwidth of the signal is the \emph{chip rate} $f_{chp}$. It is $L$ times the bandwidth of a non-spread symbol.
+	\item The symbol period is not touched and remains $T_{sym}$.
+	\item The transmission bandwidth of a non-spread symbol $\frac{1}{T_{sym}}$.
+	\item The time-bandwidth product is
+	\begin{equation}
+		T_{sym} \cdot \Delta f_{chp} = T_{sym} \cdot \frac{L}{T_{sym}} = L \gg 1
+	\end{equation}
+	\item The \ac{DSSS} fulfils the spread spectrum condition.
 \end{itemize}
 
 Example usage of \ac{DSSS}:
@@ -237,12 +249,168 @@ Example usage of \ac{DSSS}:
 
 \subsection{Frequency-Hopping Spread Spectrum}
 
+Another straightforward method spreading a signal across the frequency spectrum is transmitting each symbol at another frequency. This technique is called \index{frequency-hopping spread spectrum} \textbf{\acf{FHSS}}.
+\begin{itemize}
+	\item The frequency band $\Delta f_{FHSS}$ is divided into $M$ \index{sub-band} \textbf{sub-bands} with a bandwidth of $\Delta f_{sub}$.
+	\begin{equation}
+		\Delta f_{sub} = \frac{\Delta f_{FHSS}}{M}
+		\label{eq:ch07:fhss_sub_f}
+	\end{equation}
+	\item The bandwidth of the sub-band $\Delta f_{sub}$ is the transmission bandwidth of a single, non-spread symbol. $\Delta f_{sub}$ is wide enough to accommodate a symbol.
+	\item Each symbol is transmitted in a different sub-band $k$ ($0 \leq k < M$).
+	\item The sub-band n is selected according to the certain pattern, which is again called \index{spreading code} \textbf{spreading code}.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\node[draw,block](Mod){Modulation\\ (\acs{BPSK}, \acs{QPSK},\\ \acs{QAM}, ...)};
+		\node[draw,block](Code) at([yshift=-3.5cm]Mod) {Code\\ generator};
+		\node[mixer,right=2.5cm of Mod](Mix){};
+		\node[oscillator](LO) at([yshift=-3.5cm,xshift=5mm]Mix) {};
+		
+		\node[right=3mm of LO,align=left]{\acs{LO}};
+		
+		\draw[-o] (Mod.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Input symbol\\ sequence $\vect{D}$};
+		\draw (Mod.east) -- node[midway,above,align=center]{Baseband\\ signal} (Mix.west) node[inputarrow,rotate=0]{};
+		\draw (Code.east) -- node[midway,below,align=center]{Spreading\\ code $\vect{C}_{M}$} (LO.west) node[inputarrow,rotate=0]{};
+		\draw (LO.north) -- node[midway,right,align=left]{Carrier} (Mix.south) node[inputarrow,rotate=90]{};
+		\draw (Mix.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{\acs{RF}\\ signal};
+	\end{circuitikz}
+	\caption{Simplified block diagram of a \acs{FHSS} transmitter}
+\end{figure}
+
+Following can be said about the \emph{spreading code}:
+\begin{itemize}
+	\item The values of the \emph{spreading code} $\vect{C}_{M}$ define the sub-band $k$ where the symbol $D_n$ shall be transmitted.
+	\begin{equation}
+		k = C_n \qquad , 0 \leq C_n < M
+		\label{eq:ch07:fhss_sub_index}
+	\end{equation}
+	One code sample $C_n$ corresponds to the data symbol $D_n$.
+	\item The length of the \emph{spreading code} is generally not restricted. It can be repeating. But a repeating pattern is not required.
+	\item The rule which generates the \emph{spreading code} (the algorithm) must be known to both the transmitter and receiver.
+\end{itemize}
+
+If $f_c$ is the centre frequency of the carrier, the exact transmission frequency $f_{n}$ of the symbol $S_n$ is:
+\begin{equation}
+	\begin{split}
+		f_n &= \underbrace{f_c - \frac{\Delta f_{FHSS}}{2} + \frac{\Delta f_{sub}}{2}}_{\text{Centre frequency of the 1st sub-band}} + \underbrace{k \cdot \Delta f_{sub}}_{\text{Sub-band centre frequency offset}} \\
+		 &\quad \text{Using \eqref{eq:ch07:fhss_sub_f} and \eqref{eq:ch07:fhss_sub_index}:} \\
+		 &= f_c - \frac{M \cdot \Delta f_{sub}}{2} + \frac{\Delta f_{sub}}{2} + C_n \cdot \Delta f_{sub} \\
+		 &= f_c + \Delta f_{sub} \left(\frac{1-M}{2} + C_n \right)
+	\end{split}
+\end{equation}
+
+\begin{example}{\acs{FHSS}}
+	Let's consider an example symbol sequence $\vect{S}$ with a length of $6$. The signal is spread by $M =4$.
+	
+	The spreading code generated by the algorithm is:
+	\begin{equation}
+		\vect{C}_4 = \left[1,0,3,2,0,1\right]
+	\end{equation}
+	
+	The frequency usage can be plotted over time:
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[x=1cm,y=1cm]
+			\draw[-latex] (0,0) -- (6.5,0) node[below right, align=left]{$t$};
+			\draw[-latex] (0,0) -- (0,0.4) (0,0.6) -- (0,5.5) node[left, align=right]{$f$};
+			\draw (-0.3,0.4) -- (0.3,0.4);
+			\draw (-0.3,0.6) -- (0.3,0.6);
+			
+			\draw (0,3) -- (-0.2,3) node[left,align=right]{$f_c$};
+			\draw[latex-latex] (-1,2) -- node[midway,left,align=center,anchor=south,rotate=90]{$\Delta f_{sub}$} (-1,3);
+			\draw[latex-latex] (-2,1) -- node[midway,left,align=center,anchor=south,rotate=90]{$\Delta f_{FHSS}$} (-2,5);
+			\draw[latex-latex] (1,-0.5) -- node[midway,below,align=center]{$T_{sym}$} (2,-0.5);
+		
+			\foreach \k in {0, 1, 2, 3}{
+				\draw[dotted] (0,{\k+1}) -- (8,{\k+1});
+				\node[right,align=left] at(7,{\k+1.5}) {\small\itshape Sub-band $k = \k$};
+			}
+			\draw[dotted] (0,5) -- (8,5);
+			
+			\foreach \n/\c in {0/1, 1/0, 2/3, 3/2, 4/0, 5/1}{
+				\node[fill=gray!50, draw=black, minimum size=1cm, anchor=south west] at({\n},{\c+1}) {$S_{\n}$};
+			}
+		\end{tikzpicture}
+		\caption[Time-frequency plot of a symbol sequence spread by a \acs{FHSS} with $M = 4$]{Time-frequency plot of a symbol sequence spread by a \acs{FHSS} with $M = 4$. The $M = 4$ sub-bands are distributed around the centre frequency $f_c$. Each sub-band has the bandwidth $\Delta f_{sub}$. The duration of one symbol is $T_{sym}$ (symbol period).}
+		\label{fig:ch07:fhss_ex}
+	\end{figure}
+
+	Each symbol in Figure \ref{fig:ch07:fhss_ex} is modulated (\ac{BPSK}, \ac{QPSK}, \ac{QAM}, ...).
+\end{example}
+
+Time-bandwidth product:
+\begin{itemize}
+	\item The bandwidth of the signal is $\Delta f_{FHSS} = M \Delta f_{sub}$. It is $M$ times the bandwidth of a non-spread symbol.
+	\item The symbol period is not touched and remains $T_{sym}$.
+	\item The sub-band bandwidth is the transmission bandwidth of a non-spread symbol $\Delta f_{sub} = \frac{1}{T_{sym}}$.
+	\item The time-bandwidth product is
+	\begin{equation}
+		T_{sym} \cdot \Delta f_{FHSS} = M \gg 1
+	\end{equation}
+	\item The \ac{FHSS} fulfils the spread spectrum condition.
+\end{itemize}
+
+Benefits:
+\begin{itemize}
+	\item The benefits are the same as for \ac{DSSS} and other \emph{spread spectrum} techniques.
+	\item The noise and disturbance immunity is improved.
+\end{itemize}
+
 Example usage of \ac{FHSS}:
 \begin{itemize}
-	\item \acs{IEEE} 802.15.1 (Bluetooth)
+	\item \acs{IEEE} 802.15.1 (Bluetooth) -- Bluetooth employs a more sophisticated frequency-hopping scheme. The sub-bands are not spaced equally. The sub-band are located in the gaps between the \ac{WLAN} bands in the \SI{2.4}{GHz} band. This reduces the mutual interference of Bluetooth and \ac{WLAN}. Both services can coexists with minimum disturbance.
 \end{itemize}
 
 \subsection{Time-Hopping Spread Spectrum}
+
+A third way of spreading the signal power across the frequency is shortening the symbol width $T_{w}$ while keeping time symbol repetition period $T_{sym}$ constant. This technique is called \index{time-hopping spread spectrum} \textbf{\acf{THSS}}.
+\begin{itemize}
+	\item The transmission bandwidth is increased to $f_{sym} = \frac{1}{T_{w}}$.
+	\item The symbol is now a pulse in the time-domain with a width of $T_{w}$. A rest of the time portion, until the next symbol is transmitted, is zero.
+	\item The pulse/symbol width is related to the symbol period $T_{sym}$.
+	\begin{equation}
+		T_{sym} = M T_{w}
+	\end{equation}
+	\item The time-bandwidth product is
+	\begin{equation}
+		T_{sym} f_{sym} = M T_{w} \frac{1}{T_{w}} = M \gg 1
+	\end{equation}
+	The requirement for \emph{spread spectrum} signals is fulfilled.
+\end{itemize}
+
+The shortened pulse is then shifted in time.
+\begin{itemize}
+	\item The symbol period $T_{sym}$ is divided into $M$ time slots of equal length $Tw = \frac{T_{sym}}{M}$.
+	\item The shortened symbol is shifted to the $n$-th time slot.
+	\item The values of the \emph{spreading code} $\vect{C}_{M}$ define the time slot $m$ (pulse position) where the pulse of the symbol $D_n$ shall be transmitted.
+	\begin{equation}
+		m = C_n \qquad , 0 \leq C_n < M
+		\label{eq:ch07:thss_sub_index}
+	\end{equation}
+	One code sample $C_n$ corresponds to the data symbol $D_n$.
+	\item The length of the \emph{spreading code} is generally not restricted. It can be repeating. But a repeating pattern is not required.
+	\item The rule which generates the \emph{spreading code} (the algorithm) must be known to both the transmitter and receiver.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\node[draw,block](Mod){Modulation\\ (\acs{BPSK}, \acs{QPSK},\\ \acs{QAM}, ...)};
+		\node[draw,block,right=1.5cm of Mod](Shifter){Time-shifter\\ and pulse shaper};
+		\node[draw,block,below=2cm of Shifter](Code){Code\\ generator};
+		
+		\draw[-o] (Mod.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Input symbol\\ sequence $\vect{D}$};
+		\draw (Mod.east) -- (Shifter.west) node[inputarrow,rotate=0]{};
+		\draw (Code.north) -- node[midway,right,align=left]{Spreading\\ code $\vect{C}_{M}$} (Shifter.south) node[inputarrow,rotate=90]{};
+		\draw (Shifter.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Baseband\\ signal};
+	\end{circuitikz}
+	\caption[Simplified block diagram of a \acs{THSS} transmitter]{Simplified block diagram of a \acs{THSS} transmitter. The time-shifter and pulse shaper play a key role. The pulse shaper forms the shortened pulse with a width of $T_{w} = \frac{T_{sym}}{M}$. The time-shifter shifts the pulse to the $C_n$-th time slot.}
+\end{figure}
+
+\todo{THSS example}
 
 Example usage of \ac{THSS}:
 \begin{itemize}
