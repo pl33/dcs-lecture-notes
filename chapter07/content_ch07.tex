@@ -140,7 +140,7 @@ A simple method for increasing the bandwidth systematically re-encoding the symb
 \begin{itemize}
 	\item The input symbols are at the rate of $f_{sym}$.
 	\item The \emph{spreading} is achieved by re-encoding each symbol by $L$ new symbols, called \index{chip} \textbf{chips}.
-	\item After re-encoding, the rate of the new symbols -- the \emph{chips} -- is $f_{chp}$. $f_{chp}$ is the \index{chip rate} \textbf{chip rate}.
+	\item After re-encoding, the rate of the new symbols -- the \emph{chips} -- is $f_{chp}$. $f_{chp}$ is the \index{chip rate} \textbf{chip rate}. \nomenclature[Sf]{$f_{chp}$}{Chip rate}
 	\item $L$ is the \index{spreading factor} \textbf{spreading factor}.
 	\begin{equation}
 		L = \frac{f_{chp}}{f_{sym}}
@@ -181,7 +181,93 @@ A simple method for increasing the bandwidth systematically re-encoding the symb
 	
 	The \emph{chip sequence} $\vect{S}$ is at a rate of \SI{11}{Mchp/s}. In this case, the \emph{chip} have two discrete states $-1$ or $+1$. They can be modulated by a \ac{BPSK} modulator. It baseband is then mixed to the \ac{RF} band of \SI{2.4}{GHz} using an IQ modulator.
 	
-	\vspace{0.5em}
+	\begin{figure}[H]
+		\centering
+		
+		\subfloat[Data symbols]{
+			\begin{tikzpicture}
+				\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+				\draw[-latex] (0,-1.2) -- (0,1.5) node[left, align=right]{$D[n]$};
+				\foreach \y in {-1, 0, +1}{
+					\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+				}
+				\foreach \x/\t in {5.5/1, 11/2}{
+					\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\SI{\t}{\micro{}s}$};
+				}
+			
+				\foreach \x/\n in {0/0, 5.5/1}{
+					\draw[latex-latex] (\x,1.1) -- node[midway,above,align=center]{$D[\n]$} ({\x+5.5},1.1);
+				}
+				
+				\draw[red,thick] (0,-1) -- (5.5,-1) -- (5.5,1) -- (11,1);
+				
+				\draw[latex-latex] (5.5,-1.1) -- node[midway,below,align=center]{$T_{sym} = 1/f_{sym}$} (11,-1.1);
+			\end{tikzpicture}
+		}
+	
+		\subfloat[Code chips]{
+			\begin{tikzpicture}
+				\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+				\draw[-latex] (0,-1.3) -- (0,1.5) node[left, align=right]{$C_l$};
+				\foreach \y in {-1, 0, +1}{
+					\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+				}
+				\foreach \x/\t in {5.5/1, 11/2}{
+					\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\SI{\t}{\micro{}s}$};
+				}
+				
+				\draw[blue,thick] (0,0) \foreach \n in {0, 1} {
+					\foreach \l/\c in {0/+1, 1/+1, 2/+1, 3/-1, 4/-1, 5/-1, 6/+1, 7/-1, 8/-1, 9/+1, 10/-1}{
+						-- ({(\n*5.5)+(\l*0.5)},\c) -- ({(\n*5.5)+(\l*0.5+0.5)},\c)
+					}
+				};
+			
+				%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+				%\draw[dashed] (11,-1.2) -- (11,1.2);
+				\foreach \n in {0, 1} {
+					\foreach \l in {0,1,...,10}{
+						\node[anchor=west,rotate=90,align=center] at({((\n*11+\l)*0.5)+0.25},1.2) {\scriptsize $C_{\l}$};
+						\draw[dashed] ({((\n*11+\l)+1)*0.5},-1.1) -- ({((\n*11+\l)+1)*0.5},1.2);
+					}
+				}
+			
+				\foreach \x/\n in {0/0, 5.5/1}{
+					\draw[latex-latex] (\x,-1.2) -- node[midway,below,align=center]{$\vect{C}_L$} ({\x+5.5},-1.2);
+				}
+			\end{tikzpicture}
+		}
+	
+		\subfloat[Output chips]{
+			\begin{tikzpicture}
+				\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = m \cdot T_{chp}$};
+				\draw[-latex] (0,-1.2) -- (0,1.5) node[left, align=right]{$S[m]$};
+				\foreach \y in {-1, 0, +1}{
+					\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+				}
+				\foreach \x/\t in {5.5/1, 11/2}{
+					\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\SI{\t}{\micro{}s}$};
+				}
+				
+				\draw[olive,thick] (0,0) \foreach \n/\d in {0/-1, 1/+1} {
+					\foreach \l/\c in {0/+1, 1/+1, 2/+1, 3/-1, 4/-1, 5/-1, 6/+1, 7/-1, 8/-1, 9/+1, 10/-1}{
+						-- ({(\n*5.5)+(\l*0.5)},{\c*\d}) -- ({(\n*5.5)+(\l*0.5+0.5)},{\c*\d})
+					}
+				};
+			
+				%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+				%\draw[dashed] (11,-1.2) -- (11,1.2);
+				\foreach \m in {0,1,...,21}{
+					\node[anchor=west,rotate=90,align=center] at({(\m*0.5)+0.25},1.1) {\scriptsize $S[\m]$};
+					\draw[dashed] ({(\m+1)*0.5},-1.2) -- ({(\m+1)*0.5},1.2);
+				}
+			
+				\draw[latex-latex] (6,-1.1) -- node[midway,below,align=center]{$T_{chp} = 1/f_{chp}$} (6.5,-1.1);
+			\end{tikzpicture}
+		}
+	
+		\caption{Data, spreading code and output chips of IEEE 802.11b symbols at a spreading factor of $L = 11$}
+		\label{fig:ch07:wlan_dsss}
+	\end{figure}
 	
 	At a data rate of \SI{11}{Mbit/s}, the data is \underline{not} spread ($L = 1$). The spreading code is $\vect{C}_{1} = \left[+1\right]$. The \emph{chip rate} equals the data bit rate. The \emph{chip rate} remains constant at \SI{11}{Mchp/s}.
 	
@@ -192,19 +278,25 @@ A simple method for increasing the bandwidth systematically re-encoding the symb
 
 The \index{direct-sequence spread spectrum} \textbf{\acf{DSSS}} spreads the symbols by multiplying each data symbol with the whole spreading code.
 \begin{itemize}
-	\item The data symbol sequence is represented by the vector $\vect{D}$. A single data symbol is $D_n$.
+	\item The data symbol sequence is represented by the vector $\vect{D}$. A single data symbol is $D[n]$. \nomenclature[Sd]{$\vect{D}$}{Data symbol sequence}
+	\begin{equation}
+		\vect{D} = \left[D[0], D[1], \dots\right]
+	\end{equation}
 	\item The data comes at the rate of $f_{sym}$.
-	\item The code sequence is represented by the $L$-dimensional vector $\vect{C}_L$. $L$ is the length of the code. A single chip of the code is $C_l$.
+	\item The code sequence is represented by the $L$-dimensional vector $\vect{C}_L$. $L$ is the length of the code. A single chip of the code is $C_l$. \nomenclature[Sd]{$\vect{C}_L$}{Spreading code for direct-sequence spread spectrum}
+	\begin{equation}
+		\vect{C} = \left[C_0, C_1, \dots, C_{L-1}\right]
+	\end{equation}
 	\item The code repeats at $f_{sym}$. The rate of the single code chips is $f_{chp} = L f_{sym}$.
 \end{itemize}
 The process of multiplying each data symbol $D_n$ with the whole code sequence $\left[C_0, C_1, \dots, C_{L-1}\right]$ is represented by the \index{Kronecker product} \textbf{Kronecker product} $\otimes$. \nomenclature[Fk]{$\otimes$}{Kronecker product}
 \begin{equation}
 	\begin{split}
 		\vect{S} &= \vect{D} \otimes \vect{C}_{L} \\
-		S_{n L + l} &= D_n \cdot C_l \qquad \forall 0 \leq l < L
+		S[m] &= S[n L + l] = D[n] \cdot C_l \qquad \forall 0 \leq l < L
 	\end{split}
 \end{equation}
-$\vect{S}$ is the sequence of output chips -- the \emph{spread spectrum signal}. The chips in $\vect{S}$ are at the chip rate of $f_{chp} = M f_{sym}$.
+$\vect{S} = \left[S[0], S[1], \cdots\right]$ is the sequence of output chips -- the \emph{spread spectrum signal}. The chips in $\vect{S}$ are at the chip rate of $f_{chp} = M f_{sym}$. \nomenclature[Ss]{$\vect{S}$}{Chip sequence of a spread spectrum signal}
 
 \begin{figure}[H]
 	\centering
@@ -273,7 +365,7 @@ Another straightforward method spreading a signal across the frequency spectrum 
 		
 		\draw[-o] (Mod.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Input symbol\\ sequence $\vect{D}$};
 		\draw (Mod.east) -- node[midway,above,align=center]{Baseband\\ signal} (Mix.west) node[inputarrow,rotate=0]{};
-		\draw (Code.east) -- node[midway,below,align=center]{Spreading\\ code $\vect{C}_{M}$} (LO.west) node[inputarrow,rotate=0]{};
+		\draw (Code.east) -- node[midway,below,align=center]{Spreading\\ code $C_M[n]$} (LO.west) node[inputarrow,rotate=0]{};
 		\draw (LO.north) -- node[midway,right,align=left]{Carrier} (Mix.south) node[inputarrow,rotate=90]{};
 		\draw (Mix.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{\acs{RF}\\ signal};
 	\end{circuitikz}
@@ -282,12 +374,12 @@ Another straightforward method spreading a signal across the frequency spectrum 
 
 Following can be said about the \emph{spreading code}:
 \begin{itemize}
-	\item The values of the \emph{spreading code} $\vect{C}_{M}$ define the sub-band $k$ where the symbol $D_n$ shall be transmitted.
+	\item The values of the \emph{spreading code} $C_M[n]$ define the sub-band $k$ where the symbol $D_n$ shall be transmitted. \nomenclature[Sd]{$\vect{C}_;$}{Spreading code for time-hopping or frequency-hopping spread spectrum}
 	\begin{equation}
-		k = C_n \qquad , 0 \leq C_n < M
+		k = C_M[n] \qquad , 0 \leq C_M[n] < M
 		\label{eq:ch07:fhss_sub_index}
 	\end{equation}
-	One code sample $C_n$ corresponds to the data symbol $D_n$.
+	One code sample $C_M[n]$ corresponds to the data symbol $D[n]$.
 	\item The length of the \emph{spreading code} is generally not restricted. It can be repeating. But a repeating pattern is not required.
 	\item The rule which generates the \emph{spreading code} (the algorithm) must be known to both the transmitter and receiver.
 \end{itemize}
@@ -297,24 +389,24 @@ If $f_c$ is the centre frequency of the carrier, the exact transmission frequenc
 	\begin{split}
 		f_n &= \underbrace{f_c - \frac{\Delta f_{FHSS}}{2} + \frac{\Delta f_{sub}}{2}}_{\text{Centre frequency of the 1st sub-band}} + \underbrace{k \cdot \Delta f_{sub}}_{\text{Sub-band centre frequency offset}} \\
 		 &\quad \text{Using \eqref{eq:ch07:fhss_sub_f} and \eqref{eq:ch07:fhss_sub_index}:} \\
-		 &= f_c - \frac{M \cdot \Delta f_{sub}}{2} + \frac{\Delta f_{sub}}{2} + C_n \cdot \Delta f_{sub} \\
-		 &= f_c + \Delta f_{sub} \left(\frac{1-M}{2} + C_n \right)
+		 &= f_c - \frac{M \cdot \Delta f_{sub}}{2} + \frac{\Delta f_{sub}}{2} + C_M[n] \cdot \Delta f_{sub} \\
+		 &= f_c + \Delta f_{sub} \left(\frac{1-M}{2} + C_M[n] \right)
 	\end{split}
 \end{equation}
 
 \begin{example}{\acs{FHSS}}
-	Let's consider an example symbol sequence $\vect{S}$ with a length of $6$. The signal is spread by $M =4$.
+	Let's consider an example symbol sequence $\vect{D}$ with a length of $6$. The signal is spread by $M =4$.
 	
 	The spreading code generated by the algorithm is:
 	\begin{equation}
-		\vect{C}_4 = \left[1,0,3,2,0,1\right]
+		\vect{C}_4[n] = \left[C_4[0], C_4[1], \dots\right] = \left[1,0,3,2,0,1,\dots\right]
 	\end{equation}
 	
 	The frequency usage can be plotted over time:
 	\begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[x=1cm,y=1cm]
-			\draw[-latex] (0,0) -- (6.5,0) node[below right, align=left]{$t$};
+			\draw[-latex] (0,0) -- (6.5,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
 			\draw[-latex] (0,0) -- (0,0.4) (0,0.6) -- (0,5.5) node[left, align=right]{$f$};
 			\draw (-0.3,0.4) -- (0.3,0.4);
 			\draw (-0.3,0.6) -- (0.3,0.6);
@@ -322,7 +414,7 @@ If $f_c$ is the centre frequency of the carrier, the exact transmission frequenc
 			\draw (0,3) -- (-0.2,3) node[left,align=right]{$f_c$};
 			\draw[latex-latex] (-1,2) -- node[midway,left,align=center,anchor=south,rotate=90]{$\Delta f_{sub}$} (-1,3);
 			\draw[latex-latex] (-2,1) -- node[midway,left,align=center,anchor=south,rotate=90]{$\Delta f_{FHSS}$} (-2,5);
-			\draw[latex-latex] (1,-0.5) -- node[midway,below,align=center]{$T_{sym}$} (2,-0.5);
+			\draw[latex-latex] (1,-0.5) -- node[midway,below,align=center]{$T_{sym} = 1/f_{sym}$} (2,-0.5);
 		
 			\foreach \k in {0, 1, 2, 3}{
 				\draw[dotted] (0,{\k+1}) -- (8,{\k+1});
@@ -331,7 +423,7 @@ If $f_c$ is the centre frequency of the carrier, the exact transmission frequenc
 			\draw[dotted] (0,5) -- (8,5);
 			
 			\foreach \n/\c in {0/1, 1/0, 2/3, 3/2, 4/0, 5/1}{
-				\node[fill=gray!50, draw=black, minimum size=1cm, anchor=south west] at({\n},{\c+1}) {$S_{\n}$};
+				\node[fill=gray!50, draw=black, minimum size=1cm, anchor=south west] at({\n},{\c+1}) {\footnotesize $D[\n]$};
 			}
 		\end{tikzpicture}
 		\caption[Time-frequency plot of a symbol sequence spread by a \acs{FHSS} with $M = 4$]{Time-frequency plot of a symbol sequence spread by a \acs{FHSS} with $M = 4$. The $M = 4$ sub-bands are distributed around the centre frequency $f_c$. Each sub-band has the bandwidth $\Delta f_{sub}$. The duration of one symbol is $T_{sym}$ (symbol period).}
@@ -366,31 +458,31 @@ Example usage of \ac{FHSS}:
 
 \subsection{Time-Hopping Spread Spectrum}
 
-A third way of spreading the signal power across the frequency is shortening the symbol width $T_{w}$ while keeping time symbol repetition period $T_{sym}$ constant. This technique is called \index{time-hopping spread spectrum} \textbf{\acf{THSS}}.
+A third way of spreading the signal power across the frequency is shortening the symbol width $T_{chp}$ while keeping time symbol repetition period $T_{sym}$ constant. This technique is called \index{time-hopping spread spectrum} \textbf{\acf{THSS}}.
 \begin{itemize}
-	\item The transmission bandwidth is increased to $f_{sym} = \frac{1}{T_{w}}$.
-	\item The symbol is now a pulse in the time-domain with a width of $T_{w}$. A rest of the time portion, until the next symbol is transmitted, is zero.
+	\item The transmission bandwidth is increased to $f_{sym} = \frac{1}{T_{chp}}$.
+	\item The symbol is now a pulse -- called \index{chip} \textbf{chip} -- in the time-domain with a width of $T_{chp}$. A rest of the time portion, until the next symbol is transmitted, is zero.
 	\item The pulse/symbol width is related to the symbol period $T_{sym}$.
 	\begin{equation}
-		T_{sym} = M T_{w}
+		T_{sym} = M \cdot T_{chp}
 	\end{equation}
 	\item The time-bandwidth product is
 	\begin{equation}
-		T_{sym} f_{sym} = M T_{w} \frac{1}{T_{w}} = M \gg 1
+		T_{sym} f_{sym} = M T_{chp} \frac{1}{T_{chp}} = M \gg 1
 	\end{equation}
 	The requirement for \emph{spread spectrum} signals is fulfilled.
 \end{itemize}
 
 The shortened pulse is then shifted in time.
 \begin{itemize}
-	\item The symbol period $T_{sym}$ is divided into $M$ time slots of equal length $Tw = \frac{T_{sym}}{M}$.
+	\item The symbol period $T_{sym}$ is divided into $M$ time slots of equal length $T_{chp} = \frac{T_{sym}}{M}$.
 	\item The shortened symbol is shifted to the $n$-th time slot.
-	\item The values of the \emph{spreading code} $\vect{C}_{M}$ define the time slot $m$ (pulse position) where the pulse of the symbol $D_n$ shall be transmitted.
+	\item The values of the \emph{spreading code} $C_M[n]$ define the time slot $m$ (pulse position) where the pulse of the symbol $D_n$ shall be transmitted.
 	\begin{equation}
-		m = C_n \qquad , 0 \leq C_n < M
+		m = C_M[n] \qquad , 0 \leq C_M[n] < M
 		\label{eq:ch07:thss_sub_index}
 	\end{equation}
-	One code sample $C_n$ corresponds to the data symbol $D_n$.
+	One code sample $C_M[n]$ corresponds to the data symbol $D[n]$.
 	\item The length of the \emph{spreading code} is generally not restricted. It can be repeating. But a repeating pattern is not required.
 	\item The rule which generates the \emph{spreading code} (the algorithm) must be known to both the transmitter and receiver.
 \end{itemize}
@@ -404,13 +496,84 @@ The shortened pulse is then shifted in time.
 		
 		\draw[-o] (Mod.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Input symbol\\ sequence $\vect{D}$};
 		\draw (Mod.east) -- (Shifter.west) node[inputarrow,rotate=0]{};
-		\draw (Code.north) -- node[midway,right,align=left]{Spreading\\ code $\vect{C}_{M}$} (Shifter.south) node[inputarrow,rotate=90]{};
-		\draw (Shifter.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Baseband\\ signal};
+		\draw (Code.north) -- node[midway,right,align=left]{Spreading\\ code $C_M[n]$} (Shifter.south) node[inputarrow,rotate=90]{};
+		\draw (Shifter.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Baseband signal\\ (chip sequence $\vect{S}$)};
 	\end{circuitikz}
-	\caption[Simplified block diagram of a \acs{THSS} transmitter]{Simplified block diagram of a \acs{THSS} transmitter. The time-shifter and pulse shaper play a key role. The pulse shaper forms the shortened pulse with a width of $T_{w} = \frac{T_{sym}}{M}$. The time-shifter shifts the pulse to the $C_n$-th time slot.}
+	\caption[Simplified block diagram of a \acs{THSS} transmitter]{Simplified block diagram of a \acs{THSS} transmitter. The time-shifter and pulse shaper play a key role. The pulse shaper forms the shortened pulse with a width of $T_{chp} = \frac{T_{sym}}{M}$. The time-shifter shifts the pulse to the $C_n$-th time slot.}
 \end{figure}
 
-\todo{THSS example}
+The output chip sequence $\vect{S} = \left[S[0], S[1], \dots\right]$ is at the rate $f_{chp} = M \cdot f_{sym}$. It is defined by:
+\begin{equation}
+	S[m] = S[n M + l] = \begin{cases}
+		D[n] &\quad \text{if } l = C_M[n], \\
+		0 &\quad \text{if } l \neq C_M[n].
+	\end{cases}
+\end{equation}
+
+\begin{example}{\acs{THSS}}
+	A data symbol sequence is spread by the spreading code:
+	\begin{equation}
+		\vect{C}_4[n] = \left[C_4[0], C_4[1], \dots\right] = \left[1,3,\dots\right]
+	\end{equation}
+	
+	\begin{figure}[H]
+		\centering
+		
+		\subfloat[Data symbols]{
+			\begin{tikzpicture}[x=1cm,y=1cm]
+				\draw[-latex] (0,0) -- (9,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+				\draw[-latex] (0,0) -- (0,2.5) node[left, align=right]{$D[n]$};
+				\foreach \x/\t in {4/1, 8/2}{
+					\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+				}
+			
+				\foreach \n in {0, 1}{
+					\node[fill=gray!50, draw=black, minimum width=4cm, minimum height=2cm, anchor=south west] at({\n*4},0) {$D[\n]$};
+				}
+			\end{tikzpicture}
+		}
+	
+		\subfloat[Spreading code]{
+			\begin{tikzpicture}
+				\draw[-latex] (0,0) -- (9,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+				\draw[-latex] (0,0) -- (0,2.5) node[left, align=right]{$C_4[n]$};
+				\foreach \x/\t in {4/1, 8/2}{
+					\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+				}
+				
+				\foreach \n/\c in {0/1, 1/3}{
+					\node[fill=gray!50, draw=black, minimum width=4cm, minimum height=2cm, anchor=south west] at({\n*4},0) {$C_4[\n] = \c$};
+				}
+			\end{tikzpicture}
+		}
+		
+		\subfloat[Output chips]{
+			\begin{tikzpicture}
+				\draw[-latex] (0,0) -- (9,0) node[below right, align=left]{$t = m \cdot T_{chp}$};
+				\draw[-latex] (0,0) -- (0,2.5) node[left, align=right]{$S[m]$};
+				\foreach \x/\t in {4/1, 8/2}{
+					\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+				}
+			
+				\foreach \n in {0, 1}{
+					\foreach \m in {1, 2, 3, 4}{
+						\draw[dashed] ({(\n*4)+(\m)},0) -- ({(\n*4)+(\m)},2.5);
+					}
+				}
+			
+				\foreach \n/\c in {0/1, 1/3}{
+					\node[fill=gray!50, draw=black, minimum width=1cm, minimum height=2cm, anchor=south west] at({(\n*4)+(\c)},0) {\footnotesize $D[\n]$};
+				}
+			
+				\draw[latex-latex] (1,2.4) -- node[midway,above,align=center]{$T_{chp} = 1/f_{chp}$} (2,2.4);
+			\end{tikzpicture}
+		}
+		
+		\caption[\ac{THSS} signal]{\ac{THSS} signal. The symbol is shortened to a chip whose position is chosen by the spreading code.}
+	\end{figure}
+\end{example}
+
+Benefits are the same as in other spread spectrum techniques. The noise immunity is improved.
 
 Example usage of \ac{THSS}:
 \begin{itemize}
@@ -419,13 +582,541 @@ Example usage of \ac{THSS}:
 
 \subsection{Symbol Reconstruction}
 
-\todo{Processing Gain}
+\index{despreading} \textbf{Despreading} reconstructs the symbol sequence from the received \emph{spread spectrum} signal.
 
-\todo{Reception under noise}
+A despreader uses a cross-correlator to detect the spread symbols in the received signal. Remember that this is one of the purposes of cross-correlation.
+\begin{itemize}
+	\item The received signal is correlated with the \emph{spreading code}.
+	\item The symbols spread with the same \emph{spreading code} can thereby be detected in the received signal.
+\end{itemize}
 
-\todo{Cross-correlation}
+\begin{remark}
+	You may wonder why the autocorrelation is not used. Both receiver and transmitter use the same \emph{spreading code}. In deed, this a common misunderstanding. The received signal is different from the code and from the transmitted signal. The received signal contains noise and is subject to the transfer function of the transmission channel.
+\end{remark}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.7}
+		\begin{circuitikz}
+			\node[draw,block](Demod){Demodulation\\ (\acs{BPSK}, \acs{QPSK},\\ \acs{QAM}, ...)};
+			\node[draw,block,right=3cm of Demod](Corr){Cross corelation};
+			\node[draw,block,below=1.5cm of Corr](Code){Code\\ generator};
+			\node[draw,block,right=1.5cm of Corr](Det){Detector};
+			
+			\draw[-o] (Demod.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Received signal $r(t)$};
+			\draw (Code.north) -- node[midway,right,align=left]{Spreading\\ code $\vect{C}$} (Corr.south) node[inputarrow,rotate=90]{};
+			\draw (Demod.east) -- node[midway,above,align=center]{Received chip\\ sequence $\vect{R}$} (Corr.west) node[inputarrow]{};
+			\draw (Corr.east) -- node[midway,above,align=center]{$\mathrm{R}_{RC}$} (Det.west) node[inputarrow]{};
+			\draw (Det.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Data};
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{Abstract despreader using a cross-correlator}
+	\label{fig:ch07:abstract_spreader}
+\end{figure}
+
+\subsubsection{Despreading of DSSS Signals}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.7}
+		\begin{circuitikz}
+			\node[draw,block](Demod){Demodulation\\ (\acs{BPSK}, \acs{QPSK},\\ \acs{QAM}, ...)};
+			\node[mixer,right=3cm of Demod](Mul){};
+			\node[draw,block,right=1cm of Mul](Acc){Accumulator};
+			\node[draw,block,below=2cm of Mul](Code){Code\\ generator};
+			\node[draw,block,right=1cm of Acc](Det){Detector};
+			
+			\node[above=3mm of Mul,align=center]{Multiplier as\\ despreader};
+			
+			\draw[-o] (Demod.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Received signal $r(t)$};
+			\draw (Code.north) -- node[midway,right,align=left]{Spreading\\ code $\vect{C}_L$} (Mul.south) node[inputarrow,rotate=90]{};
+			\draw (Demod.east) -- node[midway,below,align=center]{Received chips\\ $\vect{R}$} (Mul.west) node[inputarrow]{};
+			\draw (Mul.east) -- (Acc.west) node[inputarrow]{};
+			\draw (Acc.east) -- (Det.west) node[inputarrow]{};
+			\draw (Det.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Data};
+			
+			\draw[dashed] ([shift={(5mm,2cm)}]Acc.north east) node[anchor=south east,align=right]{Cross-correlation} -- ++(0,-3.5cm) -- ++(-7cm,0) -- ++(0,3.5cm) -- cycle;
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{Simplified \acs{DSSS} despreader}
+	\label{fig:ch07:abstract_dsss_spreader}
+\end{figure}
+
+\begin{itemize}
+	\item The spreading, which was a multiplication of the data with the \emph{spreading code}, is reversed by multiplying the received chips again with the \emph{spreading code}.
+	\item The accumulation then sums up the correlated chips.
+	\item When the full code length has been accumulated:
+	\begin{itemize}
+		\item The detector decides which data symbol is received based on the correlator output.
+		\item The correlator is reset in order to receive the next symbol.
+	\end{itemize}
+\end{itemize}
+
+Let's consider three situations based on the IEEE 802.11b examples (Figure \ref{fig:ch07:wlan_dsss}):
+\begin{itemize}
+	\item Reception of a noise-free signal
+	\item Reception of pure noise
+	\item Reception of a noisy signal
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Received chips]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = m \cdot T_{chp}$};
+		\draw[-latex] (0,-1.2) -- (0,1.5) node[left, align=right]{$R[m]$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[olive,thick] (0,0) \foreach \n/\d in {0/-1, 1/+1} {
+			\foreach \l/\c in {0/+1, 1/+1, 2/+1, 3/-1, 4/-1, 5/-1, 6/+1, 7/-1, 8/-1, 9/+1, 10/-1}{
+				-- ({(\n*5.5)+(\l*0.5)},{\c*\d}) -- ({(\n*5.5)+(\l*0.5+0.5)},{\c*\d})
+			}
+		};
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \m in {0,1,...,21}{
+			\node[anchor=west,rotate=90,align=center] at({(\m*0.5)+0.25},1.1) {\scriptsize $R[\m]$};
+			\draw[dashed] ({(\m+1)*0.5},-1.2) -- ({(\m+1)*0.5},1.2);
+		}
+		
+		\draw[latex-latex] (6,-1.1) -- node[midway,below,align=center]{$T_{chp} = 1/f_{chp}$} (6.5,-1.1);
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Code chips]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.3) -- (0,1.5) node[left, align=right]{$C_l$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[blue,thick] (0,0) \foreach \n in {0, 1} {
+			\foreach \l/\c in {0/+1, 1/+1, 2/+1, 3/-1, 4/-1, 5/-1, 6/+1, 7/-1, 8/-1, 9/+1, 10/-1}{
+				-- ({(\n*5.5)+(\l*0.5)},\c) -- ({(\n*5.5)+(\l*0.5+0.5)},\c)
+			}
+		};
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \n in {0, 1} {
+			\foreach \l in {0,1,...,10}{
+				\node[anchor=west,rotate=90,align=center] at({((\n*11+\l)*0.5)+0.25},1.2) {\scriptsize $C_{\l}$};
+				\draw[dashed] ({((\n*11+\l)+1)*0.5},-1.1) -- ({((\n*11+\l)+1)*0.5},1.2);
+			}
+		}
+		
+		\foreach \x/\n in {0/0, 5.5/1}{
+			\draw[latex-latex] (\x,-1.2) -- node[midway,below,align=center]{$\vect{C}_L$} ({\x+5.5},-1.2);
+		}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Accumulation of cross-correlation. The grey circles are the sampling (detection) and reset points.]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.3) -- (0,1.5) node[left, align=right]{$\sum \mathrm{R}_{RC}$};
+		\foreach \y/\v in {-1/-11, 0, +1/+11}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\v$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[green,thick] (0,0) -- ++(5.5,-1);
+		\draw[fill=gray!50,draw] (5.5,-1) ++(0:0.1) arc(0:360:0.1);
+		\draw[green,thick] (5.5,0) -- ++(5.5,1);
+		\draw[fill=gray!50,draw] (11,1) ++(0:0.1) arc(0:360:0.1);
+		
+		\foreach \y in {-0.5,0.5}{
+			\draw[orange] (0,\y) -- (11,\y) node[anchor=south east,align=right]{Data detection threshold};
+		}
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \n in {0, 1} {
+			\foreach \l in {0,1,...,10}{
+				%\node[anchor=west,rotate=90,align=center] at({((\n*11+\l)*0.5)+0.25},1.2) {\scriptsize $C_{\l}$};
+				\draw[dashed] ({((\n*11+\l)+1)*0.5},-1.1) -- ({((\n*11+\l)+1)*0.5},1.2);
+			}
+		}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Data symbols]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.2) -- (0,1.5) node[left, align=right]{$D[n]$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\foreach \x/\n in {0/0, 5.5/1}{
+			\draw[latex-latex] (\x,1.1) -- node[midway,above,align=center]{$D[\n]$} ({\x+5.5},1.1);
+		}
+		
+		\draw[red,thick] (0,-1) -- (5.5,-1) -- (5.5,1) -- (11,1);
+		\end{tikzpicture}
+	}
+	
+	\caption{Despreading of a noise-free \acs{DSSS} signal}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Received chips]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = m \cdot T_{chp}$};
+		\draw[-latex] (0,-1.2) -- (0,1.5) node[left, align=right]{$R[m]$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[olive,thick] (0,0) \foreach \m/\r in {0/-1, 1/-1, 2/+1, 3/+1, 4/-1, 5/-1, 6/-1, 7/+1, 8/+1, 9/+1, 10/+1, 11/-1, 12/+1, 13/+1, 14/+1, 15/+1, 16/-1, 17/-1, 18/-1, 19/+1, 20/+1, 21/-1}{
+				-- ({(\m*0.5)},{\r}) -- ({(\m*0.5+0.5)},{\r})
+		};
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \m in {0,1,...,21}{
+			\node[anchor=west,rotate=90,align=center] at({(\m*0.5)+0.25},1.1) {\scriptsize $R[\m]$};
+			\draw[dashed] ({(\m+1)*0.5},-1.2) -- ({(\m+1)*0.5},1.2);
+		}
+		
+		\draw[latex-latex] (6,-1.1) -- node[midway,below,align=center]{$T_{chp} = 1/f_{chp}$} (6.5,-1.1);
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Code chips]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.3) -- (0,1.5) node[left, align=right]{$C_l$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[blue,thick] (0,0) \foreach \n in {0, 1} {
+			\foreach \l/\c in {0/+1, 1/+1, 2/+1, 3/-1, 4/-1, 5/-1, 6/+1, 7/-1, 8/-1, 9/+1, 10/-1}{
+				-- ({(\n*5.5)+(\l*0.5)},\c) -- ({(\n*5.5)+(\l*0.5+0.5)},\c)
+			}
+		};
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \n in {0, 1} {
+			\foreach \l in {0,1,...,10}{
+				\node[anchor=west,rotate=90,align=center] at({((\n*11+\l)*0.5)+0.25},1.2) {\scriptsize $C_{\l}$};
+				\draw[dashed] ({((\n*11+\l)+1)*0.5},-1.1) -- ({((\n*11+\l)+1)*0.5},1.2);
+			}
+		}
+		
+		\foreach \x/\n in {0/0, 5.5/1}{
+			\draw[latex-latex] (\x,-1.2) -- node[midway,below,align=center]{$\vect{C}_L$} ({\x+5.5},-1.2);
+		}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Accumulation of cross-correlation. The grey circles are the sampling (detection) and reset points.]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.3) -- (0,1.5) node[left, align=right]{$\sum \mathrm{R}_{RC}$};
+		\foreach \y/\v in {-1/-11, 0, +1/+11}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\v$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[green,thick] (0,0) \foreach \v in {-1,-1,+1,-1,+1,+1,+1,-1,-1,+1,-1}{ -- ++(0.5,{\v/11})};
+		\draw[fill=gray!50,draw] (5.5,{-1/11}) ++(0:0.1) arc(0:360:0.1);
+		\draw[green,thick] (5.5,0) \foreach \v in {-1,+1,+1,-1,-1,+1,-1,+1,-1,+1,+1}{ -- ++(0.5,{\v/11})};
+		\draw[fill=gray!50,draw] (11,{+1/11}) ++(0:0.1) arc(0:360:0.1);
+		
+		\foreach \y in {-0.5,0.5}{
+			\draw[orange] (0,\y) -- (11,\y) node[anchor=south east,align=right]{Data detection threshold};
+		}
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \n in {0, 1} {
+			\foreach \l in {0,1,...,10}{
+				%\node[anchor=west,rotate=90,align=center] at({((\n*11+\l)*0.5)+0.25},1.2) {\scriptsize $C_{\l}$};
+				\draw[dashed] ({((\n*11+\l)+1)*0.5},-1.1) -- ({((\n*11+\l)+1)*0.5},1.2);
+			}
+		}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Data symbols]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.2) -- (0,1.5) node[left, align=right]{$D[n]$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[red,thick] (0,0) -- node[midway,above,align=center]{No data} (11,0);
+		\end{tikzpicture}
+	}
+	
+	\caption{\acs{DSSS} despreading of pure noise}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[Received chips]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = m \cdot T_{chp}$};
+		\draw[-latex] (0,-1.2) -- (0,1.5) node[left, align=right]{$R[m]$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+	
+		\draw[olive,thick] (0,0) \foreach \m/\r in {0/-1, 1/-1, 2/-1, 3/-1, 4/+1, 5/+1, 6/-1, 7/+1, 8/+1, 9/+1, 10/+1, 11/+1, 12/+1, 13/+1, 14/-1, 15/+1, 16/-1, 17/-1, 18/-1, 19/-1, 20/+1, 21/-1}{
+			-- ({(\m*0.5)},{\r}) -- ({(\m*0.5+0.5)},{\r})
+		};
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \m in {0,1,...,21}{
+			\node[anchor=west,rotate=90,align=center] at({(\m*0.5)+0.25},1.1) {\scriptsize $R[\m]$};
+			\draw[dashed] ({(\m+1)*0.5},-1.2) -- ({(\m+1)*0.5},1.2);
+		}
+		
+		\draw[latex-latex] (6,-1.1) -- node[midway,below,align=center]{$T_{chp} = 1/f_{chp}$} (6.5,-1.1);
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Code chips]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.3) -- (0,1.5) node[left, align=right]{$C_l$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[blue,thick] (0,0) \foreach \n in {0, 1} {
+			\foreach \l/\c in {0/+1, 1/+1, 2/+1, 3/-1, 4/-1, 5/-1, 6/+1, 7/-1, 8/-1, 9/+1, 10/-1}{
+				-- ({(\n*5.5)+(\l*0.5)},\c) -- ({(\n*5.5)+(\l*0.5+0.5)},\c)
+			}
+		};
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \n in {0, 1} {
+			\foreach \l in {0,1,...,10}{
+				\node[anchor=west,rotate=90,align=center] at({((\n*11+\l)*0.5)+0.25},1.2) {\scriptsize $C_{\l}$};
+				\draw[dashed] ({((\n*11+\l)+1)*0.5},-1.1) -- ({((\n*11+\l)+1)*0.5},1.2);
+			}
+		}
+		
+		\foreach \x/\n in {0/0, 5.5/1}{
+			\draw[latex-latex] (\x,-1.2) -- node[midway,below,align=center]{$\vect{C}_L$} ({\x+5.5},-1.2);
+		}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Accumulation of cross-correlation. The grey circles are the sampling (detection) and reset points.]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.3) -- (0,1.5) node[left, align=right]{$\sum \mathrm{R}_{RC}$};
+		\foreach \y/\v in {-1/-11, 0, +1/+11}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\v$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\draw[green,thick] (0,0) \foreach \v in {-1,-1,-1,+1,-1,-1,-1,-1,-1,+1,-1}{ -- ++(0.5,{\v/11})};
+		\draw[fill=gray!50,draw] (5.5,{-9/11}) ++(0:0.1) arc(0:360:0.1);
+		\draw[green,thick] (5.5,0) \foreach \v in {+1,+1,+1,+1,-1,+1,-1,+1,+1,+1,+1}{ -- ++(0.5,{\v/11})};
+		\draw[fill=gray!50,draw] (11,{+9/11}) ++(0:0.1) arc(0:360:0.1);
+		
+		\foreach \y in {-0.5,0.5}{
+			\draw[orange] (0,\y) -- (11,\y) node[anchor=south east,align=right]{Data detection threshold};
+		}
+		
+		%\draw[dashed] (5.5,-1.2) -- (5.5,1.2);
+		%\draw[dashed] (11,-1.2) -- (11,1.2);
+		\foreach \n in {0, 1} {
+			\foreach \l in {0,1,...,10}{
+				%\node[anchor=west,rotate=90,align=center] at({((\n*11+\l)*0.5)+0.25},1.2) {\scriptsize $C_{\l}$};
+				\draw[dashed] ({((\n*11+\l)+1)*0.5},-1.1) -- ({((\n*11+\l)+1)*0.5},1.2);
+			}
+		}
+		\end{tikzpicture}
+	}
+	
+	\subfloat[Data symbols]{
+		\begin{tikzpicture}
+		\draw[-latex] (0,0) -- (12,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,-1.2) -- (0,1.5) node[left, align=right]{$D[n]$};
+		\foreach \y in {-1, 0, +1}{
+			\draw (0,\y) -- (-0.2,\y) node[left,align=right]{$\y$};
+		}
+		\foreach \x/\t in {5.5/1, 11/2}{
+			\draw (\x,0) -- (\x,-0.2) node[below,align=center]{$\t T_{sym}$};
+		}
+		
+		\foreach \x/\n in {0/0, 5.5/1}{
+			\draw[latex-latex] (\x,1.1) -- node[midway,above,align=center]{$D[\n]$} ({\x+5.5},1.1);
+		}
+		
+		\draw[red,thick] (0,-1) -- (5.5,-1) -- (5.5,1) -- (11,1);
+		\end{tikzpicture}
+	}
+	
+	\caption[Despreading of a noisy \acs{DSSS} signal]{Despreading of a noisy \acs{DSSS} signal. The noise shows up as flipped chips in the received chip sequence.}
+\end{figure}
+
+
+\subsubsection{Processing Gain}
+
+In fact, the \ac{DSSS} despreading consists of
+\begin{itemize}
+	\item \textbf{Down-sampling}: The received and cross-correlated chips are down-sampled by $L$, the length of the \emph{spreading code} length.
+	\item \textbf{Filtering}: The accumulator is in fact a \ac{FIR} low-pass filter.
+\end{itemize}
+
+The \emph{down-sampling} provides a \index{processing gain} \textbf{processing gain} of $L$.
+\begin{itemize}
+	\item The processing gain improves the \ac{SNR} by $+ \SI{10}{dB} \cdot \log_{10} \left(L\right)$.
+	\item The spread spectrum signal is more immune against noise.
+\end{itemize}
+
+\begin{fact}
+	Despreading of spread spectrum signals provides a processing gain.
+\end{fact}
+
+The processing gain is not only limited to wide-band (\ac{AWGN}, thermal, quantization, etc. noise). Narrow-band disturbances are suppressed as long as they are uncorrelated with the \emph{spreading code}. The cross-correlation has only a peak when the code matches and will be low if the code does not match. So, all uncorrelated superimposed signals can be removed. This is the strength of spread spectrum techniques.
+
+\begin{figure}[H]
+	\centering
+	
+	\subfloat[\acs{PSD} of the received signal \textbf{before} despreading]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+					height={0.15\textheight},
+					width=0.8\linewidth,
+					scale only axis,
+					xlabel={$\omega$},
+					ylabel={$|\mathrm{S}_{RR}|$},
+					%grid style={line width=.6pt, color=lightgray},
+					%grid=both,
+					grid=none,
+					legend pos=north east,
+					axis y line=middle,
+					axis x line=middle,
+					every axis x label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=north,
+					},
+					every axis y label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=east,
+					},
+					xmin=0,
+					xmax=10.5,
+					ymin=0,
+					ymax=1.2,
+					xtick={0},
+					xticklabels={0},
+					ytick={0},
+					axis x discontinuity=parallel,
+				]
+					\addplot[red, smooth] coordinates {(2,0) (2.5,0.01) (3,0.05) (5,0.05) (7,0.05) (7.5,0.01) (8,0)};
+					\addlegendentry{Spread spectrum signal};
+					\addplot[blue, smooth] coordinates {(4.6,0) (4.7,0.02) (4.8,0.2) (4.9,0.71) (5,1) (5.1,0.71) (5.2,0.2) (5.3,0.02) (5.4,0)};
+					\addlegendentry{Narrow-band noise};
+					\addplot[green, smooth] coordinates {(0,0.03) (10,0.03)};
+					\addlegendentry{Wide-band noise};
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\subfloat[\acs{PSD} of the received signal \textbf{after} despreading]{
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.15\textheight},
+				width=0.8\linewidth,
+				scale only axis,
+				xlabel={$\omega$},
+				ylabel={$|\mathrm{S}_{\tilde{R}\tilde{R}}|$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=10.5,
+				ymin=0,
+				ymax=1.2,
+				xtick={0},
+				xticklabels={0},
+				ytick={0},
+				axis x discontinuity=parallel,
+			]
+				\addplot[red, smooth] coordinates {(4.6,0) (4.7,0.02) (4.8,0.2) (4.9,0.71) (5,1) (5.1,0.71) (5.2,0.2) (5.3,0.02) (5.4,0)};
+				\addlegendentry{Spread spectrum signal};
+				\addplot[blue, smooth] coordinates {(2,0) (2.5,0.01) (3,0.05) (5,0.05) (7,0.05) (7.5,0.01) (8,0)};
+				\addlegendentry{Narrow-band noise};
+				\addplot[green, smooth] coordinates {(0,0.03) (10,0.03)};
+				\addlegendentry{Wide-band noise};
+				
+				\draw[latex-latex] (axis cs:4,0.05) -- node[midway,left,align=right]{Improved \acs{SNR}} (axis cs:4,1);
+			\end{axis}
+		\end{tikzpicture}
+	}
+
+	\caption[Processing gain of despreading]{Processing gain of despreading. The received signal is composed of the spread spectrum signal and two noise components (narrow-band and wide-band noise). After despreading the spread spectrum signal is reconstructed while both (uncorrelated) narrow-band and wide-band noise are attenuated. Despreading spreads the \acs{PSD} of the narrow-band noise, while the \ac{PSD} of the wide-band noise is not changed. The narrow-band noise does not interfere, even if it at the centre frequency of the spread spectrum signal like in this case.}
+\end{figure}
 
 \section{Multi-carrier Modulation}
+
+\subsection{Inter-Carrier Interference}
+
+\subsection{Orthogonal Frequency-Division Multiplex}
 
 \todo{OFDM}
 
