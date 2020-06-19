@@ -343,7 +343,7 @@ Example usage of \ac{DSSS}:
 
 Another straightforward method spreading a signal across the frequency spectrum is transmitting each symbol at another frequency. This technique is called \index{frequency-hopping spread spectrum} \textbf{\acf{FHSS}}.
 \begin{itemize}
-	\item The frequency band $\Delta f_{FHSS}$ is divided into $M$ \index{sub-band} \textbf{sub-bands} with a bandwidth of $\Delta f_{sub}$.
+	\item The frequency band $\Delta f_{FHSS}$ is divided into $M$ \index{sub-band} \textbf{sub-bands} with a bandwidth of $\Delta f_{sub}$. \nomenclature[Sf]{$\Delta f_{sub}$}{Bandwidth of a sub-band}
 	\begin{equation}
 		\Delta f_{sub} = \frac{\Delta f_{FHSS}}{M}
 		\label{eq:ch07:fhss_sub_f}
@@ -1114,11 +1114,204 @@ The processing gain is not only limited to wide-band (\ac{AWGN}, thermal, quanti
 
 \section{Multi-carrier Modulation}
 
+Multi-carrier modulation is a spread spectrum technique, which does not only increase the bandwidth whilst keeping the data rate constant. Multi-carrier modulation is related to \ac{FHSS}, but does not implement a hopping scheme. Instead, all sub-band are used, to transmit $M$ data streams parallelly.
+
+\begin{itemize}
+	\item The (serial) sequence of data symbols is parallelized.
+	\item The $M$ parallel symbol streams are then modulated independently.
+	\item Each modulated symbol stream is then transmitted in another sub-band.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.8}
+		\begin{circuitikz}
+			\node[draw,block,minimum height=6cm](SP){Serial-to-\\ parallel};
+			\node[adder,right=8cm of SP](Add){};
+			
+			\draw[-o] (SP.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Data stream $\vect{D}$};
+			
+			\foreach \n/\y in {1/2.5, 2/1, M/-2.5}{
+				\draw ([yshift={\y cm}]SP.east) -- ++(1cm,0) node[inputarrow]{} node[draw,block,anchor=west](Mod\n){Modulator \n};
+				\draw (Mod\n.east) -- ++(1cm,0) node[inputarrow]{} node[mixer,anchor=west](Mix\n){};
+			}
+		
+			\node[above=5mm of Mix1,align=center]{Sub-band\\ mixers};
+		
+			\draw (Mix1.east) -| (Add.north) node[inputarrow,rotate=-90]{};
+			\draw (Mix2.east) -| (Add.north);
+			\draw (MixM.east) -| (Add.south) node[inputarrow,rotate=90]{};
+			
+			\draw[draw=none] (Mod2.south) -- node[midway]{$\vdots$} (ModM.north);
+		
+			\draw (Add.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Multi-carrier\\ signal};
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{Multi-carrier modulator}
+\end{figure}
+
+\begin{itemize}
+	\item If the rate of the input symbols is $f_{sym}$, the symbol rate in each of the $M$ parallel streams is $f_{sym,M}$. \nomenclature[Sf]{$f_{sym,M}$}{Symbol rate in one of the $M$ sub-bands}
+	\begin{equation}
+		f_{sym,M} = \frac{f_{sym}}{M}
+	\end{equation}
+	\item The symbol period in each sub-band is $M$ times longer. \nomenclature[Sf]{$T_{sym,M}$}{Symbol period in one of the $M$ sub-bands}
+	\begin{equation}
+		T_{sym,M} = M \cdot T_{sym}
+	\end{equation}
+	\item The bandwidth of one sub-band is approximately $\Delta f_{sub} \approx f_{sym,M}$.
+	\item The total bandwidth $\Delta f_{MC}$ of all sub-bands together is approximately $\Delta f_{MC} = M \cdot \Delta f_{sub} \approx f_{sym}$.
+	\item The duration of one transmitted symbol is $T_{sym,M}$.
+	\item the \emph{time-bandwidth product} is
+	\begin{equation}
+		\Delta f_{MC} \cdot T_{sym,M} = M \gg 1
+	\end{equation}
+	The condition for a spread spectrum signal is fulfilled.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[x=1cm,y=1cm]
+		\draw[-latex] (0,0) -- (6.5,0) node[below right, align=left]{$t = n \cdot T_{sym}$};
+		\draw[-latex] (0,0) -- (0,0.4) (0,0.6) -- (0,5.5) node[left, align=right]{$f$};
+		\draw (-0.3,0.4) -- (0.3,0.4);
+		\draw (-0.3,0.6) -- (0.3,0.6);
+		
+		\draw (0,3) -- (-0.2,3) node[left,align=right]{$f_c$};
+		\draw[latex-latex] (-1,2) -- node[midway,left,align=center,anchor=south,rotate=90]{$\Delta f_{sub}$} (-1,3);
+		\draw[latex-latex] (-2,1) -- node[midway,left,align=center,anchor=south,rotate=90]{$\Delta f_{MC}$} (-2,5);
+		\draw[latex-latex] (2,-0.5) -- node[midway,below,align=center]{$T_{sym,M} = M/f_{sym}$} (4,-0.5);
+		
+		\foreach \k in {0, 1, 2, 3}{
+			\draw[dotted] (0,{\k+1}) -- (8,{\k+1});
+			\node[right,align=left] at(7,{\k+1.5}) {\small\itshape Sub-band $k = \k$};
+		}
+		\draw[dotted] (0,5) -- (8,5);
+		
+		\foreach \n/\x/\k in {0/0/0, 1/0/1, 2/0/2, 3/0/3, 4/1/0, 5/1/1, 6/1/2, 7/1/3, 8/2/0, 9/2/1, 10/2/2, 11/2/3}{
+			\node[fill=gray!50, draw=black, minimum height=1cm, minimum width=2cm, anchor=south west] at({\x*2},{\k+1}) {\footnotesize $D[\n]$};
+		}
+	\end{tikzpicture}
+	\caption[Time-frequency plot: distribution of symbols in an $M$-ary multi-carrier modulation (with $M = 4$)]{Time-frequency plot: distribution of symbols in an $M$-ary multi-carrier modulation (with $M = 4$). $M$ symbols can be transmitted parallelly. The symbol rate is reduced proportionally.}
+	\label{fig:ch07:mulcarr_mod_spectrum}
+\end{figure}
+
 \subsection{Inter-Carrier Interference}
+
+The \emph{\ac{ISI}} was an issue in the time-domain.
+\begin{itemize}
+	\item Neighbouring symbols interfered if no guard interval was inserted.
+	\item The reason was the band limitation of the symbols, which flattened the ideal, rectangular slopes of the symbols in the time-domain.
+\end{itemize}
+
+Due to the duality of time-domain and frequency-domain, an analogous problem arises in the frequency domain -- the \index{inter-carrier interference} \textbf{inter-carrier interference}.
+\begin{itemize}
+	\item Symbols are assumed to be ideal. They have a rectangular shape.
+	\item Their Fourier transform is a sinc-function, whose \ac{PSD} spreads across the infinite frequency range.
+	\item The side lobes of neighbouring sinc-functions would overlap. A symbol in one sub-band would interfere with its neighbouring sub-bands.
+	\item \textbf{A \emph{guard band} must be inserted to reduce the interference.}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.15\textheight},
+			width=0.7\linewidth,
+			scale only axis,
+			xlabel={$f$},
+			ylabel={Sub-bands},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=outer north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-0.5,
+			xmax=8.5,
+			ymin=0,
+			ymax=1.7,
+			%xtick={0,0.125,...,1},
+			%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+			%ytick={0},
+		]
+			\addplot[blue,smooth] coordinates {(-1.5,0) (0,0.5) (0.5,0.85) (1,1) (1.5,0.85) (2,0.5) (3.5,0)};
+			\addplot[red,smooth] coordinates {(0.5,0) (2,0.5) (2.5,0.85) (3,1) (3.5,0.85) (4,0.5) (5.5,0)};
+			\addplot[green,smooth] coordinates {(2.5,0) (4,0.5) (4.5,0.85) (5,1) (5.5,0.85) (6,0.5) (7.5,0)};
+			\addplot[olive,smooth] coordinates {(4.5,0) (6,0.5) (6.5,0.85) (7,1) (7.5,0.85) (8,0.5) (9.5,0)};
+			
+			\draw[dashed] (axis cs:2,0) -- (axis cs:2,1.2);
+			\draw[dashed] (axis cs:4,0) -- (axis cs:4,1.2);
+			\draw[latex-latex] (axis cs:2,1.1) -- node[midway,above,align=center]{Sub-band bandwidth $\Delta f_{sub}$} (axis cs:4,1.1);
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Neighbouring sub-bands interfering with each other and thereby causing inter-carrier interference}
+\end{figure}
+
+\begin{fact}
+	All frequency-division spread spectrum techniques (\ac{FHSS} and multi-carrier) suffer from inter-carrier interference.
+\end{fact}
+
+A draw-back of inserting guard bands is the increased bandwidth of the whole multi-carrier signal.
 
 \subsection{Orthogonal Frequency-Division Multiplex}
 
-\todo{OFDM}
+The increased bandwidth makes frequency-division spread spectrum techniques unattractive. Luckily, the inter-carrier interference issue can be mitigated without significantly increasing the bandwidth.
+\begin{itemize}
+	\item The sinc-function has a special property. It has \emph{zeros} at each $f = k \cdot \frac{1}{T_{sym,M}}$ (or as an angular freuqency $\omega = k \cdot \frac{2\pi}{T_{sym,M}}$) for all integer values except zero $k \in \mathbb{Z} \ \left\{0\right\}$.
+	\item If the centre frequency (sub-carrier frequency) of the neighbouring sub-bands were at these zeros of the sinc-function, the inter-carrier interference would be minimal.
+	\item Because the sub-carrier frequency is in a zero of the sin-function, \textbf{all sub-carriers are orthogonal}.
+	\item This means that the optimal spacing between the carriers of the sub-bands $\Delta f_{sc-sc}$ (the \index{sub-carrier spacing} \textbf{sub-carrier spacing}) is
+	\begin{equation}
+		\Delta f_{sc-sc} = \frac{1}{T_{sym,M}} = f_{sym,M}
+	\end{equation}%
+	\nomenclature[Sf]{$\Delta f_{sc-sc}$}{Sub-carrier spacing in a multi-carrier system}
+\end{itemize}
+
+\todo{Plot sinc-functions with zeros and its neighbouring carriers}
+
+The total bandwidth occupied is
+\begin{equation}
+	\Delta f_{MC} = M \Delta f_{sc-sc}
+\end{equation}
+which is the minimum possible value and therefore optimal.
+
+The optimal sub-carrier spacing makes the sub-carriers orthogonal. The technique is called \index{orthogonal frequency-division multiplex} \textbf{\acf{OFDM}}.
+
+\subsubsection{OFDM Implementation Using the FFT}
+
+Please remember Chapter 4, when we discussed the orthogonality of the frequency vectors of a \ac{DFT}. This circumstance is used to implement the \ac{OFDM}.
+\begin{itemize}
+	\item Symbol are parallelized.
+	\item Each parallel sub-symbol is then modulated (\acs{BPSK}, \acs{QPSK}, \acs{QAM}, ...). The modulator generates a complex-valued IQ output for each sub-band.
+	\item The complex-valued modulator output is then fed into an \ac{IFFT}. Each sub-carrier is represented by one input frequency-domain sample of the \ac{IFFT}.
+	\item The \ac{IFFT} transforms the multi-carrier signal to the time-domain.
+	\item It complex-valued IQ output of the \ac{IFFT} is the complex-valued baseband signal.
+	\item The complex-valued baseband signal is then converted to an analogue signal is mixed by an IQ modulator to the \ac{RF} band.
+\end{itemize}
+The \ac{IFFT} is, like the \ac{FFT}, implemented by an efficient algorithm.
+
+\todo{OFDM Tx block diagram}
+
+In the receiver, the signal processing chain is reversed:
+\begin{itemize}
+	\item The IO demodulator outputs an complex-valued baseband signal which is digitized.
+	\item The digitized \ac{I} and \ac{Q} components are given as time-domain samples to an \ac{FFT}.
+	\item The \ac{FFT} calculates the frequency-domain samples.
+	\item Each frequency-domain sample represents a sub-band.
+	\item Each sub-band is demodulated (\acs{BPSK}, \acs{QPSK}, \acs{QAM}, ...) independently.
+	\item The demodulated, parallel symbols are then serialized. The data stream is reconstructed.
+\end{itemize}
+
+\todo{OFDM Rx block diagram}
 
 \section{Multiple Access}
 
