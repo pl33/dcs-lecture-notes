@@ -132,8 +132,6 @@ A third party who has no knowledge of neither the existence of the spread spectr
 	\end{itemize}
 \end{itemize}
 
-\todo{Despreading in frequency-domain, suppression of noise and disturbances}
-
 \subsection{Direct-Sequence Spread Spectrum}
 
 A simple method for increasing the bandwidth systematically re-encoding the symbols using new symbols at a higher symbol rate.
@@ -1276,7 +1274,53 @@ The increased bandwidth makes frequency-division spread spectrum techniques unat
 	\nomenclature[Sf]{$\Delta f_{sc-sc}$}{Sub-carrier spacing in a multi-carrier system}
 \end{itemize}
 
-\todo{Plot sinc-functions with zeros and its neighbouring carriers}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			height={0.15\textheight},
+			width=0.7\linewidth,
+			scale only axis,
+			xlabel={$f$},
+			ylabel={\acs{OFDM} sub-bands},
+			%grid style={line width=.6pt, color=lightgray},
+			%grid=both,
+			grid=none,
+			legend pos=outer north east,
+			axis y line=middle,
+			axis x line=middle,
+			every axis x label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=north,
+			},
+			every axis y label/.style={
+				at={(ticklabel* cs:1.05)},
+				anchor=east,
+			},
+			xmin=-0.5,
+			xmax=8.5,
+			ymin=0,
+			ymax=1.7,
+			%xtick={0,0.125,...,1},
+			%xticklabels={$- \omega_S$, $- \frac{\omega_S}{2}$, $0$, $\frac{\omega_S}{2}$, $\omega_S$},
+			%ytick={0},
+		]
+			\addplot[blue,smooth,domain=0:8,samples=50] plot({\x},{(sinc(pi*(\x-3)))});
+			\addplot[blue,smooth,domain=0:8,samples=50] plot({\x},{-(sinc(pi*(\x-3)))});
+			\addplot[red,smooth,domain=0:8,samples=50] plot({\x},{(sinc(pi*(\x-4)))});
+			\addplot[red,smooth,domain=0:8,samples=50] plot({\x},{-(sinc(pi*(\x-4)))});
+			\addplot[green,smooth,domain=0:8,samples=50] plot({\x},{(sinc(pi*(\x-5)))});
+			\addplot[green,smooth,domain=0:8,samples=50] plot({\x},{-(sinc(pi*(\x-5)))});
+			\addplot[olive,smooth,domain=0:8,samples=50] plot({\x},{(sinc(pi*(\x-6)))});
+			\addplot[olive,smooth,domain=0:8,samples=50] plot({\x},{-(sinc(pi*(\x-6)))});
+			
+			\draw[dashed] (axis cs:4,0) -- (axis cs:4,1.2);
+			\draw[dashed] (axis cs:5,0) -- (axis cs:5,1.2);
+			\draw[latex-latex] (axis cs:4,1.1) -- node[midway,above,align=center]{Sub-carrier spacing $\Delta f_{sc-sc}$} (axis cs:5,1.1);
+		\end{axis}
+	\end{tikzpicture}
+	\caption[The \acs{PSD} of an \acs{OFDM} multi-carrier signal]{The \acs{PSD} of an \acs{OFDM} multi-carrier signal with $M = 4$ sub-bands. The \ac{PSD} of the sub-bands is assumed to be a sinc-function (ideal rectangular symbol shape in the time-domain). With a proper selection of the sub-carrier spacing, the carriers are exactly in the zeros of all other sinc-functions. The carriers are orthogonal. The inter-carrier interference issue is mitigated.}
+\end{figure}
 
 The total bandwidth occupied is
 \begin{equation}
@@ -1299,7 +1343,33 @@ Please remember Chapter 4, when we discussed the orthogonality of the frequency 
 \end{itemize}
 The \ac{IFFT} is, like the \ac{FFT}, implemented by an efficient algorithm.
 
-\todo{OFDM Tx block diagram}
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.6}
+		\begin{circuitikz}
+			\node[draw,block,minimum height=6cm](SP){Serial-to-\\ parallel};
+			\node[draw,block,minimum height=6cm,right=5cm of SP](IFFT){\acs{IFFT}};
+			\node[draw,block,minimum height=3cm,right=4cm of IFFT](IQ){IQ modulator};
+			
+			\draw[-o] (SP.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Data stream $\vect{D}$};
+			
+			\foreach \n/\y in {1/2.5, 2/1, M/-2.5}{
+				\draw ([yshift={\y cm}]SP.east) -- ++(1cm,0) node[inputarrow]{} node[draw,block,anchor=west](Mod\n){Modulator \n};
+				\draw (Mod\n.east) -- ([yshift={\y cm}]IFFT.west) node[inputarrow]{};
+			}
+			\draw[draw=none] (Mod2.south) -- node[midway]{$\vdots$} (ModM.north);
+		
+			\node[above=5mm of Mod1,align=center]{\acs{BPSK}, \acs{QPSK},\\ \acs{QAM}, ...\\ modulation};
+		
+			\foreach \v/\y in {I/1, Q/-1}{
+				\draw ([yshift={\y cm}]IFFT.east) to[dac,l={\v},>] ++(2cm,0) to[lowpass,>] ([yshift={\y cm}]IQ.west) node[inputarrow]{};
+			}
+			
+			\draw (IQ.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Multi-carrier\\ signal};
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{\acs{OFDM} modulator (transmitter) using an \acs{IFFT}}
+\end{figure}
 
 In the receiver, the signal processing chain is reversed:
 \begin{itemize}
@@ -1311,7 +1381,33 @@ In the receiver, the signal processing chain is reversed:
 	\item The demodulated, parallel symbols are then serialized. The data stream is reconstructed.
 \end{itemize}
 
-\todo{OFDM Rx block diagram}
+\begin{figure}[H]
+	\centering
+	\begin{adjustbox}{scale=0.6}
+		\begin{circuitikz}
+			\node[draw,block,minimum height=3cm](IQ){IQ demodulator};
+			\node[draw,block,minimum height=6cm,right=4cm of IQ](FFT){\acs{FFT}};
+			\node[draw,block,minimum height=6cm,right=5.5cm of FFT](PS){Parallel-to-\\ serial};
+			
+			\draw[-o] (IQ.west) node[inputarrow]{} -- ++(-1cm,0) node[left,align=right]{Multi-carrier\\ signal};
+			
+			\foreach \v/\y in {I/1, Q/-1}{
+				\draw ([yshift={\y cm}]IQ.east) to[lowpass,>] ++(2cm,0) to[adc,l={\v},>] ([yshift={\y cm}]FFT.west) node[inputarrow]{};
+			}
+			
+			\foreach \n/\y in {1/2.5, 2/1, M/-2.5}{
+				\draw ([yshift={\y cm}]FFT.east) -- ++(1cm,0) node[inputarrow]{} node[draw,block,anchor=west](Demod\n){Demodulator \n};
+				\draw (Demod\n.east) -- ([yshift={\y cm}]PS.west) node[inputarrow]{};
+			}
+			\draw[draw=none] (Demod2.south) -- node[midway]{$\vdots$} (DemodM.north);
+			
+			\node[above=5mm of Demod1,align=center]{\acs{BPSK}, \acs{QPSK},\\ \acs{QAM}, ...\\ demodulation};
+			
+			\draw (PS.east) -- ++(1cm,0) node[inputarrow]{} node[right,align=left]{Decoded\\ data stream\\ $\vect{\tilde{D}}$};
+		\end{circuitikz}
+	\end{adjustbox}
+	\caption{\acs{OFDM} demodulator (receiver) using an \acs{FFT}}
+\end{figure}
 
 \section{Multiple Access}
 
