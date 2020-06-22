@@ -956,9 +956,9 @@ Let's consider three situations based on the IEEE 802.11b examples (Figure \ref{
 		}
 		
 		\draw[green,thick] (0,0) \foreach \v in {-1,-1,-1,+1,-1,-1,-1,-1,-1,+1,-1}{ -- ++(0.5,{\v/11})};
-		\draw[fill=gray!50,draw] (5.5,{-9/11}) ++(0:0.1) arc(0:360:0.1);
+		\draw[fill=gray!50,draw] (5.5,{-7/11}) ++(0:0.1) arc(0:360:0.1);
 		\draw[green,thick] (5.5,0) \foreach \v in {+1,+1,+1,+1,-1,+1,-1,+1,+1,+1,+1}{ -- ++(0.5,{\v/11})};
-		\draw[fill=gray!50,draw] (11,{+9/11}) ++(0:0.1) arc(0:360:0.1);
+		\draw[fill=gray!50,draw] (11,{+7/11}) ++(0:0.1) arc(0:360:0.1);
 		
 		\foreach \y in {-0.5,0.5}{
 			\draw[orange] (0,\y) -- (11,\y) node[anchor=south east,align=right]{Data detection threshold};
@@ -1411,21 +1411,206 @@ In the receiver, the signal processing chain is reversed:
 
 \section{Multiple Access}
 
-\todo{Multiplexing}
+In the previous sections, only two terminals were involved in the communication -- the transmitter and the receiver. \index{multiple access} \textbf{Multiple access} methods allow more than two terminals to transmit on the same transmission medium. The resources are shared.
+\begin{itemize}
+	\item The resource which must be shared is a frequency band.
+	\begin{itemize}
+		\item Frequency bands are allocated to the services by the national regulation authority.
+		\item Each service has a limited bandwidth available.
+		\item All users of the service must share the bandwidth.
+	\end{itemize}
+	\item Multiple access methods set the rules and techniques for this resource sharing.
+	\item Multiple access methods are mostly based on \emph{spread spectrum} technologies.
+	\begin{itemize}
+		\item The symbol energy is spread across the frequency.
+		\item Each user uses a different \emph{spreading code} to access the medium.
+		\item By \emph{despreading}, the signals of the different users can be reconstructed.
+	\end{itemize}
+\end{itemize}
 
-\todo{Sharing Resources}
+Multiple access involves \index{multiplexing} \textbf{multiplexing}. Multiplexing distributes the signal along certain dimensions of a resource, so that the resource (transmission medium) can transport independent information parallelly. There are four dimensions which can be multiplexed:
+\begin{itemize}
+	\item Space
+	\item Time
+	\item Frequency
+	\item Code
+\end{itemize}
+
+\todo{Multiplexing scheme}
+
+Multiple access methods are implemented in both the \emph{physical layer} (\acs{OSI} layer 1) and the \emph{data link layer} (\acs{OSI} layer 2).
+\begin{itemize}
+	\item The \index{medium access control} \textbf{\acf{MAC}} is a part of the \emph{data link layer} (\acs{OSI} layer 2). It contains the high-level logic which implements multiple access methods. It is responsible for the allocation of resources (scheduling). For example, it assigns \emph{spreading codes}, time-slots or sub-carriers to different users. The \ac{MAC} must provide reliable medium access. Data collisions of different users must be mitigated.
+	\item The \emph{physical layer} (\acs{OSI} layer 1) changes the modulation and spreading parameters according to the instructions issued by the \emph{data link layer} (\acs{OSI} layer 2).
+\end{itemize}
+
+Reasons for multiple access:
+\begin{itemize}
+	\item \textbf{Number of users} -- A service is provided to lots of users.
+	\item \textbf{Efficiency} -- Users occupy the medium for only a short time. Between the transmission bursts, other users can use the free medium.
+	\item \textbf{Latency} -- Low latency can only be achieved if users can access the medium simultaneously.
+\end{itemize}
 
 \subsection{Space-Division Multiple Access}
 
+A simple and \emph{non-spreading} method is \index{space-division multiple access} \textbf{\acf{SDMA}}.
+\begin{itemize}
+	\item Users are separated spatially.
+	\item For wireless channels: The signals only have a limited range and cannot be received outside that range.
+	\item For wired channels: The users are connected to different cables.
+	\item The users are put into different spatial segments.
+	\item All users can use the medium parallelly without interfering with each other.
+\end{itemize}
+
+\todo{SDMA figure}
+
 \subsection{Time-Division Multiple Access}
+
+A multiple access method derived from \ac{THSS} is \index{time-division multiple access} \textbf{\acf{TDMA}}.
+\begin{itemize}
+	\item Each user obtains one of the $M$ time-slot for exclusive usage.
+	\item The \emph{spreading code} $C[m]$ is constant for each user and yields the time-slot number.
+	\item \ac{ISI} is an issue. Guard intervals must be inserted.
+\end{itemize}
+
+\begin{remark}
+	Optionally, users can obtain multiple time-slot allocations to increase their data rate.
+\end{remark}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		x={(0.5cm,0cm)},
+		y={(0cm,0.5cm)},
+	]
+		\draw[-latex] (0,0) -- (11,0) node[below right,align=left]{Time $t$};
+		\draw[-latex] (0,0) -- (0,11) node[above left,align=right]{Frequency $f$};
+		
+		\foreach \n/\c in {0/red, 1/blue, 2/green, 3/yellow, 4/olive}{
+			\draw[fill=\c!50,draw=black] ({(\n*2)},0) -- ({(\n*2)},10) -- ({(\n*2)+1.5},10) -- ({(\n*2)+1.5},0) -- cycle;
+			\node[align=center,rotate=90] at({(\n*2)+0.75},5) {User \n};
+		}
+	\end{tikzpicture}
+	\caption[Time-slot allocation in a \acs{TDMA} system]{Time-slot allocation in a \acs{TDMA} system. In a \acs{TDMA} system, each user obtains a time-slot where it can exclusively use the whole bandwidth.}
+\end{figure}
+
+Advantages:
+\begin{itemize}
+	\item Only one carrier frequency $\leftarrow$ only one oscillator required for reception $\leftarrow$ simple receiver design
+\end{itemize}
+
+Drawbacks:
+\begin{itemize}
+	\item Time synchronization required
+	\item Guard interval required
+\end{itemize}
 
 \subsection{Frequency-Division Multiple Access}
 
+A multiple access method derived from \ac{FHSS} is \index{frequency-division multiple access} \textbf{\acf{FDMA}}.
+\begin{itemize}
+	\item Each user obtains one of the $M$ sub-bands for exclusive usage.
+	\item The \emph{spreading code} $C[m]$ is constant for each user and yields the sub-bands number.
+	\item The frequency is not changed for a user. Thus, the frequency-hopping is replaced by a constant frequency.
+	\item \emph{Inter-carrier interference} is an issue. Guard bands must be inserted.
+\end{itemize}
+
+\begin{remark}
+	Optionally, users can obtain multiple sub-band allocations to increase their data rate.
+\end{remark}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		x={(0.5cm,0cm)},
+		y={(0cm,0.5cm)},
+	]
+		\draw[-latex] (0,0) -- (11,0) node[below right,align=left]{Time $t$};
+		\draw[-latex] (0,0) -- (0,11) node[above left,align=right]{Frequency $f$};
+		
+		\foreach \n/\c in {0/red, 1/blue, 2/green, 3/yellow, 4/olive}{
+			\draw[fill=\c!50,draw=black] (0,{(\n*2)}) -- (10,{(\n*2)}) -- (10,{(\n*2)+1.5}) -- (0,{(\n*2)+1.5}) -- cycle;
+			\node[align=center] at(5,{(\n*2)+0.75}) {User \n};
+		}
+	\end{tikzpicture}
+	\caption[Sub-band allocation in an \acs{FDMA} system]{Sub-band allocation in an \acs{FDMA} system. In an \acs{FDMA} system, each user obtains a sub-band which it can exclusively use at any time.}
+\end{figure}
+
+Advantages:
+\begin{itemize}
+	\item No time synchronization required
+\end{itemize}
+
+Drawbacks:
+\begin{itemize}
+	\item More complex receiver design (many parallel oscillators or enhanced digital signal processing)
+	\item Guard band required
+\end{itemize}
+
 \subsection{Code-Division Multiple Access}
+
+A multiple access method derived from \ac{DSSS} is \index{code-division multiple access} \textbf{\acf{CDMA}}.
+\begin{itemize}
+	\item \emph{Spreading codes} with a length of $L$ have $K$ combinations which are orthogonal.
+	\item Each user obtains one of the $K$ orthogonal codes for exclusive usage.
+	\item All users can transmit simultaneously using the whole bandwidth.
+	\item The receiver is able to split the simultaneously transmitted signals of the different users using the orthogonal codes.
+	\item Due to the code orthogonality, the users cannot interfere.
+\end{itemize}
+
+\begin{remark}
+	Optionally, users can obtain multiple code allocations to increase their data rate.
+\end{remark}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		x={(-0.35cm,-0.35cm)},
+		y={(0.5cm,0cm)},
+		z={(0cm,0.5cm)},
+	]
+		\draw[-latex] (0,0,0) -- (11,0,0) node[below right,align=left]{Time $t$};
+		\draw[-latex] (0,0,0) -- (0,11,0) node[below right,align=left]{Frequency $f$};
+		\draw[-latex] (0,0,0) -- (0,0,11) node[right,align=left]{Code $c$};
+		
+		\foreach \n/\c in {0/red, 1/blue, 2/green, 3/yellow, 4/olive}{
+			\draw[fill=\c!50,draw=black] (10,0,{(\n*2)}) -- (10,10,{(\n*2)}) -- (10,10,{(\n*2)+1.5}) -- (10,0,{(\n*2)+1.5}) -- cycle;
+			\draw[fill=\c!50,draw=black] (10,10,{(\n*2)}) -- (0,10,{(\n*2)}) -- (0,10,{(\n*2)+1.5}) -- (10,10,{(\n*2)+1.5}) -- cycle;
+			\draw[fill=\c!50,draw=black] (0,0,{(\n*2)+1.5}) -- (10,0,{(\n*2)+1.5}) -- (10,10,{(\n*2)+1.5}) -- (0,10,{(\n*2)+1.5}) -- cycle;
+			\node[align=center] at(10,5,{(\n*2)+0.75}) {User \n};
+		}
+	\end{tikzpicture}
+	\caption[Code allocation in a \acs{CDMA} system]{Code allocation in a \acs{CDMA} system. In a \acs{CDMA} system, each user obtains a spreading code which is orthogonal to all other user's codes. The whole bandwidth is used by all users simultaneously.}
+\end{figure}
+
+Advantages:
+\begin{itemize}
+	\item Only one carrier $\leftarrow$ one analogue \ac{LO} $\leftarrow$ simple receiver design (analogue part)
+	\item Bandwidth is used efficiently.
+	\item Good noise immunity.
+\end{itemize}
+
+Drawbacks:
+\begin{itemize}
+	\item High requirements on digital signal processing (parallel detection of different codes)
+	\item Transmitters must be able to adjust their transmission power. Transmitters which are closer to the receiver must reduce their power. Otherwise, the receiver would be over-driven due to the limited dynamic range. It then cannot receive far transmitters whose signals are relatively weak.
+\end{itemize}
 
 \subsection{Orthogonal Frequency-Division Multiple Access}
 
+The \index{orthogonal frequency-division multiple access} \textbf{\acf{OFDMA}} is an extension of the \ac{FDMA} using \emph{orthogonal sub-carrier}. The \ac{OFDMA} method is implemented by a \ac{OFDM} system.
+\begin{itemize}
+	\item The sub-band allocation equals that of \ac{FDMA}.
+	\item The carriers of the sub-bands are orthogonal. Guard bands are not required. The different users will not interfere.
+\end{itemize}
+
+%\subsection{Hybrid Methods}
+
+
+
 \section{Orthogonal Codes}
+
+%\section{Duplexing}
 
 \nocite{ipatov2005}
 
