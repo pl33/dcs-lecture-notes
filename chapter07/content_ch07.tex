@@ -1436,7 +1436,27 @@ Multiple access involves \index{multiplexing} \textbf{multiplexing}. Multiplexin
 	\item Code
 \end{itemize}
 
-\todo{Multiplexing scheme}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{scope}[shift={(-2,0)}]
+			\draw (0,0) -- (-1,-2) -- (-1,2) -- cycle;
+			\foreach \y in {1.5,1,0.5,0,-0.5,-1,-1.5}{
+				\draw[-latex] (-2,\y) -- (-1,\y);
+			}
+			\node[anchor=east,align=right] at(-2.2,0) {Independent\\ signals};
+		\end{scope}
+		\begin{scope}[shift={(2,0)}]
+			\draw (0,0) -- (1,-2) -- (1,2) -- cycle;
+			\foreach \y in {1.5,1,0.5,0,-0.5,-1,-1.5}{
+				\draw[-latex] (1,\y) -- (2,\y);
+			}
+			\node[anchor=west,align=left] at(2.2,0) {Independent\\ signals};
+		\end{scope}
+		\draw[very thick] (-2,0) -- node[midway,above,align=center]{Transmission\\ channel} (2,0);
+	\end{tikzpicture}
+	\caption[Principle of multiplexing]{Principle of multiplexing. Independent signals can be transmitted (quasi-) parallelly over the same transmission channel.}
+\end{figure}
 
 Multiple access methods are implemented in both the \emph{physical layer} (\acs{OSI} layer 1) and the \emph{data link layer} (\acs{OSI} layer 2).
 \begin{itemize}
@@ -1466,11 +1486,11 @@ A simple and \emph{non-spreading} method is \index{space-division multiple acces
 
 \subsection{Time-Division Multiple Access}
 
-A multiple access method derived from \ac{THSS} is \index{time-division multiple access} \textbf{\acf{TDMA}}.
+A \emph{multiple access} method derived from \ac{THSS} is \index{time-division multiple access} \textbf{\acf{TDMA}}.
 \begin{itemize}
 	\item Each user obtains one of the $M$ time-slot for exclusive usage.
-	\item The \emph{spreading code} $C[m]$ is constant for each user and yields the time-slot number.
-	\item \ac{ISI} is an issue. Guard intervals must be inserted.
+	\item Usually, the time-slots are long enough so that a series of symbols can be transmitted for one user. In contrast to pure \ac{THSS}, where one symbol is transmitted as a chip, \ac{TDMA} transmits a series of symbols for user 1 and then hands over the transmission channel to the next user.
+	\item \ac{ISI} between the users is an issue. Guard intervals must be inserted.
 \end{itemize}
 
 \begin{remark}
@@ -1507,7 +1527,7 @@ Drawbacks:
 
 \subsection{Frequency-Division Multiple Access}
 
-A multiple access method derived from \ac{FHSS} is \index{frequency-division multiple access} \textbf{\acf{FDMA}}.
+A \emph{multiple access} method derived from \ac{FHSS} is \index{frequency-division multiple access} \textbf{\acf{FDMA}}.
 \begin{itemize}
 	\item Each user obtains one of the $M$ sub-bands for exclusive usage.
 	\item The \emph{spreading code} $C[m]$ is constant for each user and yields the sub-bands number.
@@ -1547,15 +1567,66 @@ Drawbacks:
 	\item Guard band required
 \end{itemize}
 
+\subsection{Hybrid TDMA and FDMA}
+
+\ac{TDMA} and \ac{FDMA} can be combined to a hybrid system.
+\begin{itemize}
+	\item The allocation for both sub-bands and time-slots changes dynamically for each user.
+	\item The pattern is determined by the \ac{MAC} layer (\acs{OSI} layer 2).
+	\item Some users may lose allocations for the sake of enabling other users to use the transmission medium.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		x={(0.5cm,0cm)},
+		y={(0cm,0.5cm)},
+	]
+		\draw[-latex] (0,0) -- (9,0) node[below right,align=left]{Time $t$};
+		\draw[-latex] (0,0) -- (0,9) node[above left,align=right]{Frequency $f$};
+		
+		\foreach \t/\f/\n/\c in {0/0/0/red, 0/1/1/blue, 0/2/2/green, 0/3/3/yellow,
+			1/0/1/blue, 1/1/0/red, 1/2/3/yellow, 1/3/4/olive,
+			2/0/2/green, 2/1/4/olive, 2/2/0/red, 2/3/3/yellow,
+			3/0/4/olive, 3/1/5/gray, 3/2/2/green, 3/3/1/blue}{
+			\draw[fill=\c!50,draw=black] ({(\t*2)},{(\f*2)}) -- ({(\t*2)+1.5},{(\f*2)}) -- ({(\t*2)+1.5},{(\f*2)+1.5}) -- ({(\t*2)},{(\f*2)+1.5}) -- cycle;
+			\node[align=center] at({(\t*2)+0.75},{(\f*2)+0.75}) {U\n};
+		}
+	\end{tikzpicture}
+	\caption{Sub-band and time-slot allocation in an \acs{TDMA}/\acs{FDMA} hybrid system}
+\end{figure}
+
+\begin{example}{2G cell phone -- \ac{GSM}}
+	\todo{GSM example}
+\end{example}
+
 \subsection{Code-Division Multiple Access}
 
-A multiple access method derived from \ac{DSSS} is \index{code-division multiple access} \textbf{\acf{CDMA}}.
+All \emph{spread spectrum} technologies rely on \emph{spreading codes}.
+\begin{itemize}
+	\item The \emph{spreading codes} are the parameter of the \emph{spread spectrum} technology which defines how the signal power is spread.
+	\item Using \index{orthogonal spreading codes} \textbf{orthogonal spreading codes}, multiple \emph{spread spectrum} signals can superimpose without interfering each other.
+	\item Different \emph{orthogonal spreading codes} can be assigned to different users for \emph{multiple access}.
+	\item The receiver is able to split the simultaneously transmitted signals of the different users using the \emph{orthogonal spreading codes}.
+	\item Due to the code orthogonality, the users cannot interfere. The other user's signals will be noise to the receiver which is suppressed.
+\end{itemize}
+
+The \emph{multiple access} method using \emph{orthogonal spreading codes} is \index{code-division multiple access} \textbf{\acf{CDMA}}.
+
+It can be subdivided according to the underlying \emph{spread spectrum} technology.
+\begin{itemize}
+	\item \textbf{\acf{DS-CDMA}} uses \emph{\acf{DSSS}} with \emph{orthogonal spreading codes}.
+	\item \textbf{\acf{FH-CDMA}} uses \emph{\acf{FHSS}} with \emph{orthogonal spreading codes}.
+	\item \textbf{\acf{TD-CDMA}} uses \emph{\acf{THSS}} with \emph{orthogonal spreading codes}.
+\end{itemize}
+
+\subsubsection{Direct Sequence CDMA}
+
+A \emph{\ac{CDMA} scheme} derived from \ac{DSSS} is \index{direct sequence code-division multiple access} \textbf{\acf{DS-CDMA}}.
 \begin{itemize}
 	\item \emph{Spreading codes} with a length of $L$ have $K$ combinations which are orthogonal.
-	\item Each user obtains one of the $K$ orthogonal codes for exclusive usage.
+	\item Each user obtains one of the $K$ \emph{orthogonal spreading codes} for exclusive usage.
 	\item All users can transmit simultaneously using the whole bandwidth.
-	\item The receiver is able to split the simultaneously transmitted signals of the different users using the orthogonal codes.
-	\item Due to the code orthogonality, the users cannot interfere.
 \end{itemize}
 
 \begin{remark}
@@ -1580,7 +1651,7 @@ A multiple access method derived from \ac{DSSS} is \index{code-division multiple
 			\node[align=center] at(10,5,{(\n*2)+0.75}) {User \n};
 		}
 	\end{tikzpicture}
-	\caption[Code allocation in a \acs{CDMA} system]{Code allocation in a \acs{CDMA} system. In a \acs{CDMA} system, each user obtains a spreading code which is orthogonal to all other user's codes. The whole bandwidth is used by all users simultaneously.}
+	\caption[Code allocation in a \acs{DS-CDMA} system]{Code allocation in a \acs{DS-CDMA} system. In a \acs{DS-CDMA} system, each user obtains a spreading code which is orthogonal to all other user's codes. The whole bandwidth is used by all users simultaneously.}
 \end{figure}
 
 Advantages:
@@ -1596,6 +1667,30 @@ Drawbacks:
 	\item Transmitters must be able to adjust their transmission power. Transmitters which are closer to the receiver must reduce their power. Otherwise, the receiver would be over-driven due to the limited dynamic range. It then cannot receive far transmitters whose signals are relatively weak.
 \end{itemize}
 
+\subsubsection{Frequency-Hopping CDMA}
+
+A \emph{\ac{CDMA} scheme} derived from \ac{FHSS} is \index{frequency-hopping code-division multiple access} \textbf{\acf{FH-CDMA}}.
+\begin{itemize}
+	\item In contrast to \ac{FDMA}, the frequency is not constant.
+	\item The frequency is changed as defined by the \emph{orthogonal spreading codes}.
+\end{itemize}
+
+\todo{FH-CDMA plot}
+
+Benefits and drawbacks: See \ac{FDMA}
+
+\subsubsection{Time-Division CDMA}
+
+A \emph{\ac{CDMA} scheme} derived from \ac{THSS} is \index{time-division code-division multiple access} \textbf{\acf{TD-CDMA}}.
+\begin{itemize}
+	\item In contrast to \ac{TDMA}, the time-slot is not constant.
+	\item The time-slot is changed as defined by the \emph{orthogonal spreading codes}.
+\end{itemize}
+
+\todo{TD-CDMA plot}
+
+Benefits and drawbacks: See \ac{TDMA}
+
 \subsection{Orthogonal Frequency-Division Multiple Access}
 
 The \index{orthogonal frequency-division multiple access} \textbf{\acf{OFDMA}} is an extension of the \ac{FDMA} using \emph{orthogonal sub-carrier}. The \ac{OFDMA} method is implemented by a \ac{OFDM} system.
@@ -1604,13 +1699,12 @@ The \index{orthogonal frequency-division multiple access} \textbf{\acf{OFDMA}} i
 	\item The carriers of the sub-bands are orthogonal. Guard bands are not required. The different users will not interfere.
 \end{itemize}
 
-%\subsection{Hybrid Methods}
-
-
 
 \section{Orthogonal Codes}
 
-%\section{Duplexing}
+\todo{OVSF}
+
+%TODO \section{Duplexing}
 
 \nocite{ipatov2005}
 
