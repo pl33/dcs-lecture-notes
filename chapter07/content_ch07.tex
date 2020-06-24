@@ -1482,7 +1482,19 @@ A simple and \emph{non-spreading} method is \index{space-division multiple acces
 	\item All users can use the medium parallelly without interfering with each other.
 \end{itemize}
 
-\todo{SDMA figure}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\foreach \x/\y/\n in {0/0/1, 3/3/2, 7/-2/3}{
+			\begin{scope}[shift={(\x,\y)}]
+				\draw[fill=gray!50,draw=black] (0:0.1) arc(0:360:0.1) node[right,align=left]{Transmitter \n};
+				\draw[draw=black] (90:2) arc(-270:90:2) node[above,align=center]{Range of Transmitter \n};
+				\draw[fill=gray!50,draw=black] (120:1.3) arc(0:360:0.1) node[right,align=left]{Receiver \n};
+			\end{scope}
+		}
+	\end{tikzpicture}
+	\caption{Spatial separation as a method for reusing the frequency band}
+\end{figure}
 
 \subsection{Time-Division Multiple Access}
 
@@ -1516,7 +1528,7 @@ A \emph{multiple access} method derived from \ac{THSS} is \index{time-division m
 
 Advantages:
 \begin{itemize}
-	\item Only one carrier frequency $\leftarrow$ only one oscillator required for reception $\leftarrow$ simple receiver design
+	\item Only one carrier frequency $\rightarrow$ only one oscillator required for reception $\rightarrow$ simple receiver design
 \end{itemize}
 
 Drawbacks:
@@ -1596,7 +1608,7 @@ Drawbacks:
 	\caption{Sub-band and time-slot allocation in an \acs{TDMA}/\acs{FDMA} hybrid system}
 \end{figure}
 
-\begin{example}{2G cell phone -- \ac{GSM}}
+\begin{example}{2G cell phone -- \acs{GSM}}
 	\todo{GSM example}
 \end{example}
 
@@ -1615,9 +1627,9 @@ The \emph{multiple access} method using \emph{orthogonal spreading codes} is \in
 
 It can be subdivided according to the underlying \emph{spread spectrum} technology.
 \begin{itemize}
-	\item \textbf{\acf{DS-CDMA}} uses \emph{\acf{DSSS}} with \emph{orthogonal spreading codes}.
-	\item \textbf{\acf{FH-CDMA}} uses \emph{\acf{FHSS}} with \emph{orthogonal spreading codes}.
-	\item \textbf{\acf{TD-CDMA}} uses \emph{\acf{THSS}} with \emph{orthogonal spreading codes}.
+	\item The \textbf{\acf{DS-CDMA}} uses \emph{\acf{DSSS}} with \emph{orthogonal spreading codes}.
+	\item The \textbf{\acf{FH-CDMA}} uses \emph{\acf{FHSS}} with \emph{orthogonal spreading codes}.
+	\item The \textbf{\acf{TH-CDMA}} uses \emph{\acf{THSS}} with \emph{orthogonal spreading codes}.
 \end{itemize}
 
 \subsubsection{Direct Sequence CDMA}
@@ -1656,7 +1668,7 @@ A \emph{\ac{CDMA} scheme} derived from \ac{DSSS} is \index{direct sequence code-
 
 Advantages:
 \begin{itemize}
-	\item Only one carrier $\leftarrow$ one analogue \ac{LO} $\leftarrow$ simple receiver design (analogue part)
+	\item Only one carrier $\rightarrow$ one analogue \ac{LO} $\rightarrow$ simple receiver design (analogue part)
 	\item Bandwidth is used efficiently.
 	\item Good noise immunity.
 \end{itemize}
@@ -1675,19 +1687,69 @@ A \emph{\ac{CDMA} scheme} derived from \ac{FHSS} is \index{frequency-hopping cod
 	\item The frequency is changed as defined by the \emph{orthogonal spreading codes}.
 \end{itemize}
 
-\todo{FH-CDMA plot}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		x={(0.5cm,0cm)},
+		y={(0cm,0.5cm)},
+	]
+		\draw[-latex] (0,0) -- (17,0) node[below right,align=left]{Time $t$};
+		\draw[-latex] (0,0) -- (0,9) node[above left,align=right]{Frequency $f$};
+		
+		\foreach \n in {0,1,2,3}{
+			\node[anchor=east,align=right] at(0,{(\n*2)+0.75}) {\small \itshape Sub-band \n};
+		}
+		\foreach \n in {0,1,...,7}{
+			\node[anchor=east,align=right,rotate=90] at({(\n*2)+0.75},0) {\small \itshape Symbol \n};
+		}
+		
+		\foreach \t/\f/\n/\c in {0/0/0/red, 0/1/1/blue, 1/3/0/red, 1/0/1/blue, 2/1/0/red, 2/3/1/blue, 3/2/0/red, 3/1/1/blue, 4/0/0/red, 4/2/1/blue, 5/1/0/red, 5/0/1/blue, 6/3/0/red, 6/2/1/blue, 7/0/0/red, 7/3/1/blue}{
+			\draw[fill=\c!50,draw=black] ({(\t*2)},{(\f*2)}) -- ({(\t*2)+1.5},{(\f*2)}) -- ({(\t*2)+1.5},{(\f*2)+1.5}) -- ({(\t*2)},{(\f*2)+1.5}) -- cycle;
+			\node[align=center] at({(\t*2)+0.75},{(\f*2)+0.75}) {U\n};
+		}
+	\end{tikzpicture}
+	\caption[Time-frequency distribution of symbols in an \acs{FH-CDMA} system]{Time-frequency distribution of symbols in an \acs{FH-CDMA} system. Due to the orthogonality of spreading codes, the symbols of different users in a \acs{FH-CDMA} system do not interfere. In this example the spreading factor is $M = 4$.}
+\end{figure}
 
 Benefits and drawbacks: See \ac{FDMA}
 
-\subsubsection{Time-Division CDMA}
+\subsubsection{Time-Hopping CDMA}
 
-A \emph{\ac{CDMA} scheme} derived from \ac{THSS} is \index{time-division code-division multiple access} \textbf{\acf{TD-CDMA}}.
+A \emph{\ac{CDMA} scheme} derived from \ac{THSS} is \index{time-hopping code-division multiple access} \textbf{\acf{TH-CDMA}}.
 \begin{itemize}
 	\item In contrast to \ac{TDMA}, the time-slot is not constant.
 	\item The time-slot is changed as defined by the \emph{orthogonal spreading codes}.
 \end{itemize}
 
-\todo{TD-CDMA plot}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		x={(0.5cm,0cm)},
+		y={(0cm,0.5cm)},
+	]
+		\draw[-latex] (0,0) -- (17,0) node[below right,align=left]{Time $t$};
+		
+		\foreach \x/\c in {1/red, 2/blue, 4/blue, 6/red, 10/red, 11/blue, 13/blue, 14/red}{
+			\draw[fill=\c!50,draw=black] ({(\x)},0) -- ({(\x)+1},0) -- ({(\x)+1},1) -- ({(\x)},1) -- cycle;
+		}
+		
+		\foreach \x in {0,1,...,15}{
+			\draw[dashed] ({(\x)},0) -- ({(\x)+1},0) -- ({(\x)+1},1) -- ({(\x)},1) -- cycle;
+		}
+		\foreach \n in {0,1,2,3,4}{
+			\draw ({\n*4},0) -- ({\n*4},-0.2) node[below,align=center]{\footnotesize $\n T_{sym}$};
+			\draw[thick] ({\n*4},0) -- ({\n*4},1);
+		}
+	
+		\foreach \n in {0,1,2,3}{
+			\draw[latex-latex] ({\n*4},-2) --  node[midway,below,align=center]{Symbol \n} ({(\n+1)*4},-2);
+		}
+	
+		\draw[latex-] (1.5,0.5) -- (1,4) node[above,align=center]{Time-slots for user 1};
+		\draw[latex-] (2.5,0.5) -- (3,2.5) node[above right,align=left]{Time-slots for user 2};
+	\end{tikzpicture}
+	\caption[Symbol distribution of different users in a \acs{TH-CDMA} system]{Symbol distribution of different users in a \acs{TH-CDMA} system. In this example the spreading factor is $M = 4$.}
+\end{figure}
 
 Benefits and drawbacks: See \ac{TDMA}
 
@@ -1702,7 +1764,17 @@ The \index{orthogonal frequency-division multiple access} \textbf{\acf{OFDMA}} i
 
 \section{Orthogonal Codes}
 
-\todo{OVSF}
+\todo{Code orthogonality, cross correlation}
+
+\todo{Welsh/Hadamard codes}
+
+\todo{OVSF, Code Tree}
+
+\todo{Gold codes for asynchronous Tx (vs. Walsh codes for synchronous)}
+
+\begin{example}{3G cell phone -- \acs{UMTS}}
+	Inhalt...
+\end{example}
 
 %TODO \section{Duplexing}
 
