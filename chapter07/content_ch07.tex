@@ -1762,21 +1762,194 @@ The \index{orthogonal frequency-division multiple access} \textbf{\acf{OFDMA}} i
 \end{itemize}
 
 
-\section{Orthogonal Codes}
+\section{CDMA Codes}
 
-\todo{Code orthogonality, cross correlation}
+\emph{Spreading codes} must have special properties to enable \emph{multiple access}.
+\begin{itemize}
+	\item The \index{autocorrelation function} \textbf{cross-correlation function} of \emph{spreading codes} shall have two values.
+	\begin{itemize}
+		\item A peak at time $0$. That is, the code can detect itself.
+		\item Close to zero every other times. The code should not detect time-delayed replica of itself.
+	\end{itemize}
+	\item The \index{cross-correlation function} \textbf{cross-correlation function} of \emph{spreading codes} to other codes shall be close to zero. Signals spread with different codes shall be suppressed as good as possible.
+\end{itemize}
 
-\todo{Welsh/Hadamard codes}
+Let's consider \acs{DS-CDMA}, which implements the symbol spreading by multiplying each symbol with the \emph{spreading code} and thereby increasing the \emph{chip rate}. At the receiver side, there are two cases.
+\begin{itemize}
+	\item \textbf{Synchronous} -- The signals of all received users are synchronized. All symbols start at the same time and have the same period.
+	\item \textbf{Asynchronous} -- The signals of all received users are \underline{not} synchronized. There can be a random time-shift, i.e, phase-shift, of the symbols of different users.
+\end{itemize}
 
-\todo{OVSF, Code Tree}
+\subsection{Synchronous \acs{DS-CDMA}}
 
-\todo{Gold codes for asynchronous Tx (vs. Walsh codes for synchronous)}
+For the synchronous case, it is sufficient if the \emph{spreading codes} are \emph{orthogonal}.
+
+Two codes of length $L$ $\vect{C}_{L,1}$ and $\vect{C}_{L,2}$ are \index{orthogonal codes} \textbf{orthogonal codes} if their inner product is zero.
+\begin{equation}
+	0 \stackrel{!}{=} \left\langle \vect{C}_{L,1}, \vect{C}_{L,2} \right\rangle = \sum\limits_{l = 0}^{L-1} \vect{C}_{L,1}[l] \cdot \vect{C}_{L,2}[l]
+\end{equation}
+
+One set of codes, which is orthogonal, are \index{Welsh codes} \textbf{Welsh codes}. They are created out of \textbf{Hadamard matrices}.
+
+\begin{definition}{Hadamard matrices}
+	\index{Hadamard matrix} \textbf{Hadamard matrices} is a $L \times L$ matrix. Where $L = 2^k$ (with $k \in \mathbb{N}$) is a power of two.
+	
+	A Hadamard matrix $\mat{H}_{2L}$ of the order $2L$ is constructed from Hadamard matrices $\mat{H}_{L}$ of the order $L$.
+	\begin{equation}
+		\mat{H}_{2L} = \left[\begin{matrix}
+			\mat{H}_{L} & \mat{H}_{L} \\
+			\mat{H}_{L} & -\mat{H}_{L} \\
+		\end{matrix}\right]
+	\end{equation}
+	
+	Examples:
+	\begin{equation}
+		\mat{H}_{1} = \left[\begin{matrix} 1 \\ \end{matrix}\right]
+	\end{equation}
+	\begin{equation}
+		\mat{H}_{2} = \left[\begin{matrix}
+			1 & 1 \\
+			1 & -1 \\
+		\end{matrix}\right]
+	\end{equation}
+	\begin{equation}
+		\mat{H}_{4} = \left[\begin{matrix}
+			1 & 1 & 1 & 1 \\
+			1 & -1 & 1 & -1 \\
+			1 & 1 & -1 & -1 \\
+			1 & -1 & -1 & 1 \\
+		\end{matrix}\right]
+	\end{equation}
+\end{definition}
+
+The rows or columns, respectively, of Hadamard matrices are orthogonal to each other. They can be directly used as spreading codes. The order $L$ of the Hadamard matrix defines the code length.
+
+Furthermore, the $L$ codes are not only orthogonal to each other.
+\begin{itemize}
+	\item Imagine that you have a Welsh code $\vect{C}_{L,1} = \left[1, 1, -1, -1\right]$ with $L_1 = 4$.
+	\item In addition, you have a Welsh code $\vect{C}_{L,2} = \left[1, -1\right]$ with $L_2 = \frac{1}{2} L_1 = 2$.
+	\item \textbf{Both codes are orthogonal, despite their different length.}
+	\item $\vect{C}_{L,2}$ can be periodically continued to $\left[1, -1, 1, -1\right]$, which is orthogonal to $\vect{C}_{L,1}$.
+	\item The chip rate of both codes must be equal. \begin{remark}Remember that we are in the synchronous case here.\end{remark}
+\end{itemize}
+
+What is the use of this property?
+\begin{itemize}
+	\item $\vect{C}_{L,2}$ requires less chips for encoding one data symbol than $\vect{C}_{L,1}$ ($2$ versus $4$).
+	\item $\vect{C}_{L,2}$ has the double data rate than $\vect{C}_{L,1}$, whilst the chip rate remains constant.
+	\item \textbf{It is possible to have different data streams with different data rates in the same transmission channel.}
+	\item The \emph{spreading factor}, which is responsible for the data rate, can be adapted.
+	\item The Welsh code is an \index{orthogonal variable spreading factor} \textbf{\acf{OVSF}} code.
+\end{itemize}
+
+However, not each $L_1$ code is orthogonal to any $L_2$ code. The relation of orthogonality of codes with different length can be depicted in the \acs{OVSF} code tree (Figure \ref{fig:ch07:ovsf_code_tree}).
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\draw (-0.5,0) -- node[midway,above,align=center]{$\vect{C}_{1,1} = \left[1\right]$} (2,0);
+		\draw (2,4) -- (2,-4);
+		
+		\foreach \y/\n/\v in {4/1/{1,1}, -4/2/{1,-1}}{
+			\draw (2,\y) -- node[midway,above,align=center]{$\vect{C}_{2,\n} = \left[\v\right]$} (5,\y);
+			\draw (5,{\y+2}) -- (5,{\y-2});
+		}
+	
+		\foreach \y/\n/\v in {6/1/{1,1,1,1}, 2/2/{1,1,-1,-1}, -2/3/{1,-1,1,-1}, -6/4/{1,-1,-1,1}}{
+			\draw (5,\y) -- node[midway,above,align=center]{$\vect{C}_{4,\n} = \left[\v\right]$} (9,\y);
+			\draw (9,{\y+1}) -- (9,{\y-1});
+		}
+	
+		\foreach \y/\n/\v in {7/1/{1,1,1,1,1,1,1,1}, 5/2/{1,1,1,1,-1,-1,-1,-1}, 3/3/{1,1,-1,-1,1,1,-1,-1}, 1/4/{1,1,-1,-1,-1,-1,1,1}, -1/5/{1,-1,1,-1,1,-1,1,-1}, -3/6/{1,-1,1,-1,-1,1,-1,1}, -5/7/{1,-1,-1,1,1,-1,-1,1}, -7/8/{1,-1,-1,1,-1,1,1,-1}}{
+			\draw (9,\y) -- node[midway,above,align=center]{$\vect{C}_{8,\n} = \left[\v\right]$} (16,\y);
+		}
+	
+		\foreach \x/\s in {1.8/1, 4.8/2, 8.8/4, 15.8/8}{
+			\draw[dotted] (\x,9) -- (\x,-7);
+		}
+		\foreach \x/\s in {0.75/1, 3.5/2, 7/4, 12.5/8}{
+			\node[anchor=south,align=center] at(\x,8) {\small Spreading\\ factor \s};
+		}
+	\end{tikzpicture}
+	\caption[\acs{OVSF} code tree]{\acs{OVSF} code tree. Codes of different length \underline{are orthogonal} if they \underline{do not reside} in same branch of the tree. Codes \underline{are not} orthogonal if the shorter code \underline{can be found} inside of the longer code.}
+	\label{fig:ch07:ovsf_code_tree}
+\end{figure}
+
+\subsection{Asynchronous \acs{DS-CDMA}}
+
+Welsh code have excellent cross-correlation properties. But, Welsh codes \underline{do not} have good autocorrelation properties.
+\begin{itemize}
+	\item The \emph{autocorrelation function} of Welsh codes might show more than one peak.
+	\item Therefore, Welsh codes \underline{are not} suitable for asynchronous \ac{DS-CDMA}, where symbols of different users may be received with a time-shift.
+	\item The correlator in the receiver will not be able to synchronize to the time-shift.
+\end{itemize}
+
+For asynchronous \ac{DS-CDMA}, codes must have good autocorrelation properties.
+\begin{itemize}
+	\item They shall only have one peak, so that the correlator in the receiver can determine the time-shift and synchronize itself.
+	\item The cross-correlation to other codes shall be close to uero.
+	\item Good codes are \index{pseudo-random number code} \textbf{\acf{PN codes}}.
+	\begin{itemize}
+		\item There are equal numbers of $+1$'s and $-1$'s in the code sequence.
+		\item The $+1$'s and $-1$'s are equally distributed.
+	\end{itemize}
+	\item The codes are not necessarily orthogonal. Only the autocorrelation and cross-correlation properties are important.
+\end{itemize}
+
+Examples of such codes (without going into detail):
+\begin{itemize}
+	\item Gold codes
+	\item Kasami codes
+\end{itemize}
 
 \begin{example}{3G cell phone -- \acs{UMTS}}
 	Inhalt...
 \end{example}
 
-%TODO \section{Duplexing}
+\section{Duplexing}
+
+Usually, there is not only one dedicate transmitter and one dedicate receiver (simplex). The terminals in a digital communication system may both transmit and receive (duplex). Example: A cell phone must be able to transmit and receive data, because the voice channel is bi-directional.
+
+The communication relations (between two terminals) can be classified:
+\begin{itemize}
+	\item \textbf{Simplex} -- One only device is transmitting. The other one is only receiving.
+	\item \textbf{Half-duplex} -- Both terminals transmit and receive. Only one of the two devices can transmit at once. The devices exchange their transmitter and receiver roles, when one device finished its transmission and the other one wants to transmit.
+	\item \textbf{Full-duplex} -- Both terminals transmit and receive simultaneously.
+\end{itemize}
+
+Examples:
+\begin{itemize}
+	\item Simplex: Radio broadcasting, television broadcasting
+	\item Half-duplex: Walkie-talkie (push-to-talk button to switch from reception to transmission)
+	\item Full-duplex: telephone, cellphone (both persons can speak simultaneously)
+\end{itemize}
+
+Simplex and half-duplex can be easily implemented using the same transmission medium. It must only be ensured that only one device transmits at once.
+
+Full-duplex is more challenging, because both devices want to both transmit and receive simultaneously.
+
+\subsection{Frequency-Division Duplex}
+
+The \index{frequency-division duplex} \textbf{\acf{FDD}} uses two frequencies.
+\begin{itemize}
+	\item Frequency $f_1$ is used by device 1 for transmission and by device 2 for reception.
+	\item Frequency $f_2$ is used by device 2 for transmission and by device 1 for reception.
+\end{itemize}
+The transmission is perfectly simultaneous.
+
+\ac{FDD} is the \emph{duplexing method} derived from \ac{FDMA}.
+
+\subsection{Time-Division Duplex}
+
+The \index{time-division duplex} \textbf{\acf{TDD}} uses two sequential time-slots in the same frequency band.
+\begin{itemize}
+	\item Time-slot 1 is used by device 1 for transmission and by device 2 for reception.
+	\item Time-slot 2 is used by device 2 for transmission and by device 1 for reception.
+	\item Afterwards, time-slot 1 starts again.
+\end{itemize}
+In fact, this is a half-duplex method. But, the time-slots are so short that the user will not notice to switching between the time-slots. The duplexing is \emph{quasi-full-duplex}.
+
+\ac{TDD} is the \emph{duplexing method} derived from \ac{TDMA}.
+
 
 \nocite{ipatov2005}
 
