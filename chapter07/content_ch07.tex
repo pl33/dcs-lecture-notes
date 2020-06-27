@@ -1609,7 +1609,20 @@ Drawbacks:
 \end{figure}
 
 \begin{example}{2G cell phone -- \acs{GSM}}
-	\todo{GSM example}
+	The 2G cell phone system (\acf{GSM}) uses a hybrid \acs{TDMA}/\acs{FDMA} scheme.
+	\begin{itemize}
+		\item 8 users can share a frequency.
+		\begin{itemize}
+			\item The \acs{TDMA} part uses 8 time-slots of $\SI{576.92}{\micro{}s}$ length.
+			\item The 8 time-slots are arranged in a frame of $8 \cdot \SI{576.92}{\micro{}s} = \SI{4.615}{ms}$ length.
+			\item Thus, a time-slot for each user repeats every $\SI{4.615}{ms}$.
+			\item Frames are arranged in multi-frames, which themselves are arranged in super-frames, which themselves are arranged in hyper-frames.
+			\item Each time-slot (if used for data traffic) can transport $\SI{114}{bit}$. (The frame has actually $\SI{156.25}{bit}$ used for data, synchronization, control information and guard interval.)
+			\item The theoretical net data rate is $\SI{114}{bit} / \SI{4.615}{ms} = \SI{24.7}{kbit/s}$. This is sufficient to transmit voice.
+			\item The real number of users is less than 8, because some time-slots are used for control information.
+		\end{itemize}
+		\item To enable, more than 8 users, a base station uses more than one frequency. Different users can be assigned different frequencies (\acs{FDMA}).
+	\end{itemize}
 \end{example}
 
 \subsection{Code-Division Multiple Access}
@@ -1887,7 +1900,7 @@ For asynchronous \ac{DS-CDMA}, codes must have good autocorrelation properties.
 \begin{itemize}
 	\item They shall only have one peak, so that the correlator in the receiver can determine the time-shift and synchronize itself.
 	\item The cross-correlation to other codes shall be close to uero.
-	\item Good codes are \index{pseudo-random number code} \textbf{\acf{PN codes}}.
+	\item Good codes are \index{pseudo-random number code} \textbf{\acf{PRN} codes}.
 	\begin{itemize}
 		\item There are equal numbers of $+1$'s and $-1$'s in the code sequence.
 		\item The $+1$'s and $-1$'s are equally distributed.
@@ -1901,9 +1914,8 @@ Examples of such codes (without going into detail):
 	\item Kasami codes
 \end{itemize}
 
-\begin{example}{3G cell phone -- \acs{UMTS}}
-	Inhalt...
-\end{example}
+%\begin{example}{3G cell phone -- \acs{UMTS}}
+%\end{example}
 
 \section{Duplexing}
 
@@ -1938,6 +1950,15 @@ The transmission is perfectly simultaneous.
 
 \ac{FDD} is the \emph{duplexing method} derived from \ac{FDMA}.
 
+\begin{remark}
+	Like in an \ac{FDMA} system, guard bands must be inserted to mitigate inter-carrier interference.
+\end{remark}
+
+Examples:
+\begin{itemize}
+	\item 2G cell phone (\acs{GSM}) according to the \acs{ETSI} TS 145 002 Standard \cite{etsits145002}
+\end{itemize}
+
 \subsection{Time-Division Duplex}
 
 The \index{time-division duplex} \textbf{\acf{TDD}} uses two sequential time-slots in the same frequency band.
@@ -1946,9 +1967,43 @@ The \index{time-division duplex} \textbf{\acf{TDD}} uses two sequential time-slo
 	\item Time-slot 2 is used by device 2 for transmission and by device 1 for reception.
 	\item Afterwards, time-slot 1 starts again.
 \end{itemize}
-In fact, this is a half-duplex method. But, the time-slots are so short that the user will not notice to switching between the time-slots. The duplexing is \emph{quasi-full-duplex}.
+In fact, this is a half-duplex method. But, the time-slots are so short that the user will not notice the switching between the time-slots. The duplexing is \emph{quasi-full-duplex}.
 
 \ac{TDD} is the \emph{duplexing method} derived from \ac{TDMA}.
+
+\begin{remark}
+	Like in an \ac{TDMA} system, guard intervals must be inserted to mitigate \ac{ISI}.
+\end{remark}
+
+Examples:
+\begin{itemize}
+	\item \acf{TETRA}: trunked radio system for professional mobile radio according to the \acs{ETSI} EN 300 392 Standard \cite{en300392}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		x={(1.5cm,0cm)},
+		y={(0cm,1cm)},
+	]
+		\draw[-latex] (-0.5,0) -- (8.5,0) node[below right,align=left]{Time $t$};
+		
+		\foreach \x in {0,2,4,6}{
+			\draw[fill=red!50,draw=black] ({(\x)},0) -- ({(\x)+1},0) -- ({(\x)+1},1) -- ({(\x)},1) -- cycle;
+			%\node[align=center] at({(\x)+0.5},0.5) {User 1 Tx\\ User 2 Rx};
+		}
+		\draw[latex-] (0.5,0.5) -- (0,3) node[above,align=center]{User 1 transmitting\\ User 2 receiving};
+	
+		\foreach \x in {1,3,5,7}{
+			\draw[fill=blue!50,draw=black] ({(\x)},0) -- ({(\x)+1},0) -- ({(\x)+1},1) -- ({(\x)},1) -- cycle;
+			%\node[align=center] at({(\x)+0.5},0.5) {User 1 Rx\\ User 2 Tx};
+		}
+		\draw[latex-] (1.5,0.5) -- (2,2) node[above right,align=left]{User 1 receiving\\ User 2 transmitting};
+	
+		\draw[latex-latex] (1,-0.5) -- node[midway,below,align=center]{\footnotesize Time-slot length\\ $T_{TS}$} (2,-0.5);
+	\end{tikzpicture}
+	\caption{Distribution of transmission and reception time-slots (without guard intervals) in a \acs{TDD} system}
+\end{figure}
 
 
 \nocite{ipatov2005}
