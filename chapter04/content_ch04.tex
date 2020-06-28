@@ -895,7 +895,7 @@ The \ac{DTFT} is derived from the \ac{CTFT}. Therefore, all properties apply lik
 
 Analogous to the Fourier and Laplace transform, the \acf{DTFT} is a special case of the z-transform.
 
-\begin{definition}{Discrete-time Fourier transform}
+\begin{definition}{z-transform}
 	The \index{z-transform} \textbf{z-transform} of a time-discrete signal $\underline{x}[n]$ with the sampling period $T_S$ is:
 	\begin{equation}
 		\underline{X}\left(\underline{z}\right) = \mathcal{Z}\left\{\underline{x}[n]\right\} = \sum\limits_{n = -\infty}^{\infty} \underline{x}[n] \cdot \underline{z}^{-n}
@@ -1065,7 +1065,7 @@ The $N \times N$ transformation matrix $\underline{\mat{F}}$ is the \index{DFT m
 \begin{equation}
 	\underline{F}_{pq} = \underline{w}^{p \cdot q}
 \end{equation}
-where $\underline{w}$ is the $N$-th \index{primitive root of unity} \textbf{primitive root of unity}\footnote{The primitive root of unity divide the unit circle $e^{j \phi}$ into equally sized segments.}.
+where $\underline{w}$ is the $N$-th \index{primitive root of unity} \textbf{primitive root of unity}\footnote{The primitive root of unity divide the unit circle $e^{j \phi}$ into equally sized segments.}.\nomenclature[Sw]{$\underline{w}_N$}{$N$-th primitive root of unity}
 \begin{equation}
 	\underline{w} = e^{j \frac{2 \pi}{N}}
 \end{equation}

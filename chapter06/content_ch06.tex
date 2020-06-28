@@ -569,6 +569,7 @@ The \ac{LO} generates both a cos-signal and a \SI{90}{\degree}-phase-shifted sin
 \begin{itemize}
 	\item Signals at lower sampling rates require less computation time and memory (software), or lower hardware complexity (less logic gates). The power consumption is reduced.
 	\item The \ac{ADC} can be operated at maximum sampling rate. The signal is oversampled. Down-sampling provides processing gain and enhances the receiver performance.
+	%TODO \item Implementing the timing recovery
 \end{itemize}
 
 \subsection{Down-sampling}
@@ -604,6 +605,8 @@ Down-sampling is in fact the sampling of an already sampled time-discrete signal
 		\item Discard all samples in between.
 	\end{itemize}
 \end{itemize}
+
+%TODO Sampling phase (timing) must be considered.
 
 \begin{figure}[H]
 	\centering
@@ -1224,6 +1227,8 @@ The bandwidth of the interpolation filter shall be less or equal to the input si
 %\end{excursus}
 %
 %\todo{CIC filter}
+
+%TODO Rational (fractional) resampling
 
 \section{Fast Fourier Transform}
 
