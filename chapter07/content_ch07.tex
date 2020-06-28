@@ -1887,6 +1887,16 @@ However, not each $L_1$ code is orthogonal to any $L_2$ code. The relation of or
 	\label{fig:ch07:ovsf_code_tree}
 \end{figure}
 
+The rules for creating the \acs{OVSF} code tree are (derived from the construction rules of the Hadamard matrix):
+\begin{itemize}
+	\item The parent node in the tree is $\vect{C}_{n,k}$ ($n$ is the code length, $k$ is the index).
+	\item The child nodes are:
+	\begin{itemize}
+		\item $\vect{C}_{2n,2k-1} = \left[\vect{C}_{n,k}, \vect{C}_{n,k}\right]$
+		\item $\vect{C}_{2n,2k} = \left[\vect{C}_{n,k}, -\vect{C}_{n,k}\right]$
+	\end{itemize}
+\end{itemize}
+
 \subsection{Asynchronous \acs{DS-CDMA}}
 
 Welsh code have excellent cross-correlation properties. But, Welsh codes \underline{do not} have good autocorrelation properties.
