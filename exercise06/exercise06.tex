@@ -14,10 +14,38 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{question}[subtitle={Decibel}]
-	Proof mathematically that all poles of the FIR filter are $0$!
+\begin{question}[subtitle={IIR Filter}]
+	The following IIR filter is given.
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw[o-] (-1,0) node[left, align=right]{$\underline{x}[n]$} -- (0,0);
+			\draw (0,-3) node[adder](Add1){};
+			\draw (2,-3) node[adder](Add2){};
+			\draw (0,0) to[amp,l=$\underline{b}_0$,>,-] (Add1.north) node[inputarrow,rotate=-90]{};
+			\draw (0,0) to[short,*-] (2,0) to[twoport,t=$z^{-1}$,>,-] (Add2.north) node[inputarrow,rotate=-90]{};
+			\draw (Add1.east) to[short] (Add2.west) node[inputarrow,rotate=0]{};
+			\draw[-latex] (Add2.east) to[short] (4,-3) node[right, align=left]{$\underline{y}[n]$};
+			\draw (3,-3) to[short,*-] (3,-6) to[twoport,t=$z^{-1}$,>,-] (0,-6) to[amp,l=$\underline{a}_0$,>,-] (Add1.south) node[inputarrow,rotate=90]{};
+		\end{circuitikz}
+	\end{figure}
+	with:
+	\begin{itemize}
+		\item $\underline{a}_0 = 0.5$
+		\item $\underline{b}_0 = 2$
+	\end{itemize}
 	
 	\begin{tasks}
+		\task
+		Give the block diagram of the filter!
+		\task
+		Give the differential equation of the filter!
+		\task
+		How much is the filter order?
+		\task
+		Is the filter stable?
+		\task
+		Plot the amplitude and phase response between $0$ and $\pi$.
 	\end{tasks}
 \end{question}
 
@@ -26,6 +54,100 @@
 	\end{tasks}
 \end{solution}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={FIR Filter}]
+	An FIR filter with following coefficients is given.
+	\begin{itemize}
+		\item $b_0 = 1$.
+		\item $b_1 = 0.5 + j \cdot 1$.
+		\item $b_2 = 2$.
+	\end{itemize}
+
+	The sampling rate of the digital system is \SI{2}{MHz}.
+	
+	\begin{tasks}
+		\task
+		Give the block diagram of the filter!
+		\task
+		Give the transfer function of the filter!
+		\task
+		Give the differential equation of the filter!
+		\task
+		How much is the filter order?
+		\task
+		Plot the amplitude and phase response between \SI{-1}{MHz} and \SI{1}{MHz}.
+		\task
+		Proof mathematically that all poles of the FIR filter are $0$!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Down-sampling}]
+	An analogue signal $x(t)$ is digitized (sampled and quantized).
+	\begin{equation*}
+		x(t) = \sin\left(2 \pi \cdot \SI{96}{kHz} \cdot t\right)
+	\end{equation*}
+	The signal has been sampled by a \SI{8}{bit}-ADC at \SI{7.68}{MHz}.
+	
+	The signal $x[n]$ is decimated by $N = 40$.
+	
+	\begin{tasks}
+		\task
+		How much is the sampling rate of the decimated signal?
+		\task
+		Is the signal suitable to be decimated by $N = 40$? Explain why! What is the criterion?
+		\task
+		What is the optimal sampling phase?
+		\task
+		Explain the effect on the spectrum caused by down-sampling!
+		\task
+		How much is the processing gain? How much is the effective number of bits?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={FFT}]
+	A series of the samples in the time-domain is given:
+	\begin{equation*}
+		x[n] = \left[2 \underline{-0.5} 1 -2 \right]
+	\end{equation*}
+	
+	\begin{remark}
+		The underline marks the sample at $n = 0$.
+	\end{remark}
+	
+	\begin{tasks}
+		\task
+		Calculate the DFT for $k = 0, \ldots, 3$!
+		\task
+		Calculate the FFT using the Cooley-Tuckey FFT algorithm!
+		\task
+		Compare the number of multiply-accumulate operations necessary for both methods in a) and b)!
+		\task
+		Draw the butterfly graph!
+		\task
+		Give th primitive roots of unity for each sub-FFT in the butterfly graph!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	%The signal is periodic with $N = 4$.
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{question}[subtitle={Decibel}]
