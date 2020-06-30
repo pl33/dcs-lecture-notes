@@ -1897,6 +1897,12 @@ The rules for creating the \acs{OVSF} code tree are (derived from the constructi
 	\end{itemize}
 \end{itemize}
 
+The different code lengths have benefits and drawbacks.
+\begin{itemize}
+	\item Longer codes have lower data rates. But they have a higher processing gain and better noise immunity. Data decoding works in noisy environments with low \ac{SNR}.
+	\item Short codes give a higher data rate. However, the processing gain is less as well as the noise immunity. Data decoding may not work in noisy environments. A proper \ac{SNR} is required.
+\end{itemize}
+
 \subsection{Asynchronous \acs{DS-CDMA}}
 
 Welsh code have excellent cross-correlation properties. But, Welsh codes \underline{do not} have good autocorrelation properties.

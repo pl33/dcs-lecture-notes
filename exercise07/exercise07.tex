@@ -14,6 +14,100 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={DS-CDMA}]
+	Two spreading codes are given.
+	\begin{itemize}
+		\item $\vect{C}_{4,1} = \left[1,1,-1,-1\right]$
+		\item $\vect{C}_{4,2} = \left[1,-1,-1,1\right]$
+	\end{itemize}
+
+	The data stream is $\vect{D} = \left[1,-1\right]$
+	
+	\begin{tasks}
+		\task
+		How much is the inner product of $\vect{C}_{4,1}$ and $\vect{C}_{4,2}$? What does the result mean?
+		\task
+		The data $\vect{D}$ is spread by $\vect{C}_{4,1}$. Calculate the transmitted chip sequence $\vect{S}$!
+		\task
+		Calculate the cross-correlation of $\vect{S}$ and $\vect{C}_{4,1}$!
+		\task
+		Calculate the cross-correlation of $\vect{S}$ and $\vect{C}_{4,2}$!
+		\task
+		Calculate the autocorrelation of $\vect{C}_{4,2}$!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={2G cell phone -- GSM}]
+	A GSM uses a FDMA/TDMA hybrid multiple access method. The TDMA part uses time-slots of \SI{546.5}{\micro{}s} length. Each time-slot is followed by a \SI{30.5}{\micro{}s} long guard interval. Eight time-slots are grouped into one frame. A user is assigned one of the time-slots in each frame for exclusive use.
+	
+	\SI{148}{bit} can be transported in one time-slot (excluding the guard interval). \SI{114}{bit} are usable for data.
+		
+	\begin{tasks}
+		\task
+		What purpose does the guard interval serve?
+		\task
+		How much is the frame length?
+		\task
+		How much is the raw symbol rate?
+		\task
+		How much is the data rate? One bit is encoded in one symbol.
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={OFDM}]
+	An OFDM system has a sub-carrier spacing of \SI{15}{kHz}, a signal bandwidth of \SI{20}{MHz} and a guard band of \SI{2}{MHz}.
+	
+	\begin{tasks}
+		\task
+		How much is the symbol duration?
+		\task
+		How many sub-bands are available?
+		\task
+		Is the symbol duration affected if the modulation is changed from QPSK to 16-QAM?
+		\task
+		Give the data rate if a 16-QAM modulation is used. \SI{20}{\percent} of the sub-bands are pilots (for synchronization) and cannot be used for data transmission.
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={3G cell phone -- UMTS}]
+	A UMTS system uses DS-CDMA with a constant chip rate of \SI{3.84}{MHz} for all users. The data is transmitted in frames with a length of 2560 chips. One frame occupies one time-slot. Each user is assigned a spreading code and a time-slot for transmitting his/her frame.
+	
+	\begin{tasks}
+		\task
+		The transmission of frames in time-slots makes the multiple access method of UMTS a hybrid of CDMA and which other technology? Explain this technology!
+		\task
+		How much is the time-slot length (duration) if guard intervals are neglected?
+		\task
+		A spreading factor of 8 is chosen. The modulation is QPSK. How much is the symbol rate? How much is the data rate?
+		\task
+		A voice data stream with \SI{15}{kbit/s} is transmitted using BPSK. How much is the processing gain?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{question}[subtitle={Decibel}]
 %	\begin{tasks}
 %	\end{tasks}
