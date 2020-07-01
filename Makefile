@@ -53,8 +53,8 @@ $(BUILD_DIR)/svg/ch04_win_tri.pdf: chapter04/win_tri.svg
 $(BUILD_DIR)/svg/ch04_win_gauss.pdf: chapter04/win_gauss.svg
 $(BUILD_DIR)/svg/ch06_FFT_Butterfly.pdf: chapter06/FFT_Butterfly.svg
 
-.PHONY: $(BUILD_DIR)/vcs_info.tex
-$(BUILD_DIR)/vcs_info.tex:
+
+$(BUILD_DIR)/vcs_info.tex: .git/HEAD .git/refs/heads/*
 	./gen_vcs_info.sh > $@
 
 %-watch: main/%.tex
