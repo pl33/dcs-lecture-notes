@@ -24,11 +24,11 @@ clean:
 	mkdir -p $(BUILD_DIR)
 	cd $(BUILD_DIR) ; rm -f *.aux *.fdb_latexmk *.fls *.lof *.log *.lot *.pdf *.synctex.gz
 
-$(BUILD_DIR)/DCS.pdf: main/DCS.tex $(COMMON_DEPS) */*.tex $(ALL_SVGS)
+$(BUILD_DIR)/DCS.pdf: main/DCS.tex $(COMMON_DEPS) */*.tex $(ALL_SVGS) $(BUILD_DIR)/vcs_info.tex
 	mkdir -p $(BUILD_DIR)
 	cd $(BUILD_DIR) ; $(LATEXMK) ../$<
 
-$(BUILD_DIR)/%.pdf: main/%.tex $(COMMON_DEPS) %/*.tex $(ALL_SVGS)
+$(BUILD_DIR)/%.pdf: main/%.tex $(COMMON_DEPS) %/*.tex $(ALL_SVGS) $(BUILD_DIR)/vcs_info.tex
 	mkdir -p $(BUILD_DIR)
 	cd $(BUILD_DIR) ; $(LATEXMK) ../$<
 
@@ -52,6 +52,10 @@ $(BUILD_DIR)/svg/ch04_win_rect.pdf: chapter04/win_rect.svg
 $(BUILD_DIR)/svg/ch04_win_tri.pdf: chapter04/win_tri.svg
 $(BUILD_DIR)/svg/ch04_win_gauss.pdf: chapter04/win_gauss.svg
 $(BUILD_DIR)/svg/ch06_FFT_Butterfly.pdf: chapter06/FFT_Butterfly.svg
+
+.PHONY: $(BUILD_DIR)/vcs_info.tex
+$(BUILD_DIR)/vcs_info.tex:
+	./gen_vcs_info.sh > $@
 
 %-watch: main/%.tex
 	mkdir -p $(BUILD_DIR)
