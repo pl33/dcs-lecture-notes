@@ -428,6 +428,7 @@
 			]
 				\pgfmathsetmacro{\Xscale}{5}
 				\pgfmathsetmacro{\Cmargin}{0.15}
+				
 				\foreach \n/\f/\g in {0/1/3,1/0/2}{
 					\draw (0,{((2*\n+1)*\Xscale)}) node[left,align=right]{$\underline{x}[\f]$} -- ({10-\Cmargin},{((2*\n+1)*\Xscale)}) node[inputarrow,rotate=0]{};
 					\node[adder,scale=0.2] at(10,{(\n*2*\Xscale)+(\Xscale)}) {};
@@ -448,6 +449,9 @@
 				}
 				\foreach \f in {0,1,2,3}{
 					\draw ({20+\Cmargin},{(3-\f)*\Xscale}) -- (25,{(3-\f)*\Xscale}) node[inputarrow,rotate=0]{} node[right,align=left]{$\underline{X}[\f]$};
+				}
+				\foreach \n in {1,5}{
+					\draw[dashed] (3.5,{(\Xscale*\n/2)+3.5}) -- (3.5,{(\Xscale*\n/2)-3.5}) -- (11.5,{(\Xscale*\n/2)-3.5}) -- (11.5,{(\Xscale*\n/2)+3.5}) node[above left,align=right]{2-point FFT} -- cycle;
 				}
 			\end{circuitikz}
 		\end{figure}
