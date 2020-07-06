@@ -51,6 +51,117 @@
 
 \begin{solution}
 	\begin{tasks}
+		\task
+		See hand-written solution
+		
+		\task
+		See hand-written solution
+		
+		\task
+		See hand-written solution
+		
+		\task
+		See hand-written solution
+		
+		\task
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|r|r|r|}
+				\hline
+				$\phi$ in \si{rad} & $\left|\underline{H}\left(e^{j\phi}\right)\right|$ & $\arg\left(\underline{H}\left(e^{j\phi}\right)\right)$ in \si{rad} \\
+				\hline
+				\hline
+				$0$ & $2$ & $0$ \\
+				\hline
+				$0.39$ & $2$ & $0$ \\
+				\hline
+				$0.79$ & $2$ & $0$ \\
+				\hline
+				$1.18$ & $2$ & $0$ \\
+				\hline
+				$1.57$ & $2$ & $0$ \\
+				\hline
+				$1.96$ & $2$ & $0$ \\
+				\hline
+				$2.36$ & $2$ & $0$ \\
+				\hline
+				$2.75$ & $2$ & $0$ \\
+				\hline
+			\end{tabular}
+		\end{table}
+	
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+					height={0.10\textheight},
+					width=0.7\linewidth,
+					scale only axis,
+					xlabel={$\phi$ in \si{rad}},
+					ylabel={$\left|\underline{H}\left(e^{j\phi}\right)\right|$},
+					%grid style={line width=.6pt, color=lightgray},
+					%grid=both,
+					grid=none,
+					legend pos=north east,
+					axis y line=middle,
+					axis x line=middle,
+					every axis x label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=north,
+					},
+					every axis y label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=east,
+					},
+					xmin=0,
+					xmax=3.5,
+					ymin=0,
+					ymax=2.2,
+					xtick={0, 1.5708, 3.14159},
+					xticklabels={0, $\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+%					ytick={0},
+				]
+					\addplot[red] coordinates {(0, 2) (0.39, 2) (0.79, 2) (1.18, 2) (1.57, 2) (1.96, 2) (2.36, 2) (2.75, 2)};
+				\end{axis}
+			\end{tikzpicture}
+		\end{figure}
+	
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+				height={0.10\textheight},
+				width=0.7\linewidth,
+				scale only axis,
+				xlabel={$\phi$ in \si{rad}},
+				ylabel={$\arg\left(\underline{H}\left(e^{j\phi}\right)\right)$ in \si{rad}},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=3.5,
+				ymin=-3.5,
+				ymax=3.5,
+				xtick={0, 1.5708, 3.14159},
+				xticklabels={0, $\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+				ytick={-3.14159, -1.5708, 0, 1.5708, 3.14159},
+				yticklabels={$\pi\hspace{0.30cm}-$, $-\frac{\pi}{2}$, 0, $\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+			]
+				\addplot[blue] coordinates {(0, 0) (0.39, 0) (0.79, 0) (1.18, 0) (1.57, 0) (1.96, 0) (2.36, 0) (2.75, 0)};
+			\end{axis}
+		\end{tikzpicture}
+		\end{figure}
 	\end{tasks}
 \end{solution}
 
@@ -84,6 +195,138 @@
 
 \begin{solution}
 	\begin{tasks}
+		\task
+		See hand-written solution
+		
+		\task
+		See hand-written solution
+		
+		\task
+		See hand-written solution
+		
+		\task
+		See hand-written solution
+		
+		\task
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{|r|r|r|}
+				\hline
+				$f$ in \si{kHz} & $\left|\underline{H}\left(e^{j\phi}\right)\right|$ & $\arg\left(\underline{H}\left(e^{j\phi}\right)\right)$ in \si{rad} \\
+				\hline
+				\hline
+				$-875$ & $2.66222$ & $-0.940067$ \\
+				\hline
+				$-750$ & $2.35077$ & $-1.59632$ \\
+				\hline
+				$-625$ & $2.02726$ & $-2.42601$ \\
+				\hline
+				$-500$ & $2.06155$ & $2.89661$ \\
+				\hline
+				$-375$ & $2.53576$ & $2.0415$ \\
+				\hline
+				$-250$ & $3.12827$ & $1.36149$ \\
+				\hline
+				$-125$ & $3.54979$ & $0.793366$ \\
+				\hline
+				$0$ & $3.64005$ & $0.2783$ \\
+				\hline
+				$125$ & $3.33017$ & $-0.20564$ \\
+				\hline
+				$250$ & $2.63934$ & $-0.675333$ \\
+				\hline
+				$375$ & $1.64624$ & $-1.1316$ \\
+				\hline
+				$500$ & $0.5$ & $-1.5708$ \\
+				\hline
+				$625$ & $0.653682$ & $1.05924$ \\
+				\hline
+				$750$ & $1.64502$ & $0.608236$ \\
+				\hline
+				$875$ & $2.34923$ & $0.128051$ \\
+				\hline
+				$1000$ & $2.69258$ & $-0.380506$ \\
+				\hline
+			\end{tabular}
+		\end{table}
+	
+		Amplitude and phase plots will not be symmetric, because one filter coefficient is complex-valued.
+	
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+					height={0.10\textheight},
+					width=0.7\linewidth,
+					scale only axis,
+					xlabel={$f$ in \si{Hz}},
+					ylabel={$\left|\underline{H}\left(e^{j\phi}\right)\right|$},
+					%grid style={line width=.6pt, color=lightgray},
+					%grid=both,
+					grid=none,
+					legend pos=north east,
+					axis y line=middle,
+					axis x line=middle,
+					every axis x label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=north,
+					},
+					every axis y label/.style={
+						at={(ticklabel* cs:1.05)},
+						anchor=east,
+					},
+%					xmin=-3.5,
+%					xmax=3.5,
+					ymin=0,
+					ymax=3.7,
+%					xtick={0, 1.5708, 3.14159},
+%					xticklabels={0, $\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+%					ytick={0},
+				]
+					\addplot[red] coordinates {(-875000, 2.66222) (-750000, 2.35077) (-625000, 2.02726) (-500000, 2.06155) (-375000, 2.53576) (-250000, 3.12827) (-125000, 3.54979) (0, 3.64005) (125000, 3.33017) (250000, 2.63934) (375000, 1.64624) (500000, 0.5) (625000, 0.653682) (750000, 1.64502) (875000, 2.34923) (1e+06, 2.69258)};
+				\end{axis}
+			\end{tikzpicture}
+		\end{figure}
+	
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+				height={0.10\textheight},
+				width=0.7\linewidth,
+				scale only axis,
+				xlabel={$f$ in \si{Hz}},
+				ylabel={$\arg\left(\underline{H}\left(e^{j\phi}\right)\right)$ in \si{rad}},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+%				xmin=-3.5,
+%				xmax=3.5,
+				ymin=-3.5,
+				ymax=3.5,
+%				xtick={0, 1.5708, 3.14159},
+%				xticklabels={0, $\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+				ytick={-3.14159, -1.5708, 0, 1.5708, 3.14159},
+				yticklabels={$\pi\hspace{0.30cm}-$, $-\frac{\pi}{2}$, 0, $\frac{\pi}{2}$, $\pi\hspace{0.10cm}$},
+			]
+				\addplot[blue] coordinates {(-875000, -0.940067) (-750000, -1.59632) (-625000, -2.42601) (-500000, 2.89661) (-375000, 2.0415) (-250000, 1.36149) (-125000, 0.793366) (0, 0.2783) (125000, -0.20564) (250000, -0.675333) (375000, -1.1316) (500000, -1.5708) (625000, 1.05924) (750000, 0.608236) (875000, 0.128051) (1e+06, -0.380506)};
+			\end{axis}
+		\end{tikzpicture}
+		\end{figure}
+		
+		\task
+		See hand-written solution
 	\end{tasks}
 \end{solution}
 
@@ -146,8 +389,122 @@
 \end{question}
 
 \begin{solution}
-	%The signal is periodic with $N = 4$.
+	The signal is periodic with $N = 4$. So, it can be re-written as:
+	\begin{equation*}
+		x[n] = \left[\underline{-0.5}, 1, -2, 2\right]
+	\end{equation*}
+	
 	\begin{tasks}
+		\task
+		The formula of the DFT is:
+		\begin{equation}
+			\underline{X}[k] = \sum\limits_{n = 0}^{N - 1} \underline{x}[n] \cdot e^{- j \frac{2 \pi}{N} k n}
+		\end{equation}
+		where:
+		\begin{itemize}
+			\item $N = 4$
+			\item $\underline{x}[0] = -0.5$
+			\item $\underline{x}[1] = 1$
+			\item $\underline{x}[2] = -2$
+			\item $\underline{x}[3] = \underline{x}[-1] = 2$
+		\end{itemize}
+		
+		\begin{equation*}
+			\begin{split}
+				\underline{X}[0] &= \underline{x}[0] \cdot e^{-j \frac{\pi}{2} 0 \cdot 0} + \underline{x}[1] \cdot e^{-j \frac{\pi}{2} 0 \cdot 1} + \underline{x}[2] \cdot e^{-j \frac{\pi}{2} 0 \cdot 2} + \underline{x}[3] \cdot e^{-j \frac{\pi}{2} 0 \cdot 3} = 0.5 \\
+				\underline{X}[1] &= \underline{x}[0] \cdot e^{-j \frac{\pi}{2} 1 \cdot 0} + \underline{x}[1] \cdot e^{-j \frac{\pi}{2} 1 \cdot 1} + \underline{x}[2] \cdot e^{-j \frac{\pi}{2} 1 \cdot 2} + \underline{x}[3] \cdot e^{-j \frac{\pi}{2} 1 \cdot 3} = 1.5+1j \\
+				\underline{X}[2] &= \underline{x}[0] \cdot e^{-j \frac{\pi}{2} 2 \cdot 0} + \underline{x}[1] \cdot e^{-j \frac{\pi}{2} 2 \cdot 1} + \underline{x}[2] \cdot e^{-j \frac{\pi}{2} 2 \cdot 2} + \underline{x}[3] \cdot e^{-j \frac{\pi}{2} 2 \cdot 3} = -5.5 \\
+				\underline{X}[3] &= \underline{x}[0] \cdot e^{-j \frac{\pi}{2} 3 \cdot 0} + \underline{x}[1] \cdot e^{-j \frac{\pi}{2} 3 \cdot 1} + \underline{x}[2] \cdot e^{-j \frac{\pi}{2} 3 \cdot 2} + \underline{x}[3] \cdot e^{-j \frac{\pi}{2} 3 \cdot 3} = 1.5-1j
+			\end{split}
+		\end{equation*}
+		
+		\task
+		\begin{figure}[H]
+			\centering
+			\begin{circuitikz}[
+				x=0.4cm,
+				y=0.4cm,
+				littleamp/.style={amp, blocks/scale=0.2}
+			]
+				\pgfmathsetmacro{\Xscale}{5}
+				\pgfmathsetmacro{\Cmargin}{0.15}
+				\foreach \n/\f/\g in {0/1/3,1/0/2}{
+					\draw (0,{((2*\n+1)*\Xscale)}) node[left,align=right]{$\underline{x}[\f]$} -- ({10-\Cmargin},{((2*\n+1)*\Xscale)}) node[inputarrow,rotate=0]{};
+					\node[adder,scale=0.2] at(10,{(\n*2*\Xscale)+(\Xscale)}) {};
+					\draw (0,{(\n*2*\Xscale)}) node[left,align=right]{$\underline{x}[\g]$}  -- (7.5,{(\n*2*\Xscale)}) to[littleamp,l=$\underline{w}_2^{1}$] ({10-\Cmargin},{(\n*2*\Xscale)}) node[inputarrow,rotate=0]{};
+					\node[adder,scale=0.2] at(10,{(\n*2*\Xscale)}) {};
+					\draw (5,{(\n*2*\Xscale)+\Xscale}) to[short,*-] ({10-\Cmargin},{(\n*2*\Xscale)+\Cmargin}) node[inputarrow,rotate=-45]{};
+					\draw (5,{(\n*2*\Xscale)}) to[short,*-] (7.5,{(\n*2*\Xscale)+(\Xscale/2)}) to[littleamp,l=$\underline{w}_2^{0}$] ({10-\Cmargin},{(\n*2*\Xscale)+\Xscale-\Cmargin}) node[inputarrow,rotate=45]{};
+				}
+				\foreach \n/\g in {0/3,1/2}{
+					\draw ({10+\Cmargin},{(\n*\Xscale)+(2*\Xscale)}) -- ({20-\Cmargin},{(\n*\Xscale)+(2*\Xscale)}) node[inputarrow,rotate=0]{};
+					\node[adder,scale=0.2] at(20,{(\n*\Xscale)+(2*\Xscale)}) {};
+					\draw ({10+\Cmargin},{(\n*\Xscale)}) -- (17.5,{(\n*\Xscale)}) to[littleamp,l=$\underline{w}_4^{\g}$] ({20-\Cmargin},{(\n*\Xscale)}) node[inputarrow,rotate=0]{};
+					\node[adder,scale=0.2] at(20,{(\n*\Xscale)}) {};
+				}
+				\foreach \n/\g in {0/1,1/0}{
+					\draw (15,{(2*\Xscale)+(\n*\Xscale)}) node[above,align=center,red]{$\underline{E}[\g]$} to[short,*-] ({20-\Cmargin},{(\n*\Xscale)+\Cmargin}) node[inputarrow,rotate=-60]{};
+					\draw (15,{(\n*\Xscale)}) node[below,align=center,red]{$\underline{O}[\g]$} to[short,*-] (17.5,{(\Xscale)+(\n*\Xscale)}) to[littleamp,l=$\underline{w}_4^{\g}$] ({20-\Cmargin},{(2*\Xscale)+(\n*\Xscale)-\Cmargin}) node[inputarrow,rotate=60]{};
+				}
+				\foreach \f in {0,1,2,3}{
+					\draw ({20+\Cmargin},{(3-\f)*\Xscale}) -- (25,{(3-\f)*\Xscale}) node[inputarrow,rotate=0]{} node[right,align=left]{$\underline{X}[\f]$};
+				}
+			\end{circuitikz}
+		\end{figure}
+	
+		The 4-point DFT can divided into two 2-point DFTs and a 4-point combination network (butterfly graph). The 2-point sub-DFTs are itself two 1-point DFTs and a 2-point combination network (butterfly graph). Ordering by even and odd indices must be considered.
+		
+		\task
+		The unit circle is equally divided by the primitive roots of unity.
+		\begin{equation}
+			\underline{w}_N = e^{- j \frac{2 \pi}{N}}
+		\end{equation}
+		
+		$N$ is the number of points of the FFT. $N$ must be a power of $2$, i.e., $1$, $2$, $4$, $8$, $16$, $32$, ..., $512$, $1024$, ...
+		
+		\begin{itemize}
+			\item The primitive root of unity of the 2-point DFT ($N = 2$)
+			\begin{equation*}
+				\underline{w}_2 = e^{- j \pi}
+			\end{equation*}
+			\item The primitive root of unity of the 4-point DFT ($N = 4$)
+			\begin{equation*}
+				\underline{w}_4 = e^{- j \frac{\pi}{2}}
+			\end{equation*}
+		\end{itemize}
+	
+		\task
+		At first, calculate the two 2-point sub-FFTs, called \emph{even} part ($\underline{E}[k]$) and \emph{odd} part ($\underline{O}[k]$).
+		\begin{equation*}
+			\begin{split}
+				\underline{E}[0] &= \underline{x}[0] + \underline{w}_2^{0} \cdot \underline{x}[2] = -2.5 \\
+				\underline{E}[1] &= \underline{x}[0] + \underline{w}_2^{1} \cdot \underline{x}[2] = 1.5 \\
+				\underline{O}[0] &= \underline{x}[1] + \underline{w}_2^{0} \cdot \underline{x}[3] = 3.0 \\
+				\underline{O}[1] &= \underline{x}[1] + \underline{w}_2^{1} \cdot \underline{x}[3] = -1.0
+			\end{split}
+		\end{equation*}
+		Note that both $\underline{E}[k]$ and $\underline{O}[k]$ are 2-periodic, i.e., $\underline{E}[2] = \underline{E}[0]$, ...
+		
+		Now combine the two parts, to the 4-point FFT.
+		\begin{equation*}
+			\begin{split}
+				\underline{X}[0] &= \underline{E}[0] + \underline{w}_2^{0} \cdot \underline{O}[0] = 0.5 \\
+				\underline{X}[1] &= \underline{E}[1] + \underline{w}_2^{1} \cdot \underline{O}[1] = 1.5+1j \\
+				\underline{X}[2] &= \underline{E}[0] + \underline{w}_2^{2} \cdot \underline{O}[0] = -5.5 \\
+				\underline{X}[3] &= \underline{E}[1] + \underline{w}_2^{3} \cdot \underline{O}[1] = (1.5-1j)
+			\end{split}
+		\end{equation*}
+		
+		The result is the same like in a).
+		
+		\task
+		\begin{itemize}
+			\item a) and d) gave the same results. They both calculate the DFT.
+			\item a) required 16 multiplications.
+			\item d) required only 8 multiplications.
+			\item Multiplications require many computational resources. d) will perform better, because it requires fewer multiplications.
+		\end{itemize}
+		
 	\end{tasks}
 \end{solution}
 
