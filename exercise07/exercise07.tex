@@ -39,6 +39,167 @@
 
 \begin{solution}
 	\begin{tasks}
+		\task
+		The length of both codes is $N = 4$.
+		\begin{equation*}
+			\begin{split}
+				\left\langle \vect{C}_{4,1}, \vect{C}_{4,2} \right\rangle &= \sum\limits_{i = 0}^{N - 1} C_{4,1}[i] C_{4,2}[i] \\
+				 &= 1 \cdot 1 + 1 \cdot (-1) + (-1) \cdot (-1) + (-1) \cdot 1 \\
+				 &= 0
+			\end{split}
+		\end{equation*}
+		The inner product of the codes is zero. This means that the codes are orthogonal and are suitable for CDMA.
+		
+		\task
+		%TODO Symbol spreading block diagram
+		$\vect{S} = \left[1,1,-1,-1,-1,-1,1,1\right]$
+		
+		\task
+		{
+			\tiny
+			$\vect{S}$ is extended by zero. That means, $S[n] = 0 \quad \forall n < 0$ and $S[n] = 0 \quad \forall n \geq 8$.
+			\begin{equation*}
+				S[n] = \left[\ldots,0,0,0,0,\underline{1},1,-1,-1,-1,-1,1,1,0,0,0,0,\ldots\right]
+			\end{equation*}
+			\begin{remark}
+				The underline marks the sample at $n = 0$.
+			\end{remark}
+		
+			Same zero-extension is applied to the codes.
+			\begin{equation*}
+				C_{4,1}[n] = \left[\ldots,0,0,0,0,\underline{1},1,-1,-1,0,0,0,0,\ldots\right]
+			\end{equation*}
+		
+			Now, the cross-correlation can be applied.
+			\begin{equation*}
+				\mathrm{R}_{XY}[n] = \sum\limits_{i = -\infty}^{+\infty} X[n] \cdot Y[n+i]
+			\end{equation*}
+			
+			The cross-correlation effectively slides the code over the chips.
+			%TODO Figure
+		
+			\begin{equation*}
+			\begin{split}
+			\mathrm{R}_{SC_{4,1}}[-3] &= S[-3] \cdot C_{4,1}[0] + S[-2] \cdot C_{4,1}[1] + S[-1] \cdot C_{4,1}[2] + S[0] \cdot C_{4,1}[3] \\
+			&= (0) \cdot (1) + (0) \cdot (1) + (0) \cdot (-1) + (1) \cdot (-1) \\
+			&= -1 \\
+			\mathrm{R}_{SC_{4,1}}[-2] &= S[-2] \cdot C_{4,1}[0] + S[-1] \cdot C_{4,1}[1] + S[0] \cdot C_{4,1}[2] + S[1] \cdot C_{4,1}[3] \\
+			&= (0) \cdot (1) + (0) \cdot (1) + (1) \cdot (-1) + (1) \cdot (-1) \\
+			&= -2 \\
+			\mathrm{R}_{SC_{4,1}}[-1] &= S[-1] \cdot C_{4,1}[0] + S[0] \cdot C_{4,1}[1] + S[1] \cdot C_{4,1}[2] + S[2] \cdot C_{4,1}[3] \\
+			&= (0) \cdot (1) + (1) \cdot (1) + (1) \cdot (-1) + (-1) \cdot (-1) \\
+			&= 1 \\
+			\mathrm{R}_{SC_{4,1}}[0] &= S[0] \cdot C_{4,1}[0] + S[1] \cdot C_{4,1}[1] + S[2] \cdot C_{4,1}[2] + S[3] \cdot C_{4,1}[3] \\
+			&= (1) \cdot (1) + (1) \cdot (1) + (-1) \cdot (-1) + (-1) \cdot (-1) \\
+			&= 4 \\
+			\mathrm{R}_{SC_{4,1}}[1] &= S[1] \cdot C_{4,1}[0] + S[2] \cdot C_{4,1}[1] + S[3] \cdot C_{4,1}[2] + S[4] \cdot C_{4,1}[3] \\
+			&= (1) \cdot (1) + (-1) \cdot (1) + (-1) \cdot (-1) + (-1) \cdot (-1) \\
+			&= 2 \\
+			\mathrm{R}_{SC_{4,1}}[2] &= S[2] \cdot C_{4,1}[0] + S[3] \cdot C_{4,1}[1] + S[4] \cdot C_{4,1}[2] + S[5] \cdot C_{4,1}[3] \\
+			&= (-1) \cdot (1) + (-1) \cdot (1) + (-1) \cdot (-1) + (-1) \cdot (-1) \\
+			&= 0 \\
+			\mathrm{R}_{SC_{4,1}}[3] &= S[3] \cdot C_{4,1}[0] + S[4] \cdot C_{4,1}[1] + S[5] \cdot C_{4,1}[2] + S[6] \cdot C_{4,1}[3] \\
+			&= (-1) \cdot (1) + (-1) \cdot (1) + (-1) \cdot (-1) + (1) \cdot (-1) \\
+			&= -2 \\
+			\mathrm{R}_{SC_{4,1}}[4] &= S[4] \cdot C_{4,1}[0] + S[5] \cdot C_{4,1}[1] + S[6] \cdot C_{4,1}[2] + S[7] \cdot C_{4,1}[3] \\
+			&= (-1) \cdot (1) + (-1) \cdot (1) + (1) \cdot (-1) + (1) \cdot (-1) \\
+			&= -4 \\
+			\mathrm{R}_{SC_{4,1}}[5] &= S[5] \cdot C_{4,1}[0] + S[6] \cdot C_{4,1}[1] + S[7] \cdot C_{4,1}[2] + S[8] \cdot C_{4,1}[3] \\
+			&= (-1) \cdot (1) + (1) \cdot (1) + (1) \cdot (-1) + (0) \cdot (-1) \\
+			&= -1 \\
+			\mathrm{R}_{SC_{4,1}}[6] &= S[6] \cdot C_{4,1}[0] + S[7] \cdot C_{4,1}[1] + S[8] \cdot C_{4,1}[2] + S[9] \cdot C_{4,1}[3] \\
+			&= (1) \cdot (1) + (1) \cdot (1) + (0) \cdot (-1) + (0) \cdot (-1) \\
+			&= 2 \\
+			\mathrm{R}_{SC_{4,1}}[7] &= S[7] \cdot C_{4,1}[0] + S[8] \cdot C_{4,1}[1] + S[9] \cdot C_{4,1}[2] + S[10] \cdot C_{4,1}[3] \\
+			&= (1) \cdot (1) + (0) \cdot (1) + (0) \cdot (-1) + (0) \cdot (-1) \\
+			&= 1 \\
+			\end{split}
+			\end{equation*}
+			
+			The cross-correlation peak is at $n = 0$, indicating that $\vect{S}$ is correlated to $\vect{C}_{4,1}$ and is spread by $\vect{C}_{4,1}$.
+		}
+	
+		\task
+		{
+			\tiny
+			Zero-extension of $\vect{C}_{4,2}$.
+			\begin{equation*}
+				C_{4,2}[n] = \left[\ldots,0,0,0,0,\underline{1},-1,-1,1,0,0,0,0,\ldots\right]
+			\end{equation*}
+			
+			Cross-correlation:
+			\begin{equation*}
+			\begin{split}
+			\mathrm{R}_{SC_{4,2}}[-3] &= S[-3] \cdot C_{4,2}[0] + S[-2] \cdot C_{4,2}[1] + S[-1] \cdot C_{4,2}[2] + S[0] \cdot C_{4,2}[3] \\
+			&= (0) \cdot (1) + (0) \cdot (-1) + (0) \cdot (-1) + (1) \cdot (1) \\
+			&= 1 \\
+			\mathrm{R}_{SC_{4,2}}[-2] &= S[-2] \cdot C_{4,2}[0] + S[-1] \cdot C_{4,2}[1] + S[0] \cdot C_{4,2}[2] + S[1] \cdot C_{4,2}[3] \\
+			&= (0) \cdot (1) + (0) \cdot (-1) + (1) \cdot (-1) + (1) \cdot (1) \\
+			&= 0 \\
+			\mathrm{R}_{SC_{4,2}}[-1] &= S[-1] \cdot C_{4,2}[0] + S[0] \cdot C_{4,2}[1] + S[1] \cdot C_{4,2}[2] + S[2] \cdot C_{4,2}[3] \\
+			&= (0) \cdot (1) + (1) \cdot (-1) + (1) \cdot (-1) + (-1) \cdot (1) \\
+			&= -3 \\
+			\mathrm{R}_{SC_{4,2}}[0] &= S[0] \cdot C_{4,2}[0] + S[1] \cdot C_{4,2}[1] + S[2] \cdot C_{4,2}[2] + S[3] \cdot C_{4,2}[3] \\
+			&= (1) \cdot (1) + (1) \cdot (-1) + (-1) \cdot (-1) + (-1) \cdot (1) \\
+			&= 0 \\
+			\mathrm{R}_{SC_{4,2}}[1] &= S[1] \cdot C_{4,2}[0] + S[2] \cdot C_{4,2}[1] + S[3] \cdot C_{4,2}[2] + S[4] \cdot C_{4,2}[3] \\
+			&= (1) \cdot (1) + (-1) \cdot (-1) + (-1) \cdot (-1) + (-1) \cdot (1) \\
+			&= 2 \\
+			\mathrm{R}_{SC_{4,2}}[2] &= S[2] \cdot C_{4,2}[0] + S[3] \cdot C_{4,2}[1] + S[4] \cdot C_{4,2}[2] + S[5] \cdot C_{4,2}[3] \\
+			&= (-1) \cdot (1) + (-1) \cdot (-1) + (-1) \cdot (-1) + (-1) \cdot (1) \\
+			&= 0 \\
+			\mathrm{R}_{SC_{4,2}}[3] &= S[3] \cdot C_{4,2}[0] + S[4] \cdot C_{4,2}[1] + S[5] \cdot C_{4,2}[2] + S[6] \cdot C_{4,2}[3] \\
+			&= (-1) \cdot (1) + (-1) \cdot (-1) + (-1) \cdot (-1) + (1) \cdot (1) \\
+			&= 2 \\
+			\mathrm{R}_{SC_{4,2}}[4] &= S[4] \cdot C_{4,2}[0] + S[5] \cdot C_{4,2}[1] + S[6] \cdot C_{4,2}[2] + S[7] \cdot C_{4,2}[3] \\
+			&= (-1) \cdot (1) + (-1) \cdot (-1) + (1) \cdot (-1) + (1) \cdot (1) \\
+			&= 0 \\
+			\mathrm{R}_{SC_{4,2}}[5] &= S[5] \cdot C_{4,2}[0] + S[6] \cdot C_{4,2}[1] + S[7] \cdot C_{4,2}[2] + S[8] \cdot C_{4,2}[3] \\
+			&= (-1) \cdot (1) + (1) \cdot (-1) + (1) \cdot (-1) + (0) \cdot (1) \\
+			&= -3 \\
+			\mathrm{R}_{SC_{4,2}}[6] &= S[6] \cdot C_{4,2}[0] + S[7] \cdot C_{4,2}[1] + S[8] \cdot C_{4,2}[2] + S[9] \cdot C_{4,2}[3] \\
+			&= (1) \cdot (1) + (1) \cdot (-1) + (0) \cdot (-1) + (0) \cdot (1) \\
+			&= 0 \\
+			\mathrm{R}_{SC_{4,2}}[7] &= S[7] \cdot C_{4,2}[0] + S[8] \cdot C_{4,2}[1] + S[9] \cdot C_{4,2}[2] + S[10] \cdot C_{4,2}[3] \\
+			&= (1) \cdot (1) + (0) \cdot (-1) + (0) \cdot (-1) + (0) \cdot (1) \\
+			&= 1 \\
+			\end{split}
+			\end{equation*}
+			
+			The cross-correlation has no clear peaks, indicating that $\vect{S}$ and $\vect{C}_{4,2}$ are uncorrelated.
+		}
+	
+		\task
+		{
+			\tiny
+			Autocorrelation is the cross-correlation of the (zero-extended) code $\vect{C}_{4,2}$ with itself.
+			
+			\begin{equation*}
+			\begin{split}
+			\mathrm{R}_{C_{4,2}C_{4,2}}[-3] &= C_{4,2}[-3] \cdot C_{4,2}[0] + C_{4,2}[-2] \cdot C_{4,2}[1] + C_{4,2}[-1] \cdot C_{4,2}[2] + C_{4,2}[0] \cdot C_{4,2}[3] \\
+			&= (0) \cdot (1) + (0) \cdot (-1) + (0) \cdot (-1) + (1) \cdot (1) \\
+			&= 1 \\
+			\mathrm{R}_{C_{4,2}C_{4,2}}[-2] &= C_{4,2}[-2] \cdot C_{4,2}[0] + C_{4,2}[-1] \cdot C_{4,2}[1] + C_{4,2}[0] \cdot C_{4,2}[2] + C_{4,2}[1] \cdot C_{4,2}[3] \\
+			&= (0) \cdot (1) + (0) \cdot (-1) + (1) \cdot (-1) + (-1) \cdot (1) \\
+			&= -2 \\
+			\mathrm{R}_{C_{4,2}C_{4,2}}[-1] &= C_{4,2}[-1] \cdot C_{4,2}[0] + C_{4,2}[0] \cdot C_{4,2}[1] + C_{4,2}[1] \cdot C_{4,2}[2] + C_{4,2}[2] \cdot C_{4,2}[3] \\
+			&= (0) \cdot (1) + (1) \cdot (-1) + (-1) \cdot (-1) + (-1) \cdot (1) \\
+			&= -1 \\
+			\mathrm{R}_{C_{4,2}C_{4,2}}[0] &= C_{4,2}[0] \cdot C_{4,2}[0] + C_{4,2}[1] \cdot C_{4,2}[1] + C_{4,2}[2] \cdot C_{4,2}[2] + C_{4,2}[3] \cdot C_{4,2}[3] \\
+			&= (1) \cdot (1) + (-1) \cdot (-1) + (-1) \cdot (-1) + (1) \cdot (1) \\
+			&= 4 \\
+			\mathrm{R}_{C_{4,2}C_{4,2}}[1] &= C_{4,2}[1] \cdot C_{4,2}[0] + C_{4,2}[2] \cdot C_{4,2}[1] + C_{4,2}[3] \cdot C_{4,2}[2] + C_{4,2}[4] \cdot C_{4,2}[3] \\
+			&= (-1) \cdot (1) + (-1) \cdot (-1) + (1) \cdot (-1) + (0) \cdot (1) \\
+			&= -1 \\
+			\mathrm{R}_{C_{4,2}C_{4,2}}[2] &= C_{4,2}[2] \cdot C_{4,2}[0] + C_{4,2}[3] \cdot C_{4,2}[1] + C_{4,2}[4] \cdot C_{4,2}[2] + C_{4,2}[5] \cdot C_{4,2}[3] \\
+			&= (-1) \cdot (1) + (1) \cdot (-1) + (0) \cdot (-1) + (0) \cdot (1) \\
+			&= -2 \\
+			\mathrm{R}_{C_{4,2}C_{4,2}}[3] &= C_{4,2}[3] \cdot C_{4,2}[0] + C_{4,2}[4] \cdot C_{4,2}[1] + C_{4,2}[5] \cdot C_{4,2}[2] + C_{4,2}[6] \cdot C_{4,2}[3] \\
+			&= (1) \cdot (1) + (0) \cdot (-1) + (0) \cdot (-1) + (0) \cdot (1) \\
+			&= 1 \\
+			\end{split}
+			\end{equation*}
+		}
 	\end{tasks}
 \end{solution}
 
