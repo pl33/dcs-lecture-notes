@@ -51,7 +51,7 @@
 			xticklabels={$0$, $T_S$, $2 T_S$, $3 T_S$, $4 T_S$, $5 T_S$, $6 T_S$},
 		]
 			\addplot[smooth, blue, dashed] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
-			\addlegendentry{$\underline{x}{t}$};
+			\addlegendentry{$\underline{x}(t)$};
 			\addplot[red, thick] coordinates {(0, 0) (0, 1.1)};
 			\addplot[red, thick] coordinates {(1, 0) (1, 1.8)};
 			\addplot[red, thick] coordinates {(2, 0) (2, 2.1)};
@@ -60,7 +60,7 @@
 			\addplot[red, thick] coordinates {(5, 0) (5, 1.7)};
 			\addplot[red, thick] coordinates {(6, 0) (6, 2.4)};
 			\addplot[only marks, red, thick, mark=o] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
-			\addlegendentry{$\underline{x}_S{t}$};
+			\addlegendentry{$\underline{x}_S(t)$};
 		\end{axis}
 	\end{tikzpicture}
 	\caption{Sampling of a time-continuous signal}
@@ -169,10 +169,10 @@ The Dirac delta function is zero expect at $t = n T_S$. So, \eqref{eq:ch4:one_sa
 			xticklabels={$0$, $T_S$, $2 T_S$, $3 T_S$, $4 T_S$, $5 T_S$, $6 T_S$},
 		]
 			\addplot[smooth, blue, dashed] coordinates {(0, 1.1) (1, 1.8) (2, 2.1) (3, 1.0) (4, 0.8) (5, 1.7) (6, 2.4)};
-			\addlegendentry{$\underline{x}{t}$};
+			\addlegendentry{$\underline{x}(t)$};
 			\addplot[red, thick] coordinates {(2, 0) (2, 2.1)};
 			\addplot[only marks, red, thick, mark=o] coordinates {(2, 2.1)};
-			\addlegendentry{$\underline{x}_{S,n}{t}$};
+			\addlegendentry{$\underline{x}_{S,n}(t)$};
 		\end{axis}
 	\end{tikzpicture}
 	\caption[Taking out exactly one sample out of $\underline{x}(t)$]{Taking out exactly one sample out of $\underline{x}(t)$ -- in this example $n = 2$.}
