@@ -87,7 +87,7 @@ The \index{amplitude modulation} \textbf{\acf{AM}} is the alteration of the carr
 
 The carrier is a mono-chromatic signal:
 \begin{equation}
-	x_C(t) = \hat{X}_C \cdot \cos\left(2\pi f_C + \varphi_C\right)
+	x_C(t) = \hat{X}_C \cdot \cos\left(2\pi f_C t + \varphi_C\right)
 \end{equation}
 where
 \begin{itemize}
@@ -1063,9 +1063,13 @@ So, the input signal's spectrum consists of a positive and a negative part:
 	The frequencies $\omega_{o,1}$ and $\omega_{o,2}$ are called \index{mirror frequencies} \textbf{mirror frequencies}.
 \end{definition}
 
+x
+
 \begin{attention}
 	Because of the mirror frequency issue, a filter (\ac{LPF}, \ac{BPF}, etc.) must follow or precede a mixer to eliminate the unwanted mirror frequency.
 \end{attention}
+
+x
 
 
 \begin{figure}[H]
