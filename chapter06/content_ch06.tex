@@ -932,14 +932,14 @@ The real number of bits of the \ac{ADC} is not changed. The new number of bits i
 	\begin{figure}[H]
 		\centering
 		\begin{circuitikz}
-			\draw (0,0) node[left,align=right]{Input $\underline{x}_i[n]$\\ Sample rate: $T_{S,i}$} to[twoport,t=$\uparrow M$,>,o-] ++(2,0) to[lowpass,>] ++(2,0) node[inputarrow,rotate=0]{} node[right,align=left]{Output $\underline{x}_o[n]$\\ Sample rate: $T_{S,o}$};
+			\draw (0,0) node[left,align=right]{Input $\underline{x}_i[n]$\\ Sample rate: $f_{S,i}$} to[twoport,t=$\uparrow M$,>,o-] ++(2,0) to[lowpass,>] ++(2,0) node[inputarrow,rotate=0]{} node[right,align=left]{Output $\underline{x}_o[n]$\\ Sample rate: $f_{S,o}$};
 		\end{circuitikz}
 		\caption{A up-sampler with a decimation factor of $M$}
 	\end{figure}
 	
 	The ratio between output and input sampling rate is the \index{interpolation factor} \textbf{interpolation factor} $M$.
 	\begin{equation}
-		M = \frac{T_{S,o}}{T_{S,i}} = \frac{\omega_{S,o}}{\omega_{S,i}} = \frac{T_{S,i}}{T_{S,o}} \qquad, M \in \mathbb{N}
+		M = \frac{f_{S,o}}{f_{S,i}} = \frac{\omega_{S,o}}{\omega_{S,i}} = \frac{T_{S,i}}{T_{S,o}} \qquad, M \in \mathbb{N}
 	\end{equation}
 	The decimation factor $M$ must be a positive integer.
 \end{definition}

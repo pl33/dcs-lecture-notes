@@ -742,7 +742,7 @@ For simplicity, let's consider the positive part of the spectrum only.
 \end{equation}
 
 \begin{definition}{Transmission bandwidth}
-	The \index{transmission bandwidth!narrowband phase modulation} \emph{transmission bandwidth of a narrowband \ac{PM}} is approximately the bandwidth of the information signal.
+	The \index{transmission bandwidth!narrowband phase modulation} \emph{transmission bandwidth of a narrowband \ac{PM}} is approximately the double of the bandwidth of the information signal.
 \end{definition}
 
 %\subsubsection{Narrowband Tone Modulation}
@@ -1501,7 +1501,7 @@ The coherent mixer is capable of receiving all variations of the \ac{RF} signal 
 	
 	\vspace{0.5em}
 	
-	\textbf{But if the diode is a mixer, where is the \ac{LO}?} Not every \ac{AM} is suitable for non-coherent demodulation. Only those transmitting the carrier like the \ac{DSB-TC} may be used. The \ac{RF} signal consists of the modulated sidebands containing the information and the carrier. At the non-linear component, the carrier mixes with the sidebands. The sideband are moved to zero-\ac{IF}.
+	\textbf{But if the diode is a mixer, where is the \ac{LO}?} Not every \ac{AM} is suitable for non-coherent demodulation. Only those transmitting the carrier like the \ac{DSB-TC} may be used. The \ac{RF} signal consists of the modulated sidebands containing the information and the carrier. At the non-linear component, the carrier mixes with the sidebands. The sideband are moved to zero-\ac{IF}. The transmitted carrier replaces the local oscillator signal and its phase is aligned with the information signal.
 	
 	\vspace{0.5em}
 	
@@ -2139,7 +2139,7 @@ Remember that the received signal is subject to noise (thermal noise, quantizati
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
-		\node[block,draw](Det){Symbol mapping};
+		\node[block,draw](Det){Data detection};
 		\node[block,draw,right=2cm of Det](Demod){Demodulation};
 		
 		\draw[-latex] (Det.west) -- +(-2cm,0) node[left,align=right]{Reconstructed\\ data};
