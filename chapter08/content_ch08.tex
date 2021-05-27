@@ -32,7 +32,7 @@ The applications of \emph{information and coding theory} are:
 	\item \textbf{Source coding}: Detecting and removing unnecessary redundancy in a stream of symbols. This also known as \emph{compression}.
 	\item \textbf{Channel coding}: Adding systematically redundancy to a stream of symbols, in order to be able to detect and correct transmission errors in the receiver.
 	\item \textbf{Cryptography}: Concealing the contents of the transmission to provide confidentiality.
-	\item \textbf{Line coding}: Bringing the information into a representation, so that the transmission channel can transfer the information. (Not all signal representations of information can be transmitted equally, because they have different physical properties (bandwidth, etc.).)
+	\item \textbf{Line coding}: Bringing the information into a representation, so that the transmission channel can transfer the information. (Not all signal representations of information can be transmitted equally, because they have different physical properties (bandwidth, etc.).) Actually, the line coding operates in the baseband. The line-coded baseband signal is than given to a mixer, which then produces the \ac{RF} signal for transmission over the channel.
 \end{itemize}
 
 % TODO: Maybe some line coding too
@@ -285,9 +285,185 @@ Consequently, the formula for the decision quantity can be derived.
 
 \eqref{eq:ch08:dec_quant} is already known as a formula to determine how many bits are required to encode a symbol in bits. Let's say that a source emits symbols with 256 states (a byte). If all symbols have equal probability, the receiver has \emph{total surprise} and the information entropy is at its maximum. The number of bits required to encode one byte is $\log_2 \left(256\right) = \SI{8}{bit}$.
 
-% TODO: Example: Coin toss
+\begin{example}{Coin toss}
+	Consider you toss a coin. The coin lands on heads with a probability of $p$ and lands on tails with a probability of $1-p$. The question is: How many bits do you need in average to describe the output of the coin toss?
+	\begin{itemize}
+		\item If $p=0$ (always lands on heads) or $p=1$ (always lands on tails), the coin toss is predictable and does not give any information. So the information entropy is zero.
+		\item For $p=0.5$ (equal probability of head and tail), the surprise is total. The information entropy is at its maximum.
+	\end{itemize}
+	The information entropy is the measure to describe the required number of bits in average.
+	\begin{equation}
+		\begin{split}
+			\mathrm{H}(X) &= - \sum\limits_{i=1}^{M} p_i \log_2 \left(p_i\right) \\
+			 &= - p \log_2 \left(p\right) - \left(1-p\right) \log_2 \left(1-p\right)
+		\end{split}
+	\end{equation}
+	
+	A graphical representation is:
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				height={0.3\textheight},
+				width=0.6\linewidth,
+				scale only axis,
+				xlabel={$p$},
+				ylabel={$\mathrm{H}(X)$},
+				%grid style={line width=.6pt, color=lightgray},
+				%grid=both,
+				grid=none,
+				legend pos=outer north east,
+				axis y line=middle,
+				axis x line=middle,
+				every axis x label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=north,
+				},
+				every axis y label/.style={
+					at={(ticklabel* cs:1.05)},
+					anchor=east,
+				},
+				xmin=0,
+				xmax=1.2,
+				ymin=0,
+				ymax=1.2,
+			]
+				\addplot[blue, smooth, domain=0.01:0.99, samples=50] plot(\x, {-\x*log2(\x) - (1-\x)*log2(1-\x)});
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Entropy of a coin toss depending on the probability of a certain event}
+	\end{figure}
+
+	The decision quantity (maximum information entropy) is \SI{1}{bit}. If $p$ is different from $0$, $0.5$ or $1$, a value of less than \SI{1}{bit} is required to encode the output of the coin toss -- the output tends to be more head or more tail, so it is more predictable.
+\end{example}
+
+\subsection{Source Efficiency}
+
+If the discrete memoryless source delivers a total surprise, it yields the maximum gain of knowledge in the receiver. So, it is most efficient at this point.
+
+An information source with a lower information entropy, is less efficient. It can be said, that the source delivers partly redundant information, because its surprise is not total anymore.
+
+The \index{absolute redundancy} \textbf{absolute redundancy} is:
+\begin{equation}
+	R_X = \mathrm{D}(X) - \mathrm{H}(X)
+\end{equation}
+
+The \index{relative redundancy} \textbf{relative redundancy} is referenced to the maximum entropy:
+\begin{equation}
+	\rho_X = \frac{R_X}{\mathrm{D}(X)} = 1 - \frac{\mathrm{H}(X)}{\mathrm{D}(X)}
+\end{equation}
+
+$1 - \rho_X$ is the \emph{source efficiency}.
+
+\begin{definition}{Source efficiency}
+	The \index{source efficiency} \textbf{source efficiency} is:
+	\begin{equation}
+		\eta_X = \frac{\mathrm{H}(X)}{\mathrm{D}(X)}
+	\end{equation}
+\end{definition}
 
 \section{Source Coding}
+
+Generally, the information emitted by source cannot be directly sent over the transmission channel. The transmission channel has another alphabet than the source alphabet. Thus, an adaption from the source to the channel is required.
+
+\begin{itemize}
+	\item An \index{information representing code} \textbf{information representing code} is a processable form of the information in the communication system. Whereas information is a abstract term, coded information does really exist as a digital or analogue signal.
+	\item The coding of the source information must be as efficient as possible. More probable information must be encoded with shorter codes than less probable information. This saves transmission time and storage space for the information. The technique behind this coding is called \index{compression} \textbf{compression} or \index{source coding} \textbf{source coding}.
+\end{itemize}
+
+\index{coding} \textbf{Coding} is a bijective (reversible) mapping between two alphabets $\Omega_1$ and $\Omega_2$. The probability of the corresponding symbols in both alphabets is equal. $\Omega_1$ can be seen as the \emph{source alphabet}. $\Omega_2$ contains the \index{codewords} \textbf{codewords} (of the \emph{information representing code}).
+
+For now, we assume \emph{noiseless channels}. That is, the symbols sent over the transmission channel are not affected by noise. The receiver gets exactly the same symbols as sent by the transmitter.
+
+\subsection{Information Representing Code}
+
+The \emph{codewords} must be viewed as abstract symbols. They can actually have different lengths like in the following example:
+\begin{equation}
+	\Omega = \left\{x_1, x_2, x_3, x_4\right\} = \left\{\left(0\right)_2, \left(10\right)_2, \left(110\right)_2, \left(111\right)_2\right\}
+\end{equation}
+The symbols of $\Omega$ consist of binary symbol sequences with varying length. So, a binary symbol stream of $\left(011010111\right)_2$ is actually the symbol sequence $x_1, x_3, x_2, x_4$. The binary representation can really exist as a digital or analogue signal and can therefore be processed. It is an \emph{information representing code}.
+
+The mapping of the above example is:
+\begin{table}[H]
+	\caption{Code mapping example}
+	\begin{tabular}{|l|l|}
+		\hline
+		Symbol from $\Omega_1$ & Symbol from $\Omega_2$ \\
+		\hline
+		\hline
+		$x_1$ & $\left(0\right)_2$ \\
+		\hline
+		$x_2$ & $\left(10\right)_2$ \\
+		\hline
+		$x_3$ & $\left(110\right)_2$ \\
+		\hline
+		$x_4$ & $\left(111\right)_2$ \\
+		\hline
+	\end{tabular}
+\end{table}
+
+The \index{information representing code} \textbf{information representing code} is a kind of carrier for the information. The code enables the existence of the information in physical or logical form.
+
+The binary code is the most common representation for information in a digital communication system. However, there are other examples of \emph{information representing codes}:
+\begin{itemize}
+	\item The Morse code encodes letters by transmitting a short (dot) or long (dash) tone. The length of Morse code symbols is variable. More common letters in the English language (high probability) have a shorter symbol than less common letters. This significantly speeds up the transmission of letters.
+	\item \ac{PCM} is used to encode discrete-values of a sampled signal (see Chapter 4). Each symbol represents a discrete value.
+\end{itemize}
+
+\begin{excursus}{Coding in biology}
+	Codes can be found everywhere. An example is the genetic code of living organisms. Organisms are composed of proteins. Their building plan is stored in the \ac{DNA} of the cells. The production of a protein follows certain steps:
+	\begin{itemize}
+		\item The \ac{DNA} is trans-scripted. The protein building plan (the genetic information) is encoded in \ac{mRNA}.
+		\item The \ac{mRNA} is sent to the ribosomes of the cell. They decode the \ac{mRNA} and produce \ac{tRNA}.
+		\item The \ac{tRNA} then is converted into a protein.
+	\end{itemize}
+	The genetic code is represented by either \ac{DNA} or \ac{RNA}. They carry the genetic information.
+\end{excursus}
+
+\subsection{Code Efficiency}
+
+Information representing code can have a varying length. Let's define the \emph{lengths of codewords}. The length of the codeword $c_i$ is $N_{c,i}$. $c_i$ is mapped to $x_i$ from the source alphabet.
+
+The probability of $c_i$ equals the probability of $x_i$.
+\begin{equation}
+	\mathrm{P}\left(c_i\right) = \mathrm{P}\left(x_i\right) = p_i
+\end{equation}
+
+The \emph{average length of codewords} $\overline{N_c}$ is:
+\begin{equation}
+	\overline{N_c} = \sum\limits_{i=1}^{M} p_i N_{c,i}
+\end{equation}
+
+Each codeword consists of letters $l_j \in L$ from a alphabet $L$. A binary alphabet is the set of $M_L = 2$ letters $L = \left\{0, 1\right\}$. The codewords $c_i$ are groups of $N_{c,i}$ letters $l_j \in L$.
+
+The final encoded symbol stream only consists of the letters $l_j \in L$. For an outside observer, it seems that the letters $l_j$ are emitted randomly. The information entropy is $\mathrm{H}\left(L\right)$.
+
+The information entropy is connected to the information entropy of the source $\mathrm{H}\left(X\right)$. This is the \emph{entropic compression relation}.
+\begin{equation}
+	\mathrm{H}\left(X\right) = \overline{N_c} \cdot \mathrm{H}\left(L\right)
+\end{equation}
+Because of the same symbol probabilities, both information entropies of the source $\mathrm{H}\left(X\right)$ and codewords $\mathrm{H}\left(C\right)$ are equal.
+
+If the coding is optimal, the letters are emitted with total surprise. Thus, the information entropy for $L$ is at maximum:
+\begin{equation}
+	\mathrm{D}\left(L\right) = \log_2 \left(M_L\right)
+\end{equation}
+Thus, the optimal (minimal) average length of codewords $\overline{N_{c,min}}$ is:
+\begin{equation}
+	\overline{N_{c,min}} = \frac{\mathrm{H}\left(X\right)}{\mathrm{D}\left(L\right)} = \frac{\mathrm{H}\left(X\right)}{\log_2 \left(M_L\right)}
+\end{equation}
+For the optimal (minimal) average length of codewords $\overline{N_{c,min}}$, the costs for the transmission is lowest (highest speed, lowest storage size).
+
+\begin{definition}{Code efficiency}
+	The \index{code efficiency} \textbf{code efficiency} is the ratio of the minimal average length of codewords $\overline{N_{c,min}}$ and the average length of codewords of the current coding $\overline{N_c}$.
+	\begin{equation}
+		\eta_C = \frac{\overline{N_{c,min}}}{\overline{N_c}} = \frac{\mathrm{H}\left(X\right)}{\overline{N_c} \cdot \log_2 \left(M_L\right)}
+	\end{equation}
+\end{definition}
+
+If the code efficiency is $\eta_C = 1$, i.e. $\overline{N_c} = \overline{N_{c,min}}$, the code is an \index{absolute optimal code} \textbf{absolute optimal code}. For an absolute optimal code, the source coding (compression) does not have any effect, because the code is already optimal.
+
+\subsection{Example: Shannon-Fano Binary Coding}
 
 \section{Channel Coding}
 
