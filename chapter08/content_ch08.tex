@@ -385,6 +385,7 @@ The symbols of $\Omega$ consist of binary symbol sequences with varying length. 
 
 The mapping of the above example is:
 \begin{table}[H]
+	\centering
 	\caption{Code mapping example}
 	\begin{tabular}{|l|l|}
 		\hline
@@ -463,9 +464,111 @@ For the optimal (minimal) average length of codewords $\overline{N_{c,min}}$, th
 
 If the code efficiency is $\eta_C = 1$, i.e. $\overline{N_c} = \overline{N_{c,min}}$, the code is an \index{absolute optimal code} \textbf{absolute optimal code}. For an absolute optimal code, the source coding (compression) does not have any effect, because the code is already optimal.
 
+\subsection{Compression Algorithms}
+
+Compression is the act of re-encoding data so that the it requires less symbols to describe the data. That is, the output alphabet has a higher code efficiency.
+
+There are two types of compression:
+\begin{itemize}
+	\item \textbf{Lossless compression} -- The data is preserved. It is only re-encoded. The original symbols from the input alphabet can be restored.
+	\item \textbf{Lossy compression} -- The original data cannot be restored. Generally, only irrelevant parts of data are remove. The receiver is still able to gain knowledge from the information transferred. However a full recovery of data is not possible.
+\end{itemize}
+
+Examples for lossless compression algorithms are ``Deflate algorithms'' in ZIP, RAR, GZip, BZip2 or LZMA archives. These archives are files which contain other files on a computer file system. The files are compressed. Their size is reduced by a proper algorithm -- so they are ``deflated''. The original files can be restored with a reverse algorithm (``inflating''). The input alphabet is a symbol sequence with uniform length -- 1 byte consisting of 8 bits. The output alphabet uses variable length symbol sequences.
+
+Examples for lossy compression algorithms are the encodings used for image, audio and video files on a computer (images: JPEG, PNG; audio: MPEG-3/mp3; video: MPEG-4/mp4, ...). The original data stream from the audio or video sensor is heavily compressed. The compression algorithm only uses approximations of the original data, so it cannot be fully reconstructed afterwards. However, humans senses certainly will not note any difference. Furthermore, the compression can be so heavy that the receiver notices a lack in quality, but is still able to get the information transported. In return, the data size is even more reduced.
+
+Especially lossy algorithms are commonly used to encode audio and video streams in digital communication systems. With a variable compression ratio, the data rate can be adapted to the capacity of the transmission channel which relies on the noise conditions. The information receiver will experience a drop in quality if the data rate is reduced. However, the communication is still possible, because the receiver still gains knowledge.
+
 \subsection{Example: Shannon-Fano Binary Coding}
 
+The \index{Shannon-Fano algorithm} Shannon-Fano algorithm is a lossless compression algorithm. It is efficient, but it is proven that it does not deliver the best encoding for any kind of source. The Huffman algorithm, which was invented later, yields optimal encoding.
+
+The Shannon-Fano algorithm uses the circumstance that symbols have a different probability of occurence. Symbols with higher probability are encoded with shorter symbol sequences. Symbols with lower probability use longer symbol sequences in the output.
+
+The steps are:
+\begin{enumerate}
+	\item Preparation:
+	\begin{enumerate}
+		\item Determine the occurence probability of every symbol in the input source alphabet.
+		\item Sort the symbols by their occurence probability in descending order.
+	\end{enumerate}
+	\item Partitioning:
+	\begin{enumerate}
+		\item Assign the sorted symbols into two partitions $S_0$ and $S_1$ of same or almost equal probability.
+		\item In each partition $S_0$ and $S_1$, divide the symbols into two partitions $S_{00}$ and $S_{01}$ or $S_{10}$ and $S_{11}$, respectively, of same or almost equal probability, again.
+		\item Repeat until each partition only has one symbol from the input source alphabet.
+	\end{enumerate}
+	\item Output symbols (codewords) assignment:
+	\begin{enumerate}
+		\item Assign the symbol $0$ to the first partition $S_0$ and the symbol $1$ to the second partition $S_1$.
+		\item In each sub-partition, extend the output symbol by $0$ for the first sub-sub-partition $S_x0$ and by $1$ for the second sub-sub-partition $S_x1$.
+		\item Repeat until all partitions have an output symbol assigned.
+	\end{enumerate}
+\end{enumerate}
+
+\begin{example}{Shannon-Fano binary coding of a discrete memory less source}
+	A input source alphabet has the symbols $s_1 = (00)_2$, $s_2 = (01)_2$, $s_3 = (10)_2$ and $s_4 = (1)_2$ with the following probabilities:
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|l|l|l|l|}
+			\hline
+			Symbol & $s_1$ & $s_2$ & $s_3$ & $s_4$ \\
+			\hline
+			Sequence & $(00)_2$ & $(01)_2$ & $(10)_2$ & $(11)_2$ \\
+			\hline
+			Probability & $0.5$ & $0.25$ & $0.125$ & $0.125$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+	The partitions and codewords are:
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|l|l|l|l|l|}
+			\hline
+			Symbol & Probability & \multicolumn{3}{l|}{Partitions} & Codeword \\
+			\hline
+			\hline
+			$s_1 = (00)_2$ & $0.5$ & \multicolumn{3}{l|}{$S_0$} & $(0)_2$ \\
+			\hline
+			$s_2 = (01)_2$ & $0.25$ & \multirow{3}{*}{$S_1$} & \multicolumn{2}{l|}{$S_{10}$} & $(10)_2$ \\
+			\cline{1-2}\cline{4-6}
+			$s_3 = (10)_2$ & $0.125$ & & \multirow{2}{*}{$S_{11}$} & $S_{110}$ & $(110)_2$ \\
+			\cline{1-2}\cline{5-6}
+			$s_4 = (11)_2$ & $0.125$ & & & $S_{111}$ & $(111)_2$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+	The most probable symbol $s_1 = (00)_2$ is encoded by a codeword $c_1 = (0)_2$ of length 1. The least probable symbols $s_3 = (10)_2$ and $s_4 = (11)_2$ are encoded by codewords of length 3.
+	
+	So, the input sequence $(0010010011010000)_2 = [(00)_2, (10)_2, (01)_2, (00)_2, (11)_2, (01)_2, (00)_2, (00)_2]$ (length 16) would be encoded to $(01101001111000)_2 = [(0)_2, (110)_2, (10)_2, (0)_2, (111)_2, (10)_2, (0)_2, (0)_2]$ (length 14). 2 bits could be saved.
+\end{example}
+
 \section{Channel Coding}
+
+Generally, the bit error probability is low for good \ac{SNR}, and vice versa. However, the bit error probability is never zero. Thus even for good \ac{SNR} (low noise conditions), there is a non-zero probability of bit errors.
+
+Single bit errors can significantly affect the communication. Higher protocol layers in the \ac{OSI} stack cannot decode the information and whole packets (consisting of several hundrets to thousands bits) are lost.
+
+It is important to keep in mind, that every transmission channel is noisy. So, all real digital communication is subject to noise and bit errors. As a consequence, there is a great need of coping with bit errors in order to establish a reliable communication channel.
+
+\index{Channel coding} \emph{Channel coding} provides a countermeasure to detect and even correct bit errors. Whereas \emph{source} aimed to remove redundancies in data, channel coding systematically adds redundancy. This redundancy is derived from the input symbol sequence. If symbols are corrupted by noise, the redundant symbols are used to discover the corruption and recover the errors -- both to some extend.
+
+In modern high data rate, digital communication systems, channel coding is essential. Noise and interference from other users are present in most circumstances. So communication equipment must always some extend of protection.
+
+\subsection{Channel Capacity and Bit Errors}
+
+\subsection{Error Control Strategies}
+
+\subsection{Detection and Error Correcting Codes}
+
+\subsection{Hamming Distance and Maximum Likelihood Decoding}
+
+\subsection{Linear Codes}
+
+\subsection{Example: Redd-Solomon Code or }
 
 \phantomsection
 \addcontentsline{toc}{section}{References}
