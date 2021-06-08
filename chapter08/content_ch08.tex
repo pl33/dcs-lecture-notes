@@ -560,15 +560,165 @@ In modern high data rate, digital communication systems, channel coding is essen
 
 \subsection{Channel Capacity and Bit Errors}
 
+The transmission can be described by two alphabets -- the source alphabet $X$ and the alphabet of received symbols $Y$. The transmission channel maps the symbols $x_i \in X$ to symbols from $y_j \in Y$.
+
+% TODO: Mapping figure
+
+Both alphabets $X$ and $Y$ have probabilities for their symbols $\mathrm{P}(x_i) = p_{X,i}$ or $\mathrm{P}(y_j) = p_{Y,j}$, respectively. The transmission through the transmission channel can be described by the joint distribution $\mathrm{P}(y_j/x_i) = p_{Y/X,j,i}$, that is, the probability of receiving a symbol $y_j$ if $x_i$ was transmitted.
+
+The joint probabilities can be arranged in the joint probability matrix $\mat{P}_{Y/X}$. The dimension is $N_Y \times N_X$, where $N_X$ is the number of symbols in $X$ and $N_Y$ is the number of symbols in $Y$.
+
+\begin{equation}
+	\mat{P}_{Y/X} = \left[\begin{matrix}
+		p_{Y/X,1,1} & p_{Y/X,2,1} & \ldots & p_{Y/X,N_Y,1} \\
+		p_{Y/X,1,2} & p_{Y/X,2,2} & \ldots & p_{Y/X,N_Y,2} \\
+		\vdots & \vdots & \ddots & \vdots \\
+		p_{Y/X,1,N_X} & p_{Y/X,2,N_X} & \ldots & p_{Y/X,N_Y,N_X} \\
+	\end{matrix}\right]
+\end{equation}
+
+For each transmitted symbol $x_i$, one of the symbols $y_j$ must be received. So the probabilities in each row of $\mat{P}_{Y/X}$ must sum up to $1$.
+
+\begin{equation}
+	\sum\limits_{j = 1}^{N_Y} p_{Y/X,j,i} = 1 \qquad \forall 1 \leq i \leq N_X
+\end{equation}
+
+Under ideal conditions, $X$ and $Y$ have the same number of symbols (i.e. $N_X = N_Y$) and $x_i$ maps to $y_j$ with $i = j$. So, $p_{Y/X,j,i} = 1$ for $i = j$ and $p_{Y/X,j,i} = 0$ for $i \neq j$. These ideal conditions assume a noise-free environment. With presence of noise, there is a non-zero probability $p_{Y/X,j,i} > 0, i \neq j$ of receiving a wrong symbol -- a different symbol than the one which has been transmitted.
+
+A measure for the dependence of the two random variables $X$ and $Y$ is the \index{mutual information} \textbf{mutual information}. It quantifies the amount of information $Y$ gained by the receiver by observing another random variable $X$, which is the transmitter output.
+
+\begin{definition}{Mutual information}
+	The \index{mutual information} \textbf{mutual information} of two jointly discrete random variables $X$ and $Y$ is:
+	\begin{equation}
+		\mathrm{I}\left(X; Y\right) = \sum\limits_{j = 1}^{N_Y} \sum\limits_{i = 1}^{N_X} p_{Y/X,j,i} \cdot \log_2 \left(\frac{p_{Y/X,j,i}}{p_{X,i} \cdot p_{Y,j}}\right)
+	\end{equation}%
+	\nomenclature[I]{$\mathrm{I}\left(X; Y\right)$}{Mutual information between $X$ and $Y$}
+	
+	The mutual information is a measure for \emph{how many bits are delivered per symbol}.
+\end{definition}
+
+If $X$ and $Y$ are totally independent from each other, the mutual information will be zero. The total independence describes noise and noise does not lead to an information gain in the receiver. If the dependence between $X$ and $Y$ is greater, the mutual information will be higher, indicating a grater information gain in the receiver.
+
+There is an upper bound for the amount of information which can be reliably transmitted over a transmission channel. Source $X_0$ which optimally encodes the symbols delivers the best achievable information gain at the receiver. This upper limit is the \index{channel capacity} \textbf{channel capacity}.
+
+\begin{definition}{Channel capacity}
+	The \index{channel capacity} \textbf{channel capacity} $C$ is the upper limit of mutual information.
+	\begin{equation}
+		C = \max\limits_{p_{X,i} \rightarrow p_{X_0,i}} \mathrm{I}\left(X; Y\right)
+	\end{equation}
+\end{definition}
+
+Now, the mutual information $\mathrm{I}\left(X; Y\right)$ of a source $X$ can be related to the optimum of source $X_0$.
+
+\begin{definition}{Channel efficiency}
+	The \index{channel efficiency} \textbf{channel efficiency} is the ratio of the mutual information to the theoretical optimum.
+	\begin{equation}
+		\eta_C = \frac{\mathrm{I}\left(X; Y\right)}{C}
+	\end{equation}
+\end{definition}
+
+% For a digital communication system, the symbol sets are $X = \left\{0, 1\right\}$ and $Y = \left\{0, 1\right\}$. The probabilities of receiving a wrong symbol are $p_{Y/X,2,1}$ and $p_{Y/X,1,2}$
+
+By dividing the \emph{channel capacity} by the symbol period $T_{sym}$, the maximum \index{information rate} \textbf{information rate} is obtained.
+
+\begin{definition}{Information rate}
+	The \index{information rate} \textbf{information rate} is the number of bits per second.
+	\begin{equation}
+		I_t = \frac{\mathrm{I}\left(X; Y\right)}{T_{sym}}
+	\end{equation}
+
+	The upper bound -- the maximum information rate -- is at maximum channel capacity.
+	\begin{equation}
+		C_t = \frac{C}{T_{sym}}
+	\end{equation}
+\end{definition}
+
+As proven by Shannon and Hartley, the upper bound of the information rate is related to
+\begin{itemize}
+	\item the noise conditions -- namely the \ac{SNR} and
+	\item the signal bandwidth.
+\end{itemize}
+
+\begin{definition}{Shannon-Hartley theorem}
+	\begin{equation}
+		C_t = B \cdot \log_2 \left(1 + \frac{P_S}{P_N}\right)
+	\end{equation}
+	where
+	\begin{itemize}
+		\item $B$ is the signal bandwidth,
+		\item $P_S$ is the signal power and
+		\item $P_N$ is the noise power.
+	\end{itemize}
+\end{definition}
+
+Please note, that $P_S/P_N$ is the \ac{SNR}.
+
+As consequences,
+\begin{itemize}
+	\item More information can be reliably transferred, if the bandwidth is larger.
+	\item More information can be reliably transferred, if the \ac{SNR} is better.
+\end{itemize}
+
+% TODO: Bit error
+
 \subsection{Error Control Strategies}
+
+Every real transmission channel is noisy and has a non-zero probability of bit errors. So, a digital communication system should be able to detect errors. This ensures a reliable communication. Erroneous messages with wrong bits are detected and rejected. However, the data must be recovered. Common approaches to accomplish this are:
+\begin{itemize}
+	\item \acf{ARQ} -- The error is detected by the receiver. It then requests a re-transmission of the message from the sender. The request is issued automatically by some logic in the receiver. The user will not notice the presence of the error, because only re-transmitted and correct data is send to higher layers in the \ac{OSI} stack. However, the net data rate will decrease. The re-transmission requires additional transmission time which cannot be used to transmit other data.
+	\item \acf{FEC} -- Using mathematical methods, errors be corrected in addition to detecting them. The error correction is only possible until a certain extend. But usually the bit error probability is relatively low in good \ac{SNR} conditions. So the capability of correcting only a couple of bit errors in a message is enough. The advantage of \ac{FEC} compared to \ac{ARQ} is that no re-transmission is required and the transmission channel is used more effectively.
+	\item Stop and wait -- Sender and receiver communicate over a half- or full-duplex channel. If the receiver detects no error in the message it sends an \ac{ACK} indication back to the sender. The sender then sends the next message. If the receiver detects an error, it sends a \ac{NAK} back to the sender. The sender repeats the transmission of the message until it receives an \ac{ACK}. The described mechanism is also called \emph{flow control}.
+\end{itemize}
+
+Especially \ac{ARQ} and \ac{FEC} can be combined in an hybrid-\acs{ARQ}-\acs{FEC} system. This the advantages of both saving transmission time on the channel and the ability of re-transmitting messages in harsh \ac{SNR} conditions.
+
+\emph{Channel coding} is required to detect errors. Using eligible coding, error correction is possible, too. Let's have closer look at these coding mechanisms.
 
 \subsection{Detection and Error Correcting Codes}
 
-\subsection{Hamming Distance and Maximum Likelihood Decoding}
+Error detection and correction is only possible if redundancy is added. That is, additional bits are added to the message.
+
+Assume that the information is $k$ bits long. $q$ bits are added by the channel coding to provide error detection and correction. The total message is $n = k + q$ bits long. The $q$ bits are the \emph{parity bits} and add redundancy.
+
+\begin{itemize}
+	\item $k$ information bits
+	\item $q$ parity bits
+	\item $n = k + q$ message bits
+\end{itemize}
+
+The $n$ bits of the message now form the \emph{codeword}. The $q$ parity bits are dependent on the $k$ information bits. This fact restricts all theoretically possible $2^n$ codewords to a subset $2^k$ codewords.
+
+\paragraph{Hamming distance.}
+
+An important measure to analyse codewords is the \index{hamming distance} \textbf{hamming distance}.
+
+\begin{definition}{Hamming distance}
+	The \index{hamming distance} \textbf{hamming distance} $\mathrm{d}\left(\vec{v}_i, \vec{v}_j\right)$ is the number of positions for which two codewords $\vec{v}_i$ and $\vec{v}_j$ differ.
+	\begin{equation}
+		\mathrm{d}\left(\vec{v}_i, \vec{v}_j\right) = \sum\limits_{k=1}^{n} \vec{v}_i \bigoplus \vec{v}_j
+	\end{equation}
+	\nomenclature[d]{$\mathrm{d}\left(\vec{v}_i, \vec{v}_j\right)$}{Hamming distance between codewords $\vec{v}_i$ and $\vec{v}_j$}
+\end{definition}
+
+$\bigoplus$ denotes a bitwise \ac{XOR} operation. If two codewords are equal the hamming distance is $\mathrm{d}\left(\vec{v}_i, \vec{v}_i\right) = 0$.
+
+\begin{example}{Hamming distance}
+	The hamming distance of the codewords
+	\begin{itemize}
+		\item $\vec{v}_1 = \left[1, 0, 0, 1, 0, 1, 1, 0\right]$ and
+		\item $\vec{v}_2 = \left[1, 0, 1, 0, 1, 0, 1, 1\right]$
+	\end{itemize}
+	is $\mathrm{d}\left(\vec{v}_1, \vec{v}_2\right) = 5$.
+\end{example}
+
+% TODO: Systematic code
+% TODO: Number of detectable and correctable errors
 
 \subsection{Linear Codes}
 
-\subsection{Example: Redd-Solomon Code or }
+\subsection{Maximum Likelihood Decoding}
+
+% \subsection{Example: Reed-Solomon Code or }
 
 \phantomsection
 \addcontentsline{toc}{section}{References}
