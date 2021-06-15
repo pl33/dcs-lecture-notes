@@ -672,9 +672,32 @@ Every real transmission channel is noisy and has a non-zero probability of bit e
 
 Especially \ac{ARQ} and \ac{FEC} can be combined in an hybrid-\acs{ARQ}-\acs{FEC} system. This the advantages of both saving transmission time on the channel and the ability of re-transmitting messages in harsh \ac{SNR} conditions.
 
+Even though, error control strategies provide strong countermeasures against bit errors, there is still a small remaining probability of remaining errors which
+\begin{itemize}
+	\item are not detected or
+	\item are detected, but wrongly corrected.
+\end{itemize}
+
 \emph{Channel coding} is required to detect errors. Using eligible coding, error correction is possible, too. Let's have closer look at these coding mechanisms.
 
-\subsection{Detection and Error Correcting Codes}
+\subsection{Types of Error Control Codes}
+
+Coding source symbols produces codewords. The rules for producing these codewords are called \index{code} \textbf{code}. They can be classified using the many criteria. The following list shows an excerpt:
+
+\begin{itemize}
+	\item Processing strategy:
+	\begin{itemize}
+		\item \index{block code} \textbf{Block codes} -- The information is arranged in blocks of $k$ bits. $q$ control bits are added, forming a codeword of length $n$.
+		\item \index{convolutional code} \index{continuous code} \textbf{Continuous (convolutional) code} -- The information is precessed as a stream.
+	\end{itemize}
+	\item Possibility of reading the information in clear from the codeword:
+	\begin{itemize}
+		\item \index{systematic code} \textbf{Systematic code} -- The information can be read in clear from the codeword. The control bits are just added. The original information is left intact. An advantage is that the receiver can omit the decoding stage, with the drawback of loosing error detection and correction capability, but with the advantage of reducing complexity.
+		\item \textbf{Non-systematic code} -- Information and control bits cannot be read in clear. A decoder is always required in the receiver.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Detection and Error Correcting Block Codes}
 
 Error detection and correction is only possible if redundancy is added. That is, additional bits are added to the message.
 
@@ -682,11 +705,15 @@ Assume that the information is $k$ bits long. $q$ bits are added by the channel 
 
 \begin{itemize}
 	\item $k$ information bits
-	\item $q$ parity bits
+	\item $q$ parity or control bits
 	\item $n = k + q$ message bits
 \end{itemize}
 
 The $n$ bits of the message now form the \emph{codeword}. The $q$ parity bits are dependent on the $k$ information bits. This fact restricts all theoretically possible $2^n$ codewords to a subset $2^k$ codewords.
+
+\paragraph{Notation.}
+
+The parameters of a block code are written in the form $(n, k)_b$. The index $b$ denotes the number of symbols in the codeword alphabet (not source alphabet). For binary codes using bits it is $b = 2$ and can be omitted. So a $(63, 57)$ code means: $n = 63$ message bits ($b = 2$), $k = 57$ information bits and $q = n - k = 6$ parity bits. 
 
 \paragraph{Hamming distance.}
 
@@ -711,12 +738,202 @@ $\bigoplus$ denotes a bitwise \ac{XOR} operation. If two codewords are equal the
 	is $\mathrm{d}\left(\vec{v}_1, \vec{v}_2\right) = 5$.
 \end{example}
 
-% TODO: Systematic code
-% TODO: Number of detectable and correctable errors
+\paragraph{Hamming space.}
+
+A codewords with $n$ bits has $2^n$ possible combinations. If there is a bit error, the codeword is changed into another one. This situation must be coped with.
+
+The idea behind channel coding is that only $2^k$ out of the $2^n$ codewords are valid. The valid codewords are selected systematically. All valid codewords have a \emph{hamming distance} of $d_{min}$.
+\begin{equation}
+	d_{min} = n - k + 1
+	\label{eq:ch08:hamming_dist_code}
+\end{equation}
+As a consequence, if there is a bit error. The resulting codewords is invalid because it is not one of the $2^k$ valid ones. This means that up $d_{min} - 1$ bit errors can be detected.
+
+\begin{fact}
+	Up to $d_{min} - 1$ bit errors can be detected, where $d_{min}$ is the \emph{hamming distance} between the valid codewords.
+\end{fact}
+
+All $2^n$ possible (but not necessarily valid) codewords span an $n$-dimensional space -- the \index{hamming space} \textbf{hamming space}. It is the set $W$ of all codewords. The valid codewords form a \emph{linear subset} $V$. The condition of $V$ is $\mathrm{d}\left(\vec{v}_i, \vec{v}_j\right) \geq d_{min} \forall \vec{v}_i \in V, \vec{v}_j \in V, i \neq j$. Another condition for the \emph{linear subset} $V$ is that the codeword $v_0 = 00\ldots0$ (all bits zero) is element of the set $V$ -- $v_0 \in V$.
+
+\begin{example}{Hamming space and error detecting codes}
+	The hamming space has a dimension of $n = 3$. There are the possible codewords $W$.
+	\begin{equation}
+		W = \left\{\begin{matrix}
+			\mathbf{000}\\
+			001\\
+			010\\
+			\mathbf{011}\\
+			100\\
+			\mathbf{101}\\
+			\mathbf{110}\\
+			111
+		\end{matrix}\right\}
+	\end{equation}
+	
+	Now, $k = 2$. All four valid codewords in $V$ are marked bold in the upper equation. Keep in mind that $000$ must be always part of $V$ -- because $V$ is a linear subset.
+	\begin{equation}
+		V = \left\{\begin{matrix}
+			000\\
+			011\\
+			101\\
+			110
+		\end{matrix}\right\}
+	\end{equation}
+	The hamming distance between all valid codewords is $d_{min} = n - k + 1 = 2$.
+
+	The source alphabet $\Omega$ of message now comprises $2^k = 4$ possible symbols:
+	\begin{equation}
+		\Omega = \left\{00, 01, 10, 11\right\}
+	\end{equation}
+
+	Now the symbols from the source alphabet are mapped to the valid codewords:
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|l|}
+			\hline
+			Symbol & Codeword \\
+			\hline
+			\hline
+			$00$ & $\mathbf{00}0$ \\
+			\hline
+			$01$ & $\mathbf{01}1$ \\
+			\hline
+			$10$ & $\mathbf{10}1$ \\
+			\hline
+			$11$ & $\mathbf{11}0$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+	The first bits in the codewords are marked bold. They resemble the bits in the original symbol. The original symbol has a length of $k$ bits (information bits). Then $q = 1$ bit is added (parity bit). They form the codeword of length $n = k + q$ (message bits). \textbf{The code is systematic.} The message can be read directly from the codeword.
+	
+	There is a simple rule, for the parity bit. The number of all ones in the codeword must be even. This is fulfilled for all valid code words.
+	
+	Up to $d_{min} - 1 = 1$ bit errors can be detected. For example, if a symbol $01$ shall be transmitted, it is mapped to the codeword $011$. If there is one bit error, the receiver may get a $001$. The receiver now detects that this received codeword is invalid because the number of ones is not even (and the codeword is not part of $V$). The error was successfully detected.
+	
+	Of course, if there are two bit errors, the resulting codeword would be valid, although it is wrong. This is a case of non-detectable errors. They are less likely than one-bit errors. However, in poor \ac{SNR} conditions they can occur. Higher values of $q$ must be used. $k$ is thereby reduces -- less symbols can be encoded in the codewords. But the transmission is more robust.
+\end{example}
+
+\paragraph{Maximum Likelihood Decoding}
+
+In addition to the $d_{min} - 1$ detectable bit errors, it is even possible to correct bit errors up to a certain extend. Let's assume that
+\begin{itemize}
+	\item the code has a hamming distance of $d_{min} > 2$ and
+	\item the probability of more than one bit error is very low.
+\end{itemize}
+If a codeword with one bit error is received, it
+\begin{itemize}
+	\item is invalid (not part of $V$),
+	\item but is is close to a valid codeword. The hamming distance to the next valid codeword is $1$. Because the valid codewords have a hamming distance of $d_{min} > 2$, the hamming distance between the invalid, received codewords and all other valid codewords is greater $1$.
+\end{itemize}
+As a consequence, the invalid, received codeword can be assigned to the valid codeword with hamming distance $1$. The probability that it was the originally transmitted codeword is high, because more than one bit errors are very unlikely.
+
+In more formal way, the detected codeword $\tilde{y}$ is the codeword which has maximum likelihood to the actually received codeword $y$. $\tilde{y}$ is then assumed to have been transmitted by the source as $x$.
+\begin{equation}
+	\tilde{y} = \argmax\limits_{x \in V} L(x, y)
+\end{equation}
+The likelihood is determined by the likelihood function $L(x, y)$. The likelihood for the codewords $x$ and $y$ is inverse proportional to their hamming distance.
+\begin{equation}
+	L(x, y) \propto \frac{1}{\mathrm{d}\left(x, y\right)}
+\end{equation}
+As a consequence, the \index{maximum likelihood decoding} \textbf{maximum likelihood decoding} can be reformulated as:
+\begin{equation}
+	\tilde{y} = \argmin\limits_{x \in V} \mathrm{d}\left(x, y\right)
+\end{equation}
+
+\begin{example}{Error correction}
+	The hamming space has a dimension of $n = 3$. There are the possible codewords $W$.
+	\begin{equation}
+		W = \left\{\begin{matrix}
+			\mathbf{000}\\
+			001\\
+			010\\
+			011\\
+			100\\
+			101\\
+			110\\
+			\mathbf{111}
+		\end{matrix}\right\}
+	\end{equation}
+	
+	Now, $k = 1$. All two valid codewords in $V$ are marked bold in the upper equation. Keep in mind that $000$ must be always part of $V$ -- because $V$ is a linear subset.
+	\begin{equation}
+		V = \left\{\begin{matrix}
+			000\\
+			111
+		\end{matrix}\right\}
+	\end{equation}
+	The hamming distance between all valid codewords is $d_{min} = n - k + 1 = 3$.
+	
+	Following situations of received received codewords are possible.
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l||l||l|}
+			\hline
+			Received codeword & Hamming distance to $000$ & Hamming distance to $111$ \\
+			 & (number of bit errors if $000$ & (number of bit errors if $111$ \\
+			 & was transmitted) & was transmitted) \\
+			\hline
+			\hline
+			$000$ & $0$ & $3$ \\
+			\hline
+			$001$ & $1$ & $2$ \\
+			\hline
+			$010$ & $1$ & $2$ \\
+			\hline
+			$011$ & $2$ & $1$ \\
+			\hline
+			$100$ & $1$ & $2$ \\
+			\hline
+			$101$ & $2$ & $1$ \\
+			\hline
+			$110$ & $2$ & $1$ \\
+			\hline
+			$111$ & $3$ & $0$ \\
+			\hline
+		\end{tabular}
+	\end{table}
+	The received codewords are assigned to the valid with the lowest hamming distance.
+	\begin{itemize}
+		\item The codewords $000$, $001$, $010$, $100$ are assigned to codeword $000$ (symbol $0$ in the source alphabet).
+		\item The codewords $111$, $101$, $110$, $011$ are assigned to codeword $111$ (symbol $1$ in the source alphabet).
+	\end{itemize}
+	This procedure is the \index{maximum likelihood decoding} \textbf{maximum likelihood decoding}. The received codeword is likely to be the closest valid one.
+	
+	Form this example, we can deduct two corollaries:
+	\begin{itemize}
+		\item One bit error can be successfully detected and successfully corrected.
+		\item Two bit errors can be detected only. A reliable correction is not possible.
+	\end{itemize}
+\end{example}
+
+The number of correctable bit errors is smaller than the number of detectable bit errors. Generally, the number of correctable bit errors is $(d_{min}-1)/2$. The \emph{maximum likelihood decoding} fails if the number of bit errors exceeds this limit.
+
+\begin{fact}
+	Up to
+	\begin{itemize}
+		\item $\frac{d_{min}-1}{2}$ (if $d_{min}$ is odd) or
+		\item $\frac{d_{min}}{2} - 1$ (if $d_{min}$ is even), respectively,
+	\end{itemize} 
+	bit errors can be corrected, where $d_{min}$ is the \emph{hamming distance} between the valid codewords.
+\end{fact}
+
+\paragraph{Detection and correction capability.}
+
+The number of detectable and correctable bit errors depends on the hamming distance $d_{min}$ between the valid code words. The hamming distance depends on the code parameters $(n, k)$. As a summary:
+\begin{itemize}
+	\item The hamming distance of the code is \eqref{eq:ch08:hamming_dist_code}: $d_{min} = n - k + 1$.
+	\item Up to $d_{min} - 1$ bit errors can be detected.
+	\item Up to $\frac{d_{min}-1}{2}$ (if $d_{min}$ is odd) or $\frac{d_{min}}{2} - 1$ (if $d_{min}$ is even), respectively, bit errors can be corrected.
+\end{itemize}
+
+The required hamming distance is a design decision of the engineer. There is a trade-off between:
+\begin{itemize}
+	\item Higher values for $k$ (lower hamming distance) increase the number of information bits (higher data rate), but less bit errors can be corrected. A better \ac{SNR} is required to reduce the bit error probability.
+	\item Low values for $k$ (higher hamming distance) decrease the number of information bits (lower data rate), but more bit errors can be corrected. The communication system can cope worse \ac{SNR} conditions with a high bit error probability. The drawback is a decreased data rate.s
+\end{itemize}
+
 
 \subsection{Linear Codes}
-
-\subsection{Maximum Likelihood Decoding}
 
 % \subsection{Example: Reed-Solomon Code or }
 
