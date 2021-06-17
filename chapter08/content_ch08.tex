@@ -933,7 +933,199 @@ The required hamming distance is a design decision of the engineer. There is a t
 \end{itemize}
 
 
-\subsection{Linear Codes}
+\subsection{Linear Block Codes}
+
+The valid codewords belong to a \emph{linear subspace} $V$ out of all possible codewords. Linear means that that all codewords can be created be linear combinations of $m$ independent codewords $\vec{g}_i$ spanning $V$. The $m$ linear independent codewords $\vec{g}_i$ form the \index{generator matrix} \textbf{generator matrix} $\mat{G}$.
+\begin{equation}
+	\mat{G} = \left[\begin{matrix}
+		\vec{g}_1 \\
+		\vec{g}_2 \\
+		\vdots \\
+		\vec{g}_m
+	\end{matrix}\right]
+\end{equation}
+
+The \emph{generator matrix} generates the message bits from the information. Let's assume that
+\begin{itemize}
+	\item $\vec{m}$ is the vector of information bits,
+	\item $\vec{c}$ is the vector of control bits and
+	\item $\vec{x}$ is the vector of the resulting message bits (comprising both information and control bits).
+\end{itemize}
+The message bits can now be calculated by
+\begin{equation}
+	\vec{x} = \vec{m} \cdot \mat{G}
+\end{equation}
+where
+\begin{itemize}
+	\item $\vec{m}$ is a $1 \times k$ vector,
+	\item $\mat{G}$ is a $k \times n$ matrix and
+	\item $\vec{x}$ is a $1 \times n$ vector.
+\end{itemize}
+
+Here, we consider \emph{systematic codes} only. That is, the information $\vec{m}$ can be directly read from the message $\vec{x}$. This can be achieved by a special construction rule:
+\begin{itemize}
+	\item The first part of the message bits $\vec{x}$ are a copy of the information bits $\vec{m}$. The first $k \times k$ columns of the \emph{generator matrix} $\mat{G}$ are the identity matrix $\mat{\mathrm{I}}$.
+	\item The last $k \times q$ columns of the \emph{generator matrix} $\mat{G}$ are the \emph{parity matrix} $\mat{P}$. It determines the controls bits which are appended to the information bits.
+\end{itemize}
+The \emph{generator matrix} is the concatenation of the identity matrix $\mat{\mathrm{I}}$ and the \emph{parity matrix} $\mat{P}$.
+\begin{equation}
+	\mat{G} = \left[\mat{\mathrm{I}}, \mat{P}\right]
+\end{equation}
+
+\begin{example}{Generator matrix of a Hamming code}
+	Let's consider a $(7,4)$ Hamming code with $q = 3$ parity bits. There are $k = 4$ information bits and $n = 7$ message bits.
+	
+	The parity matrix is:
+	\begin{equation}
+		\mat{P} = \left[\begin{matrix}
+			0 & 1 & 1 \\
+			1 & 0 & 1 \\
+			1 & 1 & 0 \\
+			1 & 1 & 1
+		\end{matrix}\right]
+	\end{equation}
+
+	The identity matrix for $k = 4$ information bits is:
+	\begin{equation}
+		\mat{\mathrm{I}} = \left[\begin{matrix}
+			1 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 \\
+			0 & 0 & 1 & 0 \\
+			0 & 0 & 0 & 1
+		\end{matrix}\right]
+	\end{equation}
+
+	The concatenation of both is the generator matrix:
+	\begin{equation}
+		\mat{G} = \left[\begin{matrix}
+			1 & 0 & 0 & 0 & 0 & 1 & 1 \\
+			0 & 1 & 0 & 0 & 1 & 0 & 1 \\
+			0 & 0 & 1 & 0 & 1 & 1 & 0 \\
+			0 & 0 & 0 & 1 & 1 & 1 & 1
+		\end{matrix}\right]
+	\end{equation}
+
+	An example information is $\vec{m} = \left[1, 0, 1, 0\right]$. The resulting message would be:
+	\begin{equation}
+		\vec{x} = \left[1, 0, 1, 0\right] \cdot \left[\begin{matrix}
+			1 & 0 & 0 & 0 & 0 & 1 & 1 \\
+			0 & 1 & 0 & 0 & 1 & 0 & 1 \\
+			0 & 0 & 1 & 0 & 1 & 1 & 0 \\
+			0 & 0 & 0 & 1 & 1 & 1 & 1
+		\end{matrix}\right] = \left[1, 0, 1, 0, 1, 0, 1\right]
+	\end{equation}
+	The message $\vec{x}$ is systematic. So the information can be directly read from the first four bits. The last three bits are the control bits $\vec{c} = \left[1, 0, 1\right]$.
+	
+	The resulting message $\vec{x}$ is a valid codewords.
+	
+	Note: All operation are modulo $2$ because bits are used, i.e. $(1 \cdot 1 + 1 \cdot 1) \mod 2 \equiv 0 \mod 2$.
+\end{example}
+
+The \emph{generator matrix} -- especially the \emph{parity matrix} -- contains the rule for calculating the \emph{message bits}. It thereby determines the \emph{code}. There are many different codes with special properties:
+\begin{itemize}
+	\item The Hamming code
+	\item The \ac{CRC} codes
+	\item The Reed-Solomon codes
+\end{itemize}
+Each code would require its own lecture. Reed-Solomon codes provide good performance and are commonly used in digital communication systems for \ac{FEC}. \ac{CRC} are mainly used for error detection only. Here, we will just consider Hamming codes, which are easy to explain. However, all other codes are \emph{linear block codes} and are created by a \emph{generator matrix}.
+
+\paragraph{Error syndrome.}
+
+Any information $\vec{m}$ multiplied by the \emph{generator matrix} $\mat{G}$ delivers a valid codeword $\vec{x} \in V$.
+
+The message and valid codeword $\vec{x}$ is transmitted and corrupted by noise $\vec{e}$. The received word $\vec{r}$ contains bit errors resulting from the noise.
+\begin{equation}
+	\vec{r} = \vec{x} \oplus \vec{e}
+\end{equation}
+where $\oplus$ is a bitwise \ac{XOR} operation.
+
+\textbf{The challenge now is to determine the bit errors $\vec{e}$ in order to correct them.}
+
+The bit errors $\vec{e}$ must be extracted from the received word $\vec{r}$. Therefore, a \index{complementary code space} \textbf{complementary code space} to $V$ is spanned. It is denoted as $V^{*}$. The complementary code space $V^{*}$ contains codewords that are orthogonal to the codewords in $V$. The complementary code space $V^{*}$ has its own generating matrix, the \index{parity check matrix} \textbf{parity check matrix} $\mat{H}$. Because the code spaces are orthogonal, the generator matrix $\mat{G}$ and the parity check matrix $\mat{H}$ of the complementary code space are orthogonal, too.
+\begin{equation}
+	\mat{G} \cdot \mat{H}^{\mathrm{T}} = \mat{H} \cdot \mat{G}^{\mathrm{T}} = 0
+\end{equation}
+
+\begin{definition}{Parity check matrix construction}
+	The \index{generator matrix} \textbf{generator matrix} $\mat{G}$ is the concatenation of the identity matrix $\mat{\mathrm{I}}$ and the \emph{parity matrix} $\mat{P}$.
+	\begin{equation}
+		\mat{G} = \left[\mat{\mathrm{I}}, \mat{P}\right]
+	\end{equation}
+	Here, the identity matrix $\mat{\mathrm{I}}$ is a $k \times k$ matrix.
+	
+	\vspace{1em}
+
+	The orthogonal \index{parity check matrix} \textbf{parity check matrix} $\mat{H}$ is constructed by a different concatenation:
+	\begin{equation}
+		\mat{H} = \left[-\mat{P}^{\mathrm{T}}, \mat{\mathrm{I}}\right]
+	\end{equation}
+	Here, the identity matrix $\mat{\mathrm{I}}$ is a $q \times q$ matrix. $\mat{P}^{\mathrm{T}}$ is the transpose of the parity matrix.
+\end{definition}
+
+The orthogonal \emph{parity check matrix} $\mat{H}$ always delivers zero on the multiplication with a valid codeword $\vec{v}$ from the original space $V$.
+\begin{equation}
+	\vec{v} \cdot \mat{H} = 0
+\end{equation}
+
+This property is used to identify the bit errors $\vec{e}$.
+\begin{equation}
+	\mat{H} \cdot \vec{r}^{\mathrm{T}} = \mat{s}
+\end{equation}
+
+$\mat{s}$ is the \index{syndrome vector} \textbf{syndrome vector}. It is a $1 \times q$ vector. Following facts can be read from the vector:
+\begin{itemize}
+	\item If $\mat{s} = \mat{\mathrm{0}}$: There are no bit errors (most likely). There is a very unlikely probability, that there are more bit errors which can actually be detected, leading to a $\mat{s} = 0$.
+	\item If $\mat{s} \neq \mat{\mathrm{0}}$: There are bit errors. The \emph{syndrome vector} can be used to determine the error positions. Theoretically, the \emph{syndrome vector} has $2^q - 1$ combinations, so $2^q - 1$ bit errors can be detected. However, the error detection capability of different codes differs.
+\end{itemize}
+
+\begin{proof}{Syndrome vector}
+	Assuming that the original message $\vec{x}$ is a valid codeword from the original space $V$, so that $\vec{x} \cdot \mat{H} = 0$:
+	\begin{equation}
+		\begin{split}
+			\mat{s} &= \mat{H} \cdot \vec{r}^{\mathrm{T}} \\
+			 &= \mat{H} \cdot \left(\vec{x} \oplus \vec{e}\right)^{\mathrm{T}} \\
+			 &= \underbrace{\mat{H} \cdot \vec{x}^{\mathrm{T}}}_{= 0} \oplus \mat{H} \cdot \vec{e}^{\mathrm{T}} \\
+			 &= \mat{H} \cdot \vec{e}^{\mathrm{T}}
+		\end{split}
+	\end{equation}
+	So, the \emph{syndrome vector} does only depend on the bit errors $\vec{e}$, but not on the message $\vec{x}$.
+\end{proof}
+
+The syndrome vector $\mat{s}$ is used to determine the bit errors $\vec{e}$. The actual procedure is out of the scope if this lecture. The following example verifies, that the code can be used to determine the presence or absence of bit errors.
+
+\begin{example}{Syndrome vector of a Hamming code}
+	Let's consider the $(7,4)$ Hamming code from the previous example.
+	
+	The generator matrix:
+	\begin{equation}
+		\mat{G} = \left[\begin{matrix}
+			1 & 0 & 0 & 0 & 0 & 1 & 1 \\
+			0 & 1 & 0 & 0 & 1 & 0 & 1 \\
+			0 & 0 & 1 & 0 & 1 & 1 & 0 \\
+			0 & 0 & 0 & 1 & 1 & 1 & 1
+		\end{matrix}\right]
+	\end{equation}
+
+	The complementary and orthogonal parity check matrix is:
+	\begin{equation}
+		\mat{H} = \left[\begin{matrix}
+			1 & 0 & 0 & 0 & 1 & 1 & 1 \\
+			0 & 1 & 0 & 1 & 0 & 1 & 1 \\
+			0 & 0 & 1 & 1 & 1 & 0 & 1
+		\end{matrix}\right]
+	\end{equation}
+
+	The word $\vec{r} = \left[1, 0, 1, 0, 1, 0, 1\right]$ is received. Let's check if it contains bit errors:
+	\begin{equation}
+		\vec{s} = \left[\begin{matrix}
+			0 & 1 & 1 & 1 & 1 & 0 & 0 \\
+			1 & 0 & 1 & 1 & 0 & 1 & 0 \\
+			1 & 1 & 0 & 1 & 0 & 0 & 1
+		\end{matrix}\right] \left[1, 0, 1, 0, 1, 0, 1\right]^{\mathrm{T}} = \left[0, 0, 0\right] = \mat{\mathrm{0}}
+	\end{equation}
+	
+	The received word does not contain any errors. An indeed, $\vec{r}$ is a valid codeword from $V$.
+\end{example}
 
 % \subsection{Example: Reed-Solomon Code or }
 
