@@ -1069,20 +1069,20 @@ The orthogonal \emph{parity check matrix} $\mat{H}$ always delivers zero on the 
 
 This property is used to identify the bit errors $\vec{e}$.
 \begin{equation}
-	\mat{H} \cdot \vec{r}^{\mathrm{T}} = \mat{s}
+	\mat{H} \cdot \vec{r}^{\mathrm{T}} = \vec{s}
 \end{equation}
 
-$\mat{s}$ is the \index{syndrome vector} \textbf{syndrome vector}. It is a $1 \times q$ vector. Following facts can be read from the vector:
+$\vec{s}$ is the \index{syndrome vector} \textbf{syndrome vector}. It is a $1 \times q$ vector. Following facts can be read from the vector:
 \begin{itemize}
-	\item If $\mat{s} = \mat{\mathrm{0}}$: There are no bit errors (most likely). There is a very unlikely probability, that there are more bit errors which can actually be detected, leading to a $\mat{s} = 0$.
-	\item If $\mat{s} \neq \mat{\mathrm{0}}$: There are bit errors. The \emph{syndrome vector} can be used to determine the error positions. Theoretically, the \emph{syndrome vector} has $2^q - 1$ combinations, so $2^q - 1$ bit errors can be detected. However, the error detection capability of different codes differs.
+	\item If $\vec{s} = \mat{\mathrm{0}}$: There are no bit errors (most likely). There is a very unlikely probability, that there are more bit errors which can actually be detected, leading to a $\mat{s} = 0$.
+	\item If $\vec{s} \neq \mat{\mathrm{0}}$: There are bit errors. The \emph{syndrome vector} can be used to determine the error positions. Theoretically, the \emph{syndrome vector} has $2^q - 1$ combinations, so $2^q - 1$ bit errors can be detected. However, the error detection capability of different codes differs.
 \end{itemize}
 
 \begin{proof}{Syndrome vector}
 	Assuming that the original message $\vec{x}$ is a valid codeword from the original space $V$, so that $\vec{x} \cdot \mat{H} = 0$:
 	\begin{equation}
 		\begin{split}
-			\mat{s} &= \mat{H} \cdot \vec{r}^{\mathrm{T}} \\
+			\vec{s} &= \mat{H} \cdot \vec{r}^{\mathrm{T}} \\
 			 &= \mat{H} \cdot \left(\vec{x} \oplus \vec{e}\right)^{\mathrm{T}} \\
 			 &= \underbrace{\mat{H} \cdot \vec{x}^{\mathrm{T}}}_{= 0} \oplus \mat{H} \cdot \vec{e}^{\mathrm{T}} \\
 			 &= \mat{H} \cdot \vec{e}^{\mathrm{T}}
@@ -1091,7 +1091,7 @@ $\mat{s}$ is the \index{syndrome vector} \textbf{syndrome vector}. It is a $1 \t
 	So, the \emph{syndrome vector} does only depend on the bit errors $\vec{e}$, but not on the message $\vec{x}$.
 \end{proof}
 
-The syndrome vector $\mat{s}$ is used to determine the bit errors $\vec{e}$. The actual procedure is out of the scope if this lecture. The following example verifies, that the code can be used to determine the presence or absence of bit errors.
+The syndrome vector $\vec{s}$ is used to determine the bit errors $\vec{e}$. The actual procedure is out of the scope if this lecture. The following example verifies, that the code can be used to determine the presence or absence of bit errors.
 
 \begin{example}{Syndrome vector of a Hamming code}
 	Let's consider the $(7,4)$ Hamming code from the previous example.
