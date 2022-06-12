@@ -1,0 +1,387 @@
+% SPDX-License-Identifier: CC-BY-SA-4.0
+%
+% Copyright (c) 2022 Philipp Le
+%
+% Except where otherwise noted, this work is licensed under a
+% Creative Commons Attribution-ShareAlike 4.0 License.
+%
+% Please find the full copy of the licence at:
+% https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+\phantomsection
+\addcontentsline{toc}{section}{Exercise 9}
+\section*{Exercise 9}
+
+
+% Free Space Path Loss
+
+% Link Budget (Easy)
+
+% Link Budget (Complex)
+% Cable Attenuation
+% Antenna Gain
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Free Space Path Loss}]
+	Calculate the free-space path loss!
+	
+	Hint:
+	\begin{equation*}
+		L_a = \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{d}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{f}{\SI{1}{MHz}}\right)
+	\end{equation*}
+	where $d$ is the distance from the transmitter to receiver and $f$ is the transmission frequency.
+	
+	\begin{tasks}
+		\task
+		$d = \SI{1}{km}$; $f = \SI{1}{MHz}$
+		\task
+		FM radio broadcasting: $d = \SI{100}{km}$; $f = \SI{100}{MHz}$
+		\task
+		LTE: $d = \SI{40}{km}$; $f = \SI{800}{MHz}$
+		\task
+		WiFi: $d = \SI{100}{m}$; $f = \SI{2.4}{GHz}$
+		\task
+		TV Satellite Link: $d = \SI{42164}{km}$; $f = \SI{10.964}{GHz}$
+		\task
+		A WiFi link at $f = \SI{2400}{MHz}$ is allowed to have a maximum propagation loss of $L_{a,max} = \SI{87}{dB}$. What is the maximum distance between transmitter and receiver?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_a &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{1}{km}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{1}{MHz}}{\SI{1}{MHz}}\right) \\
+				 &= \SI{32.4}{dB}
+			\end{split}
+		\end{equation*}
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_a &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{100}{km}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{100}{MHz}}{\SI{1}{MHz}}\right) \\
+				 &= \SI{112.4}{dB}
+			\end{split}
+		\end{equation*}
+		
+		FM broadcasting stations transmit at high powers of several \si{kW} (\SI{60}{dBm} to \SI{80}{dBm}). So the power level at the receivers is still high enough for proper demodulation.
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_a &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{40}{km}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{800}{MHz}}{\SI{1}{MHz}}\right) \\
+				 &= \SI{122.5}{dB}
+			\end{split}
+		\end{equation*}
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_a &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{100}{m}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2.4}{GHz}}{\SI{1}{MHz}}\right) \\
+				 &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{100}{m}}{\SI{1000}{m}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right) \\
+				 &= \SI{80}{dB}
+			\end{split}
+		\end{equation*}
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_a &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{42164}{km}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{10.964}{GHz}}{\SI{1}{MHz}}\right) \\
+				 &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{42164}{km}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{10964}{MHz}}{\SI{1}{MHz}}\right) \\
+				 &= \SI{205.7}{dB}
+			\end{split}
+		\end{equation*}
+		The propagation loss of a satellite link is very high. Therefore, receivers use large dishes with gains up to \SI{40}{dB} to compensate the propagation loss.
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_{a,max} &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{d_{max}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right) \\
+				- \SI{20}{dB} \cdot \log_{10}\left(\frac{d_{max}}{\SI{1}{km}}\right) &= - L_{a,max} + \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right) \\
+				\SI{20}{dB} \cdot \log_{10}\left(\frac{d_{max}}{\SI{1}{km}}\right) &= L_{a,max} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right) \\
+				\log_{10}\left(\frac{d_{max}}{\SI{1}{km}}\right) &= \frac{L_{a,max} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right)}{\SI{20}{dB}} \\
+				\frac{d_{max}}{\SI{1}{km}} &= 10^{\frac{L_{a,max} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right)}{\SI{20}{dB}}} \\
+				d_{max} &= \SI{1}{km} \cdot 10^{\frac{L_{a,max} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right)}{\SI{20}{dB}}} \\
+				d_{max} &= \SI{0.2238}{km} \\
+				d_{max} &= \SI{223.8}{m}
+			\end{split}
+		\end{equation*}
+		
+		WiFi routers are sold with the promise that they will cover an area several hundred meters around them. However, you know that this promise is never fulfilled indoors. The point is that indoor usage is no free-space propagation loss. The operating distance is much lower. However, the advertisement numbers are measured with free-space propagation loss which will never be achieved for real usage conditions.
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Antenna Gain}]
+	The output port of a receiver delivers a power of \SI{1}{W} (peak emitted power - PEP). Calculate the effective isotropic radiated power (EIRP)! Cable losses are neglected.
+	
+	\begin{tasks}
+		\task
+		Antenna gain $L_G = \SI{3}{dBi}$
+		\task
+		Antenna gain $L_G = \SI{40}{dBi}$
+		\task
+		Antenna gain $L_G = \SI{-3}{dBi}$
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	For easier calculation, transform the power to a logarithmic power level: $\SI{1}{W} \equiv \SI{30}{dBm}$
+	
+	\begin{tasks}
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_P &= \SI{30}{dBm} + \SI{3}{dBi} \\
+				 &= \SI{33}{dBm} \\
+				P &= \SI{2}{W}
+			\end{split}
+		\end{equation*}
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_P &= \SI{30}{dBm} + \SI{40}{dBi} \\
+				&= \SI{70}{dBm} \\
+				P &= \SI{10}{kW}
+			\end{split}
+		\end{equation*}
+		
+		
+		\task
+		\begin{equation*}
+			\begin{split}
+				L_P &= \SI{30}{dBm} - \SI{3}{dBi} \\
+				&= \SI{27}{dBm} \\
+				P &= \SI{500}{mW}
+			\end{split}
+		\end{equation*}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Link Budget}]
+	A transmitter has the following parameters:
+	\begin{itemize}
+		\item Peak emitted power (PEP): \SI{0.5}{mW}
+		\item Transmission frequency: \SI{2400}{MHz}
+		\item Cable length: \SI{2}{m}
+		\item Cable attenuation per length: \SI{1}{dB/m}
+		\item Antenna gain: \SI{8}{dBi}
+	\end{itemize}
+
+	A transmitter has the following parameters:
+	\begin{itemize}
+		\item Reception frequency: \SI{2400}{MHz}
+		\item Cable length: \SI{10}{cm}
+		\item Cable attenuation per length: \SI{5}{dB/m}
+		\item Antenna gain: \SI{2}{dBi}
+	\end{itemize}
+
+	The transmission uses a $(63,55)$ error correction code for channel coding. So it can tolerate a bit error rate (BER) of \SI{6.3}{\percent} (maximum 4 bit errors in the 63 bit word). To maintain a constant BER at maximum data rate, the communication system uses an adaptive data rate (ADR) with the following configuration:
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{|l|l|l|l|}
+			\hline
+			Modulation & Spreading Factor (DSSS) & Gross Data Rate & Receiver Sensitivity \\
+			\hline
+			BPSK & 8 & \SI{20}{kbit/s} & \SI{-92}{dBm} \\
+			\hline
+			BPSK & 4 & \SI{40}{kbit/s} & \SI{-89}{dBm} \\
+			\hline
+			QPSK & 4 & \SI{80}{kbit/s} & \SI{-86}{dBm} \\
+			\hline
+			QPSK & 2 & \SI{160}{kbit/s} & \SI{-83}{dBm} \\
+			\hline
+			QPSK & 1 & \SI{320}{kbit/s} & \SI{-80}{dBm} \\
+			\hline
+		\end{tabular}
+	\end{table}
+	The receiver sensitivity is the minimum required power at the receiver input port (behind antenna and cable).
+
+	The distance between the receiver and transmitter is \SI{500}{m}. Assume free-space path loss!
+	
+	\begin{tasks}
+		\task
+		Draw a block diagram of the communication system!
+		
+		\task
+		Calculate the effective isotropic radiated power (EIRP) at the transmitter antenna!
+		
+		\task
+		Calculate the power at the receiver antenna!
+		
+		\task
+		Calculate the power at the receiver input port, i.e. the power behind antenna and cable!
+		
+		\task
+		Which data rate can be achieved with the given configuration?
+		
+		\task
+		How much is the link margin?
+		
+		\task
+		What can be done to increase the data rate to \SI{160}{kbit/s}? What is the required link budget?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		\begin{figure}[H]
+			\centering
+			\begin{adjustbox}{scale=0.4}
+				\begin{circuitikz}
+					\node[block, draw, minimum height=3cm](TX){Transmitter\\ $PEP = \SI{0.5}{mW}$};
+					\node[block, draw, minimum height=3cm, right=1cm of TX](TXcable){Cable Loss\\ \SI{2}{m} at \SI{1}{dB/m}};
+					\node[block, draw, minimum height=3cm, right=1cm of TXcable](TXant){Antenna Gain\\ \SI{8}{dBi}};
+					\node[block, draw, minimum height=3cm, right=3cm of TXant](Ch){Transmission Channel\\ \SI{500}{m}\\ with free-space path loss};
+					\node[block, draw, minimum height=3cm, right=3cm of Ch](RXant){Antenna Gain\\ \SI{2}{dBi}};
+					\node[block, draw, minimum height=3cm, right=1cm of RXant](RXcable){Cable Loss\\ \SI{10}{cm} at \SI{5}{dB/m}};
+					\node[block, draw, minimum height=3cm, right=1cm of RXcable](RX){Receiver};
+					
+					\draw (TX.east) -- (TXcable.west) node[inputarrow,rotate=0]{};
+					\draw (TXcable.east) -- (TXant.west) node[inputarrow,rotate=0]{};
+					\draw (TXant.east) -- (Ch.west) node[inputarrow,rotate=0]{};
+					\draw (Ch.east) -- (RXant.west) node[inputarrow,rotate=0]{};
+					\draw (RXant.east) -- (RXcable.west) node[inputarrow,rotate=0]{};
+					\draw (RXcable.east) -- (RX.west) node[inputarrow,rotate=0]{};
+					
+					\draw[decorate, decoration={brace, amplitude=3mm, mirror}] ([yshift=-5mm]TX.south west) -- ([yshift=-5mm]TXant.south east) node[midway, anchor=north, yshift=-5mm, align=center]{Transmitter subsystem};
+					\draw[decorate, decoration={brace, amplitude=3mm, mirror}] ([yshift=-5mm]RXant.south west) -- ([yshift=-5mm]RX.south east) node[midway, anchor=north, yshift=-5mm, align=center]{Receiver subsystem};
+				\end{circuitikz}
+			\end{adjustbox}
+		\end{figure}
+	
+		Note: The communication system comprises transmitter, receiver and the transmission channel.
+		
+		\task
+		The cable loss of the transmitter is:
+		\begin{equation*}
+			\begin{split}
+				L_{C,TX} &= \SI{2}{m} \cdot \SI{1}{dB/m} \\
+				 &= \SI{2}{dB}
+			\end{split}
+		\end{equation*}
+	
+		The antenna gain is $L_{G,TX} = \SI{8}{dBi}$.
+	
+		The PEP is: $P_{PEP} = \SI{0.5}{mW} \equiv L_{PEP} = \SI{-3}{dBm}$
+		
+		The EIRP is:
+		\begin{equation*}
+			\begin{split}
+				L_{EIRP} &= L_{PEP} \underbrace{- L_{C,TX}}_{\text{Subtraction because it is a loss}} \underbrace{+ L_{G,TX}}_{\text{Addition because it is a gain}} \\
+				 &= \SI{-3}{dBm} - \SI{2}{dB} + \SI{8}{dBi} \\
+				 &= \SI{4}{dBm}
+			\end{split}
+		\end{equation*}
+		
+		\task
+		The free-space path loss is
+		\begin{equation*}
+			\begin{split}
+				L_a &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{0.5}{km}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right) \\
+				&= \SI{94}{dB}
+			\end{split}
+		\end{equation*}
+	
+	
+		The power at the receiver antenna is:
+		\begin{equation*}
+			\begin{split}
+				L_{P,RX,Ant} &= L_{EIRP} \underbrace{- L_{a}}_{\text{Subtraction because it is a loss}} \\
+				 &= \SI{4}{dBm} - \SI{94}{dB}\\
+				 &= \SI{-90}{dBm}
+			\end{split}
+		\end{equation*}
+	
+		\task
+		The cable loss of the receiver is:
+		\begin{equation*}
+			\begin{split}
+				L_{C,RX} &= \SI{10}{cm} \cdot \SI{5}{dB/m} \\
+				 &= \SI{0.1}{m} \cdot \SI{5}{dB/m} \\
+				 &= \SI{0.5}{dB}
+			\end{split}
+		\end{equation*}
+	
+		The antenna gain is $L_{G,RX} = \SI{2}{dBi}$.
+		
+		The power at the receiver input port is:
+		\begin{equation*}
+			\begin{split}
+				L_{P,RX} &= L_{P,RX,Ant} \underbrace{- L_{C,RX}}_{\text{Subtraction because it is a loss}} \underbrace{+ L_{G,RX}}_{\text{Addition because it is a gain}} \\
+				 &= \SI{-90}{dBm} - \SI{0.5}{dB} + \SI{2}{dBi} \\
+				 &= \SI{-88.5}{dBm}
+			\end{split}
+		\end{equation*}
+	
+		\task
+		The communication system operates at \textbf{\SI{40}{kbit/s}} with BPSK and a spreading factor of \num{4} ($\SI{-88.5}{dBm} \geq \SI{-89}{dBm}$).
+		
+		\task
+		The minimum required signal power level (sensitivity) is \SI{-89}{dBm}. The difference to the actual received power level is the link margin:
+		\begin{equation*}
+			\begin{split}
+				\SI{-88.5}{dBm} - \SI{-89}{dBm} = \SI{0.5}{dB}
+			\end{split}
+		\end{equation*}
+		
+		\task
+		The total gain of the communication system accumulates all losses and gains:
+		\begin{equation*}
+			\begin{split}
+				L_{G,total} &= - L_{C,TX} + L_{G,TX} + L_{G,RX} - L_{C,RX} \\
+				&= - \SI{2}{dB} + \SI{8}{dBi} + \SI{2}{dBi} - \SI{0.5}{dB} \\
+				&= \SI{7.5}{dB}
+			\end{split}
+		\end{equation*}
+		
+		For a data rate of \SI{160}{kbit/s}, a reception power level of $L_{P,RX,min} = \SI{-83}{dBm}$ is required.
+		
+		The required link budget is the maximum allowed propagation loss:
+		\begin{equation*}
+			\begin{split}
+				L_{a,max} &= P_{PEP} - L_{P,RX,min} + L_{G,total} \\
+				&= - \SI{-3}{dBm} - \SI{-83}{dBm} + \SI{7.5}{dB} \\
+				&= \SI{87.5}{dB}
+			\end{split}
+		\end{equation*}
+	
+		Assuming free-space propagation loss, the maximum distance between transmitter and receiver must be reduced to:
+		\begin{equation*}
+			\begin{split}
+				L_{a,max} &= \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{d_{max}}{\SI{1}{km}}\right) + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right) \\
+				- \SI{20}{dB} \cdot \log_{10}\left(\frac{d_{max}}{\SI{1}{km}}\right) &= - L_{a,max} + \SI{32.4}{dB} + \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right) \\
+				\SI{20}{dB} \cdot \log_{10}\left(\frac{d_{max}}{\SI{1}{km}}\right) &= L_{a,max} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right) \\
+				\log_{10}\left(\frac{d_{max}}{\SI{1}{km}}\right) &= \frac{L_{a,max} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right)}{\SI{20}{dB}} \\
+				\frac{d_{max}}{\SI{1}{km}} &= 10^{\frac{L_{a,max} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right)}{\SI{20}{dB}}} \\
+				d_{max} &= \SI{1}{km} \cdot 10^{\frac{L_{a,max} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right)}{\SI{20}{dB}}} \\
+				d_{max} &= \SI{1}{km} \cdot 10^{\frac{\SI{87.5}{dB} - \SI{32.4}{dB} - \SI{20}{dB} \cdot \log_{10}\left(\frac{\SI{2400}{MHz}}{\SI{1}{MHz}}\right)}{\SI{20}{dB}}} \\
+				d_{max} &= \SI{0.237}{km} \\
+				d_{max} &= \SI{237}{m}
+			\end{split}
+		\end{equation*}
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{question}[subtitle={DS-CDMA}]
+%	\begin{tasks}
+%		\task
+%	
+%	\end{tasks}
+%\end{question}
+%
+%\begin{solution}
+%	\begin{tasks}
+%		\task
+%	
+%	\end{tasks}
+%\end{solution}
+
