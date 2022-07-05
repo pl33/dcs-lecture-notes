@@ -93,7 +93,7 @@
 		\begin{equation*}
 			\mathrm{R}_{f_1 f_2}(\tau) \approx \left(f_1 \star f_2\right)(\tau) = \sum\limits_{t=-5}^{5} f_1(t) f_2(t + \tau)
 		\end{equation*}
-		for $t = -2$, $t = -1$ and $t = 0$.
+		for $\tau = 0$, $\tau = 1$ and $\tau = 2$.
 		
 		\task
 		Signal $f_2(t)$ contains signal $f_1(t)$ which is superimposed by noise. Using the values calculated in a), how much is the time $\Delta t$ lag between $f_1(t)$ and $f_2(t)$?
@@ -103,7 +103,7 @@
 		\begin{equation*}
 			\mathrm{R}_{f_1 f_1}(\tau) \approx \left(f_1 \star f_1\right)(\tau) = \sum\limits_{t=-5}^{5} f_1(t) f_1(t + \tau)
 		\end{equation*}
-		for $t = -2$, $t = -1$, $t = 0$, $t = 1$ and $t = 2$.
+		for $\tau = -2$, $\tau = -1$, $\tau = 0$, $\tau = 1$ and $\tau = 2$.
 		
 		\task
 		How much is the signal energy $E$ of $f_1(t)$?
@@ -126,30 +126,30 @@
 				\hline
 				$\tau$ & -10 & -9 & -8 & -7 & -6 & -5 & -4 & -3 & -2 \\
 				\hline
-				$\mathrm{R}_{f_1 f_2}(\tau)$ & 0.0   &  -4.66 & -11.76 & -17.69 & -20.92 &  -9.99 &   8.54 &  28.92 & 45.42 \\
+				$\mathrm{R}_{f_1 f_2}(\tau)$ & $0.0$ & $-1.34$ & $-2.38$ & $11.12$ & $23.08$ & $32.01$ & $41.9$ & $65.35$ & $62.42$ \\
 				\hline
 				\hline
 				$\tau$ & -1 & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
 				\hline
-				$\mathrm{R}_{f_1 f_2}(\tau)$ &  71.06 &  68.68 &  63.74 &  62.42 &  65.35 &  41.9  &  32.01 & 23.08 &  11.12 \\
+				$\mathrm{R}_{f_1 f_2}(\tau)$ & $63.74$ & $68.68$ & $71.06$ & $45.42$ & $28.92$ & $8.54$ & $-9.99$ & $-20.92$ & $-17.69$ \\
 				\hline
 				\hline
 				$\tau$ & 8 & 9 & 10 & & & & & & \\
 				\hline
-				$\mathrm{R}_{f_1 f_2}(\tau)$ & -2.38 &  -1.34 &   0.0 & & & & & & \\
+				$\mathrm{R}_{f_1 f_2}(\tau)$ & $-11.76$ & $-4.66$ & $0.0$ & & & & & & \\
 				\hline
 			\end{tabular}
 		\end{table}
 		\begin{itemize}
-			\item $\left(f_1 \star f_2\right)(-2) = 45.42$
-			\item $\left(f_1 \star f_2\right)(-1) = 71.06$
 			\item $\left(f_1 \star f_2\right)(0) = 68.68$
+			\item $\left(f_1 \star f_2\right)(1) = 71.06$
+			\item $\left(f_1 \star f_2\right)(2) = 45.42$
 		\end{itemize}
 	
 		\task
 		\begin{itemize}
-			\item The maximum value is at $\tau = -1$.
-			\item $f_2(t)$ is advanced by $\Delta t = 1$ in relation to $f_1(t)$.
+			\item The maximum value is at $\tau = 1$.
+			\item $f_2(t)$ is delayed (negatively advanced) by $\Delta t = -1$ in relation to $f_1(t)$.
 		\end{itemize}
 	
 		\task
