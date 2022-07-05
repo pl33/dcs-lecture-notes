@@ -63,7 +63,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{question}[subtitle={Mirror frequencies}]
-	This is simplified block diagram of a receiver with two analogue mixing stages (super-heterodyne).
+	This is simplified block diagram of a receiver with two analogue mixing stages (super-heterodyne). The bandpass has a centre frequency of \SI{481}{MHz}.
 	\begin{figure}[H]
 		\centering
 		\begin{adjustbox}{scale=0.8}
@@ -84,7 +84,7 @@
 				
 				\draw[-latex] (LO.north) -- (Mixer1.south);
 				\draw[-latex] (BFO.north) -- (Mixer2.south);
-				\draw[-latex] (Mixer1.east) to[bandpass] (Mixer2.west);
+				\draw[-latex] (Mixer1.east) to[bandpass] node[midway,align=center,yshift=-8mm,xshift=-6mm]{\SI{481}{MHz}} (Mixer2.west);
 				\draw[-latex] (Mixer2.east) to[lowpass] (ADC.west);
 				\draw[-latex] (ADC.east) -- (Baseband.west);
 			\end{circuitikz}
@@ -114,29 +114,36 @@
 		\end{remark}
 		
 		\task
+		The bandpass has a centre frequency of \SI{481}{MHz}. Therefore, \SI{481}{MHz} is the desired output of mixing stage one.
+		
+		
 		Either
 		\begin{itemize}
-			\item $\SI{868}{MHz} - \SI{480}{MHz} = \SI{388}{MHz}$ or
-			\item $\SI{868}{MHz} + \SI{480}{MHz} = \SI{1348}{MHz}$
+			\item $\SI{868}{MHz} - \SI{481}{MHz} = \SI{387}{MHz}$ or
+			\item $\SI{868}{MHz} + \SI{481}{MHz} = \SI{1349}{MHz}$
 		\end{itemize}
 		will work.
 		
+		The first frequency of \SI{387}{MHz} is clear. If the two inputs \SI{387}{MHz} (LO) and \SI{868}{MHz} (RF) are applied, the two outputs are $\SI{868}{MHz} - \SI{387}{MHz} = \SI{481}{MHz}$ and $\SI{868}{MHz} + \SI{387}{MHz} = \SI{1255}{MHz}$. The second output is rejected by the bandpass filter.
+		
+		The second frequency of \SI{1349}{MHz} needs further explanation. If the two inputs \SI{1349}{MHz} (LO) and \SI{868}{MHz} (RF) are applied, the two outputs are $\SI{1349}{MHz} - \SI{868}{MHz} = \SI{481}{MHz}$ and $\SI{1349}{MHz} + \SI{868}{MHz} = \SI{2217}{MHz}$. The second output is rejected by the bandpass filter.
+		
 		\begin{remark}
-			The super-heterodyne receiver has two mixer stages. The first mixer defines the RF frequency which should be received. The first intermediate frequency is fixed. The filter has a high frequency, so that neighbouring users are eliminated and cannot disturb the wanted signal.
+			The super-heterodyne receiver has two mixer stages. The first mixer defines the RF frequency which should be received. The first intermediate frequency is fixed. The bandpass filter has a high frequency, so that it is super-selective and neighbouring users are eliminated and cannot disturb the wanted signal.
 		\end{remark}
 		
 		\task
 		The receiver receives on mirror frequencies.
 		\begin{itemize}
-			\item $\SI{480}{MHz} - \SI{388}{MHz} = \SI{92}{MHz}$ (for $f_{LO} = \SI{388}{MHz}$) or
-			\item $\SI{1348}{MHz} + \SI{480}{MHz} = \SI{1828}{MHz}$ (for $f_{LO} = \SI{1348}{MHz}$)
+			\item $\SI{481}{MHz} - \SI{387}{MHz} = \SI{94}{MHz}$ (for $f_{LO} = \SI{387}{MHz}$) or
+			\item $\SI{1349}{MHz} + \SI{481}{MHz} = \SI{1830}{MHz}$ (for $f_{LO} = \SI{1349}{MHz}$)
 		\end{itemize}
 		will be received, too. The signals that these RF frequencies will superimpose the signal mixed down from the desired signal at \SI{868}{MHz}.
 		
 		The input of the first mixer must be filtered by either
 		\begin{itemize}
-			\item a lowpass (only for $f_{LO} = \SI{1348}{MHz}$ to block the mirror frequency at \SI{1828}{MHz}),
-			\item a highpass (only for $f_{LO} = \SI{388}{MHz}$ to block the mirror frequency at \SI{92}{MHz}) or
+			\item a lowpass (only for $f_{LO} = \SI{1349}{MHz}$ to block the mirror frequency at \SI{1828}{MHz}),
+			\item a highpass (only for $f_{LO} = \SI{387}{MHz}$ to block the mirror frequency at \SI{92}{MHz}) or
 			\item a bandpass (works for both LO configurations).
 		\end{itemize}
 	\end{tasks}
