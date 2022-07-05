@@ -277,7 +277,7 @@
 			\begin{split}
 				L_{EIRP} &= L_{PEP} \underbrace{- L_{C,TX}}_{\text{Subtraction because it is a loss}} \underbrace{+ L_{G,TX}}_{\text{Addition because it is a gain}} \\
 				 &= \SI{-3}{dBm} - \SI{2}{dB} + \SI{8}{dBi} \\
-				 &= \SI{4}{dBm}
+				 &= \SI{3}{dBm}
 			\end{split}
 		\end{equation*}
 		
@@ -295,8 +295,8 @@
 		\begin{equation*}
 			\begin{split}
 				L_{P,RX,Ant} &= L_{EIRP} \underbrace{- L_{a}}_{\text{Subtraction because it is a loss}} \\
-				 &= \SI{4}{dBm} - \SI{94}{dB}\\
-				 &= \SI{-90}{dBm}
+				 &= \SI{3}{dBm} - \SI{94}{dB}\\
+				 &= \SI{-91}{dBm}
 			\end{split}
 		\end{equation*}
 	
@@ -316,19 +316,19 @@
 		\begin{equation*}
 			\begin{split}
 				L_{P,RX} &= L_{P,RX,Ant} \underbrace{- L_{C,RX}}_{\text{Subtraction because it is a loss}} \underbrace{+ L_{G,RX}}_{\text{Addition because it is a gain}} \\
-				 &= \SI{-90}{dBm} - \SI{0.5}{dB} + \SI{2}{dBi} \\
-				 &= \SI{-88.5}{dBm}
+				 &= \SI{-91}{dBm} - \SI{0.5}{dB} + \SI{2}{dBi} \\
+				 &= \SI{-89.5}{dBm}
 			\end{split}
 		\end{equation*}
 	
 		\task
-		The communication system operates at \textbf{\SI{40}{kbit/s}} with BPSK and a spreading factor of \num{4} ($\SI{-88.5}{dBm} \geq \SI{-89}{dBm}$).
+		The communication system operates at \textbf{\SI{20}{kbit/s}} with BPSK and a spreading factor of \num{4} ($\SI{-89}{dBm} \geq \SI{-89.5}{dBm} \geq \SI{-92}{dBm}$).
 		
 		\task
 		The minimum required signal power level (sensitivity) is \SI{-89}{dBm}. The difference to the actual received power level is the link margin:
 		\begin{equation*}
 			\begin{split}
-				\SI{-88.5}{dBm} - \SI{-89}{dBm} = \SI{0.5}{dB}
+				\SI{-89.5}{dBm} - (\SI{-92}{dBm}) = \SI{2.5}{dB}
 			\end{split}
 		\end{equation*}
 		
@@ -348,7 +348,7 @@
 		\begin{equation*}
 			\begin{split}
 				L_{a,max} &= P_{PEP} - L_{P,RX,min} + L_{G,total} \\
-				&= \SI{-3}{dBm} - \SI{-83}{dBm} + \SI{7.5}{dB} \\
+				&= \SI{-3}{dBm} - (\SI{-83}{dBm}) + \SI{7.5}{dB} \\
 				&= \SI{87.5}{dB}
 			\end{split}
 		\end{equation*}
