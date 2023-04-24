@@ -48,7 +48,7 @@ def generate_and_plot(sample_period):
     """
     t = np.arange(T_START, T_END, sample_period)
     phase_rad = np.pi * PHASE_DEGREES / 180
-    y = AMPLITUDE * np.cos((2 * np.pi * t * FREQUENCY_HZ) + phase_rad)
+    y = AMPLITUDE * np.cos((2 * np.pi * FREQUENCY_HZ * t) - phase_rad)
     
     print(f"Length of data {len(y)}")
     
