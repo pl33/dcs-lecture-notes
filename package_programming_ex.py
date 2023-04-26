@@ -73,6 +73,49 @@ PACKAGES = [
             "Ex 4.4": "exercise04/programming/solution_4_4.py",
         },
     ),
+    Package(
+        archive="Templates 2",
+        files={
+            "Ex 5.5": "exercise05/programming/template_5_5.py",
+            "Ex 5.6": "exercise05/programming/template_5_6.py",
+            "Ex 6.5": "exercise06/programming/template_6_5.py",
+            "Ex 6.6": "exercise06/programming/template_6_6.py",
+        },
+        scripts={
+            "Ex 5.5": "exercise05/programming/datagen_5_5.py",
+            "Ex 6.5": "exercise06/programming/datagen_6_5.py",
+            "Ex 6.6": "exercise06/programming/datagen_6_6.py",
+        },
+    ),
+    Package(
+        archive="Solutions 2",
+        files={
+            "Ex 5.5": "exercise05/programming/solution_5_5.py",
+            "Ex 5.6": "exercise05/programming/solution_5_6.py",
+            "Ex 6.5": "exercise06/programming/solution_6_5.py",
+            "Ex 6.6": "exercise06/programming/solution_6_6.py",
+        },
+    ),
+    Package(
+        archive="Templates 3",
+        files={
+            "Ex 7.5": "exercise07/programming/template_7_5.py",
+            "Ex 7.6": "exercise07/programming/template_7_6.py",
+            "Ex 8.6": "exercise08/programming/template_8_6.py",
+        },
+        scripts={
+            "Ex 7.5": "exercise07/programming/datagen_7_5.py",
+            "Ex 7.6": "exercise07/programming/datagen_7_6.py",
+        },
+    ),
+    Package(
+        archive="Solutions 3",
+        files={
+            "Ex 7.5": "exercise07/programming/solution_7_5.py",
+            "Ex 7.6": "exercise07/programming/solution_7_6.py",
+            "Ex 8.6": "exercise08/programming/solution_8_6.py",
+        },
+    ),
 ]
 
 
