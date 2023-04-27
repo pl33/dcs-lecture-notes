@@ -409,6 +409,49 @@
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Python Programming: Hamming Code}]
+	Solve all tasks in Python!
+	
+	Implement a (7, 4) Hamming coding. The parity matrix is:
+	\begin{equation*}
+		\mat{P} = \left[\begin{matrix}
+			0 & 1 & 1 \\
+			1 & 0 & 1 \\
+			1 & 1 & 0 \\
+			1 & 1 & 1
+		\end{matrix}\right]
+	\end{equation*}
+	
+	\begin{tasks}
+		\task
+		Construct the generator matrix!
+		\task
+		Encode the data given in the programming template with the (7, 4) code!
+		\task
+		Now, bit errors are introduced as given in the programming template, forming the received words. Construct the parity check matrix and calculate the syndrome vector of the received words! Use the given function to correct the bit errors!
+		\task
+		What do you observe for zero, one and two bit errors?
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		See solution code
+		\task
+		See solution code
+		\task
+		See solution code
+		\task
+		Zero bit errors: The syndrome vector is zero. No error is detected and none is corrected.
+		
+		One bit error: The syndrome vector matches one column in the parity check matrix. The position points to the faulty bit. It can be corrected by flipping it.
+		
+		Two bit errors: The syndrome vector is non-zero. However, the faulty bits cannot be reconstructed. The error is detected. But it is impossible to correct it.
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{question}[subtitle={DS-CDMA}]
 %\begin{tasks}
 %	\task

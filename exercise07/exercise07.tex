@@ -269,6 +269,94 @@
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Python Programming: DSSS}]
+	Solve all tasks in Python!
+	
+	A signal is given in \texttt{data\_7\_5\_dsss.dat}.
+	
+	The signal is the output of the BPSK demodulator. Each sample is a DSSS symbol. The signal and thereby the samples contain noise.
+	
+	The spreading code is the binary code $\left[+1, +1, +1, -1, -1, -1, +1, -1, -1, +1, -1\right]$. The received signal is already synchronized -- the first sample is the beginning of a spread data symbol.
+	
+	Task: Despread the signal and reconstruct the original data.
+	
+	Extra: You may plot the input signals and the accumulators of the despreader. Can you see the advantage of spreading with regard to noise immunity?
+\end{question}
+
+\begin{solution}
+	See solution code
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Python Programming: OFDM}]
+	Solve all tasks in Python!
+	
+	A signal is given in \texttt{data\_7\_65\_ofdm.dat}.
+	
+	The signal is OFDM modulated. The OFDM has 16 carriers with a BPSK modulation on each carrier. The signal is noise free.
+	
+	The 8 carriers transport data -- 1 bit per carrier. The remaining 8 carriers are pilots and are always +1. The pilots are used for training and synchronization of the receiver. The mapping of the carriers is as follows.
+	\begin{tabular}{|l|l|}
+		\hline
+		Carrier index & Content \\
+		\hline
+		\hline
+		-8 & Data bit 7 \\
+		\hline
+		-7 & Data bit 6 \\
+		\hline
+		-6 & Data bit 5 \\
+		\hline
+		-5 & Data bit 4 \\
+		\hline
+		-4 & Pilot \\
+		\hline
+		-3 & Pilot \\
+		\hline
+		-2 & Pilot \\
+		\hline
+		-1 & Pilot \\
+		\hline
+		0 & Pilot \\
+		\hline
+		1 & Pilot \\
+		\hline
+		2 & Pilot \\
+		\hline
+		3 & Pilot \\
+		\hline
+		4 & Data bit 0 \\
+		\hline
+		5 & Data bit 1 \\
+		\hline
+		6 & Data bit 2 \\
+		\hline
+		7 & Data bit 3 \\
+		\hline
+	\end{tabular}
+
+	The BPSK has the following constellation: A phase of \SI{0}{\degree} maps to $+1$. A phase of \SI{180}{\degree} maps to $-1$.
+
+	\begin{tasks}
+		\task
+		Demodulate the OFDM signal! Decode the BPSK carriers!
+		\task
+		The signal might decode incorrectly. Have a look at the pilots in the OFDM carriers! What is missing in the demodulation process? Fix it!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		See solution code
+		\task
+		See solution code
+		
+		The LO has a phase shift of \SI{130}{\degree}. So the whole BPSK constellation is rotated, making the data decoding fail. The phase must be corrected by rotating the signal back. The phase offset can be read from the pilots -- in the solution, the average of the pilot values in the FFT was calculated and the angle of the resulting complex number is the phase offset.
+	\end{tasks}
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{question}[subtitle={Decibel}]
 %	\begin{tasks}
 %	\end{tasks}

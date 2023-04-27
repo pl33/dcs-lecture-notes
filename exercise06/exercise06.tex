@@ -393,8 +393,6 @@
 		Calculate the FFT using the Cooley-Tuckey FFT algorithm!
 		\task
 		Compare the number of multiply-accumulate operations necessary for both methods in a) and d)!
-		\task
-		\textit{(optional programming task)} Implement the FFT algorithm in a programming language of your choice!
 	\end{tasks}
 \end{question}
 
@@ -519,6 +517,70 @@
 			\item Multiplications require many computational resources. d) will perform better, because it requires fewer multiplications.
 		\end{itemize}
 		
+	\end{tasks}
+\end{solution}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Python Programming: Digital Signal Processing}]
+	Solve all tasks in Python!
+	
+	A signal is given in \texttt{data\_6\_5.dat}.
+	
+	\begin{tasks}
+		\task
+		Filter the signal with low-pass FIR filter with the coefficients: $b_0 = 0$, $b_1 = 0$, $b_2 = -0.021$, $b_3 = 0$, $b_4 = 0.271$, $b_5 = 0.501$, $b_6 = 0.271$, $b_7 = 0$, $b_8 = -0.021$, $b_9 = 0$, and $b_{10} = 0]$. (The cut-off frequency of the filter is a quarter of the sampling frequency.)
+		\task
+		Down-sample the filtered signal with a decimation factor of 2!
+		\task
+		Plot the input signal, the filtered signal and the decimated signal.
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		See solution code
+		\task
+		See solution code
+		\task
+		See solution code
+	\end{tasks}
+\end{solution}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Python Programming: FFT}]
+	Solve all tasks in Python!
+	
+	A signal is given in \texttt{data\_6\_6.dat}.
+	
+	\begin{tasks}
+		\task
+		Calculate the FFT with the Cooley-Tukey algorithm!
+		\task
+		Compare your result with the NumPy implementation \texttt{np.fft.ftt}!
+		\task
+		Plot the input signal! Plot the FFT of both your and the NumPy implementations in both carthesian (real/imaginary) and polar (magnitude and phase) plots! Display the magnitude plot in \si{dB}.
+		\task
+		Describe the signal!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		See solution code
+		\task
+		See solution code
+		\task
+		See solution code
+		\task
+		There are two sinusoidal signals at FFT bins 2 and 48. The signal at bin 2 is a cosine (only real in FFT) and the signal at bin 48 a sine (only imaginary in FFT).
+		
+		The signal consists of 1024 samples. The spectrum is Hermitian symmetric -- the input signal is real.
+		
+		There is a noise floor at around \SI{80}{dB}.
 	\end{tasks}
 \end{solution}
 

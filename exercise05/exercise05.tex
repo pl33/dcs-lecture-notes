@@ -574,6 +574,90 @@
 	\end{tasks}
 \end{solution}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Python Programming: IQ Mixer}]
+	Solve all tasks in Python!
+	
+	The LO frequency is \SI{5}{Hz}. The following RF signals are fed to the IQ mixer input:
+	\begin{tabular}{|r|r|r|r|r}
+		\hline
+		Signal & Signal Amplitude & Signal Frequency & Signal Phase & LO Phase \\
+		\hline
+		\hline
+		1 & 2.0 & \SI{6}{Hz} & \SI{0}{\degree} & \SI{0}{\degree} \\
+		\hline
+		2 & 2.0 & \SI{4}{Hz} & \SI{0}{\degree} & \SI{0}{\degree} \\
+		\hline
+		3 & 2.0 & \SI{5}{Hz} & \SI{0}{\degree} & \SI{0}{\degree} \\
+		\hline
+		4 & 2.0 & \SI{5}{Hz} & \SI{90}{\degree} & \SI{0}{\degree} \\
+		\hline
+		5 & \multicolumn{3}{c}{From file \texttt{qpsk.dat}} & \SI{0}{\degree} \\
+		\hline
+		6 & \multicolumn{3}{c}{From file \texttt{qpsk.dat}} & \SI{90}{\degree} \\
+		\hline
+	\end{tabular}
+
+	\begin{tasks}
+		\task
+		Simulate and plot the input signal, LO signals and baseband signals! Remember that there might be an I and Q branch.
+		\task
+		What is the special case of signals 3 and 4? Discuss the benefits and advantages of IQ mixers!
+		\task
+		Discuss the influence of the LO phase on the baseband signal of the QPSK modulated signals 5 and 6!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		See solution code
+		\task
+		Direct down-conversion to DC. Depending on the phase of the input signal, the baseband is purely real or purely imaginary.
+		
+		Advantages: Input signal can have any phase -- if Q branch is missing, the baseband of signal 4 would be zero. Phase information of input signal is preserved. Can decode QAM and higher order PSK modulations.
+		
+		Disadvantages: More complex structure.
+		\task
+		PSK modulations are sensitive to phase offsets of the LO. A \SI{90}{\degree} phase shift of the LO, turns the QPSK constellation by \SI{90}{\degree} which makes it impossible to decode it correctly. The LO phase must be synchronized to the transmitter LO to ensure correct decoding.
+	\end{tasks}
+\end{solution}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{question}[subtitle={Python Programming: PSK Modulation}]
+	Solve all tasks in Python!
+	
+	Implement a BPSK and a QPSK modulation. Symbols have a rate of \SI{2}{Hz}. The carrier has a frequency of \SI{6}{Hz}.
+	
+	\begin{tasks}
+		\task
+		Implement a BPSK modulation of the symbols $\left[0, 0, 1, 0, 1, 1, 0, 1\right]$!
+		\task
+		Implement a QPSK modulation of the symbols $\left[0, 1, 3, 2\right]$!
+		\task
+		Plot the symbol signal and the PSK modulated carrier.
+		\task
+		Have a look at the time duration of both transmissions. Discuss it!
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+		See solution code
+		\task
+		See solution code
+		\task
+		See solution code
+		\task
+		BPSK signal has double transmission time than QPSK. Both carry the same amount of data (1 byte). QPSK has double data rate than BPSK.
+		
+		Downside is that QPSK requires higher SNR than BPSK. BPSK can cope better with noise.
+	\end{tasks}
+\end{solution}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{question}[subtitle={Decibel}]
 %	\begin{tasks}

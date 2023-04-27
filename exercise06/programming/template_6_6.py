@@ -67,9 +67,20 @@ def main():
     ax2.set_title("Own FFT Implementation")
     ax2.plot(np.real(freq_dom), label="Real")
     ax2.plot(np.imag(freq_dom), label="Imag")
-    ax3.set_title("np.fft.fft (Reference Implementatiom)")
+    ax3.set_title("np.fft.fft (Reference Implementation)")
     ax3.plot(np.real(ref), label="Real")
     ax3.plot(np.imag(ref), label="Imag")
+    
+    # Plot polar
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
+    ax1.set_title("Magnitude Own Implementation")
+    # TODO
+    ax2.set_title("Magnitude Reference Implementation")
+    # TODO
+    ax3.set_title("Phase Own Implementation")
+    # TODO
+    ax4.set_title("Phase Reference Implementation")
+    # TODO
     
     plt.show()
     

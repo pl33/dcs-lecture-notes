@@ -80,17 +80,29 @@ def main():
     # Calculate FFT with your implementation
     freq_dom = fft(signal)
     
-    # Plot everything
+    # Plot carthesian
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
     ax1.set_title("Input Signal")
     ax1.plot(signal)
     ax2.set_title("Own FFT Implementation")
     ax2.plot(np.real(freq_dom), label="Real")
     ax2.plot(np.imag(freq_dom), label="Imag")
-    ax3.set_title("np.fft.fft (Reference Implementatiom)")
+    ax3.set_title("np.fft.fft (Reference Implementation)")
     ax3.plot(np.real(ref), label="Real")
     ax3.plot(np.imag(ref), label="Imag")
     
+    # Plot polar
+    # ATTENTION: It is 20 dB * log10 because it is a magnitude and not a power spectrum
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
+    ax1.set_title("Magnitude Own Implementation")
+    ax1.plot(20 * np.log10(np.abs(freq_dom)))
+    ax2.set_title("Magnitude Reference Implementation")
+    ax2.plot(20 * np.log10(np.abs(ref)))
+    ax3.set_title("Phase Own Implementation")
+    ax3.plot(np.angle(freq_dom))
+    ax4.set_title("Phase Reference Implementation")
+    ax4.plot(np.angle(ref))
+
     plt.show()
     
     # Check if your implementation works.
