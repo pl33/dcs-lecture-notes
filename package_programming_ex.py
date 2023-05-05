@@ -101,7 +101,6 @@ PACKAGES = [
         files={
             "Ex 7.5": "exercise07/programming/template_7_5.py",
             "Ex 7.6": "exercise07/programming/template_7_6.py",
-            "Ex 8.6": "exercise08/programming/template_8_6.py",
         },
         scripts={
             "Ex 7.5": "exercise07/programming/datagen_7_5.py",
@@ -113,6 +112,18 @@ PACKAGES = [
         files={
             "Ex 7.5": "exercise07/programming/solution_7_5.py",
             "Ex 7.6": "exercise07/programming/solution_7_6.py",
+        },
+    ),
+    Package(
+        archive="Templates 4",
+        files={
+            "Ex 8.6": "exercise08/programming/template_8_6.py",
+        },
+        scripts={},
+    ),
+    Package(
+        archive="Solutions 4",
+        files={
             "Ex 8.6": "exercise08/programming/solution_8_6.py",
         },
     ),
